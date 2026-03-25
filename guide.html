@@ -96,6 +96,44 @@
       border-radius: 8px;
       box-shadow: 0 1px 6px rgba(0,0,0,0.1);
     }
+    .troubleshoot {
+      background: #fff8f0;
+      border: 2px solid #e8a860;
+      border-radius: 12px;
+      padding: 28px;
+      margin-top: 32px;
+    }
+    .troubleshoot h2 {
+      font-size: 18px;
+      color: #c45a20;
+      margin-bottom: 14px;
+    }
+    .troubleshoot .issue {
+      font-size: 15px;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+    .troubleshoot .cause {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .troubleshoot ol {
+      padding-left: 20px;
+      font-size: 15px;
+      line-height: 2;
+      color: #555;
+    }
+    .troubleshoot .note {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #999;
+      background: #f5f0eb;
+      padding: 10px 14px;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
     footer {
       text-align: center;
       padding: 40px 16px;
@@ -129,6 +167,19 @@
         <h2>セッションを開始して操作指示を送る</h2>
         <p>Claude CoworkまたはClaude Codeのセッションを開始すれば使い始められます。スマホからはDispatch経由でも操作指示を送れます。</p>
       </div>
+    </div>
+    <div class="troubleshoot">
+      <h2>トラブルシューティング</h2>
+      <p class="issue">「コンピューター使用」トグルが表示されない場合</p>
+      <p class="cause">原因：日本語など英語以外の言語設定では、翻訳データが未提供のためトグルが非表示になることがあります。</p>
+      <ol>
+        <li>Claude Desktop の <span class="path">設定 → 言語</span> を <strong>英語（English）</strong> に変更</li>
+        <li><strong>ログアウト</strong> する</li>
+        <li>アプリを <strong>完全に終了</strong> する（Dock からも閉じる）</li>
+        <li>アプリを <strong>再起動</strong> して <strong>再ログイン</strong></li>
+        <li>Settings → 「Computer use」トグルが表示される</li>
+      </ol>
+      <p class="note">補足：Computer Use の設定完了後に日本語に戻してもトグルは維持される場合があります（要検証）。</p>
     </div>
   </div>
   <footer>
