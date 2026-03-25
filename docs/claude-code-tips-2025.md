@@ -45,6 +45,31 @@ claude --permission-mode auto
 | `--dangerously-skip-permissions` | なし（全許可） | 最大だが危険 | 非推奨 |
 | `--permission-mode auto` | AI判断 + セーフガード | 高い＆安全 | 推奨 |
 
+### auto mode が使えるか確認する方法
+
+auto mode は段階的にロールアウトされており、まだ使えないユーザーもいる。以下のコマンドで確認可能：
+
+```bash
+jq '.cachedGrowthBookFeatures.tengu_auto_mode_config' ~/.claude.json
+```
+
+**出力例：**
+
+```json
+{
+  "enabled": "disabled",
+  "twoStageClassifier": true
+}
+```
+
+| フィールド | 値 | 意味 |
+|-----------|-----|------|
+| `enabled` | `"enabled"` | auto mode 使用可能 |
+| `enabled` | `"disabled"` | まだロールアウトされていない |
+| `twoStageClassifier` | `true` | 2段階判断（AI判断層 + セーフガード層）が有効 |
+
+> **参考**: github.com/anthropics/claude-code/issues/33587
+
 ---
 
 ## 2. 権限管理のベストプラクティス
