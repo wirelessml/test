@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Let's go!! 春休み号（3年生）</title>
+  <style>
+    @media print {
+      body { margin: 0; padding: 10mm; }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Yu Mincho', 'Hiragino Mincho Pro', 'MS PMincho', serif;
+      background: #fff;
+      color: #000;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20px 30px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .header-title {
+      border: 2px solid #000;
+      padding: 8px 24px;
+      font-size: 32px;
+      font-weight: bold;
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      letter-spacing: 2px;
+    }
+    .header-info {
+      text-align: right;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .intro {
+      margin-bottom: 20px;
+      text-indent: 1em;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 20px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::before {
+      content: '☆';
+    }
+
+    .red-text {
+      color: #cc0000;
+      font-weight: bold;
+      font-size: 18px;
+      font-family: 'Yu Gothic', 'Hiragino Kaku Gothic Pro', sans-serif;
+    }
+
+    .notice-box {
+      border: 2px solid #000;
+      padding: 6px 12px;
+      display: inline-block;
+      font-size: 13px;
+      margin-left: 16px;
+      vertical-align: middle;
+    }
+
+    .underline-title {
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: underline;
+      margin: 16px 0 8px 0;
+      text-align: center;
+    }
+
+    .item-list {
+      list-style: none;
+      padding-left: 1em;
+    }
+    .item-list li {
+      margin-bottom: 4px;
+    }
+    .item-list li::before {
+      content: '○ ';
+      font-weight: bold;
+    }
+
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    .schedule-table td {
+      border: 1px solid #000;
+      padding: 8px;
+      vertical-align: top;
+    }
+    .schedule-table td:first-child {
+      width: 60px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .footer-notes {
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    .footer-notes p {
+      margin-bottom: 4px;
+    }
+    .star::before {
+      content: '★';
+    }
+
+    .study-section {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .numbered-list {
+      padding-left: 1.5em;
+      margin-bottom: 12px;
+    }
+    .numbered-list li {
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="header-title">Let's go!!</div>
+    <div class="header-info">
+      神戸市立板宿小学校<br>
+      令和８年３月１９日<br>
+      <strong>春休み号</strong>
+    </div>
+  </div>
+
+  <!-- 前文 -->
+  <p class="intro">
+    長いようで短かった３年生が終わろうとしています。自然学校の見学や、運動会、音楽会など、大きな行事がたくさんあった一年間でした。その忙しい中でも毎日の授業や係活動、自分に任された仕事など、当たり前のことを一生懸命にがんばることもできました。
+  </p>
+  <p class="intro">
+    ４月からはいよいよ４年生。高学年の仲間入りです。春休みはその大切な準備期間です。３年生の一年間を振り返り、次の一年間に向けて、一日一日を大切に過ごしていきましょう。素晴らしいスタートがきれることを楽しみにしています。
+  </p>
+
+  <!-- 春休みの学習について -->
+  <div class="section-title">春休みの学習について</div>
+
+  <ol class="numbered-list">
+    <li>自分の苦手な学習を復習して、４年生の学習に備える。</li>
+    <li>読書や縄跳びなど長期間の休みにしかできないことにチャレンジする。</li>
+  </ol>
+
+  <!-- 持ち物の整理 -->
+  <p class="underline-title">持ち物の整理をしておきましょう</p>
+
+  <ul class="item-list">
+    <li>お道具箱（中をかくにんして、足りない物は、入れておくこと）</li>
+    <li>教科書（保健・家庭科・図工の教科書は４年生でも使います。）コンパス、分度器、三角定規なども、来年度以降も使います。</li>
+    <li>ノート（続けて使える物もあります。４年生の先生から連らくがあるまで、捨てたりあわてて先に買ったりしないようにしましょう。）</li>
+    <li>けんばんハーモニカ、リコーダーは来年度も使います。</li>
+    <li>さいほうセット、絵の具セット、習字セットの中身もかくにんしておきましょう。</li>
+    <li>筆箱（えん筆４〜５本・赤えん筆（赤ボールペン）１本・消しゴム１個・じょうぎ）</li>
+    <li>赤白ぼうし・体育館シューズは洗っておきましょう。サイズが合わないものは、新しくしておきましょう。</li>
+    <li>ライブラリーeアドバンスは、３月３１日までしか使用できません。新年度からは新しいタブレットドリルになります。</li>
+  </ul>
+
+  <!-- 新学期の予定 -->
+  <div class="section-title">新学期の予定</div>
+
+  <table class="schedule-table">
+    <tr>
+      <td><strong>８（水）</strong></td>
+      <td>
+        <strong>令和８年度 第１学期 着任式・始業式・入学式前日準備・練習</strong><br>
+        連絡・・・８：００〜８：２０に登校します。教室には入らず、体育館へ行きましょう。<br>
+        （晴れても雨でも体育館で行います）<br>
+        その日は、入学式の練習があります。下校は１２：１０頃の予定です。<br>
+        持ち物・・筆記用具、連絡帳、新しい教科書を持って帰るための手さげ、<br>
+        　　　　　体育館シューズ、パソコン<br>
+        　　　　　※くつを入れるスーパーのふくろを１枚<br>
+        　　　　　※ランドセルで登校します。
+      </td>
+    </tr>
+  </table>
+
+  <!-- フッター -->
+  <div class="footer-notes">
+    <p><span class="star"></span>４月１０日（金）以降の予定・持ち物は４月８日（水）に詳しくお知らせします。</p>
+    <p><span class="star"></span>連絡が必要な時は、板宿小学校（７３２−４０５５）に連絡しましょう。</p>
+  </div>
+
+</body>
+</html>

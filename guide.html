@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Computer Use（macOS）セットアップ & 利用ガイド</title>
+  <title>Claude新機能のPC操作試してみた</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -15,7 +15,7 @@
     header {
       background: #fff;
       border-bottom: 3px solid #d4a574;
-      padding: 24px 0;
+      padding: 32px 0;
       text-align: center;
       position: sticky;
       top: 0;
@@ -23,36 +23,82 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     header h1 {
-      font-size: 22px;
+      font-size: 24px;
       color: #c45a20;
     }
     header p {
       font-size: 13px;
       color: #888;
-      margin-top: 4px;
+      margin-top: 6px;
     }
     .container {
-      max-width: 860px;
-      margin: 32px auto;
-      padding: 0 16px;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-    .page-img {
-      width: 100%;
-      display: block;
+    .intro {
       background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      margin-bottom: 24px;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #444;
     }
-    .page-label {
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .step {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-left: 4px solid #d4a574;
+    }
+    .step-number {
+      display: inline-block;
+      background: #c45a20;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       text-align: center;
+      line-height: 32px;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .step h2 {
+      font-size: 18px;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+    .step p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #555;
+    }
+    .step .path {
+      display: inline;
+      background: #f0e6da;
+      padding: 2px 8px;
+      border-radius: 4px;
       font-size: 13px;
-      color: #999;
-      margin-bottom: 8px;
+      color: #8b5e3c;
+      font-weight: 500;
+    }
+    .screenshot {
+      margin-top: 16px;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
     }
     footer {
       text-align: center;
-      padding: 32px 16px;
+      padding: 40px 16px;
       font-size: 13px;
       color: #aaa;
     }
@@ -60,23 +106,33 @@
 </head>
 <body>
   <header>
-    <h1>Claude Computer Use（macOS）セットアップ & 利用ガイド</h1>
-    <p>Research Preview — Pro / Max プラン限定</p>
+    <h1>Claude新機能のPC操作試してみた</h1>
+    <p>Computer Use — Research Preview</p>
   </header>
   <div class="container">
-    <p class="page-label">Page 1 / 5</p>
-    <img class="page-img" src="docs/guide-page-1.png" alt="ガイド Page 1: 前提条件・機能概要">
-    <p class="page-label">Page 2 / 5</p>
-    <img class="page-img" src="docs/guide-page-2.png" alt="ガイド Page 2: セットアップ手順">
-    <p class="page-label">Page 3 / 5</p>
-    <img class="page-img" src="docs/guide-page-3.png" alt="ガイド Page 3: セットアップ続き・基本的な使い方">
-    <p class="page-label">Page 4 / 5</p>
-    <img class="page-img" src="docs/guide-page-4.png" alt="ガイド Page 4: 権限設定・セキュリティ">
-    <p class="page-label">Page 5 / 5</p>
-    <img class="page-img" src="docs/guide-page-5.png" alt="ガイド Page 5: トラブルシューティング">
+    <div class="intro">
+      Claudeの新機能「Computer Use」を使うと、AIがPC画面を見ながらキーボード・マウスを操作してくれます。特別なAPIキーや複雑な設定ファイルは不要で、対応プラン（Pro / Max）に加入していればデスクトップアプリ側で機能を有効化するだけで始められます。セットアップは3ステップで完了します。
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-number">1</span>
+        <h2>コンピュータ使用をONにする</h2>
+        <p>Claude Desktopアプリを最新版にアップデートします。次に、設定画面から <span class="path">General</span> を開き、<span class="path">Computer use</span> の項目をオンにします。</p>
+      </div>
+      <div class="step">
+        <span class="step-number">2</span>
+        <h2>Macの権限を許可する</h2>
+        <p>システム設定から、<span class="path">アクセシビリティ</span> と <span class="path">画面収録</span> の両方でClaudeアプリを許可します。</p>
+      </div>
+      <div class="step">
+        <span class="step-number">3</span>
+        <h2>セッションを開始して操作指示を送る</h2>
+        <p>Claude CoworkまたはClaude Codeのセッションを開始すれば使い始められます。スマホからはDispatch経由でも操作指示を送れます。</p>
+      </div>
+    </div>
   </div>
   <footer>
-    &copy; 2025 Claude Computer Use Guide
+    &copy; 2025 wirelessml
   </footer>
 </body>
 </html>
