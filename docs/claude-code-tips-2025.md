@@ -505,6 +505,42 @@ CLAUDE.md に以下のような自然言語の指示を書くだけで、Schedul
 3. 指摘がある場合、PR にコメントを投稿
 ```
 
+### PR自動レビューのAPI実装例
+
+```typescript
+// /api/cron/github-reviews/route.ts
+export async function GET(req: Request) {
+  // open な PR を返す
+  const pulls = await fetch(
+    'https://api.github.com/repos/you/app/pulls?state=open',
+    { headers: { Authorization: `token ${process.env.GITHUB_PAT}` } }
+  ).then(r => r.json());
+
+  return Response.json({ pulls });
+}
+
+export async function POST(req: Request) {
+  // レビューコメントを投稿
+  const { pull_number, body } = await req.json();
+  await fetch(
+    `https://api.github.com/repos/you/app/pulls/${pull_number}/reviews`,
+    {
+      method: 'POST',
+      headers: { Authorization: `token ${process.env.GITHUB_PAT}` },
+      body: JSON.stringify({ body, event: 'COMMENT' }),
+    }
+  );
+  return Response.json({ ok: true });
+}
+```
+
+| エンドポイント | メソッド | 役割 |
+|---------------|----------|------|
+| `/api/cron/github-reviews` | GET | open な PR 一覧を返す |
+| `/api/cron/github-reviews` | POST | PR にレビューコメントを投稿 |
+
+**必要な環境変数**: `GITHUB_PAT`（GitHub Personal Access Token）
+
 ### トリガーの管理
 
 Schedule で作成されたトリガーは以下のURLで管理できる：
