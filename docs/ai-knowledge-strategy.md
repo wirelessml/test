@@ -108,6 +108,45 @@ Subconscious が観察・学習
 次のセッションで自動反映
 ```
 
+### Insanely Fast Whisper（ローカル高速文字起こし）
+
+```
+音声ファイル（会議録音等）
+    ↓
+Insanely Fast Whisper でローカル文字起こし
+    ↓
+meetings/ ディレクトリに保存
+    ↓
+AIが過去の議論を参照可能に
+```
+
+- **速度**: 150分の音声を98秒で処理
+- **モデル**: OpenAI Whisper Large v3
+- **コスト**: 無料（ローカル実行、API不要）
+- **対応HW**: Nvidia GPU / Apple Silicon (Mac)
+- **機能**: 話者識別、タイムスタンプ、多言語対応
+
+```bash
+# インストール
+pipx install insanely-fast-whisper
+
+# 基本的な使い方
+insanely-fast-whisper --file-name meeting.mp3
+
+# 日本語指定 + 話者識別
+insanely-fast-whisper --file-name meeting.mp3 --language ja --diarize
+```
+
+**GitHub**: github.com/Vaibhavs10/insanely-fast-whisper
+
+#### 文字起こしツール比較
+
+| ツール | 実行場所 | コスト | PC必要 |
+|--------|----------|--------|--------|
+| tl;dv | クラウド | 有料プランあり | 不要 |
+| Insanely Fast Whisper | ローカル | 無料 | GPU搭載PCが必要 |
+| OpenAI Whisper API | クラウド | 従量課金 | 不要 |
+
 詳細は `docs/claude-code-tips-2025.md` を参照。
 
 ---
@@ -143,3 +182,4 @@ Subconscious が観察・学習
 ## 更新履歴
 
 - 2025-03-25: 初版作成
+- 2025-03-25: Insanely Fast Whisper（ローカル文字起こし）を追加
