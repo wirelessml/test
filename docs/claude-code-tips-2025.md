@@ -671,6 +671,31 @@ export async function POST(req: Request) {
 
 低評価レビューを放置すると評価が下がり続ける。自動対応で即座にフォローすることでユーザーの印象を改善。
 
+```typescript
+// /api/cron/app-reviews/route.ts
+export async function GET(req: Request) {
+  // App Store Connect API でレビュー取得
+  const reviews = await fetch(
+    `https://api.appstoreconnect.apple.com/v1/apps/${APP_ID}/customerReviews`,
+    { headers: { Authorization: `Bearer ${generateJWT()}` } }
+  ).then(r => r.json());
+
+  // 未返信 & 星3以下をフィルタ
+  const unreplied = reviews.data.filter(
+    (r: any) => r.attributes.rating <= 3 && !r.relationships.response.data
+  );
+
+  return Response.json({ reviews: unreplied });
+}
+```
+
+| エンドポイント | メソッド | 役割 |
+|---------------|----------|------|
+| `/api/cron/app-reviews` | GET | 未返信 & 星3以下のレビューを返す |
+| `/api/cron/reply-review` | POST | レビューに返信を送信 |
+
+**必要な環境変数**: App Store Connect API の認証情報（JWT生成用）
+
 ### トリガーの管理
 
 Schedule で作成されたトリガーは以下のURLで管理できる：
