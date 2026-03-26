@@ -384,16 +384,17 @@ Slackにレポートを通知
 
 ### CS自動対応のAPI設計
 
-シンプルな2エンドポイント構成：
+シンプルな3エンドポイント構成：
 
 ```
 Schedule（定期実行）
     ↓
-GET /api/cron/support-tickets
+GET  /api/cron/support-tickets
     ↓ 未対応チケット + FAQ一覧を取得
     ↓
-Claude が内容を分析
+Claude が内容を分析・コード修正が必要か判断
     ↓
+├── コード修正必要 → POST /api/cron/github-proxy（バグ修正・コミット）
 ├── FAQ で対応可能 → POST /api/cron/support-reply（自動返信）
 └── 判断できない   → POST /api/cron/support-reply（エスカレーション）
 ```
@@ -402,6 +403,7 @@ Claude が内容を分析
 |---------------|----------|------|
 | `/api/cron/support-tickets` | GET | 未対応チケット + FAQ一覧を返す |
 | `/api/cron/support-reply` | POST | チケットに返信 or エスカレーション |
+| `/api/cron/github-proxy` | POST | GitHub API のプロキシ（コード読み書き用） |
 
 ```typescript
 // /api/cron/support-tickets/route.ts の例
@@ -424,10 +426,26 @@ export async function GET(req: Request) {
 }
 ```
 
+```typescript
+// /api/cron/github-proxy/route.ts の例
+export async function POST(req: Request) {
+  if (req.headers.get('x-cron-secret') !== process.env.CRON_SECRET) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { action, ...params } = await req.json();
+
+  // action: 'read_file' | 'list_files' | 'commit_file' | 'create_branch' | ...
+  const result = await githubApi(action, params);
+  return Response.json(result);
+}
+```
+
 **ポイント**：
 - `x-cron-secret` ヘッダーで認証（Schedule からのアクセスのみ許可）
 - FAQ をセットで返すことで、Claude が既存の回答パターンを参照して返信
 - チケットに `messages` を含めることで、過去のやり取りも考慮した返信が可能
+- `github-proxy` で Claude がコードの読み書き・コミットまで実行可能（バグ修正の全自動化）
 
 ### その他の活用例
 
