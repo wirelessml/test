@@ -382,6 +382,53 @@ Slackにレポートを通知
 
 チケット受付 → バグ特定 → コード修正 → ユーザーへ返信 → Slack報告まで**全自動・人間の介入ゼロ**。
 
+### CS自動対応のAPI設計
+
+シンプルな2エンドポイント構成：
+
+```
+Schedule（定期実行）
+    ↓
+GET /api/cron/support-tickets
+    ↓ 未対応チケット + FAQ一覧を取得
+    ↓
+Claude が内容を分析
+    ↓
+├── FAQ で対応可能 → POST /api/cron/support-reply（自動返信）
+└── 判断できない   → POST /api/cron/support-reply（エスカレーション）
+```
+
+| エンドポイント | メソッド | 役割 |
+|---------------|----------|------|
+| `/api/cron/support-tickets` | GET | 未対応チケット + FAQ一覧を返す |
+| `/api/cron/support-reply` | POST | チケットに返信 or エスカレーション |
+
+```typescript
+// /api/cron/support-tickets/route.ts の例
+export async function GET(req: Request) {
+  // cron secret で認証（不正アクセス防止）
+  if (req.headers.get('x-cron-secret') !== process.env.CRON_SECRET) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // 未対応のチケットを取得
+  const tickets = await db.supportTicket.findMany({
+    where: { status: 'open' },
+    include: { messages: true },
+  });
+
+  // FAQ一覧を取得（Claude が回答に使う）
+  const faq = await db.faq.findMany();
+
+  return Response.json({ tickets, faq });
+}
+```
+
+**ポイント**：
+- `x-cron-secret` ヘッダーで認証（Schedule からのアクセスのみ許可）
+- FAQ をセットで返すことで、Claude が既存の回答パターンを参照して返信
+- チケットに `messages` を含めることで、過去のやり取りも考慮した返信が可能
+
 ### その他の活用例
 
 | ユースケース | 説明 |
