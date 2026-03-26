@@ -577,6 +577,30 @@ export async function POST(req: Request) {
 
 **必要な環境変数**: `TWITTER_BEARER`（Twitter API Bearer Token）
 
+### CLAUDE.md テンプレート例4：広告運用の自動最適化
+
+```markdown
+# CLAUDE.md
+## 広告運用自動化（Schedule 用）
+
+### 毎時やること：広告運用
+1. WebFetch で GET /api/cron/ad-performance を叩く
+2. 各キャンペーンの CTR, CPA, ROAS を確認
+3. 判断と実行：
+   - CTR が過去7日平均の50%以下 → クリエイティブを自動差し替え
+   - CPA が目標の150%超 → キャンペーンを一時停止
+   - ROAS が1.0未満 → 即座に配信停止
+4. 実行した内容を POST /api/cron/slack-notify で Slack に報告
+```
+
+| 指標 | 閾値 | アクション |
+|------|------|-----------|
+| CTR | 過去7日平均の50%以下 | クリエイティブ差し替え |
+| CPA | 目標の150%超 | キャンペーン一時停止 |
+| ROAS | 1.0未満 | 即座に配信停止 |
+
+広告費の無駄遣いを24時間自動で監視。人間が寝ている間も異常を検知して即対応。
+
 ### トリガーの管理
 
 Schedule で作成されたトリガーは以下のURLで管理できる：
