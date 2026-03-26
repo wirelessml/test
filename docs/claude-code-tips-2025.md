@@ -194,6 +194,50 @@ if button:
     pyautogui.click(button)
 ```
 
+### ブラウザ操作の最適設計
+
+ブラウザ操作は **毎回LLMに探索させるのではなく、コードベースに定型化する** のが正解。
+
+```
+┌─────────────────────────────┐
+│  定型操作（コードベース）     │  ← pyautogui / Playwright
+│  速い・安い・確実             │
+│  通常時はこちらが実行         │
+└─────────────┬───────────────┘
+              ↓ 異常時のみ
+┌─────────────────────────────┐
+│  LLM がハンドリング          │  ← Claude Code
+│  UI変更・想定外エラー対応     │
+└─────────────────────────────┘
+```
+
+**設計原則**：
+- **通常時**: コードが実行（トークン消費ゼロ、高速）
+- **異常時**: LLMが判断（UI変更、エラー等の例外処理のみ）
+- **探索**: 初回だけLLMで操作手順を特定 → コードに落とす
+
+```python
+# 例：Playwright で定型化したブラウザ操作
+from playwright.sync_api import sync_playwright
+
+def login_and_export(url, username, password):
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(url)
+        page.fill('#username', username)
+        page.fill('#password', password)
+        page.click('#login-button')
+        page.wait_for_selector('#dashboard')
+        # 定型操作をここに書く
+        page.click('#export-button')
+        page.wait_for_download()
+        browser.close()
+```
+
+> Computer Use で毎回スクショ→判断させるのはコストの無駄。
+> 定型化できるものはコードにして、LLMは「例外処理係」に徹させる。
+
 ---
 
 ## 5. Slack連携
