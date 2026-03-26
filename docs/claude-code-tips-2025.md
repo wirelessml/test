@@ -459,12 +459,36 @@ export async function POST(req: Request) {
 
 ### セットアップ
 
-```bash
-# Claude Code で Schedule を作成
-/schedule
+Claude Code に一言伝えるだけ：
+
+```
+「このリポジトリで毎時サポートチケットを確認して対応する
+ スケジュールを作って（schedule機能で）。
+ 環境変数に CRON_SECRET を設定して。」
 ```
 
-CLAUDE.md にタスクの指示を書いておけば、Schedule がそれに従って自動実行する。
+### CLAUDE.md の指示書テンプレート
+
+CLAUDE.md に以下のような自然言語の指示を書くだけで、Schedule が自動実行する：
+
+```markdown
+# CLAUDE.md
+## サポート自動対応（Schedule 用）
+
+### 毎時やること
+
+1. サポートチケット確認
+   WebFetch で GET https://yourapp.vercel.app/api/cron/support-tickets を叩く。
+   ヘッダー: x-cron-secret: （環境変数 CRON_SECRET）
+
+2. 各チケットを判断
+   - FAQ で答えられる → 返信文を作成 → POST /api/cron/support-reply
+   - バグの可能性 → ソースコードを読んで原因特定 → 修正コミット
+     → ユーザーに修正完了の返信
+   - 返金/解約/課金系 → エスカレーション（管理者にメール通知）
+```
+
+**CI/CD設定もコードも不要。自然言語の指示書だけで全自動化が動く。**
 
 ---
 
