@@ -601,6 +601,53 @@ export async function POST(req: Request) {
 
 広告費の無駄遣いを24時間自動で監視。人間が寝ている間も異常を検知して即対応。
 
+```typescript
+// /api/cron/ad-operations/route.ts
+export async function GET(req: Request) {
+  // Google Ads API からキャンペーンデータ取得
+  const campaigns = await googleAdsClient.report({
+    query: `SELECT campaign.name, campaign.id, metrics.clicks,
+            metrics.impressions, metrics.cost_micros, metrics.conversions
+            FROM campaign WHERE segments.date DURING LAST_7_DAYS`,
+  });
+
+  return Response.json({
+    campaigns: campaigns.map(c => ({
+      id: c.campaign.id,
+      name: c.campaign.name,
+      ctr: c.metrics.clicks / c.metrics.impressions,
+      cpa: c.metrics.cost_micros / 1e6 / c.metrics.conversions,
+      roas: c.metrics.conversions_value / (c.metrics.cost_micros / 1e6),
+    })),
+  });
+}
+
+export async function POST(req: Request) {
+  const { action, campaignId, creativeId } = await req.json();
+
+  if (action === 'pause') {
+    // キャンペーンを一時停止
+    await googleAdsClient.campaigns.update({
+      campaignId, status: 'PAUSED',
+    });
+  } else if (action === 'swap_creative') {
+    // クリエイティブを差し替え
+    await googleAdsClient.adGroupAds.update({
+      campaignId, adId: creativeId, status: 'ENABLED',
+    });
+  }
+
+  return Response.json({ ok: true });
+}
+```
+
+| エンドポイント | メソッド | 役割 |
+|---------------|----------|------|
+| `/api/cron/ad-operations` | GET | キャンペーンの CTR/CPA/ROAS を返す |
+| `/api/cron/ad-operations` | POST | 一時停止 or クリエイティブ差し替え |
+
+**必要な環境変数**: Google Ads API の認証情報
+
 ### トリガーの管理
 
 Schedule で作成されたトリガーは以下のURLで管理できる：
