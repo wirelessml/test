@@ -557,6 +557,26 @@ export async function POST(req: Request) {
 
 開発の進捗を自動で発信。マーケティングも Schedule で自動化できる。
 
+```typescript
+// /api/cron/post-tweet/route.ts
+export async function POST(req: Request) {
+  const { text } = await req.json();
+
+  await fetch('https://api.twitter.com/2/tweets', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.TWITTER_BEARER}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text }),
+  });
+
+  return Response.json({ ok: true });
+}
+```
+
+**必要な環境変数**: `TWITTER_BEARER`（Twitter API Bearer Token）
+
 ### トリガーの管理
 
 Schedule で作成されたトリガーは以下のURLで管理できる：
