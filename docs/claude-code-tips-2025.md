@@ -541,6 +541,22 @@ export async function POST(req: Request) {
 
 **必要な環境変数**: `GITHUB_PAT`（GitHub Personal Access Token）
 
+### CLAUDE.md テンプレート例3：X（Twitter）自動投稿
+
+```markdown
+# CLAUDE.md
+## X 自動投稿（Schedule 用）
+
+### 毎日やること：X 投稿
+1. git log で直近24時間のコミットを確認
+2. ユーザーに価値がある変更があれば、投稿文を作成
+   - 140字以内、カジュアルなトーン
+   - 関連するハッシュタグを2-3個
+3. WebFetch で POST /api/cron/post-tweet に送信
+```
+
+開発の進捗を自動で発信。マーケティングも Schedule で自動化できる。
+
 ### トリガーの管理
 
 Schedule で作成されたトリガーは以下のURLで管理できる：
