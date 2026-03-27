@@ -972,7 +972,45 @@ pip install -r requirements.txt
 
 ---
 
-## 11. マルチエージェントハーネス設計（Anthropic 公式ブログ）
+## 11. git worktree はAIが自動管理する時代
+
+### 従来の問題
+
+`git worktree` は並行開発に便利だが、手動管理が面倒だった：
+
+```bash
+# 従来：人間が手動で管理
+git worktree add ../feature-branch feature-branch
+# 作業後...
+git worktree remove ../feature-branch
+git worktree prune
+```
+
+ブランチごとにディレクトリを作り、終わったら cleanup する——この手間が地味に積み重なる。
+
+### 現在：AIが自動で活用・管理
+
+| ツール | worktree の扱い |
+|--------|----------------|
+| **Codex** | 並行タスクで自動的に worktree を作成・活用 |
+| **Claude Code** | サブエージェントが worktree を使って並行実行 |
+| **Windsurf** | 別の方向性で独自に活用 |
+
+- **作成**: 並行タスク実行時に AI が自動で worktree を作成
+- **活用**: 複数ブランチの作業を同時並行で実行
+- **cleanup**: 作業完了後に AI が自動で片付け
+
+> `git worktree` コマンドを人間が打つ必要がなくなった。AI が裏で勝手にいい感じに使ってくれる。
+
+### なぜ重要か
+
+- 並行開発の速度が上がる（複数PRを同時に作業可能）
+- worktree の作成・削除・prune を意識しなくてよい
+- AI にとっては「ファイルシステムの衝突を避けて並行作業する」ための自然な手段
+
+---
+
+## 12. マルチエージェントハーネス設計（Anthropic 公式ブログ）
 
 ### 概要
 
@@ -1079,7 +1117,7 @@ Anthropic が公開した「Harness design for long-running application developm
 
 ---
 
-## 12. まとめ：Claude Code エコシステム全体像
+## 13. まとめ：Claude Code エコシステム全体像
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -1137,3 +1175,4 @@ Anthropic が公開した「Harness design for long-running application developm
 - 2025-03-27: feature-dev プラグイン、dev-browser セクションを追加
 - 2025-03-27: Claude Code on the Web（ブラウザ版）セクションを追加
 - 2025-03-27: マルチエージェントハーネス設計（Anthropic公式ブログ）セクションを追加
+- 2025-03-27: git worktree AI自動管理セクションを追加
