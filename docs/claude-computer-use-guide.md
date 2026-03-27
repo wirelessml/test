@@ -4,7 +4,7 @@
 
 > **⚠ 現在のステータス：リサーチプレビュー**
 > - 対象プラン：Pro / Max のみ
-> - 対応OS：macOS のみ（Windows / Linux は未対応）
+> - 対応OS：**macOS Sonoma（14.0）以降のみ**（Windows / Linux / iOS 単体は未対応）
 > - Claude デスクトップアプリの起動が必須
 > - 正式リリースではないため、機能や仕様が変更される可能性がある
 
@@ -16,7 +16,7 @@
 |------|------|
 | **ステータス** | リサーチプレビュー（正式版ではない） |
 | **プラン** | Claude Pro または Max |
-| **OS** | macOS のみ（Windows / Linux は未対応） |
+| **OS** | **macOS Sonoma（14.0）以降**のみ（Windows / Linux / iOS 単体は未対応） |
 | **アプリ** | Claude デスクトップアプリ（最新版）の起動が必須 |
 | **ブラウザ操作** | Google Chrome（拡張機能が必要） |
 
