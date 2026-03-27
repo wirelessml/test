@@ -706,6 +706,29 @@ https://claude.ai/code/scheduled/（トリガーID）
 
 確認できること：実行履歴、次回実行予定、トリガーの編集・停止・削除、ログ
 
+### CLAUDE.md テンプレート例6：Grok X検索で競合・業界モニタリング
+
+xAI API（Grok）を使えば、X のリアルタイム検索を Schedule で自動化できる。
+
+**xAI API セットアップ**：
+1. https://console.x.ai/ にアクセス
+2. X アカウントでサインイン
+3. 「Create your first API key」から API キーを発行
+
+```markdown
+# CLAUDE.md
+## 競合・業界モニタリング（Schedule 用）
+
+### 毎日やること：X 検索 & レポート
+1. xAI API（Grok）で以下のキーワードを X 検索
+   - 自社プロダクト名・競合名
+   - 業界トレンドキーワード
+2. 重要な投稿をピックアップ（バズってる投稿、ネガティブな言及）
+3. 日次レポートを作成し POST /api/cron/slack-notify で Slack に通知
+```
+
+**必要な環境変数**: `XAI_API_KEY`（xAI API キー）
+
 ---
 
 ## 8. まとめ：Claude Code エコシステム全体像
