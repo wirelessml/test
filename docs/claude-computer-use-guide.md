@@ -36,7 +36,29 @@ Claude の「**Cowork**」タブ内にある **Dispatch（ディスパッチ）*
 
 ## 3. セットアップ手順
 
-### 3.1 Claude デスクトップアプリを開く
+### 3.0 Cowork デーモンのインストール（ターミナルからセットアップする場合）
+
+GUI の Dispatch 設定画面を使わず、ターミナルから直接セットアップすることも可能。
+
+```bash
+# Cowork デーモンをインストール
+curl -fsSL https://cowork.anthropic.com/install.sh | bash
+
+# 起動して Claude app とペアリング
+cowork start
+# → ターミナルに QR コードが表示される
+# スマホの Claude app でスキャンしてペアリング完了
+
+# ステータス確認
+cowork status
+# → "Paired: YES  |  Status: Ready" が出れば設定完了
+```
+
+**ポイント**：
+- スマホしか手元にない場合でも、SSH 等でリモートの Mac にアクセスして `cowork start` → スマホの Claude app で QR スキャンという流れでペアリングできる
+- ペアリング後は Claude app 側から Dispatch タスクを投げられる
+
+### 3.1 Claude デスクトップアプリを開く（GUI からセットアップする場合）
 
 上部タブで **「Cowork」** を選択し、左サイドバーから **「Dispatch」** をクリック。
 
