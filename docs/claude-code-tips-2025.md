@@ -835,7 +835,120 @@ dev-browser install  # Playwright + Chromium をセットアップ
 
 ---
 
-## 10. まとめ：Claude Code エコシステム全体像
+## 10. Claude Code on the Web（ブラウザ版）
+
+### 概要
+
+Claude Code がブラウザ上で動作する。PCにターミナルがなくても、スマホからでもClaude Codeが使える。
+
+**アクセス**: https://claude.ai/code
+
+### 主要機能
+
+#### Auto-fix PR（PRの自動修正）
+
+Claude が PR を監視し、CI の失敗やレビューコメントを自動で修正する。
+
+```
+PR を作成
+    ↓
+CI が失敗 or レビューコメントが付く
+    ↓
+Claude が自動で修正コミットをプッシュ
+    ↓
+CI が通るまで繰り返し
+```
+
+**有効化方法**：
+1. claude.ai/code でリポジトリを開く
+2. PR を選択
+3. 「Auto-fix」を有効にする
+
+**対応するトリガー**：
+- CI/CD の失敗（テスト失敗、lint エラー、ビルドエラー）
+- レビューコメント（修正リクエスト）
+
+#### `--remote` フラグ（ターミナル → Web に移行）
+
+ローカルのターミナルで開始したセッションを Web に引き継げる。
+
+```bash
+# ローカルで開始
+claude --remote
+
+# URLが発行される → ブラウザで開いて続行
+```
+
+長時間かかるタスクをローカルで始めて、PCを閉じてスマホから監視・続行できる。
+
+#### `/teleport`（Web → ターミナルに移行）
+
+Web で作業中のセッションをローカルターミナルに引き継ぐ。逆方向の移行。
+
+```
+Web で作業中
+    ↓
+/teleport コマンドを実行
+    ↓
+ローカルターミナルで続行
+```
+
+### クラウド環境
+
+Web 版の Claude Code はクラウドのサンドボックス環境で動作する。
+
+#### セットアップスクリプト
+
+リポジトリに `.claude/setup.sh` を配置すると、クラウド環境の初回起動時に自動実行される。
+
+```bash
+# .claude/setup.sh の例
+#!/bin/bash
+npm install
+pip install -r requirements.txt
+```
+
+#### SessionStart フック
+
+`.claude/settings.json` の `hooks` で `SessionStart` イベントにコマンドを設定できる。
+
+```jsonc
+// .claude/settings.json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "command": "npm install && npm run build"
+      }
+    ]
+  }
+}
+```
+
+#### ネットワークアクセス
+
+クラウド環境からは外部APIへのアクセスが可能。ただし、セキュリティのためサンドボックス化されている。
+
+### セキュリティと分離
+
+- 各セッションは独立したサンドボックスで実行
+- リポジトリのクローンは読み取り専用ではなく、変更・コミット・プッシュが可能
+- 環境変数はプロジェクト設定で管理
+- セッション終了後にサンドボックスは破棄される
+
+### 使い分け
+
+| シナリオ | 推奨環境 |
+|---------|---------|
+| PCで本格的に開発 | ローカルターミナル |
+| スマホから PR 修正 | Web 版 (auto-fix) |
+| 長時間タスクの実行 | `--remote` → Web で監視 |
+| 外出先からコードレビュー | Web 版 |
+| CI 修正の自動化 | Web 版 (auto-fix) |
+
+---
+
+## 11. まとめ：Claude Code エコシステム全体像
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -870,6 +983,11 @@ dev-browser install  # Playwright + Chromium をセットアップ
 │  │  Slack / Gmail / Google Calendar          │    │
 │  │  (MCP サーバー経由で連携)                  │    │
 │  └──────────────────────────────────────────┘    │
+│                                                   │
+│  ┌──────────────────────────────────────────┐    │
+│  │  Claude Code on the Web                    │    │
+│  │  auto-fix / --remote / /teleport           │    │
+│  └──────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -881,3 +999,4 @@ dev-browser install  # Playwright + Chromium をセットアップ
 - 2025-03-25: Gmail & Google Calendar 連携セクションを追加
 - 2025-03-26: Claude Code Schedule（自動タスク実行）セクションを追加
 - 2025-03-27: feature-dev プラグイン、dev-browser セクションを追加
+- 2025-03-27: Claude Code on the Web（ブラウザ版）セクションを追加
