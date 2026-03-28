@@ -34,3 +34,9 @@ python docs/render_guide.py
 # HTMLをブラウザでプレビュー
 open *.html
 ```
+
+## 開発環境
+
+- **PC:** HP ノートPC
+- **CPU:** Core i5
+- **メモリ:** 8GB
