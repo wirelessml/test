@@ -38,5 +38,6 @@ open *.html
 ## 開発環境
 
 - **PC:** HP ノートPC
+- **OS:** Windows 11 25H2
 - **CPU:** Core i5
 - **メモリ:** 8GB
