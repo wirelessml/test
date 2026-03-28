@@ -1162,8 +1162,107 @@ Anthropic が公開した「Harness design for long-running application developm
 │  │  マルチエージェントハーネス                  │    │
 │  │  Planner / Generator / Evaluator           │    │
 │  └──────────────────────────────────────────┘    │
+│                                                   │
+│  ┌──────────────────────────────────────────┐    │
+│  │  Amphetamine × リモート操作               │    │
+│  │  蓋閉じ運用 / SSH / tmux / スマホ操作     │    │
+│  └──────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────┘
 ```
+
+---
+
+## 14. Amphetamine × リモート操作で電車開発
+
+### 課題：ノートPCを閉じるとスリープする
+
+電車の中でClaude Codeを走らせたい。でもMacBookを開いたまま持ち歩くのは現実的じゃない。蓋を閉じればスリープして、実行中のセッションは止まる。
+
+### 解決策：Amphetamine（無料アプリ）
+
+[Amphetamine](https://apps.apple.com/app/amphetamine/id937984704) はMacのスリープを制御するアプリ。**Closed-Display Mode（クラムシェルモード）** を有効にすれば、蓋を閉じてもMacがスリープしない。
+
+```
+設定手順：
+1. App Store から Amphetamine をインストール
+2. Amphetamine Enhancer もインストール（公式サイトから）
+3. Amphetamine の設定で「Closed-Display Mode」を有効化
+4. セッションを開始（時間指定 or 無期限）
+5. MacBook の蓋を閉じる → スリープしない！
+```
+
+> **注意：** Closed-Display Mode を使うには Amphetamine Enhancer（無料の補助アプリ）が必要。Amphetamine 本体だけでは蓋を閉じるとスリープする。
+
+### 代替手段：pmset コマンド（アプリ不要）
+
+GUIアプリを入れたくない場合は、macOS 標準の `pmset` コマンドでスリープを無効化できる：
+
+```bash
+# スリープ無効化（蓋を閉じてもスリープしない）
+sudo pmset -a disablesleep 1
+
+# 元に戻す（スリープ有効化）
+sudo pmset -a disablesleep 0
+```
+
+Amphetamine より手軽で、**余計なアプリのインストールが不要**。ターミナルで1行打つだけなので、こちらの方がシンプル。
+
+> **注意：** `sudo` が必要。また、戻し忘れるとバッテリーが消耗し続けるので、作業後は必ず `disablesleep 0` で戻すこと。
+
+### リモート操作の組み合わせ
+
+蓋を閉じたMacに、スマホからアクセスする方法：
+
+| 方法 | 特徴 |
+|------|------|
+| **Claude Code on the Web** | claude.ai/code からブラウザで操作。Mac不要でクラウド実行も可能 |
+| **SSH + Termux（Android）** | ターミナルアプリからSSH接続。最も軽量 |
+| **SSH + iSH/Blink（iOS）** | iOSのSSHクライアントから接続 |
+| **VS Code Remote** | スマホブラウザからcode-serverにアクセス |
+| **Tailscale** | VPNなしで自宅Mac・外出先を安全に接続 |
+
+### 実践的なワークフロー
+
+```
+【電車での開発フロー】
+
+出発前（MacBook を開いた状態）：
+  1. Amphetamine でセッション開始
+  2. Claude Code を起動（tmux 内推奨）
+  3. MacBook の蓋を閉じてカバンへ
+
+電車内（スマホ操作）：
+  4. スマホから SSH or claude.ai/code でアクセス
+  5. Claude Code にタスクを指示
+  6. 結果を確認、次の指示を出す
+
+到着後：
+  7. MacBook を開いて続きを確認
+  8. Amphetamine セッションを終了
+```
+
+### tmux との組み合わせが必須
+
+SSH接続が切れてもセッションを維持するために、**tmux**（または screen）を使う：
+
+```bash
+# セッション作成
+tmux new -s claude
+
+# Claude Code を起動
+claude
+
+# デタッチ（Ctrl+B → D）して蓋を閉じる
+
+# スマホから再接続
+tmux attach -t claude
+```
+
+### Tips
+
+- **バッテリー消費**：蓋を閉じていてもスリープしないので、バッテリーは減り続ける。長時間の場合はモバイルバッテリー接続を推奨
+- **発熱注意**：カバンの中で高負荷処理を続けると熱がこもる。軽いタスク向け
+- **Claude Code on the Web が最強**：そもそもMacを持ち歩かなくても、claude.ai/code でクラウド上のサンドボックスで実行できる。Amphetamine が不要になるケースも多い
 
 ---
 
@@ -1176,3 +1275,4 @@ Anthropic が公開した「Harness design for long-running application developm
 - 2025-03-27: Claude Code on the Web（ブラウザ版）セクションを追加
 - 2025-03-27: マルチエージェントハーネス設計（Anthropic公式ブログ）セクションを追加
 - 2025-03-27: git worktree AI自動管理セクションを追加
+- 2026-03-28: Amphetamine × リモート操作で電車開発セクションを追加
