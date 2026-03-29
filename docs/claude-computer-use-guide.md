@@ -1,12 +1,23 @@
-# Claude Computer Use（macOS）セットアップ & 利用ガイド
+# Claude Computer Use セットアップ & 利用ガイド
 
 > 2025年3月23日発表。Claude がユーザーの許可のもと Mac を直接操作し、デスクワークを代行する機能。
 
 > **⚠ 現在のステータス：リサーチプレビュー**
 > - 対象プラン：Pro / Max のみ
-> - 対応OS：**macOS Sonoma（14.0）以降のみ**（Windows / Linux / iOS 単体は未対応）
+> - 対応OS：**macOS Sonoma（14.0）以降**（Computer Use の画面操作）
+> - **Windows**：Coworkは対応済み（2026年2月〜）、Computer Use（画面操作）は「coming soon」
 > - Claude デスクトップアプリの起動が必須
 > - 正式リリースではないため、機能や仕様が変更される可能性がある
+
+> **📝 2026年3月29日 更新情報**
+>
+> | 機能 | macOS | Windows |
+> |------|-------|---------|
+> | Cowork（テキストタスク） | ✅ | ✅（2026年2月10日〜） |
+> | Computer Use（画面操作） | ✅（2026年3月23日〜） | ❌ まもなく対応予定 |
+>
+> HP ProBook（Windows 11）では、CoworkはDispatch経由で利用可能。
+> Computer Use（画面操作）はWindows対応待ち。
 
 ---
 
