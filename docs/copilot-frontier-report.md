@@ -31,7 +31,7 @@
 - [x] Frontier 早期アクセス有効化（Web Apps: すべてのユーザー）
 - [x] Frontierエージェント確認（管理センターで全エージェント表示確認済み）
 - [ ] AIプロバイダー（Anthropic/Claude）有効化
-- [x] Cowork (Frontier) 展開完了（管理センターから展開済み、反映待ち）
+- [x] Cowork (Frontier) 展開・動作確認完了
 
 ### 利用可能なFrontierエージェント（2026年3月30日確認）
 
