@@ -179,7 +179,32 @@ insanely-fast-whisper --file-name meeting.mp3 --language ja --diarize
 
 ---
 
+## 他社AI動向メモ
+
+### Google Gemini — ケア記録アシスト Gem（2026年3月）
+
+- **対象**: 介護従事者
+- **機能**: Geminiアプリの「Gem」機能に「ケア記録アシスト」が追加
+- **効果**: 介護記録の作成時間を約20%削減
+- **特徴**: 複数の介護現場を訪問し、介護従事者のフィードバックを集めて設計
+- **意義**: AIの業務特化型アプリケーションが介護分野にも拡大。特定業種向けのプリセットGem（カスタムエージェント）は、Claude CodeのSKILL.mdやCopilot Coworkのエージェントと同じ「業務特化AI」のトレンド
+
+### Claude Code Usage Report プロンプト（2026年3月）
+
+X（Twitter）で利用統計ダッシュボードを共有するためのプロンプトテンプレート。
+`/stats` のスクリーンショットを添付し、以下の構成でHTMLダッシュボードを自動生成：
+
+1. ヘッダー（Top X%バッジ + プランバッジ）
+2. ティアバナー（ランク表示 + サマリー）
+3. KPIカード4列（トークン数・API換算・日平均・節約額）
+4. Tokens per Day棒グラフ（Chart.js、モデル別色分け + Phase分析）
+5. 用途分析 + Key Insights（ベンチマーク比較リングチャート付き）
+6. Model Usage / API換算コスト内訳 / トークン詳細テーブル / CTA
+
+技術要件: Tailwind CSS + Chart.js + Inter + JetBrains Mono、単一HTMLファイル
+
 ## 更新履歴
 
 - 2025-03-25: 初版作成
 - 2025-03-25: Insanely Fast Whisper（ローカル文字起こし）を追加
+- 2026-03-30: 他社AI動向メモ（Gemini ケア記録アシスト）、Usage Reportプロンプトを追加
