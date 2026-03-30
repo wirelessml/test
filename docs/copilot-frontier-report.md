@@ -27,10 +27,23 @@
 ### 購入後の設定ステップ
 
 - [x] Copilot Business ライセンス購入
-- [x] ライセンス割り当て
-- [ ] Frontier 早期アクセス有効化
+- [x] ライセンス割り当て（仲 啓輔）
+- [x] Frontier 早期アクセス有効化（Web Apps: すべてのユーザー）
+- [x] Frontierエージェント確認（管理センターで全エージェント表示確認済み）
 - [ ] AIプロバイダー（Anthropic/Claude）有効化
 - [ ] Cowork 動作確認
+
+### 利用可能なFrontierエージェント（2026年3月30日確認）
+
+| エージェント名 | 発行元 | 可用性 | チャネル |
+|-------------|--------|--------|---------|
+| Learning (Frontier) | Microsoft | すべてのユーザー | Copilot |
+| Skills (Frontier) | Microsoft | すべてのユーザー | Copilot |
+| Planner (Frontier) | Microsoft | すべてのユーザー | Copilot |
+| Workforce Insights (Frontier) | Microsoft | すべてのユーザー | Copilot |
+| App Builder (Frontier) | Microsoft | すべてのユーザー | Copilot |
+| Sales Development (Frontier) | Microsoft | すべてのユーザー | Copilot |
+| Workflows (Frontier) | Microsoft | すべてのユーザー | Copilot |
 
 ## 個人での推奨アプローチ
 
