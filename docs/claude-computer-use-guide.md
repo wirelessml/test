@@ -13,6 +13,14 @@
 >
 > Claude Code（CLI）から直接PC操作が可能に。
 >
+> **⚠️ 既知のバグ（2026年3月30日時点）：**
+> `/mcp` から有効化はできるが、実際にスクショ取得等を実行するとエラーが発生。
+> ```
+> Cannot read properties of undefined (reading 'registerEscape')
+> ```
+> 複数ユーザーから同様の報告あり。GitHub Issueにも上がっている。
+> → 修正待ち。現時点ではCLI版Computer Useは実質使用不可。
+>
 > **できること：**
 > - CLIからアプリ起動・UI操作・テスト検証まで自動化
 > - Swiftアプリをビルド→起動→全ボタンクリック→スクショまで1会話で完結
