@@ -158,9 +158,16 @@ Claude Codeを運用しているマシンのスペック情報。
 |------|------|
 | 機種 | Lenovo YOGA Tablet 2-1051L |
 | 型番 | 59435738 |
-| SIM | SIMフリー |
+| SIM | SIMフリー（microSIM） |
 | 発売日 | 2014年12月1日 |
 | OS | Windows 8.1（元々）→ Windows 10 22H2にアップグレード済み |
+| CPU | Intel Atom Z3745（1.33GHz） |
+| RAM | 2GB |
+| ストレージ | 32GB eMMC |
+| 画面 | 10.1インチ / 1920x1200 |
+| Wi-Fi | 802.11n（2.4GHz/5GHz） |
+| 端子 | MicroUSB / MicroHDMI / Bluetooth |
+| 付属 | Office Home and Business / キーボード |
 
 ### 注意事項
 
@@ -169,6 +176,15 @@ Claude Codeを運用しているマシンのスペック情報。
 - Windows 10のサポートは**2026年10月13日で完全終了**（ESU含む）
 - Windows 11の要件（TPM 2.0等）を満たさないためアップグレード不可
 - 発売から約12年経過しており、スペック的にClaude Code等の活用は厳しい
+
+### Linux化の選択肢（Windows 10サポート終了後）
+
+- **Atom系の罠**: 32bit UEFIのため、通常の64bit Linuxが起動しない
+- **選択肢1**: 32bit版のLinuxを導入
+- **選択肢2**: 64bit版の **Bodhi Linux** 等を導入（32bit UEFI対応の手順あり）
+- **Wi-Fi/Bluetoothの動作**: 実装次第で動かない可能性あり
+  - 参考: T100系はBluetooth全滅だった
+- RAM 2GB / eMMC 32GBなので軽量ディストリビューション推奨
 
 ### 用途
 
