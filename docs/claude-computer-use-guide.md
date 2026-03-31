@@ -18,8 +18,13 @@
 > ```
 > Cannot read properties of undefined (reading 'registerEscape')
 > ```
-> 複数ユーザーから同様の報告あり。GitHub Issueにも上がっている。
-> → 修正待ち。現時点ではCLI版Computer Useは実質使用不可。
+> 複数ユーザーから同様の報告あり（👍3件）。
+> GitHub Issue: anthropics/claude-code#41118（ステータス: OPEN、ラベル: bug, has repro）
+> - v2.1.87 / macOS / zsh で再現
+> - `/mcp` 再接続・CLI再起動でも解消しない
+> - 他のMCP（Gmail, Calendar, Notion等）は正常動作
+> - 原因: CLI側のcomputer-use MCP接続処理の問題と推定
+> → **修正待ち。現時点ではCLI版Computer Useは実質使用不可。**
 >
 > **できること：**
 > - CLIからアプリ起動・UI操作・テスト検証まで自動化
