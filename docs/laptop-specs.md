@@ -197,10 +197,42 @@ Claude Codeを運用しているマシンのスペック情報。
 
 | マシン | OS | 役割 | 状態 |
 |--------|-----|------|------|
-| HP ProBook 450 G9 | Windows 11 Pro | メイン作業・Claude Code | 稼働中 |
+| HP ProBook 450 G9 | Windows 11 Pro | メイン作業・Claude Code・Computer Use | 稼働中 |
 | MacBook Air M1 (2020) | macOS | Computer Use・Cowork | 発注済み |
 | YOGA Tablet 2-1051L | Windows 10 22H2 | 軽作業のみ | サポート終了間近 |
+| IdeaPad D330-10IGL | Windows 10 Pro | 賃貸物件の設備 | 所有中 |
+| iPad Pro 9.7" (MLPX2J/A) | iPadOS 16（最終） | テザリング・閲覧 | 賃貸物件の設備 |
 | iPhone | iOS | SSH接続・Dispatch | 稼働中 |
+
+## Lenovo IdeaPad D330-10IGL（賃貸物件の設備）
+
+| 項目 | 詳細 |
+|------|------|
+| 型番 | 82H0S00000 |
+| タイプ | 2-in-1（キーボード脱着式） |
+| 画面 | 10.1インチ HD IPS（マルチタッチ） |
+| OS | Windows 10 Pro |
+| CPU | Intel Celeron（デュアルコア） |
+| RAM | 4GB |
+| ストレージ | 64GB |
+
+## iPad Pro 9.7インチ（賃貸物件の設備）
+
+| 項目 | 詳細 |
+|------|------|
+| 型番 | MLPX2J/A（モデル A1674） |
+| 画面 | 9.7インチ / 2048x1536 Retina |
+| CPU | Apple A9X + M9コプロセッサ |
+| RAM | 2GB |
+| ストレージ | 32GB |
+| バッテリー | 42.5Wh（最大10時間） |
+| 通信 | Wi-Fi + Cellular（SIMフリー） |
+| カメラ | 背面12MP（4K）/ 前面5MP |
+| 認証 | Touch ID |
+| 発売 | 2016年3月 |
+| 最終OS | iPadOS 16（17以降非対応） |
+| テザリング | 楽天SIM使用中（最大3〜5台、キャリア依存） |
+| 注意 | リコール対象ではない |
 
 ## Claude Code 利用統計（2026年3月）
 
@@ -233,4 +265,4 @@ Claude Codeを運用しているマシンのスペック情報。
 
 ## 記録日
 
-2026年3月30日
+2026年4月3日（最終更新）
