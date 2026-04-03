@@ -91,15 +91,19 @@
 > **意義：** 従来はデスクトップアプリのCowork経由でのみ可能だったPC操作が、
 > CLIから直接可能に。理論上、大半の業務を自動化できるレベルに到達。
 
-> **📝 2026年3月29日 更新情報**
+> **📝 2026年4月3日 更新情報：Windows対応開始**
 >
 > | 機能 | macOS | Windows |
 > |------|-------|---------|
-> | Cowork（テキストタスク） | ✅ | ✅（2026年2月10日〜） |
-> | Computer Use（画面操作） | ✅（2026年3月23日〜） | ❌ まもなく対応予定 |
+> | Cowork（テキストタスク） | ✅ | ✅ |
+> | Computer Use（画面操作） | ✅（2026年3月23日〜） | ✅（2026年4月3日〜） |
+> | Claude Code CLI版 Computer Use | ✅ | ✅ |
 >
-> HP ProBook（Windows 11）では、CoworkはDispatch経由で利用可能。
-> Computer Use（画面操作）はWindows対応待ち。
+> **Windows版Computer Useが正式対応。** Mac版の1週間後にリリース。
+> Claude Desktopアプリ（Pro/Max）で利用可能。リサーチプレビュー。
+> API/ターミナル/設定不要 — アプリDLだけで使える。
+>
+> HP ProBook（Windows 11）でもComputer Useが利用可能に。
 
 ---
 
