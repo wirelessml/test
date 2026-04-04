@@ -1316,3 +1316,48 @@ pip install ccsl
 - コンテキスト使用率を常に可視化
 - **80%超えたら強制リセット**（新しいセッションを開始）
 - これにより精度低下を防ぎ、トークンの無駄遣いも回避
+
+## 18. /rc（Remote Control）— iPhoneからCLIを遠隔操作
+
+### 問題
+
+Mac で Claude Code CLI を起動中、手元の iPhone から操作を続けたい。
+SSH の設定は面倒で、Desktop アプリの Cowork/Dispatch は CLI とは別機能。
+
+### 解決策：/rc コマンド
+
+Claude Code CLI 内蔵のリモートコントロール機能。コマンド1つでセッション共有。
+
+**手順：**
+1. Mac の **Terminal.app** で `claude` を起動
+2. `/rc` と入力（`/remote-control` の省略形）
+3. セッション URL と QR コードが表示される
+4. iPhone の Claude アプリで QR コードをスキャン
+5. そのまま操作可能（Computer Use 含む）
+
+**主な特徴：**
+
+| 項目 | 詳細 |
+|------|------|
+| 会話履歴 | 引き継がれる |
+| セットアップ | `/rc` と入力するだけ |
+| 外出先から | 接続可能（Wi-Fi不問） |
+| 名前付きセッション | `/rc プロジェクト名` |
+| 全セッション有効化 | `/config` で設定可能 |
+
+**要件：** Pro / Max / Team / Enterprise プラン、v2.1.51 以降
+
+**他の方法との比較：**
+
+| 方法 | 手軽さ | 外出先 | Computer Use | 会話引継ぎ |
+|------|--------|--------|-------------|-----------|
+| **/rc** | ★★★ | ✅ | ✅ | ✅ |
+| SSH | ★★ | △ | ✅ | ❌ |
+| Web版(claude.ai/code) | ★★★ | ✅ | ❌ | ❌ |
+| Dispatch(Desktop) | ★★ | ✅ | ✅ | ❌ |
+
+### 注意点
+
+- Computer Use CLI は **Cursor 等のエディタ内ターミナルでは使用不可**（実証済み）
+- Terminal.app または iTerm2 から起動した Claude Code でのみ computer-use MCP が表示される
+- `/rc` 自体は Cursor 内でも動作するが、Computer Use と組み合わせる場合は Terminal.app を使うこと
