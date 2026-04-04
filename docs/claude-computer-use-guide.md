@@ -143,27 +143,20 @@ Claude の「**Cowork**」タブ内にある **Dispatch（ディスパッチ）*
 
 ## 3. セットアップ手順
 
-### 3.0 Cowork デーモンのインストール（ターミナルからセットアップする場合）
+### 3.0 Dispatch のセットアップ方法
 
-GUI の Dispatch 設定画面を使わず、ターミナルから直接セットアップすることも可能。
+Dispatch（iPhoneからMacを遠隔操作）は **Claude Desktop アプリに内蔵** されている。CLI からの個別インストールは不要。
 
-```bash
-# Cowork デーモンをインストール
-curl -fsSL https://cowork.anthropic.com/install.sh | bash
+**セットアップ手順：**
+1. Mac で **Claude Desktop アプリ** を開く
+2. 上部タブで **Cowork** を選択
+3. 左サイドバーから **Dispatch** をクリック
+4. 画面の指示に従って権限を許可（アクセシビリティ、ファイルアクセス等）
+5. iPhone の **Claude アプリ** からタスクを送信できるようになる
 
-# 起動して Claude app とペアリング
-cowork start
-# → ターミナルに QR コードが表示される
-# スマホの Claude app でスキャンしてペアリング完了
-
-# ステータス確認
-cowork status
-# → "Paired: YES  |  Status: Ready" が出れば設定完了
-```
-
-**ポイント**：
-- スマホしか手元にない場合でも、SSH 等でリモートの Mac にアクセスして `cowork start` → スマホの Claude app で QR スキャンという流れでペアリングできる
-- ペアリング後は Claude app 側から Dispatch タスクを投げられる
+**iPhone からの代替操作方法：**
+- **SSH接続**: Mac のリモートログインを有効化 → iPhone の SSH アプリ（Termius等）から `ssh ユーザー名@MacのIP` → `claude` で CLI 起動
+- **Web版**: iPhone の Safari から **claude.ai/code** にアクセス
 
 ### 3.1 Claude デスクトップアプリを開く（GUI からセットアップする場合）
 
