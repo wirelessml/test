@@ -96,8 +96,8 @@
 > | 機能 | macOS | Windows |
 > |------|-------|---------|
 > | Cowork（テキストタスク） | ✅ | ✅ |
-> | Computer Use（画面操作） | ✅（2026年3月23日〜） | ✅（2026年4月3日〜） |
-> | Claude Code CLI版 Computer Use | ✅ | ✅ |
+> | Computer Use（画面操作）— Desktop アプリ | ✅ | ✅（2026年4月3日〜） |
+> | Computer Use — Claude Code **CLI** | ✅ | ❌（macOSのみ） |
 >
 > **Windows版Computer Useが正式対応。** Mac版の1週間後にリリース。
 > Claude Desktopアプリ（Pro/Max）で利用可能。リサーチプレビュー。
