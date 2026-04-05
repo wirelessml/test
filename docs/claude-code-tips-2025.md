@@ -1358,6 +1358,5 @@ Claude Code CLI 内蔵のリモートコントロール機能。コマンド1つ
 
 ### 注意点
 
-- Computer Use CLI は **Cursor 等のエディタ内ターミナルでは使用不可**（実証済み）
-- Terminal.app または iTerm2 から起動した Claude Code でのみ computer-use MCP が表示される
-- `/rc` 自体は Cursor 内でも動作するが、Computer Use と組み合わせる場合は Terminal.app を使うこと
+- 初回は `/mcp` に computer-use が表示されない場合がある → Terminal.app で一度有効化すれば、以降は Cursor 内でも利用可能
+- **Cursor でも Computer Use + /rc の両方が動作することを確認済み**（2026年4月5日）
