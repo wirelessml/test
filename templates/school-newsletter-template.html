@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{タイトル}} {{号名}}（{{学年}}）</title>
+  <style>
+    @media print {
+      body { margin: 0; padding: 10mm; }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Yu Mincho', 'Hiragino Mincho Pro', 'MS PMincho', serif;
+      background: #fff;
+      color: #000;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20px 30px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* ===== ヘッダー ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .header-title {
+      border: 2px solid #000;
+      padding: 8px 24px;
+      font-size: 32px;
+      font-weight: bold;
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      letter-spacing: 2px;
+    }
+    .header-info {
+      text-align: right;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* ===== 本文 ===== */
+    .intro {
+      margin-bottom: 20px;
+      text-indent: 1em;
+    }
+
+    /* ===== セクション見出し（☆付き） ===== */
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 20px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::before {
+      content: '☆';
+    }
+
+    /* ===== 赤字強調テキスト ===== */
+    .red-text {
+      color: #cc0000;
+      font-weight: bold;
+      font-size: 18px;
+      font-family: 'Yu Gothic', 'Hiragino Kaku Gothic Pro', sans-serif;
+    }
+
+    /* ===== 囲みボックス ===== */
+    .notice-box {
+      border: 2px solid #000;
+      padding: 6px 12px;
+      display: inline-block;
+      font-size: 13px;
+      margin-left: 16px;
+      vertical-align: middle;
+    }
+
+    /* ===== 下線付き中央見出し ===== */
+    .underline-title {
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: underline;
+      margin: 16px 0 8px 0;
+      text-align: center;
+    }
+
+    /* ===== ○付きリスト ===== */
+    .item-list {
+      list-style: none;
+      padding-left: 1em;
+    }
+    .item-list li {
+      margin-bottom: 4px;
+    }
+    .item-list li::before {
+      content: '○ ';
+      font-weight: bold;
+    }
+
+    /* ===== 番号付きリスト ===== */
+    .numbered-list {
+      padding-left: 1.5em;
+      margin-bottom: 12px;
+    }
+    .numbered-list li {
+      margin-bottom: 2px;
+    }
+
+    /* ===== 予定テーブル ===== */
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    .schedule-table td {
+      border: 1px solid #000;
+      padding: 8px;
+      vertical-align: top;
+    }
+    .schedule-table td:first-child {
+      width: 60px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* ===== フッター（★付き注釈） ===== */
+    .footer-notes {
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    .footer-notes p {
+      margin-bottom: 4px;
+    }
+    .star::before {
+      content: '★';
+    }
+
+    /* ===== 横並びセクション ===== */
+    .flex-section {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="header-title">{{タイトル}}</div>
+    <div class="header-info">
+      {{学校名}}<br>
+      {{日付}}<br>
+      <strong>{{号名}}</strong>
+    </div>
+  </div>
+
+  <!-- 前文 -->
+  <p class="intro">
+    {{前文1}}
+  </p>
+  <p class="intro">
+    {{前文2}}
+  </p>
+
+  <!-- セクション1: ☆見出し -->
+  <div class="section-title">{{セクション1タイトル}}</div>
+
+  <!-- 番号付きリスト -->
+  <ol class="numbered-list">
+    <li>{{項目1}}</li>
+    <li>{{項目2}}</li>
+  </ol>
+
+  <!-- セクション2: 下線付き見出し -->
+  <p class="underline-title">{{セクション2タイトル}}</p>
+
+  <!-- ○付きリスト -->
+  <ul class="item-list">
+    <li>{{持ち物1}}</li>
+    <li>{{持ち物2}}</li>
+    <!-- 必要に応じて追加 -->
+  </ul>
+
+  <!-- セクション3: 予定テーブル -->
+  <div class="section-title">{{セクション3タイトル}}</div>
+
+  <table class="schedule-table">
+    <tr>
+      <td><strong>{{日付1}}</strong></td>
+      <td>
+        <strong>{{予定タイトル1}}</strong><br>
+        {{予定詳細1}}
+      </td>
+    </tr>
+    <!-- 行を追加する場合 -->
+    <!--
+    <tr>
+      <td><strong>{{日付2}}</strong></td>
+      <td>
+        <strong>{{予定タイトル2}}</strong><br>
+        {{予定詳細2}}
+      </td>
+    </tr>
+    -->
+  </table>
+
+  <!-- フッター -->
+  <div class="footer-notes">
+    <p><span class="star"></span>{{注釈1}}</p>
+    <p><span class="star"></span>{{注釈2}}</p>
+  </div>
+
+</body>
+</html>
