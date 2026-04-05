@@ -45,11 +45,30 @@
 - USB-Cハブ（サードパーティ製）はHDCP非対応 → Netflix等の有料配信はテレビに映せない
 - DRM保護: Netflix > NHKプラス（Netflixは映像もUIも全て黒、NHKプラスはUI要素は見える）
 
+## Netflixマイリスト
+- ONE PIECE（ワンピース） — 新シーズン まもなく配信
+- Dr.STONE SCIENCE FUTURE — 新しいエピソード 今すぐ観る
+- ジョジョの奇妙な冒険 STEEL BALL RUN — 新着
+
+## GitHub連携
+- GitHubアカウント: wirelessml、リポジトリ「test」を使用
+- Homebrewインストール不可（管理者権限なし）→ PATで直接認証
+- 既存リポジトリとマージして会話記録・スクリーンショットをプッシュ
+- GitHub Pages: https://wirelessml.github.io/test/
+
+## スクリーンショットログ（GitHub Pages）
+- screencaptureコマンドで /Users/yuika/Desktop/screenshots/ に保存
+- log.json で時系列管理、index.html でギャラリー表示
+- 毎時7分にcronジョブで自動実行（スクショ + Gmail下書き + git push）
+- ジョブID: dcdc9185（7日間有効）
+
 ## リモートコントロール維持
 - 外出中にリモートコントロールが切断された（タイムアウト）
-- 1時間ごとにスクリーンショット撮影 + Gmail下書き作成のcronジョブを設定（ジョブID: 41517609）
+- 1時間ごとにスクリーンショット撮影 + Gmail下書き作成 + GitHub pushで維持
 - Gmail MCPはメール送信機能なし、下書き作成のみ対応
 
 ## 環境セットアップ
 - Xcode Command Line Toolsをインストール
 - /Users/yuika/Desktop にgitリポジトリを初期化
+- コワーキングオフィスにMacを設置、次回来訪は4/8(水)始業式
+- 自動許可設定を追加（screencapture, date, Computer Use系ツール）

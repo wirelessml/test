@@ -7,7 +7,26 @@
       "Bash(/usr/bin/git init:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "WebSearch",
+      "Bash(networksetup -getairportnetwork en0)",
+      "Bash(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I)",
+      "Bash(system_profiler SPAirPortDataType)",
+      "mcp__claude_ai_Gmail__gmail_get_profile",
+      "mcp__claude_ai_Gmail__gmail_create_draft",
+      "Bash(gh auth:*)",
+      "Bash(brew --version)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Read(//private/var/folders/**)",
+      "Read(//private/tmp/**)",
+      "Bash(screencapture:*)",
+      "Bash(date:*)",
+      "mcp__computer-use__screenshot",
+      "mcp__computer-use__open_application",
+      "mcp__computer-use__zoom",
+      "mcp__computer-use__request_access"
     ]
   }
 }
