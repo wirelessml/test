@@ -110,7 +110,7 @@ Claude Codeを運用しているマシンのスペック情報。
 
 ---
 
-## MacBook Air M1（2台目・発注済み）
+## MacBook Air M1（2台目・セットアップ完了）
 
 ### スペック
 
@@ -124,11 +124,55 @@ Claude Codeを運用しているマシンのスペック情報。
 | ポート | Thunderbolt (Type-C) x2 |
 | 価格 | ¥33,700（送料込み・メルカリ整備品） |
 | 購入日 | 2026年3月29日 |
+| OS | macOS Tahoe Beta 26.5 |
+| ユーザー名 | yuika |
+
+### セットアップ済み環境（2026年4月5日）
+
+| ソフトウェア | バージョン / 状態 |
+|-------------|-----------------|
+| Claude Code CLI | v2.1.92 |
+| Cursor（エディタ） | インストール済み・日本語化済み |
+| Claude Desktop | インストール済み（Claude Code / Claude in Chrome 連携） |
+| Xcode Command Line Tools | Computer Use 経由でインストール中 |
+| Git リポジトリ | Cursor でクローン済み（test リポジトリ） |
+| モデル | Opus 4.6（1M context） |
+
+### MCP接続状況（MacBook）
+
+| サービス | 状態 |
+|---------|------|
+| claude.ai | ✅ connected |
+| claude.ai Gmail | ✅ connected |
+| claude.ai Google Calendar | ✅ connected / ❌ failed（不安定） |
+| claude.ai マネーフォワードクラウド | ✅ connected |
+| computer-use（Built-in） | ✅ 有効化済み |
+
+### Computer Use セットアップ経緯
+
+1. **Cursor 内ターミナル**で `/mcp` → computer-use が表示されなかった
+2. **Terminal.app** で `claude` 起動 → `/mcp` に computer-use が **Built-in MCPs** として表示
+3. Terminal.app で computer-use を **Enable**
+4. その後 **Cursor 内でも Computer Use が動作**することを確認
+5. `/rc`（Remote Control）も Cursor 内で動作確認済み
+6. Computer Use 経由で Xcode Command Line Tools のインストールダイアログを操作
+
+**結論**: 初回は Terminal.app で有効化が必要。以降は Cursor でも利用可能。
+
+### iPhoneからの遠隔操作
+
+| 方法 | 手軽さ | 外出先 | Computer Use | 会話引継ぎ |
+|------|--------|--------|-------------|-----------|
+| **/rc** | ★★★ | ✅ | ✅ | ✅ |
+| SSH | ★★ | △ | ✅ | ❌ |
+| Web版(claude.ai/code) | ★★★ | ✅ | ❌ | ❌ |
+
+**推奨: /rc（Remote Control）** — `/rc` と入力するだけで QR コード表示 → iPhone の Claude アプリでスキャン。Desktop アプリ不要、CLI のみで完結。
 
 ### 注意事項
 
 - **スクリーンの90%が表示不可**（整備品・画面不具合あり）
-- **外部ディスプレイ必須**で運用する前提
+- **外部ディスプレイ必須**で運用する前提（LGモニター使用中）
 - 本体自体はきれいな状態
 - 純正アダプター・ケーブル・化粧箱付き
 
@@ -144,9 +188,11 @@ Claude Codeを運用しているマシンのスペック情報。
 |------|---------------------|----------------------|
 | Claude Code CLI | ✅ | ✅ |
 | Cowork（テキスト） | ✅ | ✅ |
-| Computer Use（画面操作） | ❌ 未対応 | ✅ 対応 |
+| Computer Use（画面操作）— Desktop | ✅（2026年4月3日〜） | ✅ |
+| Computer Use — CLI | ❌（macOSのみ） | ✅ |
 | Dispatch | ✅ | ✅ |
 | MCP連携（Slack等） | ✅ | ✅ |
+| /rc（Remote Control） | ❌ | ✅ |
 
 ---
 
@@ -197,8 +243,8 @@ Claude Codeを運用しているマシンのスペック情報。
 
 | マシン | OS | 役割 | 状態 |
 |--------|-----|------|------|
-| HP ProBook 450 G9 | Windows 11 Pro | メイン作業・Claude Code・Computer Use | 稼働中 |
-| MacBook Air M1 (2020) | macOS | Computer Use・Cowork | 発注済み |
+| HP ProBook 450 G9 | Windows 11 Pro | メイン作業・Claude Code・Computer Use(Desktop) | 稼働中 |
+| MacBook Air M1 (2020) | macOS Tahoe Beta 26.5 | Computer Use(CLI+Desktop)・Cowork・/rc | セットアップ完了 |
 | YOGA Tablet 2-1051L | Windows 10 22H2 | 軽作業のみ | サポート終了間近 |
 | IdeaPad D330-10IGL | Windows 10 Pro | 賃貸物件の設備 | 所有中 |
 | iPad Pro 9.7" (MLPX2J/A) | iPadOS 16（最終） | テザリング・閲覧 | 賃貸物件の設備 |
@@ -265,4 +311,4 @@ Claude Codeを運用しているマシンのスペック情報。
 
 ## 記録日
 
-2026年4月3日（最終更新）
+2026年4月5日（最終更新）
