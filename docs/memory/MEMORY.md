@@ -1,0 +1,7 @@
+- [Don't announce access requests](feedback_no_announce_access.md) — computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
+- [National pension amount FY2026](reference_pension.md) — 令和8年度の国民年金保険料は月額17,920円
+- [User environment history](user_environment.md) — 以前はWindows/クラウド、現在はMacBook Air
+- [User devices](user_devices.md) — MacBook Air、iPad Pro 9.7(彩羽/楽天SIM/テザリング)、LGモニター、VIERAテレビ
+- [Coworking office schedule](project_coworking.md) — Macはコワーキングオフィスに置いている。次回4/8(水)始業式
+- [Prefer CLI over Dispatch](feedback_prefer_cli.md) — Dispatchは使わない、CLIで完結させたい
+- [Remote control status report](project_remote_control.md) — 毎時スクショ+Gmail下書き+git pushのcronジョブ、セッション毎に再設定が必要
