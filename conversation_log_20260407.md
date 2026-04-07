@@ -38,3 +38,46 @@
 - ~/.claude/history.jsonl にユーザー入力コマンドのみ記録されている（Claudeの応答は含まれない）
 - 過去10セッション分の入力履歴を確認
 - 会話の全文を残すには conversation_log_*.md に手動記録してgit保存が確実
+
+## --dangerously-skip-permissions について
+- Xの投稿で `claude --dangerously-skip-permissions` の紹介を見た
+- 全承認をスキップするため非推奨
+- より安全な代替手段: `claude --enable-auto-mode`（安全性チェック付き自動承認）、セッション中にShift+Tabでモード切替
+
+## Microsoft 365 インストール
+- Homebrewは未インストール、管理者権限あり
+- microsoft.comから直接ダウンロード（curl、約2.6GB）
+- ダウンロード途中で切断（75%）→ curl -C - で再開して完了
+- sudo installer はパスワード入力が必要なためGUIインストーラーを起動（open コマンド）
+- ユーザーのパスワード入力待ち
+
+## App Store / Final Cut Pro
+- App Storeを開いてFinal Cut Proを検索
+- AssistiveControlが画面全体に重なりクリック不可 → キーボード操作（Cmd+F）で検索成功
+- 「App Storeに接続できません」エラーが一時的に発生（Returnキーで解消）
+- 検索結果: Final Cut Pro（Mac版、レビュー1.6万件）と Final Cut Pro: ビデオ制作（iPad版）
+- Mac版（左上の方）を推奨
+- インストールはApple ID認証が必要なためユーザーが操作
+
+## チャレンジタッチ用ケーブル
+- munesada.comの記事からケーブルを特定
+- Access Mini USB 延長ケーブル（25cm）Mini-B メス → USB A オス、OTG対応
+- Amazon: https://www.amazon.co.jp/dp/B08R5MQMHX
+- 購入はユーザー自身で行う必要あり
+
+## ネットワーク変更
+- Wi-Fiから変更、iPad Pro「彩羽」（楽天SIM）のUSBテザリングで接続
+- その後iPhone「結花」（iPhone 15 Pro）のテザリングに切り替え
+- Network Analyzerで確認:
+  - iPhone（172.20.10.1）— 結花（ゲートウェイ）
+  - MACBOOKAIR-FD33（172.20.10.3）— MacBook Air
+  - Nintendo Co.,Ltd（172.20.10.5）— Nintendo Switch
+
+## デバイス情報
+- MacBook Air — コワーキングオフィスに設置
+- iPhone 15 Pro（名前: 結花）— メインスマホ
+- 初代iPad Pro 9.7インチ（名前: 彩羽）— 楽天SIM挿入、テザリング用
+- Nintendo Switch — 同じネットワークに接続
+
+## リモートコントロール状態報告の実行記録（4/7）
+- 03:42, 03:46, 04:46, 05:46, 06:46, 08:18, 08:47, 09:47, 10:47, 11:47, 12:46, 13:46, 14:46, 15:46, 16:46, 17:46
