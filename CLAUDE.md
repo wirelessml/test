@@ -3,6 +3,8 @@
 ## TODO（次回セッション）
 
 - [ ] YouTube動画 2oySXA967II の字幕取得（IP制限解除後にyt-dlp or kome.ai）
+- [ ] YouTube動画 QzMDrHjAhpI の字幕取得（shoの片付けサービス相談会ライブ、Whisper文字起こし必要）
+- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（しぶ最新ルームツアー「究極の自宅」39分、2026/4/8公開、kiyoonコラボ）
 - [ ] Google Photos MCPのセットアップ（Google Cloud Console → OAuth設定が必要）
 - [ ] Google Drive MCPのセットアップ
 
@@ -44,6 +46,9 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - Markdownファイルは見出し構造を明確にする
 - HTMLはPlaywrightでPNG出力する前提で作成（幅794px）
 - ファイル名は英語のケバブケース（例: `claude-code-tips-2025.md`）
+- **読んでいないコードは変更するな** — 必ずReadで内容を確認してから編集すること
+- 複雑なタスクでは十分に調査してから行動すること（いきなり編集に飛びつかない）
+- **サブエージェントの成果物は必ず自分で検証してからユーザーに報告すること** — 「完了しました」の丸投げ禁止
 
 ## 情報の保存方針
 
@@ -74,13 +79,19 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - スクリーンショットは ~/Desktop/screenshots/ に保存
 - GitHub Pages: https://wirelessml.github.io/test/
 
+## セッション設定
+
+- セッション開始時に `/model opusplan` を実行する（思考=Opus、実行=Sonnetの自動切り替え）
+
 ## 操作上の注意
 
 - computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
 - Dispatchは使わない、CLIで完結させる
 - ブラウザはcomputer-useでtier "read"（クリック不可）、URLを開くことはできるが再生・停止などの操作は不可
 - Web情報取得はWebFetch/curl優先
-- ブラウザ作業はChrome DevTools MCPで行う（`open`コマンドでBraveを開かない）
+- ブラウザ自動化は**dev-browser優先**（1スクリプトで完結、Playwright MCPより高速）
+- 画面の読み取りだけならChrome DevTools MCPでも可
+- `open`コマンドでBraveを開かない
 - 音量制御はosascriptで可能
 
 ## よく使うコマンド
@@ -91,4 +102,14 @@ python docs/render_guide.py
 
 # HTMLをブラウザでプレビュー
 open *.html
+
+# YouTube字幕取得（最新版yt-dlp + deno）
+PATH="$HOME/.deno/bin:$PATH" ~/yt-dlp --write-auto-sub --sub-lang ja --skip-download -o "保存先/yt-VIDEO_ID" "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# dev-browser（ブラウザ自動化）
+dev-browser --headless <<'EOF'
+const page = await browser.getPage("main");
+await page.goto("URL");
+// Playwright API使用可能
+EOF
 ```
