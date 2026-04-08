@@ -2,9 +2,9 @@
 
 ## TODO（次回コワーキング 4/8）
 
-- [ ] マネーフォワードクラウドMCPの認証（Mac側で `/mcp` から再認証）
-- [ ] Microsoft 365のインストール完了（GUIインストーラーでパスワード入力）
-- [ ] Safariへのcomputer-useアクセス許可
+- [x] マネーフォワードクラウドMCPの認証（exchangeツールでトークン交換が必要）
+- [x] Microsoft 365のインストール完了（Word, Excel, PowerPoint）
+- [x] Safariへのcomputer-useアクセス許可（完了、tier "read"）
 
 ## このリポジトリについて
 
