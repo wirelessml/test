@@ -111,3 +111,24 @@
 - Brave Browser
 - Google Chrome（+ Claude in Chrome拡張）
 - Node.js v22.15.0（~/local/）
+
+## Computer Use消失問題（セッション3）
+
+### 症状
+- `/mcp` にcomputer-useが表示されなくなった
+- deferred toolsリストにも `mcp__computer-use__*` が含まれていない
+- settings.local.jsonにはcomputer-use権限が残っている
+
+### 調査結果
+- **条件はすべて満たしている**: macOS, v2.1.96, Maxプラン, claude.ai認証, インタラクティブセッション
+- **MCPサーバーログでは起動成功**（`/Users/yuika/Library/Caches/claude-cli-nodejs/-Users-yuika-Desktop/mcp-logs-computer-use/`）
+  - 接続OK、hasTools: true、エラーなし
+  - でもツールがセッションに公開されていない
+- **Claude Desktopアプリは未インストール**（ネイティブバイナリの別ソースなし）
+- **GitHub既知バグ**: #44209（v2.1.92+、macOS Tahoe）、#42404、#42380 等
+  - 「/mcpにBuilt-inセクション自体が表示されない」という報告多数
+
+### 対処方針
+- セッション再起動して `/mcp` を再確認
+- それでも出なければClaude Desktopアプリのインストールを検討
+- 代替手段: Chrome DevTools MCP + osascript + Playwright MCPで画面操作をカバー
