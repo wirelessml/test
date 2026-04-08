@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIミニマリストしぶ</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Helvetica Neue', sans-serif; background: #fafafa; color: #333; line-height: 1.6; }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 24px; font-weight: 300; letter-spacing: 2px; text-align: center; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #999; font-size: 13px; margin-bottom: 48px; }
+    .card { background: #fff; border-radius: 8px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .card h2 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 20px; }
+    .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 8px; }
+    .stat { text-align: center; }
+    .stat .value { font-size: 28px; font-weight: 200; }
+    .stat .value.negative { color: #e74c3c; }
+    .stat .value.positive { color: #2ecc71; }
+    .stat .label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .bar-chart { margin-top: 16px; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 12px; }
+    .bar-label { width: 100px; font-size: 13px; color: #666; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 24px; background: #f0f0f0; border-radius: 4px; overflow: hidden; position: relative; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .bar-value { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #666; }
+    .month-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 160px; margin-top: 16px; padding-top: 16px; }
+    .month-bar { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .month-bar .bar { width: 32px; background: #333; border-radius: 4px 4px 0 0; transition: height 0.6s ease; }
+    .month-bar .month-label { font-size: 11px; color: #999; margin-top: 8px; }
+    .month-bar .month-value { font-size: 10px; color: #666; margin-bottom: 4px; }
+    .insight { padding: 16px; background: #f8f8f8; border-radius: 6px; margin-top: 16px; border-left: 3px solid #333; }
+    .insight p { font-size: 13px; color: #555; }
+    .insight .tag { display: inline-block; background: #333; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
+    .log-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+    .log-table th { text-align: left; padding: 8px 0; border-bottom: 1px solid #eee; color: #999; font-weight: 500; font-size: 11px; text-transform: uppercase; }
+    .log-table td { padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+    .footer { text-align: center; margin-top: 48px; font-size: 11px; color: #ccc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AIミニマリストしぶ</h1>
+    <p class="subtitle">Less is more. — 支出を最小に、価値を最大に。</p>
+
+    <div class="card">
+      <h2>2026 Q1 サマリー</h2>
+      <div class="summary">
+        <div class="stat">
+          <div class="value">¥4,116</div>
+          <div class="label">売上</div>
+        </div>
+        <div class="stat">
+          <div class="value negative">¥489,964</div>
+          <div class="label">経費</div>
+        </div>
+        <div class="stat">
+          <div class="value negative">-¥485,848</div>
+          <div class="label">損益</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>月別経費推移</h2>
+      <div class="month-chart">
+        <div class="month-bar">
+          <div class="month-value">¥93,537</div>
+          <div class="bar" style="height: 53px; background: #555;"></div>
+          <div class="month-label">1月</div>
+        </div>
+        <div class="month-bar">
+          <div class="month-value">¥113,484</div>
+          <div class="bar" style="height: 64px; background: #555;"></div>
+          <div class="month-label">2月</div>
+        </div>
+        <div class="month-bar">
+          <div class="month-value">¥282,943</div>
+          <div class="bar" style="height: 160px; background: #e74c3c;"></div>
+          <div class="month-label">3月</div>
+        </div>
+        <div class="month-bar">
+          <div class="month-value">—</div>
+          <div class="bar" style="height: 0px; background: #ddd;"></div>
+          <div class="month-label">4月</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>カテゴリ別内訳</h2>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label">消耗品費</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 40.7%; background: #e74c3c;"></div>
+            <div class="bar-value">¥199,596 (40.7%)</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">水道光熱費</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 32.7%; background: #e67e22;"></div>
+            <div class="bar-value">¥160,219 (32.7%)</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">地代家賃</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 17.9%; background: #3498db;"></div>
+            <div class="bar-value">¥87,765 (17.9%)</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">通信費</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 4.6%; background: #2ecc71;"></div>
+            <div class="bar-value">¥22,403 (4.6%)</div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">その他</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 4.1%; background: #95a5a6;"></div>
+            <div class="bar-value">¥19,981 (4.1%)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>ミニマリストの気づき</h2>
+      <div class="insight">
+        <span class="tag">要確認</span>
+        <p>3月の消耗品費199,596円のうち、99,800円はアップルジャパン。もう1件の99,796円はメルペイ経由で内容不明。本当に必要だった？</p>
+      </div>
+      <div class="insight" style="margin-top: 12px;">
+        <span class="tag">季節変動</span>
+        <p>水道光熱費は2月がピーク（77,393円）、3月は33,436円に減少。冬の暖房コストが主因。待機電力のカットで更に削減可能。</p>
+      </div>
+      <div class="insight" style="margin-top: 12px;">
+        <span class="tag">最重要</span>
+        <p>Q1の売上は4,116円のみ。経費を減らすよりも、収入源の確立が最優先課題。少ないリソースで最大の価値を生む方法を考える。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>開発ログ</h2>
+      <table class="log-table">
+        <tr><th>日時</th><th>Issue</th><th>内容</th></tr>
+        <tr><td>2026-04-08</td><td>#35</td><td>ミニマリスト支出ダッシュボード作成</td></tr>
+        <tr><td>2026-04-08</td><td>#31</td><td>消耗品費199,596円の仕訳詳細分析</td></tr>
+      </table>
+    </div>
+
+    <div class="footer">
+      AIミニマリストしぶ — Built with Claude Code<br>
+      自律型AI × ミニマリズム × マネーフォワード
+    </div>
+  </div>
+</body>
+</html>
