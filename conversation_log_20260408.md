@@ -95,3 +95,19 @@
 - Playwright MCPを追加（claude mcp add playwright）
 - Node.js v22.15.0を~/localにインストール
 - 次回セッション: `claude --chrome` で起動すればChrome拡張が使える
+- Chrome DevTools MCPも追加（既存Chromeに接続、ログイン状態利用可能）
+
+### MCP環境まとめ
+- Gmail ✅
+- Google Calendar ✅
+- マネーフォワードクラウド ✅（exchangeツールでトークン交換が必要）
+- Computer Use ✅（ブラウザはtier "read"）
+- Playwright MCP ✅（追加済み、次回セッションから利用可能）
+- Chrome DevTools MCP ✅（追加済み、次回セッションから利用可能）
+- Claude in Chrome ✅（拡張インストール済み、`claude --chrome`で起動）
+
+### インストール済みアプリ
+- Microsoft Word, Excel, PowerPoint
+- Brave Browser
+- Google Chrome（+ Claude in Chrome拡張）
+- Node.js v22.15.0（~/local/）
