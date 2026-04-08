@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimalist Sibu x Kiyoon - Loop</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Noto+Sans+JP:wght@200;300;400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 200;
+      letter-spacing: 0.05em;
+      margin-bottom: 32px;
+      color: #fff;
+    }
+
+    h2 span {
+      color: #4ade80;
+    }
+
+    .player-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto 32px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(74, 222, 128, 0.08);
+      border: 1px solid #1e1e1e;
+    }
+
+    #player {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: block;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    button {
+      background: none;
+      border: 1px solid #333;
+      color: #e0e0e0;
+      padding: 12px 28px;
+      border-radius: 100px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.05em;
+    }
+
+    button:hover {
+      border-color: #4ade80;
+      color: #4ade80;
+      box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
+    }
+
+    button.active {
+      background: #4ade80;
+      color: #0a0a0a;
+      border-color: #4ade80;
+      font-weight: 500;
+    }
+
+    .status {
+      font-size: 0.8rem;
+      color: #555;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .status .loop-icon {
+      display: inline-block;
+      animation: spin 3s linear infinite;
+      margin-right: 6px;
+    }
+
+    .status.paused .loop-icon {
+      animation-play-state: paused;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .info {
+      font-size: 0.75rem;
+      color: #333;
+      margin-top: 32px;
+      line-height: 1.8;
+    }
+
+    .info a {
+      color: #4ade80;
+      text-decoration: none;
+    }
+
+    .info a:hover {
+      text-decoration: underline;
+    }
+
+    .visualizer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 3px;
+      height: 40px;
+      margin-bottom: 24px;
+    }
+
+    .bar {
+      width: 3px;
+      background: #4ade80;
+      border-radius: 2px;
+      opacity: 0.6;
+      transition: height 0.15s;
+    }
+
+    .bar.active {
+      animation: pulse 0.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { height: 4px; opacity: 0.3; }
+      to { height: 32px; opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Room Tour</h1>
+    <h2><span>Minimalist Sibu</span> x Kiyoon</h2>
+
+    <div class="visualizer" id="visualizer"></div>
+
+    <div class="player-wrap">
+      <div id="player"></div>
+    </div>
+
+    <div class="status" id="status">
+      <span class="loop-icon">&#x21bb;</span> LOOP READY
+    </div>
+
+    <div class="controls">
+      <button id="btnPlay" onclick="togglePlay()">Play</button>
+      <button id="btnAudioOnly" onclick="toggleAudioOnly()">Audio Only</button>
+    </div>
+
+    <div class="info">
+      <a href="https://youtu.be/ukfCg8ZgMjA" target="_blank">Original Video</a>
+       &middot;
+      <a href="https://www.youtube.com/@minimalist_sibu" target="_blank">@minimalist_sibu</a>
+       &middot;
+      <a href="https://www.youtube.com/@KiyoonCars" target="_blank">@kiyoooncars</a>
+    </div>
+  </div>
+
+  <script>
+    // Create visualizer bars
+    const viz = document.getElementById('visualizer');
+    for (let i = 0; i < 24; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = '4px';
+      bar.style.animationDelay = `${Math.random() * 0.8}s`;
+      viz.appendChild(bar);
+    }
+
+    let player;
+    let isPlaying = false;
+    let audioOnly = false;
+
+    // YouTube IFrame API
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        videoId: 'ukfCg8ZgMjA',
+        playerVars: {
+          autoplay: 0,
+          loop: 1,
+          playlist: 'ukfCg8ZgMjA',
+          controls: 1,
+          modestbranding: 1,
+          rel: 0,
+        },
+        events: {
+          onStateChange: onPlayerStateChange,
+          onReady: onPlayerReady
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      document.getElementById('status').innerHTML = '<span class="loop-icon">&#x21bb;</span> READY';
+    }
+
+    function onPlayerStateChange(event) {
+      const statusEl = document.getElementById('status');
+      const bars = document.querySelectorAll('.bar');
+
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        statusEl.innerHTML = '<span class="loop-icon">&#x21bb;</span> NOW PLAYING &middot; LOOP ON';
+        statusEl.classList.remove('paused');
+        document.getElementById('btnPlay').textContent = 'Pause';
+        document.getElementById('btnPlay').classList.add('active');
+        bars.forEach(b => b.classList.add('active'));
+      } else if (event.data === YT.PlayerState.PAUSED) {
+        isPlaying = false;
+        statusEl.innerHTML = '<span class="loop-icon">&#x21bb;</span> PAUSED';
+        statusEl.classList.add('paused');
+        document.getElementById('btnPlay').textContent = 'Play';
+        document.getElementById('btnPlay').classList.remove('active');
+        bars.forEach(b => b.classList.remove('active'));
+      } else if (event.data === YT.PlayerState.ENDED) {
+        // Loop: restart
+        player.seekTo(0);
+        player.playVideo();
+      }
+    }
+
+    function togglePlay() {
+      if (!player) return;
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    }
+
+    function toggleAudioOnly() {
+      audioOnly = !audioOnly;
+      const btn = document.getElementById('btnAudioOnly');
+      const wrap = document.querySelector('.player-wrap');
+      if (audioOnly) {
+        wrap.style.height = '0';
+        wrap.style.overflow = 'hidden';
+        wrap.style.border = 'none';
+        wrap.style.boxShadow = 'none';
+        btn.classList.add('active');
+        btn.textContent = 'Show Video';
+      } else {
+        wrap.style.height = '';
+        wrap.style.overflow = '';
+        wrap.style.border = '1px solid #1e1e1e';
+        wrap.style.boxShadow = '0 0 60px rgba(74, 222, 128, 0.08)';
+        btn.classList.remove('active');
+        btn.textContent = 'Audio Only';
+      }
+    }
+  </script>
+</body>
+</html>
