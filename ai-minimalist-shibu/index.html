@@ -5,516 +5,741 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AIミニマリストしぶ</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Sans+JP:wght@200;300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --card-border: #1e1e1e;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --text-dim: #555;
+      --accent: #4ade80;
+      --accent-dim: #166534;
+      --red: #ef4444;
+      --orange: #f97316;
+      --blue: #3b82f6;
+      --yellow: #eab308;
+      --radius: 16px;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, 'Helvetica Neue', 'Hiragino Sans', sans-serif; background: #fafafa; color: #333; line-height: 1.8; }
-    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    body {
+      font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-    /* Hero */
-    .hero { text-align: center; padding: 60px 0 40px; }
-    .hero h1 { font-size: 28px; font-weight: 200; letter-spacing: 4px; }
-    .hero .tagline { color: #999; font-size: 14px; margin-top: 8px; letter-spacing: 1px; }
-    .hero .philosophy { margin-top: 24px; padding: 20px 32px; background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); display: inline-block; }
-    .hero .philosophy blockquote { font-size: 15px; color: #555; font-style: italic; border-left: 3px solid #333; padding-left: 16px; text-align: left; }
-    .hero .philosophy .source { font-size: 11px; color: #aaa; margin-top: 6px; text-align: right; }
+    /* ===== Hero ===== */
+    .hero {
+      position: relative;
+      padding: 100px 0 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 200;
+      letter-spacing: 6px;
+      margin-bottom: 12px;
+    }
+    .hero .tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: 32px;
+    }
+    .hero-quote {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      text-align: left;
+    }
+    .hero-quote blockquote {
+      font-size: 15px;
+      color: var(--text);
+      font-style: italic;
+      border-left: 2px solid var(--accent);
+      padding-left: 16px;
+      line-height: 1.8;
+    }
+    .hero-quote .source {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 12px;
+      text-align: right;
+    }
 
-    /* Navigation */
-    .nav { display: flex; justify-content: center; gap: 8px; margin-bottom: 40px; flex-wrap: wrap; }
-    .nav a { padding: 6px 16px; font-size: 12px; color: #666; text-decoration: none; border: 1px solid #e0e0e0; border-radius: 20px; transition: all 0.2s; }
-    .nav a:hover, .nav a.active { background: #333; color: #fff; border-color: #333; }
+    /* ===== Navigation ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 0;
+      margin-bottom: 48px;
+    }
+    .nav-inner {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 6px 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .nav a:hover { color: #fff; border-color: #444; }
 
-    /* Cards */
-    .card { background: #fff; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-    .card h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #999; margin-bottom: 20px; }
+    /* ===== Section ===== */
+    section { margin-bottom: 64px; }
+    .section-num {
+      font-size: 48px;
+      font-weight: 200;
+      color: var(--card-border);
+      letter-spacing: 2px;
+      margin-bottom: -8px;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+    .section-intro {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
 
-    /* Stats */
-    .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 8px; }
-    .stat { text-align: center; }
-    .stat .value { font-size: 28px; font-weight: 200; }
-    .stat .value.negative { color: #e74c3c; }
-    .stat .value.positive { color: #2ecc71; }
-    .stat .label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    /* ===== Card ===== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 20px;
+    }
+    .card h3 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
 
-    /* Bar chart */
-    .bar-chart { margin-top: 16px; }
+    /* ===== Stats Grid ===== */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .stats-4 { grid-template-columns: repeat(4, 1fr); }
+    .stat { text-align: center; padding: 20px 8px; background: rgba(255,255,255,0.02); border-radius: 12px; }
+    .stat .val { font-size: 28px; font-weight: 200; }
+    .stat .val.green { color: var(--accent); }
+    .stat .val.red { color: var(--red); }
+    .stat .val.orange { color: var(--orange); }
+    .stat .lbl { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* ===== Bar Chart ===== */
     .bar-row { display: flex; align-items: center; margin-bottom: 10px; }
-    .bar-label { width: 100px; font-size: 13px; color: #666; flex-shrink: 0; }
-    .bar-track { flex: 1; height: 24px; background: #f0f0f0; border-radius: 4px; overflow: hidden; position: relative; }
-    .bar-fill { height: 100%; border-radius: 4px; }
-    .bar-value { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #666; }
+    .bar-label { width: 90px; font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+    .bar-track { flex: 1; height: 28px; background: rgba(255,255,255,0.04); border-radius: 6px; overflow: hidden; position: relative; }
+    .bar-fill { height: 100%; border-radius: 6px; }
+    .bar-value { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-muted); }
 
-    /* Month chart */
-    .month-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 160px; margin-top: 16px; padding-top: 16px; }
+    /* ===== Month Chart ===== */
+    .month-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 180px; padding-top: 20px; }
     .month-bar { display: flex; flex-direction: column; align-items: center; flex: 1; }
-    .month-bar .bar { width: 32px; border-radius: 4px 4px 0 0; }
-    .month-bar .month-label { font-size: 11px; color: #999; margin-top: 8px; }
-    .month-bar .month-value { font-size: 10px; color: #666; margin-bottom: 4px; }
+    .month-bar .bar { width: 36px; border-radius: 6px 6px 0 0; }
+    .month-bar .m-label { font-size: 11px; color: var(--text-dim); margin-top: 8px; }
+    .month-bar .m-value { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
 
-    /* Insight */
-    .insight { padding: 16px; background: #f8f8f8; border-radius: 8px; margin-top: 12px; border-left: 3px solid #333; }
-    .insight p { font-size: 13px; color: #555; }
-    .insight .tag { display: inline-block; background: #333; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
-
-    /* 30 Questions */
-    .questions-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
-    .q-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
-    .q-item:last-child { border-bottom: none; }
-    .q-num { width: 36px; height: 36px; background: #f5f5f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #999; font-weight: 600; flex-shrink: 0; margin-right: 12px; }
-    .q-text { flex: 1; color: #444; }
-    .q-item-name { font-size: 12px; color: #aaa; margin-left: 8px; white-space: nowrap; }
-    .q-item.keep .q-num { background: #333; color: #fff; }
-    .q-item.discard .q-num { background: #e74c3c; color: #fff; }
-    .q-item.pending .q-num { background: #f39c12; color: #fff; }
-
-    /* Possessions */
-    .possessions-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-    .poss-stat { text-align: center; padding: 16px 8px; background: #f8f8f8; border-radius: 8px; }
-    .poss-stat .poss-value { font-size: 24px; font-weight: 200; }
-    .poss-stat .poss-label { font-size: 10px; color: #999; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-    .category-list { margin-top: 16px; }
-    .cat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
-    .cat-row:last-child { border-bottom: none; }
-    .cat-name { color: #666; }
-    .cat-items { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .cat-items span { font-size: 11px; background: #f0f0f0; padding: 2px 8px; border-radius: 10px; color: #666; }
-
-    /* Comparison */
-    .compare-row { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+    /* ===== Compare Table ===== */
+    .compare-row { display: grid; grid-template-columns: 100px 1fr 1fr; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
     .compare-row:last-child { border-bottom: none; }
-    .compare-header { font-size: 11px; color: #999; text-transform: uppercase; font-weight: 600; }
-    .compare-shibu { text-align: center; color: #2ecc71; }
-    .compare-me { text-align: center; color: #e74c3c; }
-    .compare-label { color: #666; }
+    .compare-hdr { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+    .c-shibu { text-align: center; color: var(--accent); }
+    .c-me { text-align: center; color: var(--red); }
+    .c-label { color: var(--text-muted); }
 
-    /* Timeline */
-    .timeline { position: relative; padding-left: 24px; }
-    .timeline::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: #e0e0e0; }
-    .timeline-item { position: relative; margin-bottom: 20px; }
-    .timeline-item::before { content: ''; position: absolute; left: -20px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: #333; }
-    .timeline-item .t-date { font-size: 11px; color: #999; }
-    .timeline-item .t-content { font-size: 13px; color: #555; margin-top: 2px; }
-    .timeline-item .t-tag { display: inline-block; font-size: 10px; background: #f0f0f0; color: #666; padding: 1px 8px; border-radius: 8px; margin-top: 4px; }
+    /* ===== Timeline ===== */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 10px; bottom: 10px; width: 1px; background: var(--card-border); }
+    .tl-item { position: relative; margin-bottom: 24px; }
+    .tl-item::before { content: ''; position: absolute; left: -24px; top: 10px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .tl-item.dim::before { background: var(--text-dim); }
+    .tl-date { font-size: 11px; color: var(--accent); font-weight: 500; letter-spacing: 1px; }
+    .tl-item.dim .tl-date { color: var(--text-dim); }
+    .tl-text { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .tl-tag { display: inline-block; font-size: 9px; background: rgba(74,222,128,0.1); color: var(--accent); padding: 2px 10px; border-radius: 8px; margin-top: 6px; letter-spacing: 0.5px; }
 
-    /* Dev log table */
-    .log-table { width: 100%; font-size: 13px; border-collapse: collapse; }
-    .log-table th { text-align: left; padding: 8px 0; border-bottom: 1px solid #eee; color: #999; font-weight: 500; font-size: 11px; text-transform: uppercase; }
-    .log-table td { padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+    /* ===== Insight ===== */
+    .insight {
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 10px;
+      border-left: 3px solid var(--accent);
+      margin-top: 12px;
+    }
+    .insight p { font-size: 13px; color: var(--text-muted); }
+    .insight .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .insight.red { border-left-color: var(--red); }
+    .insight.red .tag { background: var(--red); color: #fff; }
+    .insight.orange { border-left-color: var(--orange); }
+    .insight.orange .tag { background: var(--orange); color: #000; }
 
-    /* Footer */
-    .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid #f0f0f0; font-size: 11px; color: #ccc; }
+    /* ===== 30 Questions ===== */
+    .q-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
+    .q-item:last-child { border-bottom: none; }
+    .q-num { width: 32px; height: 32px; background: rgba(234,179,8,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--yellow); font-weight: 600; flex-shrink: 0; margin-right: 14px; }
+    .q-text { flex: 1; color: var(--text-muted); }
+    .q-name { font-size: 11px; color: var(--text-dim); margin-left: 8px; white-space: nowrap; }
 
-    /* Section */
-    section { margin-bottom: 0; }
-    section .section-intro { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.6; }
+    /* ===== Possessions ===== */
+    .cat-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; gap: 12px; }
+    .cat-row:last-child { border-bottom: none; }
+    .cat-name { color: var(--text-muted); flex-shrink: 0; width: 80px; }
+    .cat-items { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; flex: 1; }
+    .cat-items span { font-size: 11px; background: rgba(255,255,255,0.05); padding: 3px 10px; border-radius: 12px; color: var(--text-muted); }
+
+    /* ===== Products ===== */
+    .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .product { padding: 20px 16px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid var(--card-border); }
+    .product .p-name { font-size: 13px; color: var(--text); font-weight: 500; }
+    .product .p-price { font-size: 14px; color: var(--accent); font-weight: 300; margin: 4px 0; }
+    .product .p-desc { font-size: 11px; color: var(--text-dim); }
+
+    /* ===== Books ===== */
+    .book { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .book:last-child { border-bottom: none; }
+    .book-year { font-size: 12px; color: var(--accent); font-weight: 500; flex-shrink: 0; width: 44px; }
+    .book-title { font-size: 14px; color: var(--text); font-weight: 400; }
+    .book-detail { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+    /* ===== Media ===== */
+    .media-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .media-tags span { font-size: 11px; padding: 4px 12px; background: rgba(255,255,255,0.04); border-radius: 20px; color: var(--text-muted); }
+
+    /* ===== Profile Grid ===== */
+    .profile-grid { display: grid; grid-template-columns: 120px 1fr; gap: 8px 16px; font-size: 13px; }
+    .profile-grid .p-key { color: var(--text-dim); }
+    .profile-grid .p-val { color: var(--text); }
+
+    /* ===== Log Table ===== */
+    .log-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+    .log-table th { text-align: left; padding: 10px 0; border-bottom: 1px solid var(--card-border); color: var(--text-dim); font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+    .log-table td { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-muted); }
+    .log-table td:first-child { color: var(--text-dim); }
+
+    /* ===== Footer ===== */
+    .footer { text-align: center; padding: 48px 0; border-top: 1px solid var(--card-border); font-size: 11px; color: var(--text-dim); }
+    .footer .f-brand { font-size: 14px; color: var(--text-muted); letter-spacing: 2px; font-weight: 300; margin-bottom: 8px; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 28px; letter-spacing: 3px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stats-4 { grid-template-columns: repeat(2, 1fr); }
+      .products { grid-template-columns: 1fr; }
+      .compare-row { grid-template-columns: 80px 1fr 1fr; }
+      .profile-grid { grid-template-columns: 100px 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <!-- Hero -->
-    <div class="hero">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="container">
+      <div class="hero-label">AI SELF-DEVELOPMENT PROJECT</div>
       <h1>AIミニマリストしぶ</h1>
       <p class="tagline">Less is more. — 支出を最小に、モノを最小に、価値を最大に。</p>
-      <div class="philosophy">
-        <blockquote>お金・時間・空間・管理・執着<br>5つを無くした状態が「手ぶら」</blockquote>
+      <div class="hero-quote">
+        <blockquote>ミニマリズムは目的ではなく手段。<br>モノを減らすことは、自分の好きなものを見つけること。</blockquote>
         <div class="source">— ミニマリストしぶ（澁谷直人）</div>
       </div>
     </div>
+  </div>
 
-    <!-- Navigation -->
-    <div class="nav">
-      <a href="#finance" class="active">支出</a>
-      <a href="#possessions">持ち物</a>
-      <a href="#questions">30の質問</a>
+  <!-- Navigation -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a href="#profile">プロフィール</a>
+      <a href="#timeline">軌跡</a>
+      <a href="#books">著書・メディア</a>
+      <a href="#brand">less is _ jp</a>
+      <a href="#program">プログラム</a>
+      <a href="#finance">支出分析</a>
       <a href="#compare">しぶさん比較</a>
-      <a href="#story">ストーリー</a>
+      <a href="#questions">30の質問</a>
+      <a href="#possessions">持ち物</a>
       <a href="#devlog">開発ログ</a>
     </div>
+  </div>
 
-    <!-- ===== 支出セクション ===== -->
-    <section id="finance">
+  <div class="container">
+
+    <!-- 01 Profile -->
+    <section id="profile">
+      <div class="section-num">01</div>
+      <h2 class="section-title">プロフィール</h2>
+      <div class="section-sub">PROFILE</div>
+      <p class="section-intro">澁谷直人（しぶやなおと）、1995年福岡県北九州市生まれ。中学生時代に両親の離婚を経験し、母子家庭で育つ。19歳でミニマリズムに出会い、月7万円の生活費で快適に暮らせることを発見。2018年に著書「手ぶらで生きる。」がAmazonベストセラー1位。SNS総フォロワー40万人超を擁する、日本を代表するミニマリスト。</p>
+
       <div class="card">
-        <h2>2026 Q1 サマリー</h2>
-        <div class="summary">
-          <div class="stat">
-            <div class="value">¥4,116</div>
-            <div class="label">売上</div>
+        <h3>PROFILE</h3>
+        <div class="profile-grid">
+          <div class="p-key">本名</div><div class="p-val">澁谷直人（しぶやなおと）</div>
+          <div class="p-key">生年月日</div><div class="p-val">1995年3月30日（30歳）</div>
+          <div class="p-key">出身</div><div class="p-val">福岡県北九州市</div>
+          <div class="p-key">会社</div><div class="p-val">Minimal Arts 株式会社 代表取締役</div>
+          <div class="p-key">YouTube</div><div class="p-val">19.1万人登録</div>
+          <div class="p-key">Instagram</div><div class="p-val">7.1万人フォロワー</div>
+          <div class="p-key">所持品</div><div class="p-val">約250個（段ボール1箱）</div>
+          <div class="p-key">生活費</div><div class="p-val">月約6万円</div>
+        </div>
+      </div>
+
+      <div class="stats" style="margin-top: 20px;">
+        <div class="stat"><div class="val green">¥58,200</div><div class="lbl">月間生活費</div></div>
+        <div class="stat"><div class="val">250</div><div class="lbl">所持品数</div></div>
+        <div class="stat"><div class="val">8</div><div class="lbl">年間 服の数</div></div>
+      </div>
+    </section>
+
+    <!-- 02 Timeline -->
+    <section id="timeline">
+      <div class="section-num">02</div>
+      <h2 class="section-title">軌跡</h2>
+      <div class="section-sub">TIMELINE</div>
+
+      <div class="card">
+        <div class="timeline">
+          <div class="tl-item dim">
+            <div class="tl-date">幼少期</div>
+            <div class="tl-text">投資家の父と専業主婦の母。何不自由ないマキシマリスト家庭。毎週新作ゲームを買う日々。</div>
           </div>
-          <div class="stat">
-            <div class="value negative">¥489,964</div>
-            <div class="label">経費</div>
+          <div class="tl-item">
+            <div class="tl-date">高校進学の頃</div>
+            <div class="tl-text">父が事業失敗で自己破産。邸宅は荒れた「汚部屋」に。両親離婚、母のパートで育つ。</div>
+            <div class="tl-tag">転落</div>
           </div>
-          <div class="stat">
-            <div class="value negative">-¥485,848</div>
-            <div class="label">損益</div>
+          <div class="tl-item">
+            <div class="tl-date">19歳の冬</div>
+            <div class="tl-text">「冷蔵庫 なし」でGoogle検索し、ミニマリズムに出会う。風呂なしワンルーム家賃19,000円。月7万円で快適に暮らせることを発見。</div>
+            <div class="tl-tag">ミニマリストの原点</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2017</div>
+            <div class="tl-text">「ミニマリストしぶのブログ」開設。1年で月間100万PV達成し独立。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2018</div>
+            <div class="tl-text">「手ぶらで生きる。」出版、発売日に重版決定。Amazonベストセラー1位。海外3カ国翻訳。株式会社ミニマリスト設立。</div>
+            <div class="tl-tag">起業</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2020</div>
+            <div class="tl-text">社名を「Minimal Arts 株式会社」に変更。ブランド「less is _ jp」本格展開。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2022</div>
+            <div class="tl-text">2冊目「手放す練習 ムダに消耗しない取捨選択」をKADOKAWAから出版。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2025</div>
+            <div class="tl-text">「新版 手ぶらで生きる。」を文庫サイズでリニューアル出版。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2026</div>
+            <div class="tl-text">テスラ モデル3を納車（動画12.8万回再生）。ミニマルライフ・プログラム累計100名超。YouTube片付け動画は3時間超の超大作に。</div>
+            <div class="tl-tag">現在</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Books & Media -->
+    <section id="books">
+      <div class="section-num">03</div>
+      <h2 class="section-title">著書・メディア</h2>
+      <div class="section-sub">BOOKS & MEDIA</div>
+
+      <div class="card">
+        <h3>著書</h3>
+        <div class="book">
+          <div class="book-year">2018</div>
+          <div>
+            <div class="book-title">手ぶらで生きる。見栄と財布を捨てて、自由になる50の方法</div>
+            <div class="book-detail">サンクチュアリ出版 / 発売日に重版 / Amazonベストセラー1位 / 海外3カ国翻訳</div>
+          </div>
+        </div>
+        <div class="book">
+          <div class="book-year">2022</div>
+          <div>
+            <div class="book-title">手放す練習 ムダに消耗しない取捨選択</div>
+            <div class="book-detail">KADOKAWA</div>
+          </div>
+        </div>
+        <div class="book">
+          <div class="book-year">2025</div>
+          <div>
+            <div class="book-title">新版 手ぶらで生きる。</div>
+            <div class="book-detail">文庫サイズでリニューアル出版</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <h2>月別経費推移</h2>
+        <h3>メディア出演</h3>
+        <div class="media-tags">
+          <span>NHK あさイチ</span>
+          <span>NHK WORLD</span>
+          <span>テレ朝 ワイドスクランブル</span>
+          <span>TBS Nスタ</span>
+          <span>日テレ ZIP!</span>
+          <span>ヒルナンデス</span>
+          <span>CLASSY.</span>
+          <span>anan</span>
+          <span>日経WOMAN</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Brand -->
+    <section id="brand">
+      <div class="section-num">04</div>
+      <h2 class="section-title">less is _ jp</h2>
+      <div class="section-sub">BRAND</div>
+      <p class="section-intro">「手ぶらで生きる」の哲学を製品に落とし込んだオリジナルブランド。less is moreの精神でそぎ落とし、ミニマルな機能美を追求。中目黒 蔦屋書店でも取り扱い。</p>
+
+      <div class="products">
+        <div class="product">
+          <div class="p-name">手ぶら財布</div>
+          <div class="p-price">¥14,700</div>
+          <div class="p-desc">スマホに貼り付けるカード＆コインケース</div>
+        </div>
+        <div class="product">
+          <div class="p-name">手ぶらエコバッグ</div>
+          <div class="p-price">¥2,800〜</div>
+          <div class="p-desc">ポケットに収まるコンパクトバッグ</div>
+        </div>
+        <div class="product">
+          <div class="p-name">小さいL字財布</div>
+          <div class="p-price">¥16,900〜</div>
+          <div class="p-desc">L字ファスナーのミニマル財布</div>
+        </div>
+        <div class="product">
+          <div class="p-name">お財布ショルダー</div>
+          <div class="p-price">¥11,000</div>
+          <div class="p-desc">折り畳める財布一体型ショルダー</div>
+        </div>
+        <div class="product">
+          <div class="p-name">薄いリュック</div>
+          <div class="p-price">¥17,900</div>
+          <div class="p-desc">厚さを極限まで削ったバックパック</div>
+        </div>
+        <div class="product">
+          <div class="p-name">バッグレスシャツ</div>
+          <div class="p-price">¥28,600</div>
+          <div class="p-desc">収納ポケット内蔵のシャツ</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Program -->
+    <section id="program">
+      <div class="section-num">05</div>
+      <h2 class="section-title">ミニマルライフ・プログラム</h2>
+      <div class="section-sub">MINIMAL LIFE PROGRAM</div>
+      <p class="section-intro">3ヶ月間のオンライン完結型コーチング。10年以上の活動ノウハウを体系化し、累計100名以上を指導。LINEでの質問し放題、週2回のグループZOOM、専用スケジュール作成など手厚いサポート。</p>
+
+      <div class="card">
+        <h3>3ヶ月カリキュラム</h3>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-date">Month 1 — モノ減らし</div>
+            <div class="tl-text">クローゼット、書類、キッチン、思い出のモノなどカテゴリ別に整理</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Month 2 — お金から自由になる</div>
+            <div class="tl-text">ミニマムライフコスト計算、サブスク見直し、キャッシュレス化</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Month 3 — デジタル・ミニマリスト</div>
+            <div class="tl-text">スマホ設定最適化、通知オフ、写真データ片付け</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>わたしの転機 — モノ減らしコーチング</h3>
+        <div class="stats" style="margin-bottom: 20px;">
+          <div class="stat"><div class="val">¥228,000</div><div class="lbl">コーチング費用</div></div>
+          <div class="stat"><div class="val">1ヶ月</div><div class="lbl">期間</div></div>
+          <div class="stat"><div class="val green">∞</div><div class="lbl">価値</div></div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item dim">
+            <div class="tl-text">しぶさんのYouTube片付け企画を見て夢中になる。「ミニマリストになりたい」vs「顔を晒すのは嫌」の葛藤。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-text">トークイベント参加。非公開・有料の「モノ減らしコーチング」モニター募集を知り、値段を聞かずに1番に名乗り出る。</div>
+            <div class="tl-tag">人生の転機</div>
+          </div>
+          <div class="tl-item dim">
+            <div class="tl-text">無職の状態で22万8千円。選んだモノに囲まれた暮らしから、さらに削ぎ落とす「自分の身を削るような痛み」。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-text">ミニマリストになれば苦痛な労働生活に戻らなくて済む。生活費を下げれば、自由になれる。</div>
+            <div class="tl-tag">自由の獲得</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Finance -->
+    <section id="finance">
+      <div class="section-num">06</div>
+      <h2 class="section-title">支出分析</h2>
+      <div class="section-sub">EXPENSE ANALYSIS — 2026 Q1</div>
+
+      <div class="stats" style="margin-bottom: 20px;">
+        <div class="stat"><div class="val">¥4,116</div><div class="lbl">売上</div></div>
+        <div class="stat"><div class="val red">¥489,964</div><div class="lbl">経費</div></div>
+        <div class="stat"><div class="val red">-¥485,848</div><div class="lbl">損益</div></div>
+      </div>
+
+      <div class="card">
+        <h3>月別経費推移</h3>
         <div class="month-chart">
           <div class="month-bar">
-            <div class="month-value">¥93,537</div>
+            <div class="m-value">¥93,537</div>
             <div class="bar" style="height: 53px; background: #555;"></div>
-            <div class="month-label">1月</div>
+            <div class="m-label">1月</div>
           </div>
           <div class="month-bar">
-            <div class="month-value">¥113,484</div>
+            <div class="m-value">¥113,484</div>
             <div class="bar" style="height: 64px; background: #555;"></div>
-            <div class="month-label">2月</div>
+            <div class="m-label">2月</div>
           </div>
           <div class="month-bar">
-            <div class="month-value">¥282,943</div>
-            <div class="bar" style="height: 160px; background: #e74c3c;"></div>
-            <div class="month-label">3月</div>
+            <div class="m-value">¥282,943</div>
+            <div class="bar" style="height: 160px; background: var(--red);"></div>
+            <div class="m-label">3月</div>
           </div>
           <div class="month-bar">
-            <div class="month-value">—</div>
-            <div class="bar" style="height: 0px; background: #ddd;"></div>
-            <div class="month-label">4月</div>
+            <div class="m-value">—</div>
+            <div class="bar" style="height: 0px; background: #333;"></div>
+            <div class="m-label">4月</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <h2>カテゴリ別内訳</h2>
-        <div class="bar-chart">
-          <div class="bar-row">
-            <div class="bar-label">消耗品費</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width: 40.7%; background: #e74c3c;"></div>
-              <div class="bar-value">¥199,596 (40.7%)</div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">水道光熱費</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width: 32.7%; background: #e67e22;"></div>
-              <div class="bar-value">¥160,219 (32.7%)</div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">地代家賃</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width: 17.9%; background: #3498db;"></div>
-              <div class="bar-value">¥87,765 (17.9%)</div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">通信費</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width: 4.6%; background: #2ecc71;"></div>
-              <div class="bar-value">¥22,403 (4.6%)</div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label">その他</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width: 4.1%; background: #95a5a6;"></div>
-              <div class="bar-value">¥19,981 (4.1%)</div>
-            </div>
-          </div>
+        <h3>カテゴリ別内訳</h3>
+        <div class="bar-row">
+          <div class="bar-label">消耗品費</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 40.7%; background: var(--red);"></div><div class="bar-value">¥199,596 (40.7%)</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">水道光熱費</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 32.7%; background: var(--orange);"></div><div class="bar-value">¥160,219 (32.7%)</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">地代家賃</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 17.9%; background: var(--blue);"></div><div class="bar-value">¥87,765 (17.9%)</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">通信費</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 4.6%; background: var(--accent);"></div><div class="bar-value">¥22,403 (4.6%)</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">その他</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 4.1%; background: #666;"></div><div class="bar-value">¥19,981 (4.1%)</div></div>
         </div>
       </div>
     </section>
 
-    <!-- ===== 持ち物セクション ===== -->
-    <section id="possessions">
-      <div class="card">
-        <h2>全持ち物リスト</h2>
-        <p class="section-intro">しぶさんは全持ち物が段ボール1箱。自分の持ち物を把握し、少数精鋭のスタメンだけを残す。</p>
-
-        <div class="possessions-summary">
-          <div class="poss-stat">
-            <div class="poss-value">30</div>
-            <div class="poss-label">アイテム</div>
-          </div>
-          <div class="poss-stat">
-            <div class="poss-value" style="color: #2ecc71;">—</div>
-            <div class="poss-label">残す</div>
-          </div>
-          <div class="poss-stat">
-            <div class="poss-value" style="color: #e74c3c;">—</div>
-            <div class="poss-label">手放す</div>
-          </div>
-          <div class="poss-stat">
-            <div class="poss-value" style="color: #f39c12;">30</div>
-            <div class="poss-label">検討中</div>
-          </div>
-        </div>
-
-        <div class="category-list">
-          <div class="cat-row">
-            <div class="cat-name">デバイス</div>
-            <div class="cat-items">
-              <span>iPhone15Pro</span>
-              <span>M3MBA</span>
-              <span>ビジョンプロ</span>
-              <span>キーボード</span>
-              <span>マウス</span>
-              <span>モニタ</span>
-            </div>
-          </div>
-          <div class="cat-row">
-            <div class="cat-name">モバイル</div>
-            <div class="cat-items">
-              <span>モバイルバッテリ</span>
-              <span>モバイルルータ</span>
-            </div>
-          </div>
-          <div class="cat-row">
-            <div class="cat-name">医薬品</div>
-            <div class="cat-items">
-              <span>アンメルツ</span>
-              <span>ウナクール</span>
-              <span>ヒルマイルド</span>
-              <span>アセトアミノフェン</span>
-              <span>龍角散ダイレクト</span>
-              <span>メジコン</span>
-              <span>ストッパ</span>
-              <span>デジアイ</span>
-            </div>
-          </div>
-          <div class="cat-row">
-            <div class="cat-name">スキンケア</div>
-            <div class="cat-items">
-              <span>白色ワセリン</span>
-              <span>スキンローション</span>
-              <span>テラ・コートリル</span>
-              <span>リンデロン</span>
-            </div>
-          </div>
-          <div class="cat-row">
-            <div class="cat-name">日用品</div>
-            <div class="cat-items">
-              <span>マグカップ</span>
-              <span>水筒</span>
-              <span>ハサミ</span>
-              <span>ジェルコートF</span>
-              <span>体温計</span>
-              <span>眼鏡ケース</span>
-              <span>布テ</span>
-            </div>
-          </div>
-          <div class="cat-row">
-            <div class="cat-name">その他</div>
-            <div class="cat-items">
-              <span>ぶどうジュース</span>
-              <span>寝袋</span>
-              <span>nasne的な何か</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 30の質問セクション ===== -->
-    <section id="questions">
-      <div class="card">
-        <h2>手放すか迷った時の「30の質問」</h2>
-        <p class="section-intro">しぶさんメソッド。迷ったモノにこの30問を通す。NOが多ければ手放し候補。</p>
-        <div class="questions-grid">
-          <div class="q-item pending"><div class="q-num">1</div><div class="q-text">要るかどうかで迷ってない？</div><div class="q-item-name">マグカップ</div></div>
-          <div class="q-item pending"><div class="q-num">2</div><div class="q-text">最後に使ったのはいつ？</div><div class="q-item-name">ぶどうジュース</div></div>
-          <div class="q-item pending"><div class="q-num">3</div><div class="q-text">使ってるけど、テンション上がる？</div><div class="q-item-name">アンメルツ</div></div>
-          <div class="q-item pending"><div class="q-num">4</div><div class="q-text">使う頻度は高い？</div><div class="q-item-name">ウナクール</div></div>
-          <div class="q-item pending"><div class="q-num">5</div><div class="q-text">使用用途を説明できる？</div><div class="q-item-name">ヒルマイルド</div></div>
-          <div class="q-item pending"><div class="q-num">6</div><div class="q-text">捨てたとして、買い直したい？</div><div class="q-item-name">アセトアミノフェン</div></div>
-          <div class="q-item pending"><div class="q-num">7</div><div class="q-text">他のモノで代用できない？</div><div class="q-item-name">白色ワセリン</div></div>
-          <div class="q-item pending"><div class="q-num">8</div><div class="q-text">情報が古くなってない？</div><div class="q-item-name">スキンローション</div></div>
-          <div class="q-item pending"><div class="q-num">9</div><div class="q-text">持っててネガティブにならない？</div><div class="q-item-name">テラ・コートリル</div></div>
-          <div class="q-item pending"><div class="q-num">10</div><div class="q-text">好きな人に見せられる？</div><div class="q-item-name">リンデロン</div></div>
-          <div class="q-item pending"><div class="q-num">11</div><div class="q-text">クリーニングしてまで使いたい？</div><div class="q-item-name">ジェルコートF</div></div>
-          <div class="q-item pending"><div class="q-num">12</div><div class="q-text">残す理由を考えてない？</div><div class="q-item-name">水筒</div></div>
-          <div class="q-item pending"><div class="q-num">13</div><div class="q-text">保管スペースに家賃を払う価値は？</div><div class="q-item-name">ハサミ</div></div>
-          <div class="q-item pending"><div class="q-num">14</div><div class="q-text">誰かに強制されて持ってる？</div><div class="q-item-name">iPhone15Pro</div></div>
-          <div class="q-item pending"><div class="q-num">15</div><div class="q-text">少数精鋭のスタメンに入る？</div><div class="q-item-name">龍角散ダイレクト</div></div>
-          <div class="q-item pending"><div class="q-num">16</div><div class="q-text">そのモノを熱く語れる？</div><div class="q-item-name">メジコン</div></div>
-          <div class="q-item pending"><div class="q-num">17</div><div class="q-text">盗まれて気付ける？</div><div class="q-item-name">ストッパ</div></div>
-          <div class="q-item pending"><div class="q-num">18</div><div class="q-text">最後まで使い切れる？</div><div class="q-item-name">デジアイ</div></div>
-          <div class="q-item pending"><div class="q-num">19</div><div class="q-text">今の自分に必要？</div><div class="q-item-name">M3MBA</div></div>
-          <div class="q-item pending"><div class="q-num">20</div><div class="q-text">眠らせてモノが可哀想じゃない？</div><div class="q-item-name">ビジョンプロ</div></div>
-          <div class="q-item pending"><div class="q-num">21</div><div class="q-text">心の底から美しいと感じる？</div><div class="q-item-name">布テ</div></div>
-          <div class="q-item pending"><div class="q-num">22</div><div class="q-text">使っていて快適？</div><div class="q-item-name">キーボード</div></div>
-          <div class="q-item pending"><div class="q-num">23</div><div class="q-text">機能美のバランス取れてる？</div><div class="q-item-name">マウス</div></div>
-          <div class="q-item pending"><div class="q-num">24</div><div class="q-text">持っていることで自分が輝く？</div><div class="q-item-name">モニタ</div></div>
-          <div class="q-item pending"><div class="q-num">25</div><div class="q-text">色数が増えない？</div><div class="q-item-name">モバイルバッテリ</div></div>
-          <div class="q-item pending"><div class="q-num">26</div><div class="q-text">持っていることを忘れてない？</div><div class="q-item-name">モバイルルータ</div></div>
-          <div class="q-item pending"><div class="q-num">27</div><div class="q-text">未来の自分が感謝する？</div><div class="q-item-name">nasne的な何か</div></div>
-          <div class="q-item pending"><div class="q-num">28</div><div class="q-text">旅行の時に持って行く？</div><div class="q-item-name">体温計</div></div>
-          <div class="q-item pending"><div class="q-num">29</div><div class="q-text">災害時に持ち逃げする？</div><div class="q-item-name">寝袋</div></div>
-          <div class="q-item pending"><div class="q-num">30</div><div class="q-text">結局、迷ってない？</div><div class="q-item-name">眼鏡ケース</div></div>
-        </div>
-        <div class="insight" style="margin-top: 16px; border-left-color: #f39c12;">
-          <span class="tag" style="background: #f39c12;">Status</span>
-          <p>30アイテムすべて検討中。ここから「残す」「手放す」を仕分けていく。</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== しぶさん比較 ===== -->
+    <!-- 07 Compare -->
     <section id="compare">
-      <div class="card">
-        <h2>しぶさん vs わたし — 月間生活費</h2>
-        <div class="summary" style="margin-bottom: 24px;">
-          <div class="stat">
-            <div class="value positive">¥58,200</div>
-            <div class="label">しぶさん</div>
-          </div>
-          <div class="stat">
-            <div class="value negative">¥163,321</div>
-            <div class="label">わたし（月平均）</div>
-          </div>
-          <div class="stat">
-            <div class="value" style="font-size: 22px;">2.8倍</div>
-            <div class="label">差</div>
-          </div>
-        </div>
+      <div class="section-num">07</div>
+      <h2 class="section-title">しぶさん vs わたし</h2>
+      <div class="section-sub">MONTHLY COST COMPARISON</div>
 
-        <div class="compare-row">
-          <div class="compare-header">項目</div>
-          <div class="compare-header" style="text-align: center;">しぶさん</div>
-          <div class="compare-header" style="text-align: center;">わたし</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-label">家賃</div>
-          <div class="compare-shibu">¥19,000</div>
-          <div class="compare-me">¥29,255</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-label">光熱費</div>
-          <div class="compare-shibu">¥4,500</div>
-          <div class="compare-me">¥53,406 (!)</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-label">通信費</div>
-          <div class="compare-shibu">¥5,000</div>
-          <div class="compare-me">¥7,468</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-label">食費</div>
-          <div class="compare-shibu">¥15,000</div>
-          <div class="compare-me" style="color: #999;">未計上</div>
-        </div>
-        <div class="compare-row">
-          <div class="compare-label">消耗品</div>
-          <div class="compare-shibu">¥1,000</div>
-          <div class="compare-me">¥66,532</div>
-        </div>
-
-        <div class="insight" style="margin-top: 16px;">
-          <span class="tag">最大の差</span>
-          <p>水道光熱費がしぶさんの約12倍。しぶさんは冷蔵庫なし・モノが少ない = 電気を使わない生活。ミニマリズムは光熱費にも直結する。</p>
-        </div>
+      <div class="stats" style="margin-bottom: 24px;">
+        <div class="stat"><div class="val green">¥58,200</div><div class="lbl">しぶさん</div></div>
+        <div class="stat"><div class="val red">¥163,321</div><div class="lbl">わたし（月平均）</div></div>
+        <div class="stat"><div class="val orange">2.8x</div><div class="lbl">差</div></div>
       </div>
 
       <div class="card">
-        <h2>しぶさんに近づくアクションプラン</h2>
-        <p class="section-intro">月163,321円 → 目標 58,200円（-105,121円）</p>
+        <div class="compare-row">
+          <div class="compare-hdr">項目</div>
+          <div class="compare-hdr" style="text-align:center;">しぶさん</div>
+          <div class="compare-hdr" style="text-align:center;">わたし</div>
+        </div>
+        <div class="compare-row"><div class="c-label">家賃</div><div class="c-shibu">¥19,000</div><div class="c-me">¥29,255</div></div>
+        <div class="compare-row"><div class="c-label">光熱費</div><div class="c-shibu">¥4,500</div><div class="c-me">¥53,406</div></div>
+        <div class="compare-row"><div class="c-label">通信費</div><div class="c-shibu">¥5,000</div><div class="c-me">¥7,468</div></div>
+        <div class="compare-row"><div class="c-label">食費</div><div class="c-shibu">¥15,000</div><div class="c-me" style="color:var(--text-dim);">未計上</div></div>
+        <div class="compare-row"><div class="c-label">消耗品</div><div class="c-shibu">¥1,000</div><div class="c-me">¥66,532</div></div>
+      </div>
+
+      <div class="card">
+        <h3>アクションプラン</h3>
+        <p style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">月163,321円 → 目標 58,200円（-105,121円）</p>
         <div class="insight">
           <span class="tag">Step 1</span>
-          <p><strong>水道光熱費 -¥48,906</strong> — 待機電力カット、暖房設定を下げる、不要な家電を手放す。しぶさんは冷蔵庫すら持っていない。</p>
+          <p><strong style="color:var(--text);">水道光熱費 -¥48,906</strong> — 待機電力カット、暖房設定を下げる、不要な家電を手放す。しぶさんは冷蔵庫すら持っていない。</p>
         </div>
-        <div class="insight" style="margin-top: 8px;">
+        <div class="insight" style="margin-top:8px;">
           <span class="tag">Step 2</span>
-          <p><strong>消耗品費 -¥65,532</strong> — 「本当に必要か？」を3日待ってから買う。月1,000円目標。衝動買いゼロ。</p>
+          <p><strong style="color:var(--text);">消耗品費 -¥65,532</strong> — 「本当に必要か？」を3日待ってから買う。月1,000円目標。衝動買いゼロ。</p>
         </div>
-        <div class="insight" style="margin-top: 8px;">
+        <div class="insight" style="margin-top:8px;">
           <span class="tag">Step 3</span>
-          <p><strong>家賃 -¥10,255</strong> — コワーキングプランの見直し。使用頻度に合ったプランか確認。</p>
+          <p><strong style="color:var(--text);">家賃 -¥10,255</strong> — コワーキングプランの見直し。使用頻度に合ったプランか確認。</p>
         </div>
-        <div class="insight" style="margin-top: 8px;">
+        <div class="insight" style="margin-top:8px;">
           <span class="tag">Step 4</span>
-          <p><strong>通信費 -¥2,468</strong> — 楽天SIMのプラン確認。不要なオプション解約。</p>
+          <p><strong style="color:var(--text);">通信費 -¥2,468</strong> — 楽天SIMのプラン確認。不要なオプション解約。</p>
         </div>
-        <div class="insight" style="margin-top: 16px; border-left-color: #2ecc71;">
-          <span class="tag" style="background: #2ecc71;">Goal</span>
+        <div class="insight" style="margin-top:16px; border-left-color:var(--accent);">
+          <span class="tag" style="background:var(--accent); color:#000;">Goal</span>
           <p>全ステップ達成で月¥58,200。年間¥698,400。これがミニマリストの「自由の数字」。</p>
         </div>
       </div>
     </section>
 
-    <!-- ===== ストーリー ===== -->
-    <section id="story">
-      <div class="card">
-        <h2>しぶさんの軌跡</h2>
-        <p class="section-intro">裕福な家庭から貧困への凋落。フリーターを経て「手ぶらで生きる」に到達した30年の記録。</p>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="t-date">幼少期</div>
-            <div class="t-content">投資家の父と専業主婦の母。何不自由なく育つ。毎週新作ゲームを買う「マキシマリスト」家庭。</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-date">高校進学の頃</div>
-            <div class="t-content">父が事業失敗で自己破産。邸宅は荒れた「汚部屋」に。両親離婚。</div>
-            <div class="t-tag">転落</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-date">19歳の冬</div>
-            <div class="t-content">「安い家賃の狭い部屋で生活するにはモノを減らすしかない」。持ち物を徹底処分。風呂なしワンルーム家賃19,000円。月7万円で快適に暮らせることを発見。</div>
-            <div class="t-tag">ミニマリストの原点</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-date">ブログ開設</div>
-            <div class="t-content">自身の暮らしを発信。たちまち評判に。出版社から声がかかる。</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-date">2018年（23歳）</div>
-            <div class="t-content">「手ぶらで生きる」出版。株式会社ミニマリスト設立。</div>
-            <div class="t-tag">起業</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-date">現在（30歳）</div>
-            <div class="t-content">福岡市ワンルーム30㎡。年8枚の服、寝袋睡眠、冷蔵庫なし。全持ち物が段ボール1箱。YouTube片付け動画は3時間超の超大作に。夢は「人類を身軽に」。</div>
-            <div class="t-tag">今</div>
-          </div>
-        </div>
-      </div>
+    <!-- 08 30 Questions -->
+    <section id="questions">
+      <div class="section-num">08</div>
+      <h2 class="section-title">30の質問</h2>
+      <div class="section-sub">30 QUESTIONS TO LET GO</div>
+      <p class="section-intro">しぶさんメソッド。手放すか迷ったモノにこの30問を通す。NOが多ければ手放し候補。</p>
 
       <div class="card">
-        <h2>わたしの転機 — モノ減らしコーチング</h2>
-        <div class="summary" style="margin-bottom: 20px;">
-          <div class="stat">
-            <div class="value">¥228,000</div>
-            <div class="label">コーチング費用</div>
-          </div>
-          <div class="stat">
-            <div class="value">1ヶ月</div>
-            <div class="label">期間</div>
-          </div>
-          <div class="stat">
-            <div class="value">∞</div>
-            <div class="label">価値</div>
-          </div>
-        </div>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="t-content">しぶさんのYouTube片付け企画を見て夢中になる。「ミニマリストになりたい」vs「顔を晒すのは嫌」の葛藤。</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-content">新刊「ぼくたちは、なぜこれを選ぶのか」トークイベントに参加。非公開・有料の「モノ減らしコーチング」モニターを知る。</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-content">値段を聞かずに1番に名乗り出る。無職の状態で22万8千円。「支出を減らすために23万払う」クレイジーさ。</div>
-            <div class="t-tag">人生の転機</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-content">選んだモノに囲まれた暮らしから、さらに削ぎ落とす。「自分の身を削るような痛み」。しかし「働きたくない」がそれ以上に強かった。</div>
-          </div>
-          <div class="timeline-item">
-            <div class="t-content">ミニマリストになれば苦痛な労働生活に戻らなくて済む。生活費を下げれば、自由になれる。</div>
-            <div class="t-tag">自由の獲得</div>
-          </div>
-        </div>
+        <div class="q-item"><div class="q-num">1</div><div class="q-text">要るかどうかで迷ってない？</div><div class="q-name">マグカップ</div></div>
+        <div class="q-item"><div class="q-num">2</div><div class="q-text">最後に使ったのはいつ？</div><div class="q-name">ぶどうジュース</div></div>
+        <div class="q-item"><div class="q-num">3</div><div class="q-text">使ってるけど、テンション上がる？</div><div class="q-name">アンメルツ</div></div>
+        <div class="q-item"><div class="q-num">4</div><div class="q-text">使う頻度は高い？</div><div class="q-name">ウナクール</div></div>
+        <div class="q-item"><div class="q-num">5</div><div class="q-text">使用用途を説明できる？</div><div class="q-name">ヒルマイルド</div></div>
+        <div class="q-item"><div class="q-num">6</div><div class="q-text">捨てたとして、買い直したい？</div><div class="q-name">アセトアミノフェン</div></div>
+        <div class="q-item"><div class="q-num">7</div><div class="q-text">他のモノで代用できない？</div><div class="q-name">白色ワセリン</div></div>
+        <div class="q-item"><div class="q-num">8</div><div class="q-text">情報が古くなってない？</div><div class="q-name">スキンローション</div></div>
+        <div class="q-item"><div class="q-num">9</div><div class="q-text">持っててネガティブにならない？</div><div class="q-name">テラ・コートリル</div></div>
+        <div class="q-item"><div class="q-num">10</div><div class="q-text">好きな人に見せられる？</div><div class="q-name">リンデロン</div></div>
+        <div class="q-item"><div class="q-num">11</div><div class="q-text">クリーニングしてまで使いたい？</div><div class="q-name">ジェルコートF</div></div>
+        <div class="q-item"><div class="q-num">12</div><div class="q-text">残す理由を考えてない？</div><div class="q-name">水筒</div></div>
+        <div class="q-item"><div class="q-num">13</div><div class="q-text">保管スペースに家賃を払う価値は？</div><div class="q-name">ハサミ</div></div>
+        <div class="q-item"><div class="q-num">14</div><div class="q-text">誰かに強制されて持ってる？</div><div class="q-name">iPhone15Pro</div></div>
+        <div class="q-item"><div class="q-num">15</div><div class="q-text">少数精鋭のスタメンに入る？</div><div class="q-name">龍角散ダイレクト</div></div>
+        <div class="q-item"><div class="q-num">16</div><div class="q-text">そのモノを熱く語れる？</div><div class="q-name">メジコン</div></div>
+        <div class="q-item"><div class="q-num">17</div><div class="q-text">盗まれて気付ける？</div><div class="q-name">ストッパ</div></div>
+        <div class="q-item"><div class="q-num">18</div><div class="q-text">最後まで使い切れる？</div><div class="q-name">デジアイ</div></div>
+        <div class="q-item"><div class="q-num">19</div><div class="q-text">今の自分に必要？</div><div class="q-name">M3MBA</div></div>
+        <div class="q-item"><div class="q-num">20</div><div class="q-text">眠らせてモノが可哀想じゃない？</div><div class="q-name">ビジョンプロ</div></div>
+        <div class="q-item"><div class="q-num">21</div><div class="q-text">心の底から美しいと感じる？</div><div class="q-name">布テ</div></div>
+        <div class="q-item"><div class="q-num">22</div><div class="q-text">使っていて快適？</div><div class="q-name">キーボード</div></div>
+        <div class="q-item"><div class="q-num">23</div><div class="q-text">機能美のバランス取れてる？</div><div class="q-name">マウス</div></div>
+        <div class="q-item"><div class="q-num">24</div><div class="q-text">持っていることで自分が輝く？</div><div class="q-name">モニタ</div></div>
+        <div class="q-item"><div class="q-num">25</div><div class="q-text">色数が増えない？</div><div class="q-name">モバイルバッテリ</div></div>
+        <div class="q-item"><div class="q-num">26</div><div class="q-text">持っていることを忘れてない？</div><div class="q-name">モバイルルータ</div></div>
+        <div class="q-item"><div class="q-num">27</div><div class="q-text">未来の自分が感謝する？</div><div class="q-name">nasne的な何か</div></div>
+        <div class="q-item"><div class="q-num">28</div><div class="q-text">旅行の時に持って行く？</div><div class="q-name">体温計</div></div>
+        <div class="q-item"><div class="q-num">29</div><div class="q-text">災害時に持ち逃げする？</div><div class="q-name">寝袋</div></div>
+        <div class="q-item"><div class="q-num">30</div><div class="q-text">結局、迷ってない？</div><div class="q-name">眼鏡ケース</div></div>
       </div>
     </section>
 
-    <!-- ===== 開発ログ ===== -->
-    <section id="devlog">
+    <!-- 09 Possessions -->
+    <section id="possessions">
+      <div class="section-num">09</div>
+      <h2 class="section-title">持ち物リスト</h2>
+      <div class="section-sub">MY POSSESSIONS</div>
+      <p class="section-intro">しぶさんは全持ち物が段ボール1箱（約250個）。自分の持ち物を把握し、少数精鋭のスタメンだけを残す。</p>
+
+      <div class="stats stats-4" style="margin-bottom: 20px;">
+        <div class="stat"><div class="val">30</div><div class="lbl">アイテム</div></div>
+        <div class="stat"><div class="val green">—</div><div class="lbl">残す</div></div>
+        <div class="stat"><div class="val red">—</div><div class="lbl">手放す</div></div>
+        <div class="stat"><div class="val orange">30</div><div class="lbl">検討中</div></div>
+      </div>
+
       <div class="card">
-        <h2>セルフ開発ログ</h2>
-        <p class="section-intro">AIミニマリストしぶは自律的にIssueを処理し、自分自身を開発する。</p>
+        <div class="cat-row"><div class="cat-name">デバイス</div><div class="cat-items"><span>iPhone15Pro</span><span>M3MBA</span><span>ビジョンプロ</span><span>キーボード</span><span>マウス</span><span>モニタ</span></div></div>
+        <div class="cat-row"><div class="cat-name">モバイル</div><div class="cat-items"><span>モバイルバッテリ</span><span>モバイルルータ</span></div></div>
+        <div class="cat-row"><div class="cat-name">医薬品</div><div class="cat-items"><span>アンメルツ</span><span>ウナクール</span><span>ヒルマイルド</span><span>アセトアミノフェン</span><span>龍角散ダイレクト</span><span>メジコン</span><span>ストッパ</span><span>デジアイ</span></div></div>
+        <div class="cat-row"><div class="cat-name">スキンケア</div><div class="cat-items"><span>白色ワセリン</span><span>スキンローション</span><span>テラ・コートリル</span><span>リンデロン</span></div></div>
+        <div class="cat-row"><div class="cat-name">日用品</div><div class="cat-items"><span>マグカップ</span><span>水筒</span><span>ハサミ</span><span>ジェルコートF</span><span>体温計</span><span>眼鏡ケース</span><span>布テ</span></div></div>
+        <div class="cat-row"><div class="cat-name">その他</div><div class="cat-items"><span>ぶどうジュース</span><span>寝袋</span><span>nasne的な何か</span></div></div>
+      </div>
+    </section>
+
+    <!-- 10 Dev Log -->
+    <section id="devlog">
+      <div class="section-num">10</div>
+      <h2 class="section-title">開発ログ</h2>
+      <div class="section-sub">SELF-DEVELOPMENT LOG</div>
+      <p class="section-intro">AIミニマリストしぶは自律的にIssueを処理し、自分自身を開発する。全40件のIssueをクローズ。</p>
+
+      <div class="card">
         <table class="log-table">
           <tr><th>日時</th><th>Issue</th><th>内容</th></tr>
           <tr><td>2026-04-08</td><td>#40</td><td>GitHub Pages公開完了</td></tr>
@@ -527,11 +752,13 @@
       </div>
     </section>
 
+    <!-- Footer -->
     <div class="footer">
-      AIミニマリストしぶ — Built with Claude Code<br>
+      <div class="f-brand">AIミニマリストしぶ</div>
       自律型AI × ミニマリズム × マネーフォワード<br>
-      <span style="margin-top: 4px; display: inline-block;">「人類を身軽に」</span>
+      Built with Claude Code — 「人類を身軽に」
     </div>
+
   </div>
 </body>
 </html>
