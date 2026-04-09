@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>家計簿 — AIミニマリストしぶ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Sans+JP:wght@200;300;400;500;600;700&display=swap');
+    :root {
+      --bg: #fafafa; --card: #fff; --border: #e8e8e8;
+      --text: #1a1a1a; --muted: #888; --dim: #bbb;
+      --green: #22c55e; --red: #ef4444; --blue: #3b82f6;
+      --orange: #f97316; --purple: #a855f7; --pink: #ec4899;
+      --yellow: #eab308; --cyan: #06b6d4;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+    h1 { font-size: 1.6rem; font-weight: 600; margin-bottom: 4px; }
+    .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+
+    /* Summary Cards */
+    .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .summary-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .summary-card .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .summary-card .label .icon { font-size: 1rem; }
+    .summary-card .value { font-size: 1.5rem; font-weight: 700; }
+    .summary-card .change { font-size: 0.75rem; margin-top: 4px; }
+    .summary-card .change.up { color: var(--green); }
+    .summary-card .change.down { color: var(--red); }
+
+    /* Charts Row */
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .chart-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .chart-card h3 { font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+    .chart-wrap { position: relative; height: 280px; }
+
+    /* Table */
+    .table-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .table-card h3 { font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; }
+    .tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .tab { padding: 8px 16px; font-size: 0.8rem; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th { text-align: left; padding: 8px 12px; color: var(--muted); font-weight: 400; font-size: 0.75rem; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 0.7rem; font-weight: 500;
+    }
+    .badge-income { background: #dcfce7; color: #166534; }
+    .badge-housing { background: #dbeafe; color: #1e40af; }
+    .badge-food { background: #fef9c3; color: #854d0e; }
+    .badge-transport { background: #ffedd5; color: #9a3412; }
+    .badge-utility { background: #f3e8ff; color: #6b21a8; }
+    .badge-comm { background: #e0f2fe; color: #075985; }
+    .badge-entertain { background: #fce7f3; color: #9d174d; }
+    .badge-supply { background: #f1f5f9; color: #334155; }
+    .badge-misc { background: #f5f5f5; color: #525252; }
+    .badge-book { background: #ecfdf5; color: #065f46; }
+    .type-income { color: var(--green); font-weight: 500; }
+    .type-expense { color: var(--red); font-weight: 500; }
+
+    .footer { text-align: center; padding: 32px 0; color: var(--dim); font-size: 0.7rem; }
+
+    @media (max-width: 768px) {
+      .summary { grid-template-columns: repeat(2, 1fr); }
+      .charts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>家計簿</h1>
+    <p class="subtitle">2026年 Q1（1月〜3月）マネーフォワードクラウド連携</p>
+
+    <!-- Summary Cards -->
+    <div class="summary">
+      <div class="summary-card">
+        <div class="label"><span class="icon">📊</span> Q1 売上</div>
+        <div class="value">¥4,116</div>
+        <div class="change down">返金のみ</div>
+      </div>
+      <div class="summary-card">
+        <div class="label"><span class="icon">💳</span> Q1 経費合計</div>
+        <div class="value">¥489,964</div>
+        <div class="change">3ヶ月合計</div>
+      </div>
+      <div class="summary-card">
+        <div class="label"><span class="icon">📈</span> 月平均経費</div>
+        <div class="value">¥163,321</div>
+        <div class="change">3月: ¥282,943</div>
+      </div>
+      <div class="summary-card">
+        <div class="label"><span class="icon">🏠</span> 固定費（家賃）</div>
+        <div class="value">¥29,255</div>
+        <div class="change up">月平均・安定</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts">
+      <div class="chart-card">
+        <h3>📊 支出サマリー（Q1合計）</h3>
+        <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>📈 月別支出推移</h3>
+        <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <h3>収支記録</h3>
+      <div class="tabs">
+        <div class="tab active">3月の記録</div>
+        <div class="tab">Q1サマリー</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>日付</th><th>名前</th><th>カテゴリ</th><th>金額</th><th>種類</th><th>メモ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>3/4</td><td>売上返金</td><td><span class="badge badge-income">収入</span></td><td>¥2,889</td><td class="type-income">収入</td><td>返金（キャンセル）</td></tr>
+          <tr><td>3/4</td><td>通信費</td><td><span class="badge badge-comm">通信費</span></td><td>¥3,201</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/4</td><td>通信費</td><td><span class="badge badge-comm">通信費</span></td><td>¥2,857</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/5</td><td>雑費</td><td><span class="badge badge-misc">雑費</span></td><td>¥2,889</td><td class="type-expense">支出</td><td>メルカリShops</td></tr>
+          <tr><td>3/5</td><td>雑費</td><td><span class="badge badge-misc">雑費</span></td><td>¥1,639</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/5</td><td>雑費</td><td><span class="badge badge-misc">雑費</span></td><td>¥1,639</td><td class="type-expense">支出</td><td>メルカリShops</td></tr>
+          <tr><td>3/6</td><td>アップルジャパン</td><td><span class="badge badge-supply">消耗品費</span></td><td>¥99,800</td><td class="type-expense">支出</td><td>Apple製品</td></tr>
+          <tr><td>3/10</td><td>Netflix</td><td><span class="badge badge-entertain">接待交際費</span></td><td>¥498</td><td class="type-expense">支出</td><td>ネットフリックス</td></tr>
+          <tr><td>3/12</td><td>楽天モバイル</td><td><span class="badge badge-comm">通信費</span></td><td>¥3,281</td><td class="type-expense">支出</td><td>楽天モバイル通信料</td></tr>
+          <tr><td>3/16</td><td>接待交際費</td><td><span class="badge badge-entertain">接待交際費</span></td><td>¥459</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/17</td><td>消耗品費</td><td><span class="badge badge-supply">消耗品費</span></td><td>¥99,796</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/17</td><td>新聞図書費</td><td><span class="badge badge-book">新聞図書費</span></td><td>¥980</td><td class="type-expense">支出</td><td>ジェネラルコンサルティング</td></tr>
+          <tr><td>3/19</td><td>Looopでんき</td><td><span class="badge badge-utility">水道光熱費</span></td><td>¥12,813</td><td class="type-expense">支出</td><td>Looopでんき</td></tr>
+          <tr><td>3/20</td><td>MASU-p板宿</td><td><span class="badge badge-housing">地代家賃</span></td><td>¥14,800</td><td class="type-expense">支出</td><td>コワーキング</td></tr>
+          <tr><td>3/20</td><td>地代家賃</td><td><span class="badge badge-housing">地代家賃</span></td><td>¥13,802</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/21</td><td>新聞図書費</td><td><span class="badge badge-book">新聞図書費</span></td><td>¥832</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/24</td><td>水道光熱費</td><td><span class="badge badge-utility">水道光熱費</span></td><td>¥12,804</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/25</td><td>接待交際費</td><td><span class="badge badge-entertain">接待交際費</span></td><td>¥1,099</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/26</td><td>水道光熱費</td><td><span class="badge badge-utility">水道光熱費</span></td><td>¥7,819</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/26</td><td>接待交際費</td><td><span class="badge badge-entertain">接待交際費</span></td><td>¥1,690</td><td class="type-expense">支出</td><td>メルペイ（清算・返済）</td></tr>
+          <tr><td>3/26</td><td>メルカリShops</td><td><span class="badge badge-entertain">接待交際費</span></td><td>¥245</td><td class="type-expense">支出</td><td>メルカリShops</td></tr>
+          <tr><td>3/26</td><td>売上返金</td><td><span class="badge badge-income">収入</span></td><td>¥1,227</td><td class="type-income">収入</td><td>返金（キャンセル）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      データソース: マネーフォワードクラウド会計 &middot; AIミニマリストしぶ
+    </div>
+  </div>
+
+  <script>
+    // Pie Chart - Q1 Expense Breakdown
+    new Chart(document.getElementById('pieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['消耗品費', '水道光熱費', '地代家賃', '通信費', '接待交際費', '雑費', '新聞図書費', '会議費'],
+        datasets: [{
+          data: [199596, 160219, 87765, 22403, 10514, 6167, 1812, 1488],
+          backgroundColor: ['#64748b','#a855f7','#3b82f6','#06b6d4','#ec4899','#f97316','#22c55e','#eab308'],
+          borderWidth: 0,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'right', labels: { font: { size: 11, family: "'Inter','Noto Sans JP'" }, padding: 12, usePointStyle: true, pointStyleWidth: 8 } },
+          tooltip: { callbacks: { label: (c) => `${c.label}: ¥${c.raw.toLocaleString()} (${((c.raw/489964)*100).toFixed(1)}%)` } }
+        }
+      }
+    });
+
+    // Bar Chart - Monthly Breakdown
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: ['1月', '2月', '3月'],
+        datasets: [
+          { label: '消耗品費', data: [0, 0, 199596], backgroundColor: '#64748b' },
+          { label: '水道光熱費', data: [49390, 77393, 33436], backgroundColor: '#a855f7' },
+          { label: '地代家賃', data: [29595, 29568, 28602], backgroundColor: '#3b82f6' },
+          { label: '通信費', data: [6541, 6523, 9339], backgroundColor: '#06b6d4' },
+          { label: 'その他', data: [8011, 0, 11970], backgroundColor: '#f97316' },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: { stacked: true, ticks: { callback: (v) => '¥' + (v/10000).toFixed(0) + '万' }, grid: { color: '#f0f0f0' } }
+        },
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 10, family: "'Inter','Noto Sans JP'" }, usePointStyle: true, pointStyleWidth: 8, padding: 12 } },
+          tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ¥${c.raw.toLocaleString()}` } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
