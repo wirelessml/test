@@ -100,7 +100,8 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - GitHub Pages: https://wirelessml.github.io/test/
 - **ネットワーク接続状況を毎回報告する**
   - Wi-Fi: `system_profiler SPAirPortDataType | grep -A5 "Current Network"` でSSID・周波数
-  - YKSmas318 = コワーキングスペースのWi-Fi
+  - YKSmas318 = コワーキングスペースWi-Fi（メイン）
+  - rams502 = コワーキングスペースWi-Fi（バックアップ、パスワードは ~/.claude/local-notes/wifi.txt）
   - テザリング: `ifconfig en5 2>/dev/null` でiPhone USB接続確認
   - テザリング時はデバイス名も報告（結花=iPhone 15 Pro / 彩羽=iPad Pro 9.7）
   - 有線接続はなし（Wi-Fiかテザリングのどちらか）
