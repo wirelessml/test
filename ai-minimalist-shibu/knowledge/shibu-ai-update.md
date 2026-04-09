@@ -31,12 +31,52 @@
 - 画面にはClaude Code v2.x（Opus 4.6、1M context）が映っている
 
 ## しぶさんの技術環境
-- **MacBook Air M5 13インチ ミッドナイト ¥424,800**（2026/4/8 kiyoon動画で確認、最上位構成）
+- **MacBook Air M5 13インチ ミッドナイト ¥424,800 × 2台**
+  - 1台目: 持ち歩き用（誕生日プレゼント、3/30購入）
+  - 2台目: 自宅Claude常時稼働用（4/9購入、「感動のあまりポチってしまった」）
+  - スペック: 10コアCPU、10コアGPU、32GBメモリ、4TB SSD、USキーボード
+- **旧MacBook Air → りくとに譲渡**（4/9 りくとInstagramストーリーで確認）
 - Apple Vision Pro（テスラ車内で仮想大画面として使用）
 - Claude Code CLI使用中
 - Claude Maxプラン
 - OpenClaw + Obsidian（ナレッジ管理）
 - 哲学: **生活費はミニマル（月7万円）、仕事道具には全投資**
+- 合計投資: MacBook Air × 2 = ¥849,600（仕事道具への全投資を体現）
+
+## AIで動画編集（2026/4/9 Instagramストーリー）
+
+しぶさんがClaude Cowork + Dispatchで遠隔動画編集を実現。
+
+### 構成
+- **Claude Cowork** + **Dispatch**: スマホからMacBook Airを遠隔操作
+- **CupCut**（CapCut）: Mac版で動画編集
+- スマホで指示 → MacBook Air上のCupCutで編集が実行される
+
+### しぶさんのコメント
+- 「AIで動画編集」
+- 「claude cowarkとdispatchでスマホで遠隔からパソコン操作して」
+- 「そのままCupCutで編集できてヤバ」
+- 「まだ遅いけど、放置前提なら許せる」
+
+### 2台目MacBook Air購入の理由
+- 「自立型AI入門、家に置いてClaude動かしっぱなし用🖥️」
+- 1台目は持ち歩き用、2台目は自宅サーバー的に常時稼働
+- Claude Codeを24時間走らせる専用機
+
+### 分析
+- **我々のプロジェクトと完全に同じ方向性**: リモートコントロール + AI動画編集
+- しぶ: Claude Cowork + Dispatch + CupCut（GUI操作）
+- 我々: Claude Code + computer-use + ffmpeg/jetcut.py（CLI操作）
+- しぶの方がGUI（CupCut）を使っている分、テロップ等の凝った編集が可能
+- 我々の方がCLIベースで自動化・バッチ処理に強い
+
+## りくとのAI環境移行（2026/4/9 Instagramストーリー）
+
+- しぶの旧MacBook Airをりくとが受け継いだ
+- りくと: 「MacBook Air しぶモデル受け継いだ！これでAIと友達になります！感謝です！🙏」
+- 画面にClaude Codeのセットアップ画面が映っている
+- りくと（しぶチャンネルの編集者）がAIツールを導入 → 編集ワークフローの変革の可能性
+- iPhone編集（VLLO + CapCut） → MacBook Air + AI支援編集にシフトするか注目
 
 ## MoviePy（動画切り抜きPythonライブラリ）
 - `pip install moviepy`
