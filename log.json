@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-04-10T07:50:00+09:00",
+  "last_updated": "2026-04-10T08:48:00+09:00",
   "session": "2026-04-10",
   "status": "active",
-  "screenshot": "screenshots/remote_20260410_075023.png",
+  "screenshot": "screenshots/remote_20260410_084854.png",
   "network": {
     "type": "Wi-Fi",
     "ssid": "YKSmas318",
@@ -12,8 +12,7 @@
   },
   "desktop_state": {
     "cursor": "Claude Code実行中（ウルトラワイドモニター全画面）",
-    "tailscale": "ログイン画面表示中（未ログイン）",
-    "claude_desktop": "インストール済み・起動済み"
+    "claude_desktop": "サインイン画面表示中（未サインイン、Dispatchペアリング待ち）"
   },
-  "notes": "定時報告。Homebrew 5.1.5インストール完了。Tailscale 1.96.5インストール完了（GUIログイン待ち、CLIからのログインは失敗）。Claudeデスクトップアプリv1.1617.0インストール・起動完了。claude-rcエイリアス設定済み（~/.zshrc）。"
+  "notes": "定時報告。Windows PC（MASU-P55）にSSH接続成功・git pull同期完了。Claudeデスクトップアプリをv1.1348.0にアップデート。masupユーザーをログオフ。Dispatchペアリングは両PC共にGUI操作が必要なため次回Mac前で対応。TODO追加済み。"
 }
