@@ -2,6 +2,8 @@
 
 ## TODO（次回セッション）
 
+- [ ] **Dispatchペアリング**（Mac or WindowsでClaude Desktopにサインイン → 設定でDispatch有効化）
+- [ ] **Tailscaleログイン**（Macメニューバーからwirelessml@gmail.comでサインイン）
 - [ ] YouTube動画 QzMDrHjAhpI の字幕取得（shoの片付けサービス相談会ライブ、Whisper文字起こし必要）
 - [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（しぶ最新ルームツアー「究極の自宅」39分、音声のみ取得済み、Whisper文字起こし必要）
 - [ ] Google Photos MCPのセットアップ（Google Cloud Console → OAuth設定が必要）
