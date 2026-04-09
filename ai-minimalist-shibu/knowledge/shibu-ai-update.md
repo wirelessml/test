@@ -31,10 +31,12 @@
 - 画面にはClaude Code v2.x（Opus 4.6、1M context）が映っている
 
 ## しぶさんの技術環境
-- MacBook Air 2台体制（新旧）
+- **MacBook Air M5 13インチ ミッドナイト ¥424,800**（2026/4/8 kiyoon動画で確認、最上位構成）
+- Apple Vision Pro（テスラ車内で仮想大画面として使用）
 - Claude Code CLI使用中
 - Claude Maxプラン
-- Obsidian（ナレッジ管理）
+- OpenClaw + Obsidian（ナレッジ管理）
+- 哲学: **生活費はミニマル（月7万円）、仕事道具には全投資**
 
 ## MoviePy（動画切り抜きPythonライブラリ）
 - `pip install moviepy`
@@ -72,10 +74,10 @@
 3. **Claude CLIバックエンド** — ローカルのclaude binaryに委譲（OpenClaw公式推奨）
 4. **ローカルモデルに切り替え** — コスト$15/月で再構築した事例も
 
-### しぶさんへの影響
-- しぶ次郎BotがClaude依存の場合、4/4以降動作に問題が出ている可能性
-- しぶさんはClaude Max（$200/月）を使用中 → Extra Usage課金が発生
-- もしくはClaude CLIバックエンドに移行済みの可能性
+### しぶさんの対応
+- 4/8時点でしぶ次郎Botは正常稼働（Instagramストーリーで確認）
+- **Claude CLIバックエンドに移行済みと推測** — しぶさんは既にClaude Codeを使用しており、CLIバックエンドへの切り替えは自然
+- 構成: OpenClaw（フロントエンド） → Claude CLI（バックエンド） → Obsidian（保存）
 
 ### Discordでの実際の使用例（2026/4/8）
 - 「#コラボ・メディア出演」チャンネルにて
