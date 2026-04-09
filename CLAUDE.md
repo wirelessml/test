@@ -2,11 +2,23 @@
 
 ## TODO（次回セッション）
 
-- [ ] YouTube動画 2oySXA967II の字幕取得（IP制限解除後にyt-dlp or kome.ai）
 - [ ] YouTube動画 QzMDrHjAhpI の字幕取得（shoの片付けサービス相談会ライブ、Whisper文字起こし必要）
-- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（しぶ最新ルームツアー「究極の自宅」39分、2026/4/8公開、kiyoonコラボ）
+- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（しぶ最新ルームツアー「究極の自宅」39分、音声のみ取得済み、Whisper文字起こし必要）
 - [ ] Google Photos MCPのセットアップ（Google Cloud Console → OAuth設定が必要）
 - [ ] Google Drive MCPのセットアップ
+- [ ] Whisperインストール（pip3 install openai-whisper、ukfCg8ZgMjA等の文字起こし用）
+- [ ] しぶ自己語りダイジェスト動画のチャプター時間の微調整（実際の再生で確認）
+
+## 完了（4/9コワーキング）
+
+- [x] YouTube動画 2oySXA967II の字幕取得 + しぶ自己語り9場面抽出
+- [x] しぶInstagramストーリー情報記録（Obsidianボルト構造 + ポケモンチャンピオンズ）
+- [x] iPhone動画編集マニュアル GitHub Pages公開
+- [x] ffmpegインストール（ARM64静的バイナリ、~/local/bin/ffmpeg）
+- [x] 自動ジェットカットスクリプト jetcut.py 作成・テスト完了
+- [x] しぶ自己語りダイジェスト動画作成（9場面 + 宣伝パート合成、23:32）
+- [x] チャプター付き動画プレーヤー GitHub Pages公開
+- [x] リモートコントロールcronジョブ運用（毎時33分×5回報告）
 
 ## 完了（4/8コワーキング）
 
