@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ミニマリストしぶ 自己語りダイジェスト</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Sans+JP:wght@200;300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --card-border: #1e1e1e;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --text-dim: #555;
+      --accent: #4ade80;
+      --accent-dim: #166534;
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .hero {
+      position: relative;
+      padding: 60px 0 40px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 200;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+    .hero .tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .hero .source {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* Video */
+    .video-wrapper {
+      margin: 32px 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--card-border);
+    }
+    video {
+      width: 100%;
+      display: block;
+    }
+
+    /* Chapter list */
+    .chapters {
+      margin: 32px 0;
+    }
+    .chapters h2 {
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .chapter-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .chapter-item:hover {
+      border-color: var(--accent-dim);
+    }
+    .chapter-item.active {
+      border-color: var(--accent);
+    }
+    .chapter-time {
+      font-size: 13px;
+      font-family: 'Inter', monospace;
+      color: var(--accent);
+      min-width: 50px;
+      font-weight: 500;
+    }
+    .chapter-num {
+      font-size: 11px;
+      color: var(--text-dim);
+      min-width: 24px;
+    }
+    .chapter-title {
+      font-size: 14px;
+      color: var(--text);
+      flex: 1;
+    }
+    .chapter-dur {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 200;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 32px;
+      margin-bottom: 48px;
+      font-size: 13px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .back:hover { color: var(--accent); }
+
+    footer {
+      padding: 32px 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--card-border);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-label">video digest</div>
+    <h1>しぶ 自己語り</h1>
+    <p class="tagline">1時間12分の対談動画から、しぶが自分を語る9場面を抽出</p>
+    <p class="source">元動画: ミニマリストしぶさんと終活｜82袋手放した日の舞台裏</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">1h12m</div>
+      <div class="stat-label">元動画</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">→</div>
+      <div class="stat-label"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">23:32</div>
+      <div class="stat-label">ダイジェスト</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">9</div>
+      <div class="stat-label">場面</div>
+    </div>
+  </div>
+
+  <div class="video-wrapper">
+    <video controls preload="metadata" id="player">
+      <source src="shibu-self-talk-web.mp4" type="video/mp4">
+      お使いのブラウザは動画再生に対応していません。
+    </video>
+  </div>
+
+  <div class="chapters">
+    <h2>チャプター</h2>
+    <div class="chapter-item" data-time="0" onclick="seekTo(0)">
+      <span class="chapter-num">00</span>
+      <span class="chapter-time">0:00</span>
+      <span class="chapter-title">公式LINE宣伝（冒頭）</span>
+      <span class="chapter-dur">0:52</span>
+    </div>
+    <div class="chapter-item" data-time="52" onclick="seekTo(52)">
+      <span class="chapter-num">01</span>
+      <span class="chapter-time">0:52</span>
+      <span class="chapter-title">ミニマリストになったきっかけ</span>
+      <span class="chapter-dur">1:53</span>
+    </div>
+    <div class="chapter-item" data-time="165" onclick="seekTo(165)">
+      <span class="chapter-num">02</span>
+      <span class="chapter-time">2:45</span>
+      <span class="chapter-title">取捨選択の訓練</span>
+      <span class="chapter-dur">1:17</span>
+    </div>
+    <div class="chapter-item" data-time="242" onclick="seekTo(242)">
+      <span class="chapter-num">03</span>
+      <span class="chapter-time">4:02</span>
+      <span class="chapter-title">ミニマリスト歴と評価の変化</span>
+      <span class="chapter-dur">2:10</span>
+    </div>
+    <div class="chapter-item" data-time="372" onclick="seekTo(372)">
+      <span class="chapter-num">04</span>
+      <span class="chapter-time">6:12</span>
+      <span class="chapter-title">「物に殺される」論</span>
+      <span class="chapter-dur">1:55</span>
+    </div>
+    <div class="chapter-item" data-time="487" onclick="seekTo(487)">
+      <span class="chapter-num">05</span>
+      <span class="chapter-time">8:07</span>
+      <span class="chapter-title">片付け動画の制作コスト</span>
+      <span class="chapter-dur">1:36</span>
+    </div>
+    <div class="chapter-item" data-time="583" onclick="seekTo(583)">
+      <span class="chapter-num">06</span>
+      <span class="chapter-time">9:43</span>
+      <span class="chapter-title">「働きたくないから」ミニマリストに</span>
+      <span class="chapter-dur">0:58</span>
+    </div>
+    <div class="chapter-item" data-time="641" onclick="seekTo(641)">
+      <span class="chapter-num">07</span>
+      <span class="chapter-time">10:41</span>
+      <span class="chapter-title">テスラ購入と車の話</span>
+      <span class="chapter-dur">7:54</span>
+    </div>
+    <div class="chapter-item" data-time="1115" onclick="seekTo(1115)">
+      <span class="chapter-num">08</span>
+      <span class="chapter-time">18:35</span>
+      <span class="chapter-title">バスタオル・マット不要論</span>
+      <span class="chapter-dur">1:54</span>
+    </div>
+    <div class="chapter-item" data-time="1229" onclick="seekTo(1229)">
+      <span class="chapter-num">09</span>
+      <span class="chapter-time">20:29</span>
+      <span class="chapter-title">引っ越し自由＋テスラ車中泊生活</span>
+      <span class="chapter-dur">2:05</span>
+    </div>
+    <div class="chapter-item" data-time="1354" onclick="seekTo(1354)">
+      <span class="chapter-num">10</span>
+      <span class="chapter-time">22:34</span>
+      <span class="chapter-title">チャンネル登録・公式LINE（末尾）</span>
+      <span class="chapter-dur">0:58</span>
+    </div>
+  </div>
+
+  <a href="index.html" class="back">← AIミニマリストしぶ トップへ戻る</a>
+
+  <footer>
+    <p>AIミニマリストしぶ — 自己語りダイジェスト</p>
+    <p style="margin-top:4px;">Generated by Claude Code — 自動字幕解析 + ffmpeg動画合成</p>
+  </footer>
+
+</div>
+
+<script>
+const player = document.getElementById('player');
+const items = document.querySelectorAll('.chapter-item');
+
+function seekTo(seconds) {
+  player.currentTime = seconds;
+  player.play();
+}
+
+player.addEventListener('timeupdate', () => {
+  const t = player.currentTime;
+  items.forEach(item => {
+    const start = parseFloat(item.dataset.time);
+    const next = item.nextElementSibling;
+    const end = next ? parseFloat(next.dataset.time) : Infinity;
+    item.classList.toggle('active', t >= start && t < end);
+  });
+});
+</script>
+
+</body>
+</html>
