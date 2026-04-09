@@ -16,6 +16,11 @@
 - [x] ブラウザ自動化メインをdev-browser → agent-browserに切り替え
 - [x] Windows PC（MASU-P55）でのClaude Code v2.1.92起動確認（iPhone SSH経由）
 - [x] 定時報告にネットワーク接続状況（Wi-Fi SSID/テザリングデバイス名）を追加
+- [x] Homebrew 5.1.5 インストール
+- [x] Tailscale 1.96.5 インストール（GUIログインは次回Mac前で）
+- [x] Claudeデスクトップアプリ v1.1617.0 インストール
+- [x] claude-rcエイリアス設定（~/.zshrc）
+- [x] Windows PC（MASU-P55）にSSH接続・git pull同期完了
 
 ## 完了（4/9コワーキング）
 
@@ -84,8 +89,16 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 
 ## ユーザー情報
 
-- MacBook Air — コワーキングオフィスに設置、メイン作業機
-- iPhone 15 Pro（名前: 結花）— メインスマホ
+- MacBook Air M1 8GB — コワーキングオフィスに設置、メイン作業機
+  - Homebrew 5.1.5、Tailscale 1.96.5、Claudeデスクトップアプリ インストール済み
+  - Claude Code CLI + agent-browser + dev-browser
+- Windows PC（MASU-P55）— コワーキングオフィス、サブ作業機
+  - ユーザー: gci_admin / IP: 192.168.2.248 (masu-p55.local)
+  - SSH接続情報は ~/.claude/local-notes/wifi.txt（パスワードはgit管理外）
+  - Claude Code v2.1.92 インストール済み
+  - リポジトリ: C:\Users\gci_admin\test（同じナレッジベース共有）
+  - MacからSSH経由でリモート操作可能
+- iPhone 15 Pro（名前: 結花）— メインスマホ、Dispatch + Tailscale
 - 初代iPad Pro 9.7インチ（名前: 彩羽）— 楽天SIM挿入、テザリング用
 - パナソニック VIERA TH-40CX700 — 自宅テレビ（2015年モデル）
 - LG 40WP95C-W — 39.7インチ 5K2Kウルトラワイドモニター（Mac接続）
