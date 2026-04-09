@@ -1,10 +1,19 @@
 {
-  "last_updated": "2026-04-10T06:48:00+09:00",
+  "last_updated": "2026-04-10T07:50:00+09:00",
   "session": "2026-04-10",
   "status": "active",
-  "screenshot": "screenshots/remote_20260410_064852.png",
-  "desktop_state": {
-    "cursor": "Claude Code実行中（ウルトラワイドモニター全画面、会話継続中）"
+  "screenshot": "screenshots/remote_20260410_075023.png",
+  "network": {
+    "type": "Wi-Fi",
+    "ssid": "YKSmas318",
+    "location": "コワーキングスペース",
+    "band": "5GHz 802.11ax",
+    "ip": "192.168.2.135"
   },
-  "notes": "定時報告。前回からの進捗: Windows PC（MASU-P55）でもClaude Code v2.1.92をSSH経由で起動中（iPhone操作）。2台体制確認。Claude Codeアップデート方法を案内（claude update）。"
+  "desktop_state": {
+    "cursor": "Claude Code実行中（ウルトラワイドモニター全画面）",
+    "tailscale": "ログイン画面表示中（未ログイン）",
+    "claude_desktop": "インストール済み・起動済み"
+  },
+  "notes": "定時報告。Homebrew 5.1.5インストール完了。Tailscale 1.96.5インストール完了（GUIログイン待ち、CLIからのログインは失敗）。Claudeデスクトップアプリv1.1617.0インストール・起動完了。claude-rcエイリアス設定済み（~/.zshrc）。"
 }
