@@ -9,6 +9,14 @@
 - [ ] Whisperインストール（pip3 install openai-whisper、ukfCg8ZgMjA等の文字起こし用）
 - [ ] しぶ自己語りダイジェスト動画のチャプター時間の微調整（実際の再生で確認）
 
+## 完了（4/10）
+
+- [x] agent-browserインストール（v0.25.3、Vercel Labs製Rust高速CLI、Chrome 147同梱）
+- [x] ブラウザ自動化CLI 4ツール比較調査・ナレッジ保存（docs/browser-automation-cli-comparison.md）
+- [x] ブラウザ自動化メインをdev-browser → agent-browserに切り替え
+- [x] Windows PC（MASU-P55）でのClaude Code v2.1.92起動確認（iPhone SSH経由）
+- [x] 定時報告にネットワーク接続状況（Wi-Fi SSID/テザリングデバイス名）を追加
+
 ## 完了（4/9コワーキング）
 
 - [x] YouTube動画 2oySXA967II の字幕取得 + しぶ自己語り9場面抽出
@@ -90,6 +98,11 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - screencaptureコマンドを使用（computer-useのスクショはCursorがフィルタされるため不可）
 - スクリーンショットは ~/Desktop/screenshots/ に保存
 - GitHub Pages: https://wirelessml.github.io/test/
+- **ネットワーク接続状況を毎回報告する**
+  - Wi-Fi: `system_profiler SPAirPortDataType | grep -A5 "Current Network"` でSSID・周波数
+  - テザリング: `ifconfig en5 2>/dev/null` でiPhone USB接続確認
+  - テザリング時はデバイス名も報告（結花=iPhone 15 Pro / 彩羽=iPad Pro 9.7）
+  - 有線接続はなし（Wi-Fiかテザリングのどちらか）
 
 ## セッション設定
 
