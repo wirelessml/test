@@ -95,7 +95,9 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - Windows PC（MASU-P55）— コワーキングオフィス、サブ作業機
   - ユーザー: gci_admin / IP: 192.168.2.248 (masu-p55.local)
   - SSH接続情報は ~/.claude/local-notes/wifi.txt（パスワードはgit管理外）
-  - Claude Code v2.1.92 インストール済み
+  - Claude Code v2.1.98 インストール済み
+  - Claudeデスクトップアプリ インストール済み（Microsoft Store版）
+  - Computer Use対応（Windows版、2026/4/3〜）
   - リポジトリ: C:\Users\gci_admin\test（同じナレッジベース共有）
   - MacからSSH経由でリモート操作可能
 - iPhone 15 Pro（名前: 結花）— メインスマホ、Dispatch + Tailscale
