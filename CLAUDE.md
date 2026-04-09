@@ -101,8 +101,8 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - Dispatchは使わない、CLIで完結させる
 - ブラウザはcomputer-useでtier "read"（クリック不可）、URLを開くことはできるが再生・停止などの操作は不可
 - Web情報取得はWebFetch/curl優先
-- ブラウザ自動化は**dev-browser優先**（1スクリプトで完結、Playwright MCPより高速）
-- **agent-browser**も利用可能（Vercel Labs製Rust高速CLI、トークン93%削減、snapshotベース）
+- ブラウザ自動化は**agent-browser優先**（Rust高速CLI、トークン93%削減、snapshotベース）
+- dev-browserも利用可能（Playwright API直接、1スクリプト完結型のタスク向け）
 - 画面の読み取りだけならChrome DevTools MCPでも可
 - `open`コマンドでBraveを開かない
 - 音量制御はosascriptで可能
@@ -119,18 +119,18 @@ open *.html
 # YouTube字幕取得（最新版yt-dlp + deno）
 PATH="$HOME/.deno/bin:$PATH" ~/yt-dlp --write-auto-sub --sub-lang ja --skip-download -o "保存先/yt-VIDEO_ID" "https://www.youtube.com/watch?v=VIDEO_ID"
 
-# dev-browser（ブラウザ自動化・メイン）
-dev-browser --headless <<'EOF'
-const page = await browser.getPage("main");
-await page.goto("URL");
-// Playwright API使用可能
-EOF
-
-# agent-browser（ブラウザ自動化・AI特化）
+# agent-browser（ブラウザ自動化・メイン）
 agent-browser open https://example.com
 agent-browser snapshot -i -c          # インタラクティブ要素のみ、コンパクト
 agent-browser click @e2               # refで要素クリック
 agent-browser fill @e3 "text"         # フォーム入力
 agent-browser screenshot              # スクリーンショット
 agent-browser close --all             # 終了
+
+# dev-browser（ブラウザ自動化・サブ、Playwright API直接）
+dev-browser --headless <<'EOF'
+const page = await browser.getPage("main");
+await page.goto("URL");
+// Playwright API使用可能
+EOF
 ```
