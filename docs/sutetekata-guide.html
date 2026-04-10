@@ -4,21 +4,95 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>【モノ別35種類】捨て方ガイドブック</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs" type="module"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #1a1a1a; color: #fff; font-family: -apple-system, sans-serif; }
-header { padding: 16px; background: #222; text-align: center; }
-header h1 { font-size: 18px; }
-.pdf-container { width: 100%; height: calc(100vh - 60px); }
-iframe { width: 100%; height: 100%; border: none; }
+header { position: sticky; top: 0; z-index: 10; padding: 10px 16px; background: #222; display: flex; align-items: center; justify-content: space-between; }
+header h1 { font-size: 14px; flex: 1; }
+.nav { display: flex; gap: 8px; align-items: center; }
+.nav button { background: #444; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 14px; cursor: pointer; }
+.nav button:active { background: #666; }
+.nav span { font-size: 14px; min-width: 80px; text-align: center; }
+#pages { padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+#pages canvas { max-width: 100%; height: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+#loading { text-align: center; padding: 40px; font-size: 16px; }
 </style>
 </head>
 <body>
 <header>
-<h1>【モノ別35種類】捨て方ガイドブック</h1>
-</header>
-<div class="pdf-container">
-<iframe src="sutetekata-guide-35.pdf"></iframe>
+<h1>捨て方ガイド35種類</h1>
+<div class="nav">
+<button id="prev" onclick="goPrev()">&#9664;</button>
+<span id="pageInfo">- / -</span>
+<button id="next" onclick="goNext()">&#9654;</button>
 </div>
+</header>
+<div id="loading">読み込み中...</div>
+<div id="pages"></div>
+
+<script type="module">
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.worker.min.mjs';
+
+let pdfDoc = null;
+let currentPage = 1;
+let totalPages = 0;
+const container = document.getElementById('pages');
+const pageInfo = document.getElementById('pageInfo');
+const loading = document.getElementById('loading');
+
+async function renderPage(num) {
+  const page = await pdfDoc.getPage(num);
+  const scale = Math.min(window.innerWidth - 16, 1200) / page.getViewport({scale: 1}).width;
+  const viewport = page.getViewport({scale});
+
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  const ctx = canvas.getContext('2d');
+
+  await page.render({canvasContext: ctx, viewport}).promise;
+  return canvas;
+}
+
+async function showPage(num) {
+  if (num < 1 || num > totalPages) return;
+  currentPage = num;
+  pageInfo.textContent = `${currentPage} / ${totalPages}`;
+  container.innerHTML = '';
+  const canvas = await renderPage(num);
+  container.appendChild(canvas);
+  window.scrollTo(0, 0);
+}
+
+window.goNext = () => showPage(currentPage + 1);
+window.goPrev = () => showPage(currentPage - 1);
+
+// Swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 60) {
+    if (diff > 0) window.goNext();
+    else window.goPrev();
+  }
+});
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') window.goNext();
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') window.goPrev();
+});
+
+// Load PDF
+const loadingTask = pdfjsLib.getDocument('sutetekata-guide-35.pdf');
+pdfDoc = await loadingTask.promise;
+totalPages = pdfDoc.numPages;
+loading.style.display = 'none';
+showPage(1);
+</script>
 </body>
 </html>
