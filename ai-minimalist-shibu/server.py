@@ -412,6 +412,8 @@ document.getElementById('s').innerHTML=h})</script></body></html>"""
 
 last_request = {}
 RATE_LIMIT_SEC = 5
+response_cache = {}
+CACHE_MAX = 100
 
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -494,6 +496,17 @@ class Handler(http.server.BaseHTTPRequestHandler):
         dup = find_duplicate(msg, past)
         dup_note = "\n\n注意: この質問は過去にも聞かれたことがある。塩対応で「それ前にも聞かれたよ。」と短く返して、前回と違う角度で一言だけ答えて終わり。長く答えない。" if dup else ""
 
+        # キャッシュチェック
+        cache_key = msg.strip().lower()
+        if cache_key in response_cache and not any('30の質問' in h.get('content','') for h in hist):
+            reply = response_cache[cache_key]
+            log_chat(msg, reply + ' (cached)')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'reply': reply}, ensure_ascii=False).encode())
+            return
+
         # 30の質問モード
         if '30の質問' in msg and not any('30の質問' in h.get('content','') for h in hist[:-1] if h['role']=='user'):
             dup_note = ""
@@ -516,6 +529,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         except subprocess.TimeoutExpired:
             reply = 'ちょっと時間がかかりすぎたみたい。もう一度試してみて。'
 
+        if len(response_cache) < CACHE_MAX:
+            response_cache[cache_key] = reply
         log_chat(msg, reply)
 
         self.send_response(200)
