@@ -19,12 +19,20 @@ sleep 5
 
 # Tunnel URL取得・表示
 URL=$(grep -o 'https://[^ ]*trycloudflare.com' /tmp/shibu-tunnel.log | head -1)
-if [ -n "$URL" ]; then
-  echo ""
-  echo "========================================="
-  echo "  AIミニマリストしぶ 稼働中"
-  echo "  $URL"
-  echo "========================================="
+URL=$(grep -o 'https://[^ ]*trycloudflare.com' /tmp/shibu-tunnel.log | head -1)
+# ヘルスチェック
+if curl -s http://localhost:8787/health | grep -q "ok"; then
+  HEALTH="OK"
 else
-  echo "Tunnel URL取得待ち... cat /tmp/shibu-tunnel.log で確認"
+  HEALTH="NG"
 fi
+
+echo ""
+echo "========================================="
+echo "  AIミニマリストしぶ 稼働中"
+echo "  ヘルス: $HEALTH"
+if [ -n "$URL" ]; then
+  echo "  $URL"
+  echo "  統計: ${URL}/stats"
+fi
+echo "========================================="
