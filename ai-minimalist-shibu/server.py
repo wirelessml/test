@@ -156,6 +156,7 @@ header small { color: var(--muted); font-size: 11px; }
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
 </div>
+<button class="calc-btn" onclick="shareChat()">共有</button>
 <button class="calc-btn" onclick="toggleTheme()" id="theme-btn">☀</button>
 <button class="calc-btn" onclick="resetChat()">リセット</button>
 <button class="calc-btn" onclick="toggleCalc()">生活費計算</button>
@@ -292,6 +293,16 @@ function askShibu() {
   const msg = '私のミニマムライフコストを計算したよ。\\n' + items.join('\\n') + '\\n合計: ' + total.toLocaleString() + '円/月\\nこの生活費についてアドバイスちょうだい。';
   send(msg);
   toggleCalc();
+}
+function shareChat() {
+  const lastAi = history.filter(h => h.role === 'assistant').pop();
+  if (!lastAi) { alert('まだ会話がないよ'); return; }
+  const text = 'AIミニマリストしぶ:\\n' + lastAi.content;
+  if (navigator.share) {
+    navigator.share({ text: text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => alert('クリップボードにコピーしたよ'));
+  }
 }
 function miniMd(t) {
   return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
