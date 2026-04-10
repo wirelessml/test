@@ -403,7 +403,9 @@ const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
 addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。\\n\\n右上の「生活費計算」からミニマムライフコストも計算できるよ。水道代は請求額をそのまま入れれば自動で月額に変換するよ。\\n\\n今日の一言: ' + q);
 const sugDiv = document.createElement('div');
 sugDiv.className = 'suggest';
-['片付けのコツは？', 'ミニマリストになるには？', '30の質問をやる'].forEach(q => {
+const challenges = ['靴箱を全出し','財布の中身を全出し','スマホのアプリを全出し','クローゼットを全出し','洗面台の下を全出し','冷蔵庫を全出し','本棚を全出し'];
+const todayChallenge = challenges[new Date().getDay() % challenges.length];
+['片付けのコツは？', '今日のチャレンジ: ' + todayChallenge, '30の質問をやる'].forEach(q => {
   const b = document.createElement('button');
   b.textContent = q;
   b.onclick = () => { sugDiv.remove(); send(q); };
@@ -520,6 +522,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(entries[-20:], ensure_ascii=False).encode())
+        elif path == '/api/knowledge':
+            files = []
+            for f in sorted(os.listdir(KNOWLEDGE_DIR)):
+                if f.endswith('.md'):
+                    p = os.path.join(KNOWLEDGE_DIR, f)
+                    files.append({'name': f, 'size': os.path.getsize(p)})
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'count': len(files), 'files': files}, ensure_ascii=False).encode())
         elif path == '/api/export-md':
             logs = []
             if os.path.exists(LOG_DIR):
