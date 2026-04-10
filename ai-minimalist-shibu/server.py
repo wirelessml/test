@@ -236,11 +236,6 @@ function addMsg(role, text) {
   del.onclick = () => div.remove();
   div.appendChild(del);
   if (role === 'ai') {
-    const fb = document.createElement('span');
-    fb.style.cssText = 'float:right;font-size:12px;cursor:pointer;opacity:0.4';
-    fb.innerHTML = '👍 👎';
-    fb.onclick = e => { const t = e.target.textContent.trim(); if(t) { fb.innerHTML = t; fb.style.opacity = '1'; } };
-    div.appendChild(fb);
     const cb = document.createElement('button');
     cb.className = 'copy-btn';
     cb.textContent = 'コピー';
