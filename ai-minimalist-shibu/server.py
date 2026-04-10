@@ -119,6 +119,7 @@ header small { color: var(--muted); font-size: 11px; }
 #input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
 #input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
 #input-area button:disabled { opacity: 0.4; cursor: default; }
+#phrase-counter { padding: 6px 16px; background: var(--surface); border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; flex-shrink: 0; }
 #calc-panel { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin: 8px 16px; padding: 16px; align-self: stretch; }
 #calc-panel h2 { font-size: 14px; color: var(--accent); margin-bottom: 4px; }
 #calc-panel p { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
@@ -171,6 +172,7 @@ header small { color: var(--muted); font-size: 11px; }
 </div>
 </div>
 <div id="chat"></div>
+<div id="phrase-counter"></div>
 <div id="input-area">
 <textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
 <button id="send-btn" onclick="send()">送信</button>
@@ -212,6 +214,7 @@ async function send(text) {
     const data = await res.json();
     history.push({ role: 'assistant', content: data.reply });
     addMsg('ai', data.reply);
+    countPhrases(data.reply);
   } catch (e) {
     typing.remove();
     addMsg('ai', '通信エラーが発生したよ。サーバーが起動してるか確認してみて。');
@@ -252,7 +255,15 @@ function askShibu() {
   send(msg);
   toggleCalc();
 }
+const PHRASES = {'全出し':0, '手放す':0, '迷ったら':0, '部屋は心':0, '必要なもの':0};
+function countPhrases(text) {
+  for (const p in PHRASES) { const m = text.match(new RegExp(p, 'g')); if (m) PHRASES[p] += m.length; }
+  const items = Object.entries(PHRASES).filter(([k,v]) => v > 0).map(([k,v]) => k + ' x' + v);
+  document.getElementById('phrase-counter').textContent = items.length ? 'しぶ語録: ' + items.join('  ') : '';
+}
 function resetChat() {
+  for (const p in PHRASES) PHRASES[p] = 0;
+  document.getElementById('phrase-counter').textContent = '';
   history = [];
   document.getElementById('chat').innerHTML = '';
   addMsg('ai', 'リセットしたよ。身軽になったね。\\n\\n何でも聞いてね。');
