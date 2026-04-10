@@ -412,6 +412,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.end_headers()
             self.wfile.write(STATS_HTML.encode())
+        elif path == '/api/export':
+            logs = []
+            if os.path.exists(LOG_DIR):
+                for fname in sorted(os.listdir(LOG_DIR)):
+                    if fname.endswith('.jsonl'):
+                        with open(os.path.join(LOG_DIR, fname), 'r') as f:
+                            for line in f:
+                                try: logs.append(json.loads(line.strip()))
+                                except: pass
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Disposition', 'attachment; filename="shibu-chat-export.json"')
+            self.end_headers()
+            self.wfile.write(json.dumps(logs, ensure_ascii=False, indent=2).encode())
         elif path == '/api/stats':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
