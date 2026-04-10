@@ -40,7 +40,8 @@ def log_chat(user_msg, ai_reply):
     entry = {
         'timestamp': datetime.datetime.now().isoformat(),
         'user': user_msg,
-        'ai': ai_reply
+        'ai': ai_reply,
+        'title': user_msg[:30]
     }
     with open(path, 'a', encoding='utf-8') as f:
         f.write(json.dumps(entry, ensure_ascii=False) + '\n')
