@@ -118,6 +118,8 @@ header small { color: var(--muted); font-size: 11px; }
 .suggest { display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-start; }
 .suggest button { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 6px 12px; border-radius: 16px; font-size: 12px; cursor: pointer; }
 .suggest button:active { background: var(--accent); color: #000; }
+@keyframes dots { 0%,20% { content: '.'; } 40% { content: '..'; } 60%,100% { content: '...'; } }
+.typing::after { content: ''; animation: dots 1.5s infinite; }
 #input-area { padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
 #input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
 #input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
@@ -206,7 +208,7 @@ async function send(text) {
   history.push({ role: 'user', content: text });
   const typing = document.createElement('div');
   typing.className = 'typing';
-  typing.textContent = 'しぶが考え中...';
+  typing.textContent = 'しぶが考え中';
   document.getElementById('chat').appendChild(typing);
   try {
     const res = await fetch('/chat', {
