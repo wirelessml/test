@@ -26,6 +26,14 @@
 
 
 
+## しぶInstagram監視
+
+- アカウント: @minimalist_sibu（認証済み、48投稿、フォロワー7万）
+- Chrome DevTools MCPでログイン済み（セッション毎に再ログイン必要）
+- ストーリーズ定期チェック: 毎時17分（cron、セッション内のみ）
+- 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
+- Google Photosに過去のしぶInstagram画像あり（次セッションでチェック）
+
 ## 完了（4/11）
 
 - [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
@@ -34,6 +42,7 @@
 - [x] YouTube字幕取得: QzMDrHjAhpI（しぶライブ）、ukfCg8ZgMjA（大川裕介×しぶルームツアー）
 - [x] ナレッジ57→99ファイル（Windows Claude Codeで42ファイル新規作成、バンドル再生成済み）
 - [x] セルフ開発ループ完了（Issue 100件完了、ナレッジ99ファイル、server.py 668行で完成）
+- [x] Instagram監視設定（Chrome DevTools MCPでログイン、定期チェックcron）
 
 ## 完了（4/10）
 
