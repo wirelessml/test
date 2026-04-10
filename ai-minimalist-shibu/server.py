@@ -218,7 +218,7 @@ function addMsg(role, text) {
     div.appendChild(cb);
   }
   chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  setTimeout(() => chat.scrollTop = chat.scrollHeight, 50);
 }
 async function send(text) {
   const input = document.getElementById('msg');
