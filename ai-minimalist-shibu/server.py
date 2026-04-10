@@ -515,6 +515,25 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(entries[-20:], ensure_ascii=False).encode())
+        elif path == '/api/export-md':
+            logs = []
+            if os.path.exists(LOG_DIR):
+                for fname in sorted(os.listdir(LOG_DIR)):
+                    if fname.endswith('.jsonl'):
+                        with open(os.path.join(LOG_DIR, fname), 'r') as f:
+                            for line in f:
+                                try: logs.append(json.loads(line.strip()))
+                                except: pass
+            md = '# AIミニマリストしぶ 会話ログ\n\n'
+            for e in logs:
+                ts = e.get('timestamp','')[:16].replace('T',' ')
+                if e.get('user'): md += f'**あなた** ({ts})\n{e["user"]}\n\n'
+                if e.get('ai'): md += f'**しぶ** ({ts})\n{e["ai"]}\n\n---\n\n'
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/markdown; charset=utf-8')
+            self.send_header('Content-Disposition', 'attachment; filename="shibu-chat.md"')
+            self.end_headers()
+            self.wfile.write(md.encode())
         elif path == '/api/stats':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
