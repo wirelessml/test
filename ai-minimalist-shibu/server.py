@@ -416,12 +416,7 @@ const todayChallenge = challenges[new Date().getDay() % challenges.length];
 });
 document.getElementById('chat').appendChild(sugDiv);
 document.getElementById('msg').focus();
-fetch('/api/history').then(r=>r.json()).then(entries => {
-  entries.forEach(e => {
-    if (e.user) { addMsg('user', e.user); history.push({role:'user',content:e.user}); }
-    if (e.ai) { addMsg('ai', e.ai); history.push({role:'assistant',content:e.ai}); }
-  });
-}).catch(() => {});
+// 履歴復元は無効化（リロードで初期状態に戻る）
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'l') { e.preventDefault(); resetChat(); }
   if (e.ctrlKey && e.key === '/') { e.preventDefault(); document.getElementById('calc-toggle').click(); }
