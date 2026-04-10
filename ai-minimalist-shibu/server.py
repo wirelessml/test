@@ -197,6 +197,7 @@ header small { color: var(--muted); font-size: 11px; }
 <div class="calc-item"><label>コワーキング</label><input type="number" data-cost value="0"></div>
 <div class="calc-item"><label>保険料</label><input type="number" data-cost value="0"></div>
 <div class="calc-item"><label>年金</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>税金</label><input type="number" data-cost value="0"></div>
 </div>
 <div id="custom-items"></div>
 <div id="calc-total"><span id="total-label">合計: ¥0</span></div>
