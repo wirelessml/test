@@ -35,10 +35,11 @@
 - Chrome DevTools MCPでログイン済み（セッション毎に再ログイン必要）
 - ストーリーズ定期チェック: 毎時17分（cron、セッション内のみ）
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
-- Google Photosに過去のしぶInstagram画像あり（次セッションでチェック）
+- Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
 ## 完了（4/11）
 
+- [x] Google Photos全画像エクスポート・しぶ関連272枚特定（Google Takeout→HEIC変換→6エージェント並列チェック）
 - [x] Google Photos MCP再認証・修正（STDIOモードの.env読み込み問題修正、環境変数付きMCP再登録）
 - [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
 - [x] Google Photos MCPセットアップ完了（OAuth認証・Claude Code登録）
