@@ -23,6 +23,8 @@
 - [x] Claudeデスクトップアプリ v1.1617.0 インストール
 - [x] claude-rcエイリアス設定（~/.zshrc）
 - [x] Windows PC（MASU-P55）にSSH接続・git pull同期完了
+- [x] AIミニマリストしぶ Webチャットボット作成・公開（server.py + Cloudflare Tunnel）
+- [x] 捨て方ガイドブック35種類PDF GitHub Pages公開
 
 ## 完了（4/9コワーキング）
 
