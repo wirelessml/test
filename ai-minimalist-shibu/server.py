@@ -527,6 +527,21 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(entries[-20:], ensure_ascii=False).encode())
+        elif path.startswith('/api/search'):
+            import urllib.parse as _up
+            qs = _up.parse_qs(_up.urlparse(self.path).query)
+            q = qs.get('q', [''])[0]
+            results = []
+            if q:
+                for fname, content in knowledge_data.items():
+                    if q.lower() in content.lower():
+                        idx = content.lower().find(q.lower())
+                        snippet = content[max(0,idx-50):idx+100].replace('\n',' ')
+                        results.append({'file': fname, 'snippet': snippet})
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'query': q, 'count': len(results), 'results': results}, ensure_ascii=False).encode())
         elif path == '/api/knowledge':
             files = []
             for f in sorted(os.listdir(KNOWLEDGE_DIR)):
