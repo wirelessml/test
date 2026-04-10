@@ -125,8 +125,9 @@ CHAT_HTML = """<!DOCTYPE html>
 <title>AIミニマリストしぶ</title>
 <style>
 :root { --bg: #0a0a0a; --surface: #161616; --border: #2a2a2a; --text: #e5e5e5; --muted: #888; --accent: #4ade80; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Noto Sans JP', sans-serif; height: 100dvh; display: flex; flex-direction: column; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Noto Sans JP', sans-serif; height: 100dvh; display: flex; flex-direction: column; overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
+html { height: -webkit-fill-available; }
 header { padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 header h1 { font-size: 16px; color: var(--accent); }
 header small { color: var(--muted); font-size: 11px; }
@@ -148,8 +149,8 @@ header small { color: var(--muted); font-size: 11px; }
 .suggest button:active { background: var(--accent); color: #000; }
 @keyframes dots { 0%,20% { content: '.'; } 40% { content: '..'; } 60%,100% { content: '...'; } }
 .typing::after { content: ''; animation: dots 1.5s infinite; }
-#input-area { padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
-#input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
+#input-area { padding: 12px 16px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
+#input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 16px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
 #input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
 #input-area button:disabled { opacity: 0.4; cursor: default; }
 #credit { padding: 8px 16px; text-align: center; font-size: 10px; color: var(--muted); flex-shrink: 0; }
