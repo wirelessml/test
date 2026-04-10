@@ -1,15 +1,50 @@
 # プロジェクトコンテキスト
 
-## TODO（次回セッション）
+## TODO（次回Mac前での作業）
 
-- [ ] **Dispatchペアリング**（Mac or WindowsでClaude Desktopにサインイン → 設定でDispatch有効化）
-- [ ] **Tailscaleログイン**（Macメニューバーからwirelessml@gmail.comでサインイン）
-- [ ] YouTube動画 QzMDrHjAhpI の字幕取得（shoの片付けサービス相談会ライブ、Whisper文字起こし必要）
-- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（しぶ最新ルームツアー「究極の自宅」39分、音声のみ取得済み、Whisper文字起こし必要）
-- [ ] Google Photos MCPのセットアップ（Google Cloud Console → OAuth設定が必要）
-- [ ] Google Drive MCPのセットアップ
-- [ ] Whisperインストール（pip3 install openai-whisper、ukfCg8ZgMjA等の文字起こし用）
-- [ ] しぶ自己語りダイジェスト動画のチャプター時間の微調整（実際の再生で確認）
+全てブラウザGUI操作が必要なため、リモートからは実行不可。
+
+### 1. Tailscaleログイン（1分）
+- メニューバーのTailscaleアイコンをクリック
+- wirelessml@gmail.com でサインイン
+- → 外出先からMacにアクセス可能に
+
+### 2. Dispatchペアリング（2分）
+- MacのClaudeデスクトップアプリを開く
+- wirelessml@gmail.com でサインイン
+- 設定 → Dispatchを有効化
+- → iPhoneからMacを遠隔操作可能に
+
+### 3. Google Photos MCPセットアップ（10分）
+- 詳細手順: `docs/google-photos-mcp-setup.md`
+- Google Cloud Console でプロジェクト作成
+- Photos Library API 有効化
+- OAuth同意画面 + 認証情報作成
+- `cd ~/Desktop/google-photos-mcp && npm start` → ブラウザ認証
+- `claude mcp add google-photos -- node ~/Desktop/google-photos-mcp/dist/index.js --stdio`
+
+### 4. Google Drive MCPセットアップ（同様にOAuth設定必要）
+
+### 5. しぶ自己語りダイジェスト動画のチャプター微調整（実際の再生で確認）
+
+## TODO（次回Windows PC前での作業）
+
+### 1. Claudeデスクトップアプリにサインイン（2分）
+- Claudeアプリを起動（Start Apps: Claude_pzs8sxrjxfjjc!Claude）
+- wirelessml@gmail.com でサインイン
+- → DispatchからWindowsを操作可能に
+
+### 2. masupユーザーの整理（任意）
+- 現在gci_adminとmasupの2ユーザーが存在
+- masupが不要ならアカウント削除を検討
+
+## TODO（リモートで実行可能）
+
+- [ ] Whisperインストール（`pip3 install openai-whisper`）
+- [ ] YouTube動画 QzMDrHjAhpI の字幕取得（Whisper文字起こし）
+- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（Whisper文字起こし）
+- [ ] セルフ開発ループ継続（Issue #102,#110,#113,#115,#120,#128等 未着手）
+- [ ] ナレッジバンドル再生成（56ファイル→サーバー反映）
 
 ## 完了（4/10）
 
