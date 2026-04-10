@@ -84,9 +84,10 @@ CHAT_HTML = """<!DOCTYPE html>
 :root { --bg: #0a0a0a; --surface: #161616; --border: #2a2a2a; --text: #e5e5e5; --muted: #888; --accent: #4ade80; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Noto Sans JP', sans-serif; height: 100dvh; display: flex; flex-direction: column; }
-header { padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+header { padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 header h1 { font-size: 16px; color: var(--accent); }
 header small { color: var(--muted); font-size: 11px; }
+.calc-btn { background: none; border: 1px solid var(--border); color: var(--accent); font-size: 12px; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
 #chat { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .msg { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 .msg.ai { background: #1a2e1a; border: 1px solid #2d4a2d; align-self: flex-start; border-bottom-left-radius: 4px; }
@@ -98,13 +99,56 @@ header small { color: var(--muted); font-size: 11px; }
 #input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
 #input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
 #input-area button:disabled { opacity: 0.4; cursor: default; }
+#calc-panel { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin: 8px 16px; padding: 16px; align-self: stretch; }
+#calc-panel h2 { font-size: 14px; color: var(--accent); margin-bottom: 4px; }
+#calc-panel p { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.calc-item { display: flex; align-items: center; gap: 6px; }
+.calc-item label { font-size: 12px; color: var(--muted); min-width: 70px; }
+.calc-item input { flex: 1; padding: 6px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; text-align: right; max-width: 90px; }
+#calc-total { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+#calc-total span { font-size: 16px; color: var(--accent); font-weight: 700; }
+#calc-actions { margin-top: 10px; display: flex; gap: 8px; }
+#calc-actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-calc { background: var(--accent); color: #000; }
+.btn-ask { background: #2a2a2a; color: var(--text); }
+#custom-items { margin-top: 8px; }
 </style>
 </head>
 <body>
 <header>
+<div>
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
+</div>
+<button class="calc-btn" onclick="toggleCalc()">生活費計算</button>
 </header>
+<div id="calc-panel">
+<h2>ミニマムライフコスト計算シート</h2>
+<p>毎月いくらあれば生活できる？支出を書き出してお金の不安を手放そう。</p>
+<div class="calc-grid">
+<div class="calc-item"><label>家賃</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>電気代</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>水道代</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>ガス代</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>食費</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>スマホ代</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>WiFi代</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>交通費</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>日用品</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>娯楽費</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>交際費</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>保険料</label><input type="number" data-cost value="0"></div>
+<div class="calc-item"><label>年金</label><input type="number" data-cost value="0"></div>
+</div>
+<div id="custom-items"></div>
+<div id="calc-total"><span id="total-label">合計: ¥0</span></div>
+<div id="calc-actions">
+<button class="btn-calc" onclick="calcTotal()">計算する</button>
+<button class="btn-ask" onclick="askShibu()">しぶに相談</button>
+<button class="btn-ask" onclick="addItem()">+項目追加</button>
+</div>
+</div>
 <div id="chat"></div>
 <div id="input-area">
 <textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
@@ -126,12 +170,10 @@ function addMsg(role, text) {
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
-async function send() {
+async function send(text) {
   const input = document.getElementById('msg');
-  const text = input.value.trim();
+  if (!text) { text = input.value.trim(); input.value = ''; input.style.height = '42px'; }
   if (!text) return;
-  input.value = '';
-  input.style.height = '42px';
   document.getElementById('send-btn').disabled = true;
   addMsg('user', text);
   history.push({ role: 'user', content: text });
@@ -154,9 +196,40 @@ async function send() {
     addMsg('ai', '通信エラーが発生したよ。サーバーが起動してるか確認してみて。');
   }
   document.getElementById('send-btn').disabled = false;
-  input.focus();
+  document.getElementById('msg').focus();
 }
-addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。');
+function toggleCalc() {
+  const p = document.getElementById('calc-panel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+}
+function calcTotal() {
+  let total = 0;
+  document.querySelectorAll('[data-cost]').forEach(el => { total += Number(el.value) || 0; });
+  document.getElementById('total-label').textContent = '合計: \\u00a5' + total.toLocaleString();
+}
+function addItem() {
+  const name = prompt('項目名を入力');
+  if (!name) return;
+  const div = document.createElement('div');
+  div.className = 'calc-item';
+  div.innerHTML = '<label>' + name + '</label><input type="number" data-cost value="0">';
+  document.getElementById('custom-items').appendChild(div);
+}
+function askShibu() {
+  calcTotal();
+  const items = [];
+  document.querySelectorAll('.calc-item').forEach(el => {
+    const label = el.querySelector('label').textContent;
+    const val = Number(el.querySelector('input').value) || 0;
+    if (val > 0) items.push(label + ': ' + val + '円');
+  });
+  let total = 0;
+  document.querySelectorAll('[data-cost]').forEach(el => { total += Number(el.value) || 0; });
+  const msg = '私のミニマムライフコストを計算したよ。\\n' + items.join('\\n') + '\\n合計: ' + total.toLocaleString() + '円/月\\nこの生活費についてアドバイスちょうだい。';
+  send(msg);
+  toggleCalc();
+}
+addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。\\n\\n右上の「生活費計算」からミニマムライフコストも計算できるよ。');
 </script>
 </body>
 </html>"""
