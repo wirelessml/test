@@ -176,11 +176,7 @@ header small { color: var(--muted); font-size: 11px; }
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
 </div>
-<a href="/stats" class="calc-btn" style="text-decoration:none">統計</a>
-<button class="calc-btn" onclick="shareChat()">共有</button>
-<button class="calc-btn" onclick="toggleTheme()" id="theme-btn">☀</button>
-<button class="calc-btn" onclick="resetChat()">リセット</button>
-<button class="calc-btn" onclick="toggleCalc()">生活費計算</button>
+<button class="calc-btn" id="calc-toggle">生活費計算</button>
 </header>
 <div id="calc-panel" style="display:none">
 <h2>ミニマムライフコスト計算シート</h2>
@@ -305,11 +301,11 @@ async function send(text) {
   btn.disabled = false; btn.textContent = '送信';
   document.getElementById('msg').focus();
 }
-function toggleCalc() {
+document.getElementById('calc-toggle').addEventListener('click', function() {
   const p = document.getElementById('calc-panel');
-  const visible = p.style.display === 'block';
-  p.style.display = visible ? 'none' : 'block';
-}
+  if (p.style.display === 'block') { p.style.display = 'none'; }
+  else { p.style.display = 'block'; }
+});
 function calcTotal() {
   let total = 0;
   document.querySelectorAll('[data-cost]').forEach(el => { const v = Number(el.value) || 0; total += el.hasAttribute('data-half') ? Math.round(v / 2) : v; });
@@ -337,7 +333,7 @@ function askShibu() {
   document.querySelectorAll('[data-cost]').forEach(el => { const v = Number(el.value) || 0; total += el.hasAttribute('data-half') ? Math.round(v / 2) : v; });
   const msg = '私のミニマムライフコストを計算したよ。\\n' + items.join('\\n') + '\\n合計: ' + total.toLocaleString() + '円/月\\nこの生活費についてアドバイスちょうだい。';
   send(msg);
-  toggleCalc();
+  document.getElementById('calc-panel').style.display = 'none';
 }
 let recognition = null;
 function toggleMic() {
@@ -427,7 +423,7 @@ fetch('/api/history').then(r=>r.json()).then(entries => {
 }).catch(() => {});
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'l') { e.preventDefault(); resetChat(); }
-  if (e.ctrlKey && e.key === '/') { e.preventDefault(); toggleCalc(); }
+  if (e.ctrlKey && e.key === '/') { e.preventDefault(); document.getElementById('calc-toggle').click(); }
 });
 </script>
 </body>
