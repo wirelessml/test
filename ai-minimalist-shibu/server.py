@@ -459,7 +459,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Type', 'text/plain')
             self.end_headers()
-            self.wfile.write(b'ok')
+            uptime = int(_time_module.time() - SERVER_START)
+            self.wfile.write(f'ok uptime:{uptime}s'.encode())
         elif path == '/manifest.json':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -584,6 +585,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         with open(log_path, 'a') as f:
             f.write(line + '\n')
 
+import time as _time_module
+SERVER_START = _time_module.time()
 total_kb = sum(len(v) for v in knowledge_data.values()) // 1024
 print(f"AIミニマリストしぶサーバー起動: http://localhost:{PORT}")
 print(f"ナレッジ: {len(knowledge_data)}ファイル, {total_kb}KB")
