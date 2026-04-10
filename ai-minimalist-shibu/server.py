@@ -142,6 +142,7 @@ header small { color: var(--muted); font-size: 11px; }
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
 </div>
+<button class="calc-btn" onclick="toggleTheme()" id="theme-btn">☀</button>
 <button class="calc-btn" onclick="resetChat()">リセット</button>
 <button class="calc-btn" onclick="toggleCalc()">生活費計算</button>
 </header>
@@ -254,6 +255,21 @@ function askShibu() {
   const msg = '私のミニマムライフコストを計算したよ。\\n' + items.join('\\n') + '\\n合計: ' + total.toLocaleString() + '円/月\\nこの生活費についてアドバイスちょうだい。';
   send(msg);
   toggleCalc();
+}
+function toggleTheme() {
+  const r = document.documentElement;
+  const isLight = r.style.getPropertyValue('--bg').trim() === '#f5f5f5';
+  if (isLight) {
+    r.style.setProperty('--bg','#0a0a0a'); r.style.setProperty('--surface','#161616');
+    r.style.setProperty('--border','#2a2a2a'); r.style.setProperty('--text','#e5e5e5');
+    r.style.setProperty('--muted','#888');
+    document.getElementById('theme-btn').textContent = '\\u2600';
+  } else {
+    r.style.setProperty('--bg','#f5f5f5'); r.style.setProperty('--surface','#ffffff');
+    r.style.setProperty('--border','#ddd'); r.style.setProperty('--text','#1a1a1a');
+    r.style.setProperty('--muted','#666');
+    document.getElementById('theme-btn').textContent = '\\u263D';
+  }
 }
 const PHRASES = {'全出し':0, '手放す':0, '迷ったら':0, '部屋は心':0, '必要なもの':0};
 function countPhrases(text) {
