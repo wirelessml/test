@@ -237,6 +237,11 @@ function addMsg(role, text) {
   del.onclick = () => div.remove();
   div.appendChild(del);
   if (role === 'ai') {
+    const fb = document.createElement('span');
+    fb.style.cssText = 'float:right;font-size:12px;cursor:pointer;opacity:0.4';
+    fb.innerHTML = '👍 👎';
+    fb.onclick = e => { const t = e.target.textContent.trim(); if(t) { fb.innerHTML = t; fb.style.opacity = '1'; } };
+    div.appendChild(fb);
     const cb = document.createElement('button');
     cb.className = 'copy-btn';
     cb.textContent = 'コピー';
@@ -610,9 +615,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
         except subprocess.TimeoutExpired:
             reply = 'ちょっと時間がかかりすぎたみたい。もう一度試してみて。'
 
+        elapsed_ms = int((_time.time() - now) * 1000)
         if len(response_cache) < CACHE_MAX:
             response_cache[cache_key] = reply
         log_chat(msg, reply)
+        print(f"[shibu] {elapsed_ms}ms | {msg[:30]}")
 
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
