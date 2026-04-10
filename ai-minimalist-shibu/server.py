@@ -8,6 +8,32 @@ KNOWLEDGE_DIR = os.path.join(DIR, 'knowledge')
 LOG_DIR = os.path.join(DIR, 'logs')
 os.makedirs(LOG_DIR, exist_ok=True)
 
+def load_past_questions():
+    """過去のログから全ユーザー質問を読み込む"""
+    questions = []
+    if not os.path.exists(LOG_DIR):
+        return questions
+    for fname in sorted(os.listdir(LOG_DIR)):
+        if fname.endswith('.jsonl'):
+            path = os.path.join(LOG_DIR, fname)
+            with open(path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    try:
+                        entry = json.loads(line.strip())
+                        if entry.get('user'):
+                            questions.append(entry['user'])
+                    except: pass
+    return questions
+
+def find_duplicate(msg, past_questions):
+    """同じ質問が過去にあったか判定"""
+    msg_clean = msg.strip().lower().replace('？', '').replace('?', '').replace('。', '')
+    for q in past_questions:
+        q_clean = q.strip().lower().replace('？', '').replace('?', '').replace('。', '')
+        if msg_clean == q_clean or (len(msg_clean) > 5 and msg_clean in q_clean) or (len(q_clean) > 5 and q_clean in msg_clean):
+            return q
+    return None
+
 def log_chat(user_msg, ai_reply):
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     path = os.path.join(LOG_DIR, f'chat_{today}.jsonl')
@@ -146,11 +172,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
         msg = body.get('message', '')
         hist = body.get('history', [])
 
+        # 過去の同じ質問をチェック
+        past = load_past_questions()
+        dup = find_duplicate(msg, past)
+        dup_note = f"\n\n注意: この質問は過去にも聞かれたことがある（「{dup}」）。回答の冒頭で「前にも同じ質問されたよ。」と一言触れてから答えて。" if dup else ""
+
         prompt_parts = []
         for h in hist[-10:]:
             role = 'ユーザー' if h['role'] == 'user' else 'しぶ'
             prompt_parts.append(f"{role}: {h['content']}")
-        prompt_parts.append(f"ユーザー: {msg}")
+        prompt_parts.append(f"ユーザー: {msg}{dup_note}")
         prompt_parts.append("しぶ:")
         full_prompt = '\n'.join(prompt_parts)
 
