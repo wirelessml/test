@@ -141,6 +141,7 @@ header small { color: var(--muted); font-size: 11px; }
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
 </div>
+<button class="calc-btn" onclick="resetChat()">リセット</button>
 <button class="calc-btn" onclick="toggleCalc()">生活費計算</button>
 </header>
 <div id="calc-panel">
@@ -250,6 +251,11 @@ function askShibu() {
   const msg = '私のミニマムライフコストを計算したよ。\\n' + items.join('\\n') + '\\n合計: ' + total.toLocaleString() + '円/月\\nこの生活費についてアドバイスちょうだい。';
   send(msg);
   toggleCalc();
+}
+function resetChat() {
+  history = [];
+  document.getElementById('chat').innerHTML = '';
+  addMsg('ai', 'リセットしたよ。身軽になったね。\\n\\n何でも聞いてね。');
 }
 addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。\\n\\n右上の「生活費計算」からミニマムライフコストも計算できるよ。\\n\\n水道代は2ヶ月に1回の請求だから、請求額をそのまま入れてくれたら自動で半分にして月額に変換するよ。');
 </script>
