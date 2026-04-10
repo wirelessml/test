@@ -5,10 +5,17 @@
 ## テクノロジー
 - MacBook Air M5 13インチ ミッドナイト x2台（424,800円x2）
 - Apple Vision Pro
-- iPhone（メイン）
-- AirPods
+- iPhone 17 Pro（毎年最新版に買い替え）
+- Samsung Galaxy Z Fold7（折りたたみスマホ）
+- AirPods Pro 3
 - モバイルバッテリー
 - モバイルルーター
+- Nintendo Switch 2 + コントローラー
+
+## 過去のデバイス
+- MacBook 12インチ（メルカリ購入、8年前の中古、ProRes/4K/60fps/Final Cut編集用）
+- MacBook Air（スペースグレー、5年使用→りくとに譲渡）
+- MacBook Air M4 ミッドナイト 32GB（2025年購入→手放し？）
 
 ## テスラ車内
 - テスラ モデルY（白）
