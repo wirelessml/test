@@ -26,24 +26,13 @@
 
 
 
-## TODO（次回Windows PC前での作業）
-
-### 1. Claudeデスクトップアプリにサインイン（2分）
-- Claudeアプリを起動（Start Apps: Claude_pzs8sxrjxfjjc!Claude）
-- wirelessml@gmail.com でサインイン
-- → DispatchからWindowsを操作可能に
-
-### 2. masupユーザーの整理（任意）
-- 現在gci_adminとmasupの2ユーザーが存在
-- masupが不要ならアカウント削除を検討
-
 ## TODO（リモートで実行可能）
 
-- [ ] Whisperインストール（`pip3 install openai-whisper`）
-- [ ] YouTube動画 QzMDrHjAhpI の字幕取得（Whisper文字起こし）
-- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（Whisper文字起こし）
+- [x] Whisperインストール済み（`pip3 install openai-whisper`）
+- [x] YouTube動画 QzMDrHjAhpI の字幕取得（YouTube自動字幕、しぶライブ配信）
+- [x] YouTube動画 ukfCg8ZgMjA の字幕取得（YouTube自動字幕、大川裕介×しぶルームツアー）
 - [ ] セルフ開発ループ継続（Issue #102,#110,#113,#115,#120,#128等 未着手）
-- [ ] ナレッジバンドル再生成（56ファイル→サーバー反映）
+- [x] ナレッジバンドル再生成（99ファイル→knowledge-bundle.js反映済み、Windows Claude Codeで42ファイル新規作成）
 
 ## 完了（4/10）
 
