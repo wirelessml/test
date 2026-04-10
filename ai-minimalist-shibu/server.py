@@ -325,12 +325,58 @@ document.getElementById('chat').appendChild(sugDiv);
 </body>
 </html>"""
 
+def get_stats():
+    """会話ログから統計を集計"""
+    from collections import Counter
+    total = 0; today_count = 0; questions = []; phrases_count = Counter()
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    shibu_phrases = ['全出し', '手放す', '迷ったら', '部屋は心', '必要なもの']
+    if os.path.exists(LOG_DIR):
+        for fname in sorted(os.listdir(LOG_DIR)):
+            if fname.endswith('.jsonl'):
+                is_today = today in fname
+                with open(os.path.join(LOG_DIR, fname), 'r') as f:
+                    for line in f:
+                        try:
+                            e = json.loads(line.strip())
+                            total += 1
+                            if is_today: today_count += 1
+                            if e.get('user'): questions.append(e['user'])
+                            if e.get('ai'):
+                                for p in shibu_phrases:
+                                    phrases_count[p] += e['ai'].count(p)
+                        except: pass
+    q_counter = Counter(questions).most_common(5)
+    return {'total': total, 'today': today_count, 'top_questions': q_counter, 'phrases': dict(phrases_count)}
+
+STATS_HTML = """<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>しぶ統計</title>
+<style>:root{--bg:#0a0a0a;--surface:#161616;--border:#2a2a2a;--text:#e5e5e5;--muted:#888;--accent:#4ade80}*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:-apple-system,'Noto Sans JP',sans-serif;padding:16px}
+h1{font-size:18px;color:var(--accent);margin-bottom:16px}h2{font-size:14px;color:var(--accent);margin:16px 0 8px}.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
+.big{font-size:32px;font-weight:700;color:var(--accent)}.row{display:flex;gap:12px}.row .card{flex:1;text-align:center}.list{font-size:13px;line-height:2}a{color:var(--accent)}</style></head><body>
+<h1>AIミニマリストしぶ 統計</h1><div id="s">読み込み中...</div><p style="margin-top:16px"><a href="/">チャットに戻る</a></p>
+<script>fetch('/api/stats').then(r=>r.json()).then(d=>{let h='<div class="row"><div class="card"><div class="big">'+d.total+'</div>総会話</div><div class="card"><div class="big">'+d.today+'</div>今日</div></div>';
+h+='<h2>よく聞かれる質問</h2><div class="card"><div class="list">';d.top_questions.forEach(([q,c])=>{h+=c+'回: '+q+'<br>'});h+='</div></div>';
+h+='<h2>しぶ語録の出現回数</h2><div class="card"><div class="list">';Object.entries(d.phrases).forEach(([k,v])=>{if(v>0)h+=k+': '+v+'回<br>'});h+='</div></div>';
+document.getElementById('s').innerHTML=h})</script></body></html>"""
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.end_headers()
-        self.wfile.write(CHAT_HTML.encode())
+        path = self.path.split('?')[0]
+        if path == '/stats':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(STATS_HTML.encode())
+        elif path == '/api/stats':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(get_stats(), ensure_ascii=False).encode())
+        else:
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(CHAT_HTML.encode())
 
     def do_POST(self):
         body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
