@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-04-10T10:48:00+09:00",
+  "last_updated": "2026-04-10T11:48:00+09:00",
   "session": "2026-04-10",
   "status": "active",
-  "screenshot": "screenshots/remote_20260410_104854.png",
+  "screenshot": "screenshots/remote_20260410_114854.png",
   "network": {
     "type": "Wi-Fi",
     "ssid": "YKSmas318",
@@ -11,8 +11,9 @@
     "ip": "192.168.2.135"
   },
   "desktop_state": {
-    "cursor": "Claude Code実行中（ウルトラワイドモニター全画面、一部エラー表示あり）",
-    "claude_desktop": "サインイン画面表示中（未サインイン）"
+    "cursor": "Claude Code実行中（ウルトラワイドモニター全画面）",
+    "claude_desktop": "サインイン画面表示中（未サインイン）",
+    "shibu_server": "稼働中（localhost:8787 + Cloudflare Tunnel）"
   },
-  "notes": "定時報告。しぶ公式AIミニマリストしぶ（LINE Bot）情報記録。捨て方ガイドブック35種類PDFをWindows→Macコピー→GitHub Pages公開。AIミニマリストしぶWebチャットボット作成・公開（chat.html、GitHub Pages完結型、APIキー入力方式）。AIあんの（チームみらい）を参考事例として調査。"
+  "notes": "定時報告。AIミニマリストしぶチャットボット完成・調整完了（塩対応・回数非表示・**除去）。Cloudflare Tunnel経由で外部公開中。セッション全記録をCLAUDE.mdに保存。Rust→TS移植事例(@bcherny)をナレッジに追加。"
 }
