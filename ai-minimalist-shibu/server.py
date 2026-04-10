@@ -227,6 +227,7 @@ async function send(text) {
   document.getElementById('send-btn').disabled = true;
   addMsg('user', text);
   history.push({ role: 'user', content: text });
+  const t0 = Date.now();
   const typing = document.createElement('div');
   typing.className = 'typing';
   typing.textContent = 'しぶが考え中';
@@ -242,6 +243,11 @@ async function send(text) {
     history.push({ role: 'assistant', content: data.reply });
     addMsg('ai', data.reply);
     countPhrases(data.reply);
+    const elapsed = ((Date.now()-t0)/1000).toFixed(1);
+    const tEl = document.createElement('div');
+    tEl.style.cssText = 'font-size:10px;color:var(--muted);padding:0 14px';
+    tEl.textContent = elapsed + '秒';
+    document.getElementById('chat').appendChild(tEl);
   } catch (e) {
     try {
       const res2 = await fetch('/chat', {
