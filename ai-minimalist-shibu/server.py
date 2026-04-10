@@ -369,6 +369,9 @@ h+='<h2>よく聞かれる質問</h2><div class="card"><div class="list">';d.top
 h+='<h2>しぶ語録の出現回数</h2><div class="card"><div class="list">';Object.entries(d.phrases).forEach(([k,v])=>{if(v>0)h+=k+': '+v+'回<br>'});h+='</div></div>';
 document.getElementById('s').innerHTML=h})</script></body></html>"""
 
+last_request = {}
+RATE_LIMIT_SEC = 5
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split('?')[0]
@@ -399,6 +402,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(CHAT_HTML.encode())
 
     def do_POST(self):
+        import time as _time
+        client = self.client_address[0]
+        now = _time.time()
+        if client in last_request and now - last_request[client] < RATE_LIMIT_SEC:
+            self.send_response(429)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'reply': 'ちょっと待って。焦らないで。ミニマリストはゆっくりでいい。'}, ensure_ascii=False).encode())
+            return
+        last_request[client] = now
         body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
         msg = body.get('message', '')
         hist = body.get('history', [])
