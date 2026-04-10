@@ -222,8 +222,21 @@ async function send(text) {
     addMsg('ai', data.reply);
     countPhrases(data.reply);
   } catch (e) {
-    typing.remove();
-    addMsg('ai', '通信エラーが発生したよ。サーバーが起動してるか確認してみて。');
+    try {
+      const res2 = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: history })
+      });
+      typing.remove();
+      const data2 = await res2.json();
+      history.push({ role: 'assistant', content: data2.reply });
+      addMsg('ai', data2.reply);
+      countPhrases(data2.reply);
+    } catch (e2) {
+      typing.remove();
+      addMsg('ai', '通信エラーが発生したよ。サーバーが起動してるか確認してみて。');
+    }
   }
   document.getElementById('send-btn').disabled = false;
   document.getElementById('msg').focus();
