@@ -112,7 +112,8 @@ header small { color: var(--muted); font-size: 11px; }
 .msg { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 .msg.ai { background: #1a2e1a; border: 1px solid #2d4a2d; align-self: flex-start; border-bottom-left-radius: 4px; }
 .msg.user { background: #2a2a2a; align-self: flex-end; border-bottom-right-radius: 4px; }
-.msg .name { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 600; }
+.msg .name { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 600; display: flex; justify-content: space-between; }
+.msg .time { font-weight: 400; color: var(--muted); }
 .msg.user .name { color: var(--muted); }
 .typing { color: var(--muted); font-style: italic; font-size: 13px; align-self: flex-start; padding: 8px 14px; }
 .suggest { display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-start; }
@@ -191,7 +192,9 @@ function addMsg(role, text) {
   div.className = 'msg ' + role;
   const name = document.createElement('div');
   name.className = 'name';
-  name.textContent = role === 'ai' ? 'しぶ' : 'あなた';
+  const now = new Date();
+  const ts = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  name.innerHTML = (role === 'ai' ? 'しぶ' : 'あなた') + '<span class=\"time\">' + ts + '</span>';
   div.appendChild(name);
   const body = document.createElement('div');
   body.textContent = text;
