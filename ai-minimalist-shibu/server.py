@@ -120,6 +120,8 @@ header small { color: var(--muted); font-size: 11px; }
 .msg .name { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 600; display: flex; justify-content: space-between; }
 .msg .time { font-weight: 400; color: var(--muted); }
 .msg.user .name { color: var(--muted); }
+.copy-btn { background: none; border: none; color: var(--muted); font-size: 11px; cursor: pointer; padding: 2px 6px; float: right; opacity: 0.5; }
+.copy-btn:active { opacity: 1; }
 .typing { color: var(--muted); font-style: italic; font-size: 13px; align-self: flex-start; padding: 8px 14px; }
 .suggest { display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-start; }
 .suggest button { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 6px 12px; border-radius: 16px; font-size: 12px; cursor: pointer; }
@@ -204,6 +206,13 @@ function addMsg(role, text) {
   const body = document.createElement('div');
   body.innerHTML = miniMd(text);
   div.appendChild(body);
+  if (role === 'ai') {
+    const cb = document.createElement('button');
+    cb.className = 'copy-btn';
+    cb.textContent = 'コピー';
+    cb.onclick = () => { navigator.clipboard.writeText(text).then(() => { cb.textContent = 'コピー済'; setTimeout(() => cb.textContent = 'コピー', 1500); }); };
+    div.appendChild(cb);
+  }
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
 }
