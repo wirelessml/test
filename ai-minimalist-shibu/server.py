@@ -315,7 +315,7 @@ function addItem() {
   const div = document.createElement('div');
   div.className = 'calc-item';
   div.innerHTML = '<label>' + name + '</label><input type="number" data-cost value="0">';
-  document.getElementById('custom-items').appendChild(div);
+  document.querySelector('.calc-grid').appendChild(div);
 }
 function askShibu() {
   calcTotal();
