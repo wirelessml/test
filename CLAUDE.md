@@ -4,13 +4,12 @@
 
 全てブラウザGUI操作が必要なため、リモートからは実行不可。
 
-### 1. Tailscaleログイン — 問題あり（4/11）
-- Standalone版(pkg)をインストール済み
-- トグルオンにしてもブラウザが開かない、CLIも応答なし
-- システム拡張機能のブロックが原因の可能性
-- **Mac再起動後にシステム拡張機能の許可ダイアログを確認**
-- Windows PC(masu-p55)とiPhone(iphone-15-pro)は既にtailnet接続済み
-- Macだけ未接続
+### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
+- Standalone版(pkg)でシステム拡張機能を許可→接続成功
+- macbook-air: 100.99.41.2（Tailscale 1.96.5、macOS 26.5.0）
+- iphone-15-pro: 100.74.77.115（Tailscale 1.96.5、iOS 26.5.0）
+- masu-p55: 100.125.21.47（Tailscale 1.96.3、Windows 11 25H2）
+- 3台すべてtailnet接続済み
 
 ### ~~2. Dispatchペアリング~~ ✅ 完了（4/11）
 - MacのClaudeデスクトップアプリ サインイン済み（仲結花 マックスプラン）
