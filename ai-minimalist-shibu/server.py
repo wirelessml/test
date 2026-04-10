@@ -224,7 +224,8 @@ async function send(text) {
   const input = document.getElementById('msg');
   if (!text) { text = input.value.trim(); input.value = ''; input.style.height = '42px'; }
   if (!text) return;
-  document.getElementById('send-btn').disabled = true;
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true; btn.textContent = '...';
   addMsg('user', text);
   history.push({ role: 'user', content: text });
   const t0 = Date.now();
@@ -265,7 +266,7 @@ async function send(text) {
       addMsg('ai', '通信エラーが発生したよ。サーバーが起動してるか確認してみて。');
     }
   }
-  document.getElementById('send-btn').disabled = false;
+  btn.disabled = false; btn.textContent = '送信';
   document.getElementById('msg').focus();
 }
 function toggleCalc() {
