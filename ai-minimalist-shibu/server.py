@@ -492,7 +492,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(json.dumps({'reply': reply}, ensure_ascii=False).encode())
 
     def log_message(self, fmt, *args):
-        print(f"[shibu] {args[0]}")
+        ts = datetime.datetime.now().strftime('%H:%M:%S')
+        line = f"[{ts}] {self.client_address[0]} {args[0]}"
+        print(line)
+        log_path = os.path.join(LOG_DIR, f'access_{datetime.datetime.now().strftime("%Y-%m-%d")}.log')
+        with open(log_path, 'a') as f:
+            f.write(line + '\n')
 
 print(f"AIミニマリストしぶサーバー起動: http://localhost:{PORT}")
 print("ブラウザで開いてください。Ctrl+Cで停止。")
