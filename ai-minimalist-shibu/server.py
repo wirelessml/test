@@ -202,7 +202,7 @@ function addMsg(role, text) {
   name.innerHTML = (role === 'ai' ? 'しぶ' : 'あなた') + '<span class=\"time\">' + ts + '</span>';
   div.appendChild(name);
   const body = document.createElement('div');
-  body.textContent = text;
+  body.innerHTML = miniMd(text);
   div.appendChild(body);
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
@@ -281,6 +281,10 @@ function askShibu() {
   const msg = '私のミニマムライフコストを計算したよ。\\n' + items.join('\\n') + '\\n合計: ' + total.toLocaleString() + '円/月\\nこの生活費についてアドバイスちょうだい。';
   send(msg);
   toggleCalc();
+}
+function miniMd(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
 }
 function toggleTheme() {
   const r = document.documentElement;
