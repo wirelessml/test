@@ -477,4 +477,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 print(f"AIミニマリストしぶサーバー起動: http://localhost:{PORT}")
 print("ブラウザで開いてください。Ctrl+Cで停止。")
-http.server.HTTPServer(('0.0.0.0', PORT), Handler).serve_forever()
+import socketserver
+class ThreadedServer(socketserver.ThreadingMixIn, http.server.HTTPServer): pass
+ThreadedServer(('0.0.0.0', PORT), Handler).serve_forever()
