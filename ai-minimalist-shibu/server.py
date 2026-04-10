@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
 """AIミニマリストしぶ チャットサーバー（Claude CLI経由、無料）"""
-import http.server, json, subprocess, os, urllib.parse
+import http.server, json, subprocess, os, urllib.parse, datetime
 
 PORT = 8787
 DIR = os.path.dirname(os.path.abspath(__file__))
 KNOWLEDGE_DIR = os.path.join(DIR, 'knowledge')
+LOG_DIR = os.path.join(DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+
+def log_chat(user_msg, ai_reply):
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    path = os.path.join(LOG_DIR, f'chat_{today}.jsonl')
+    entry = {
+        'timestamp': datetime.datetime.now().isoformat(),
+        'user': user_msg,
+        'ai': ai_reply
+    }
+    with open(path, 'a', encoding='utf-8') as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
 # コアナレッジ読み込み
 CORE_FILES = [
@@ -149,6 +162,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             reply = result.stdout.strip() if result.returncode == 0 else 'ごめん、ちょっとエラーが起きた。もう一度聞いてみて。'
         except subprocess.TimeoutExpired:
             reply = 'ちょっと時間がかかりすぎたみたい。もう一度試してみて。'
+
+        log_chat(msg, reply)
 
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
