@@ -455,11 +455,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(get_stats(), ensure_ascii=False).encode())
-        else:
+        elif path == '/':
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.end_headers()
             self.wfile.write(CHAT_HTML.encode())
+        else:
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>404</title><style>body{background:#0a0a0a;color:#e5e5e5;font-family:-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;text-align:center}h1{color:#4ade80;font-size:48px}p{color:#888;margin-top:12px}a{color:#4ade80}</style></head><body><div><h1>404</h1><p>そのページ、もう手放したよ。</p><p>必要なものだけ残す。<a href="/">トップへ</a></p></div></body></html>'.encode())
 
     def do_POST(self):
         import time as _time
