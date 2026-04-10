@@ -115,6 +115,9 @@ header small { color: var(--muted); font-size: 11px; }
 .msg .name { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 600; }
 .msg.user .name { color: var(--muted); }
 .typing { color: var(--muted); font-style: italic; font-size: 13px; align-self: flex-start; padding: 8px 14px; }
+.suggest { display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-start; }
+.suggest button { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 6px 12px; border-radius: 16px; font-size: 12px; cursor: pointer; }
+.suggest button:active { background: var(--accent); color: #000; }
 #input-area { padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
 #input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
 #input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
@@ -284,7 +287,16 @@ function resetChat() {
   document.getElementById('chat').innerHTML = '';
   addMsg('ai', 'リセットしたよ。身軽になったね。\\n\\n何でも聞いてね。');
 }
-addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。\\n\\n右上の「生活費計算」からミニマムライフコストも計算できるよ。\\n\\n水道代は2ヶ月に1回の請求だから、請求額をそのまま入れてくれたら自動で半分にして月額に変換するよ。');
+addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。\\n\\n右上の「生活費計算」からミニマムライフコストも計算できるよ。水道代は請求額をそのまま入れれば自動で月額に変換するよ。');
+const sugDiv = document.createElement('div');
+sugDiv.className = 'suggest';
+['片付けのコツは？', 'ミニマリストになるには？', '生活費いくら？'].forEach(q => {
+  const b = document.createElement('button');
+  b.textContent = q;
+  b.onclick = () => { sugDiv.remove(); send(q); };
+  sugDiv.appendChild(b);
+});
+document.getElementById('chat').appendChild(sugDiv);
 </script>
 </body>
 </html>"""
