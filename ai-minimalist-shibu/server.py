@@ -177,6 +177,7 @@ header small { color: var(--muted); font-size: 11px; }
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
 </div>
+<button class="calc-btn" onclick="resetChat()">リセット</button>
 <button class="calc-btn" id="calc-toggle">生活費計算</button>
 </header>
 <div id="calc-panel" style="display:none">
