@@ -326,6 +326,7 @@ sugDiv.className = 'suggest';
   sugDiv.appendChild(b);
 });
 document.getElementById('chat').appendChild(sugDiv);
+document.getElementById('msg').focus();
 </script>
 </body>
 </html>"""
@@ -367,7 +368,12 @@ document.getElementById('s').innerHTML=h})</script></body></html>"""
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split('?')[0]
-        if path == '/manifest.json':
+        if path == '/health':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'ok')
+        elif path == '/manifest.json':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
