@@ -5,7 +5,8 @@
 出典: https://sibu2.com/minimalist-sibu-own-items/
 
 ## テクノロジー
-- MacBook Air M5 13インチ ミッドナイト x2台（424,800円x2）
+- MacBook Air M4 13インチ ミッドナイト（2025年購入、持ち歩き用）
+- MacBook Air M5 13インチ ミッドナイト（2026/4/9購入、424,800円、自宅Claude常時稼働用）
 - Apple Vision Pro
 - iPhone（常に最新モデル）
 - Samsung Galaxy Z Fold7（折りたたみスマホ）
@@ -14,9 +15,8 @@
 - Nintendo Switch 2 + コントローラー
 
 ## 過去のデバイス
-- MacBook 12インチ（メルカリ購入、8年前の中古、ProRes/4K/60fps/Final Cut編集用）
-- MacBook Air（スペースグレー、5年使用→りくとに譲渡）
-- MacBook Air M4 ミッドナイト 32GB（2025年購入→手放し？）
+- MacBook 12インチ 2015年モデル（メルカリ購入、8年前の中古）
+- MacBook Air（スペースグレー、約5年使用→りくとに譲渡、M1相当）
 
 ## テスラ車内
 - テスラ モデルY（白）
