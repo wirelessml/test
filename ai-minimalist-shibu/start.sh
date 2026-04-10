@@ -8,6 +8,9 @@ pkill -f "server.py" 2>/dev/null
 pkill -f "cloudflared tunnel" 2>/dev/null
 sleep 1
 
+# ナレッジバンドル再生成
+python3 "$DIR/src/build-knowledge.py"
+
 # サーバー起動
 cd "$DIR" && nohup python3 server.py > /tmp/shibu-server.log 2>&1 &
 echo "しぶサーバー起動 (PID: $!)"
