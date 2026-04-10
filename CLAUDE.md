@@ -24,7 +24,21 @@
 - [x] claude-rcエイリアス設定（~/.zshrc）
 - [x] Windows PC（MASU-P55）にSSH接続・git pull同期完了
 - [x] AIミニマリストしぶ Webチャットボット作成・公開（server.py + Cloudflare Tunnel）
+  - URL: Cloudflare Tunnel経由（セッション毎にURL変わる）
+  - Claude CLI経由、APIキー不要、追加費用ゼロ
+  - ナレッジ11ファイル埋め込み、しぶ口調再現
+  - 会話ログ自動保存（logs/chat_YYYY-MM-DD.jsonl）
+  - 同じ質問は塩対応（回数は言わない）
+  - 起動: `python3 ai-minimalist-shibu/server.py` + `cloudflared tunnel --url http://localhost:8787`
 - [x] 捨て方ガイドブック35種類PDF GitHub Pages公開
+  - ビューア: https://wirelessml.github.io/test/docs/sutetekata-guide.html
+- [x] しぶ公式「AIミニマリストしぶ」LINE Bot情報をナレッジに記録
+- [x] しぶプロフィール修正（住民票: 福岡市中央区、年齢: 31歳）
+- [x] Cloudflareインストール（cloudflared 2026.3.0）
+- [x] sshpassインストール（Windows SSH用）
+- [x] Windows PC Claudeデスクトップアプリ v1.569.0→v1.1348.0にアップデート
+- [x] 「なぜAIはPythonで作られるのか」ナレッジ保存（docs/why-ai-uses-python.md）
+- [x] AIあんの（チームみらい）参考事例調査
 
 ## 完了（4/9コワーキング）
 
@@ -125,6 +139,14 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
   - テザリング時はデバイス名も報告（結花=iPhone 15 Pro / 彩羽=iPad Pro 9.7）
   - 有線接続はなし（Wi-Fiかテザリングのどちらか）
   - **Wi-Fi切り替え後は /rc で接続状況を報告する**
+
+## AIミニマリストしぶ チャットサーバー
+
+- サーバー: `python3 ~/Desktop/ai-minimalist-shibu/server.py`（ポート8787）
+- 外部公開: `cloudflared tunnel --url http://localhost:8787`（セッション毎にURL変わる）
+- Claude CLI経由、APIキー不要、Claude Pro範囲内で無料
+- 会話ログ: `ai-minimalist-shibu/logs/chat_YYYY-MM-DD.jsonl`
+- ナレッジ更新時: `python3 ai-minimalist-shibu/src/build-knowledge.py` → サーバー再起動
 
 ## セッション設定
 
