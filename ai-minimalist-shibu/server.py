@@ -132,6 +132,7 @@ header small { color: var(--muted); font-size: 11px; }
 #input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
 #input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
 #input-area button:disabled { opacity: 0.4; cursor: default; }
+#credit { padding: 8px 16px; text-align: center; font-size: 10px; color: var(--muted); flex-shrink: 0; }
 #phrase-counter { padding: 6px 16px; background: var(--surface); border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; flex-shrink: 0; }
 #calc-panel { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin: 8px 16px; padding: 16px; align-self: stretch; }
 #calc-panel h2 { font-size: 14px; color: var(--accent); margin-bottom: 4px; }
@@ -187,8 +188,9 @@ header small { color: var(--muted); font-size: 11px; }
 </div>
 <div id="chat"></div>
 <div id="phrase-counter"></div>
+<div id="credit">Powered by Claude + ミニマリストしぶのナレッジ</div>
 <div id="input-area">
-<textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+<textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!('ontouchstart' in window)){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
 <button id="send-btn" onclick="send()">送信</button>
 </div>
 <script>
