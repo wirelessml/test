@@ -175,6 +175,7 @@ header small { color: var(--muted); font-size: 11px; }
 <h1>AIミニマリストしぶ</h1>
 <small>少ないことは、豊かなこと。</small>
 </div>
+<a href="/stats" class="calc-btn" style="text-decoration:none">統計</a>
 <button class="calc-btn" onclick="shareChat()">共有</button>
 <button class="calc-btn" onclick="toggleTheme()" id="theme-btn">☀</button>
 <button class="calc-btn" onclick="resetChat()">リセット</button>
@@ -211,6 +212,7 @@ header small { color: var(--muted); font-size: 11px; }
 <div id="credit">Powered by Claude + ミニマリストしぶのナレッジ</div>
 <div id="input-area">
 <textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!('ontouchstart' in window)){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px';document.getElementById('char-count').textContent=this.value.length>0?this.value.length:''"></textarea>
+<button id="mic-btn" onclick="toggleMic()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:10px;cursor:pointer;flex-shrink:0">🎤</button>
 <span id="char-count" style="font-size:10px;color:var(--muted);align-self:center"></span>
 <button id="send-btn" onclick="send()">送信</button>
 </div>
@@ -326,6 +328,20 @@ function askShibu() {
   send(msg);
   toggleCalc();
 }
+let recognition = null;
+function toggleMic() {
+  const btn = document.getElementById('mic-btn');
+  if (recognition) { recognition.stop(); recognition = null; btn.style.color = 'var(--muted)'; return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('音声入力非対応'); return; }
+  recognition = new SR();
+  recognition.lang = 'ja-JP';
+  recognition.onresult = e => { document.getElementById('msg').value = e.results[0][0].transcript; btn.style.color = 'var(--muted)'; recognition = null; };
+  recognition.onerror = () => { btn.style.color = 'var(--muted)'; recognition = null; };
+  recognition.onend = () => { btn.style.color = 'var(--muted)'; recognition = null; };
+  recognition.start();
+  btn.style.color = 'var(--accent)';
+}
 function shareChat() {
   const lastAi = history.filter(h => h.role === 'assistant').pop();
   if (!lastAi) { alert('まだ会話がないよ'); return; }
@@ -338,6 +354,7 @@ function shareChat() {
 }
 function miniMd(t) {
   return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\\n- /g,'<br>・').replace(/\n- /g,'<br>・')
     .replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
 }
 function toggleTheme() {
@@ -564,7 +581,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 ['claude', '-p', f'{SYSTEM_BASE}{select_knowledge(msg)}\n\n{full_prompt}', '--output-format', 'text'],
                 capture_output=True, text=True, timeout=120
             )
-            reply = result.stdout.strip().replace('**', '') if result.returncode == 0 else 'ごめん、ちょっとエラーが起きた。もう一度聞いてみて。'
+            if result.returncode == 0:
+                reply = result.stdout.strip().replace('**', '')
+            else:
+                reply = 'ごめん、ちょっとエラーが起きた。もう一度聞いてみて。'
+                err_path = os.path.join(LOG_DIR, f'error_{datetime.datetime.now().strftime("%Y-%m-%d")}.log')
+                with open(err_path, 'a') as ef:
+                    ef.write(f'{datetime.datetime.now().isoformat()} | {result.stderr[:200]}\n')
         except subprocess.TimeoutExpired:
             reply = 'ちょっと時間がかかりすぎたみたい。もう一度試してみて。'
 
