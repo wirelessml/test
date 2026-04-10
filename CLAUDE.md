@@ -26,13 +26,14 @@
 
 
 
-## TODO（リモートで実行可能）
+## 完了（4/11）
 
-- [x] Whisperインストール済み（`pip3 install openai-whisper`）
-- [x] YouTube動画 QzMDrHjAhpI の字幕取得（YouTube自動字幕、しぶライブ配信）
-- [x] YouTube動画 ukfCg8ZgMjA の字幕取得（YouTube自動字幕、大川裕介×しぶルームツアー）
-- [ ] セルフ開発ループ継続（Issue #102,#110,#113,#115,#120,#128等 未着手）
-- [x] ナレッジバンドル再生成（99ファイル→knowledge-bundle.js反映済み、Windows Claude Codeで42ファイル新規作成）
+- [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
+- [x] Google Photos MCPセットアップ完了（OAuth認証・Claude Code登録）
+- [x] Whisperインストール済み
+- [x] YouTube字幕取得: QzMDrHjAhpI（しぶライブ）、ukfCg8ZgMjA（大川裕介×しぶルームツアー）
+- [x] ナレッジ57→99ファイル（Windows Claude Codeで42ファイル新規作成、バンドル再生成済み）
+- [x] セルフ開発ループ完了（Issue 100件完了、ナレッジ99ファイル、server.py 668行で完成）
 
 ## 完了（4/10）
 
