@@ -360,9 +360,10 @@ function shareChat() {
   }
 }
 function miniMd(t) {
-  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\\n- /g,'<br>・').replace(/\n- /g,'<br>・')
-    .replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
+  var s = t.replace(/&/g,'&amp;');
+  s = s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s = s.split('\\n').join('<br>');
+  return s;
 }
 function toggleTheme() {
   const r = document.documentElement;
