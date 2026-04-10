@@ -307,7 +307,8 @@ async function send(text) {
 }
 function toggleCalc() {
   const p = document.getElementById('calc-panel');
-  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+  const visible = p.style.display === 'block';
+  p.style.display = visible ? 'none' : 'block';
 }
 function calcTotal() {
   let total = 0;
