@@ -354,6 +354,12 @@ sugDiv.className = 'suggest';
 });
 document.getElementById('chat').appendChild(sugDiv);
 document.getElementById('msg').focus();
+fetch('/api/history').then(r=>r.json()).then(entries => {
+  entries.forEach(e => {
+    if (e.user) { addMsg('user', e.user); history.push({role:'user',content:e.user}); }
+    if (e.ai) { addMsg('ai', e.ai); history.push({role:'assistant',content:e.ai}); }
+  });
+}).catch(() => {});
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'l') { e.preventDefault(); resetChat(); }
   if (e.ctrlKey && e.key === '/') { e.preventDefault(); toggleCalc(); }
@@ -431,6 +437,19 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Disposition', 'attachment; filename="shibu-chat-export.json"')
             self.end_headers()
             self.wfile.write(json.dumps(logs, ensure_ascii=False, indent=2).encode())
+        elif path == '/api/history':
+            today = datetime.datetime.now().strftime('%Y-%m-%d')
+            today_log = os.path.join(LOG_DIR, f'chat_{today}.jsonl')
+            entries = []
+            if os.path.exists(today_log):
+                with open(today_log, 'r') as f:
+                    for line in f:
+                        try: entries.append(json.loads(line.strip()))
+                        except: pass
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(entries[-20:], ensure_ascii=False).encode())
         elif path == '/api/stats':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
