@@ -69,6 +69,22 @@ for fname in KNOWLEDGE_FILES:
 # 必須ナレッジ（常に含める、短いファイル）
 ALWAYS_INCLUDE = ['shibu-biography.md', 'minimalism-principles.md']
 
+knowledge_mtime = {}
+def reload_knowledge():
+    """ファイル更新を検知してナレッジをリロード"""
+    changed = False
+    for fname in KNOWLEDGE_FILES:
+        path = os.path.join(KNOWLEDGE_DIR, fname)
+        if os.path.exists(path):
+            mt = os.path.getmtime(path)
+            if fname not in knowledge_mtime or knowledge_mtime[fname] != mt:
+                with open(path, 'r') as fh:
+                    knowledge_data[fname] = fh.read().replace('**', '')
+                knowledge_mtime[fname] = mt
+                changed = True
+    if changed:
+        print(f"ナレッジ更新検知: {len(knowledge_data)}ファイル")
+
 def select_knowledge(msg):
     """質問に関連するナレッジだけを選択"""
     selected = set(ALWAYS_INCLUDE)
@@ -508,6 +524,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({'reply': 'ちょっと待って。焦らないで。ミニマリストはゆっくりでいい。'}, ensure_ascii=False).encode())
             return
         last_request[client] = now
+        reload_knowledge()
         body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
         msg = body.get('message', '')
         hist = body.get('history', [])
