@@ -9,11 +9,10 @@
 - wirelessml@gmail.com でサインイン
 - → 外出先からMacにアクセス可能に
 
-### 2. Dispatchペアリング（2分）
-- MacのClaudeデスクトップアプリを開く
-- wirelessml@gmail.com でサインイン
-- 設定 → Dispatchを有効化
-- → iPhoneからMacを遠隔操作可能に
+### ~~2. Dispatchペアリング~~ ✅ 完了（4/11）
+- MacのClaudeデスクトップアプリ サインイン済み（仲結花 マックスプラン）
+- Dispatch接続済み、Computer Use有効化済み
+- iPhoneからMac操作可能
 
 ### 3. Google Photos MCPセットアップ（10分）
 - 詳細手順: `docs/google-photos-mcp-setup.md`
