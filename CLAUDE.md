@@ -21,8 +21,11 @@
 - Photos Library API 有効化済み
 - OAuth同意画面: photos-mcp（外部、テストユーザー: wirelessml@gmail.com）
 - OAuthクライアント: photos-mcp（ウェブアプリケーション）
-- ブラウザ認証完了、トークン取得済み
-- Claude Code MCP登録済み: `claude mcp add google-photos`
+- ブラウザ認証完了、トークン取得済み（4/11 06:16再認証）
+- Claude Code MCP登録済み: `claude mcp add google-photos`（環境変数付き）
+- **STDIOモードの.env読み込み問題を修正済み**（`dotenv.config()`に`__dirname`ベースのpath指定）
+- トークン保存先: `google-photos-mcp/tokens.json`（実体はSQLite）
+- 2025/3/31以降のAPI制限: アプリ作成コンテンツのみアクセス可、Picker APIで既存写真選択可能
 
 
 
@@ -36,6 +39,7 @@
 
 ## 完了（4/11）
 
+- [x] Google Photos MCP再認証・修正（STDIOモードの.env読み込み問題修正、環境変数付きMCP再登録）
 - [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
 - [x] Google Photos MCPセットアップ完了（OAuth認証・Claude Code登録）
 - [x] Whisperインストール済み
