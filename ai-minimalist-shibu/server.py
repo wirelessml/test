@@ -222,7 +222,7 @@ function addMsg(role, text) {
 }
 async function send(text) {
   const input = document.getElementById('msg');
-  if (!text) { text = input.value.trim(); input.value = ''; input.style.height = '42px'; }
+  if (!text) { text = input.value.trim().replace(/\\n/g,'').trim(); input.value = ''; input.style.height = '42px'; }
   if (!text) return;
   const btn = document.getElementById('send-btn');
   btn.disabled = true; btn.textContent = '...';
