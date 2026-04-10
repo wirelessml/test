@@ -154,7 +154,7 @@ header small { color: var(--muted); font-size: 11px; }
 #input-area button:disabled { opacity: 0.4; cursor: default; }
 #credit { padding: 8px 16px; text-align: center; font-size: 10px; color: var(--muted); flex-shrink: 0; }
 #phrase-counter { padding: 6px 16px; background: var(--surface); border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; flex-shrink: 0; }
-#calc-panel { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin: 8px 16px; padding: 16px; align-self: stretch; }
+#calc-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin: 8px 16px; padding: 16px; align-self: stretch; }
 #calc-panel h2 { font-size: 14px; color: var(--accent); margin-bottom: 4px; }
 #calc-panel p { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
 .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -182,7 +182,7 @@ header small { color: var(--muted); font-size: 11px; }
 <button class="calc-btn" onclick="resetChat()">リセット</button>
 <button class="calc-btn" onclick="toggleCalc()">生活費計算</button>
 </header>
-<div id="calc-panel">
+<div id="calc-panel" style="display:none">
 <h2>ミニマムライフコスト計算シート</h2>
 <p>毎月いくらあれば生活できる？支出を書き出してお金の不安を手放そう。</p>
 <div class="calc-grid">
