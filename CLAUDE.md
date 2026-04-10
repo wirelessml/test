@@ -21,29 +21,33 @@
 - Photos Library API 有効化済み
 - OAuth同意画面: photos-mcp（外部、テストユーザー: wirelessml@gmail.com）
 - OAuthクライアント: photos-mcp（ウェブアプリケーション）
-- ブラウザ認証完了、トークン取得済み
-- Claude Code MCP登録済み: `claude mcp add google-photos`
+- ブラウザ認証完了、トークン取得済み（4/11 06:16再認証）
+- Claude Code MCP登録済み: `claude mcp add google-photos`（環境変数付き）
+- **STDIOモードの.env読み込み問題を修正済み**（`dotenv.config()`に`__dirname`ベースのpath指定）
+- トークン保存先: `google-photos-mcp/tokens.json`（実体はSQLite）
+- 2025/3/31以降のAPI制限: アプリ作成コンテンツのみアクセス可、Picker APIで既存写真選択可能
 
 
 
-## TODO（次回Windows PC前での作業）
+## しぶInstagram監視
 
-### 1. Claudeデスクトップアプリにサインイン（2分）
-- Claudeアプリを起動（Start Apps: Claude_pzs8sxrjxfjjc!Claude）
-- wirelessml@gmail.com でサインイン
-- → DispatchからWindowsを操作可能に
+- アカウント: @minimalist_sibu（認証済み、48投稿、フォロワー7万）
+- Chrome DevTools MCPでログイン済み（セッション毎に再ログイン必要）
+- ストーリーズ定期チェック: 毎時17分（cron、セッション内のみ）
+- 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
+- Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
-### 2. masupユーザーの整理（任意）
-- 現在gci_adminとmasupの2ユーザーが存在
-- masupが不要ならアカウント削除を検討
+## 完了（4/11）
 
-## TODO（リモートで実行可能）
-
-- [ ] Whisperインストール（`pip3 install openai-whisper`）
-- [ ] YouTube動画 QzMDrHjAhpI の字幕取得（Whisper文字起こし）
-- [ ] YouTube動画 ukfCg8ZgMjA の字幕取得（Whisper文字起こし）
-- [ ] セルフ開発ループ継続（Issue #102,#110,#113,#115,#120,#128等 未着手）
-- [ ] ナレッジバンドル再生成（56ファイル→サーバー反映）
+- [x] Google Photos全画像エクスポート・しぶ関連272枚特定（Google Takeout→HEIC変換→6エージェント並列チェック）
+- [x] Google Photos MCP再認証・修正（STDIOモードの.env読み込み問題修正、環境変数付きMCP再登録）
+- [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
+- [x] Google Photos MCPセットアップ完了（OAuth認証・Claude Code登録）
+- [x] Whisperインストール済み
+- [x] YouTube字幕取得: QzMDrHjAhpI（しぶライブ）、ukfCg8ZgMjA（大川裕介×しぶルームツアー）
+- [x] ナレッジ57→99ファイル（Windows Claude Codeで42ファイル新規作成、バンドル再生成済み）
+- [x] セルフ開発ループ完了（Issue 100件完了、ナレッジ99ファイル、server.py 668行で完成）
+- [x] Instagram監視設定（Chrome DevTools MCPでログイン、定期チェックcron）
 
 ## 完了（4/10）
 

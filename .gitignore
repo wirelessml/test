@@ -2,4 +2,5 @@
 *.webm
 *.mov
 ai-minimalist-shibu/logs/access_*.log
+ai-minimalist-shibu/photos/
 google-photos-mcp/
