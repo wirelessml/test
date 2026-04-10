@@ -314,7 +314,7 @@ function resetChat() {
 addMsg('ai', 'やあ。ミニマリストしぶだよ。\\n\\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。\\n\\n右上の「生活費計算」からミニマムライフコストも計算できるよ。水道代は請求額をそのまま入れれば自動で月額に変換するよ。');
 const sugDiv = document.createElement('div');
 sugDiv.className = 'suggest';
-['片付けのコツは？', 'ミニマリストになるには？', '生活費いくら？'].forEach(q => {
+['片付けのコツは？', 'ミニマリストになるには？', '30の質問をやる'].forEach(q => {
   const b = document.createElement('button');
   b.textContent = q;
   b.onclick = () => { sugDiv.remove(); send(q); };
@@ -341,6 +341,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
         past = load_past_questions()
         dup = find_duplicate(msg, past)
         dup_note = "\n\n注意: この質問は過去にも聞かれたことがある。塩対応で「それ前にも聞かれたよ。」と短く返して、前回と違う角度で一言だけ答えて終わり。長く答えない。" if dup else ""
+
+        # 30の質問モード
+        if '30の質問' in msg and not any('30の質問' in h.get('content','') for h in hist[:-1] if h['role']=='user'):
+            dup_note = ""
+            msg = "30の質問をやりたい。手放すか迷ってるモノがある。1問目から順番に聞いて。1回のメッセージで1問だけ。質問番号と質問文を言って、相手の回答を待って。"
 
         prompt_parts = []
         for h in hist[-10:]:
