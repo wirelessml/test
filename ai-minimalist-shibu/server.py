@@ -191,7 +191,8 @@ header small { color: var(--muted); font-size: 11px; }
 <div id="phrase-counter"></div>
 <div id="credit">Powered by Claude + ミニマリストしぶのナレッジ</div>
 <div id="input-area">
-<textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!('ontouchstart' in window)){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+<textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!('ontouchstart' in window)){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px';document.getElementById('char-count').textContent=this.value.length>0?this.value.length:''"></textarea>
+<span id="char-count" style="font-size:10px;color:var(--muted);align-self:center"></span>
 <button id="send-btn" onclick="send()">送信</button>
 </div>
 <script>
@@ -353,6 +354,10 @@ sugDiv.className = 'suggest';
 });
 document.getElementById('chat').appendChild(sugDiv);
 document.getElementById('msg').focus();
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'l') { e.preventDefault(); resetChat(); }
+  if (e.ctrlKey && e.key === '/') { e.preventDefault(); toggleCalc(); }
+});
 </script>
 </body>
 </html>"""
