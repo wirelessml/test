@@ -16,17 +16,15 @@
 - Dispatch接続済み、Computer Use有効化済み
 - iPhoneからMac操作可能
 
-### 3. Google Photos MCPセットアップ（10分）
-- 詳細手順: `docs/google-photos-mcp-setup.md`
-- Google Cloud Console でプロジェクト作成
-- Photos Library API 有効化
-- OAuth同意画面 + 認証情報作成
-- `cd ~/Desktop/google-photos-mcp && npm start` → ブラウザ認証
-- `claude mcp add google-photos -- node ~/Desktop/google-photos-mcp/dist/index.js --stdio`
+### ~~3. Google Photos MCPセットアップ~~ ✅ 完了（4/11）
+- プロジェクト: My First Project（既存利用）
+- Photos Library API 有効化済み
+- OAuth同意画面: photos-mcp（外部、テストユーザー: wirelessml@gmail.com）
+- OAuthクライアント: photos-mcp（ウェブアプリケーション）
+- ブラウザ認証完了、トークン取得済み
+- Claude Code MCP登録済み: `claude mcp add google-photos`
 
-### 4. Google Drive MCPセットアップ（同様にOAuth設定必要）
 
-### 5. しぶ自己語りダイジェスト動画のチャプター微調整（実際の再生で確認）
 
 ## TODO（次回Windows PC前での作業）
 
