@@ -547,7 +547,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
         with open(log_path, 'a') as f:
             f.write(line + '\n')
 
+total_kb = sum(len(v) for v in knowledge_data.values()) // 1024
 print(f"AIミニマリストしぶサーバー起動: http://localhost:{PORT}")
+print(f"ナレッジ: {len(knowledge_data)}ファイル, {total_kb}KB")
 print("ブラウザで開いてください。Ctrl+Cで停止。")
 import socketserver
 class ThreadedServer(socketserver.ThreadingMixIn, http.server.HTTPServer): pass
