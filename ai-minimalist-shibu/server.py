@@ -296,6 +296,12 @@ function countPhrases(text) {
   document.getElementById('phrase-counter').textContent = items.length ? 'しぶ語録: ' + items.join('  ') : '';
 }
 function resetChat() {
+  const aiMsgs = history.filter(h => h.role === 'assistant');
+  const userMsgs = history.filter(h => h.role === 'user');
+  if (aiMsgs.length > 0) {
+    const avgLen = Math.round(aiMsgs.reduce((s,m) => s + m.content.length, 0) / aiMsgs.length);
+    addMsg('ai', '会話まとめ: ' + userMsgs.length + '個の質問、しぶの平均回答 ' + avgLen + '文字。お疲れ。');
+  }
   for (const p in PHRASES) PHRASES[p] = 0;
   document.getElementById('phrase-counter').textContent = '';
   history = [];
