@@ -1,6 +1,6 @@
 # なぜAIはPythonで作られるのか
 
-ソース: X（Twitter）投稿スレッド（2026年4月）
+ソース: [@pajostm on X](https://x.com/pajostm/status/2041961500290556362)（2026年4月）
 
 ## 1. Pythonは遅い — でも問題ない
 
