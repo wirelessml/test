@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """AIミニマリストしぶ チャットサーバー（Claude CLI経由、無料）"""
-import http.server, json, subprocess, os, urllib.parse, datetime
+import http.server, json, subprocess, os, urllib.parse, datetime, sys
 
 PORT = 8787
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -553,6 +553,12 @@ total_kb = sum(len(v) for v in knowledge_data.values()) // 1024
 print(f"AIミニマリストしぶサーバー起動: http://localhost:{PORT}")
 print(f"ナレッジ: {len(knowledge_data)}ファイル, {total_kb}KB")
 print("ブラウザで開いてください。Ctrl+Cで停止。")
-import socketserver
+import socketserver, signal
+
+def graceful_shutdown(sig, frame):
+    print("\nサーバー停止中... ログ保存完了。")
+    sys.exit(0)
+signal.signal(signal.SIGINT, graceful_shutdown)
+signal.signal(signal.SIGTERM, graceful_shutdown)
 class ThreadedServer(socketserver.ThreadingMixIn, http.server.HTTPServer): pass
 ThreadedServer(('0.0.0.0', PORT), Handler).serve_forever()
