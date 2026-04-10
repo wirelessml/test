@@ -420,6 +420,16 @@ response_cache = {}
 CACHE_MAX = 100
 
 class Handler(http.server.BaseHTTPRequestHandler):
+    def _cors(self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self._cors()
+        self.end_headers()
+
     def do_GET(self):
         path = self.path.split('?')[0]
         if path == '/health':
