@@ -98,7 +98,12 @@ CHAT_HTML = """<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AIしぶ">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="/manifest.json">
 <title>AIミニマリストしぶ</title>
 <style>
 :root { --bg: #0a0a0a; --surface: #161616; --border: #2a2a2a; --text: #e5e5e5; --muted: #888; --accent: #4ade80; }
@@ -362,7 +367,12 @@ document.getElementById('s').innerHTML=h})</script></body></html>"""
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split('?')[0]
-        if path == '/stats':
+        if path == '/manifest.json':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"name":"AIミニマリストしぶ","short_name":"AIしぶ","start_url":"/","display":"standalone","background_color":"#0a0a0a","theme_color":"#0a0a0a"}, ensure_ascii=False).encode())
+        elif path == '/stats':
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.end_headers()
