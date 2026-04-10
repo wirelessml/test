@@ -260,6 +260,10 @@ async function send(text) {
   btn.disabled = true; btn.textContent = '...';
   addMsg('user', text);
   history.push({ role: 'user', content: text });
+  if (history.filter(h=>h.role==='user').length >= 20) {
+    addMsg('ai', 'もう20個も質問したね。知識ばかり集めても部屋は片付かない。そろそろ実践しよう。リセットボタンを押して、1つだけ行動に移してみて。');
+    btn.disabled = false; btn.textContent = '送信'; return;
+  }
   const t0 = Date.now();
   const typing = document.createElement('div');
   typing.className = 'typing';
@@ -485,7 +489,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/plain')
             self.end_headers()
             uptime = int(_time_module.time() - SERVER_START)
-            self.wfile.write(f'ok uptime:{uptime}s'.encode())
+            self.wfile.write(f'ok v0.120 uptime:{uptime}s knowledge:{len(knowledge_data)}files'.encode())
         elif path == '/manifest.json':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
