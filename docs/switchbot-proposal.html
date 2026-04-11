@@ -7,8 +7,10 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap');
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Zen Maru Gothic', sans-serif; background: #fff9f0; min-height: 100vh; display: flex; justify-content: center; padding: 20px; }
-.page { max-width: 580px; width: 100%; background: #fff; border: 4px dashed #f5a0b5; border-radius: 20px; padding: 30px 25px; position: relative; }
+body { font-family: 'Zen Maru Gothic', sans-serif; background: #fff9f0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+.page { max-width: 580px; width: 100%; background: #fff; border: 4px dashed #f5a0b5; border-radius: 20px; padding: 24px 22px; position: relative; }
+@media print { body { padding: 0; background: #fff; } .page { border: none; border-radius: 0; padding: 16px; } .page::before { display: none; } .download-btn { display: none !important; } }
+@page { size: A4; margin: 10mm; }
 .page::before { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 2px dotted #fce4ec; border-radius: 14px; pointer-events: none; }
 .deco { position: absolute; font-size: 1.2em; }
 .deco-1 { top: 12px; left: 18px; } .deco-2 { top: 12px; right: 18px; } .deco-3 { bottom: 12px; left: 18px; } .deco-4 { bottom: 12px; right: 18px; }
@@ -17,8 +19,8 @@ h1 { text-align: center; font-size: 1.6em; color: #d81b60; line-height: 1.4; mar
 h1 .brand { font-size: 1.1em; color: #333; }
 .subtitle { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 20px; background: linear-gradient(transparent 60%, #e3f2fd 60%); display: inline-block; width: 100%; }
 
-.section { margin-bottom: 18px; }
-.section-title { font-size: 1.15em; font-weight: 900; padding: 6px 12px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.section { margin-bottom: 14px; }
+.section-title { font-size: 1.1em; font-weight: 900; padding: 6px 12px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .section-title.problem { background: #fff3e0; color: #e65100; }
 .section-title.solution { background: #e8f5e9; color: #2e7d32; }
 .section-title.money { background: #e3f2fd; color: #1565c0; }
@@ -55,7 +57,7 @@ h1 .brand { font-size: 1.1em; color: #333; }
 .closing .message { font-style: italic; }
 .closing .name { font-weight: 900; font-size: 1.1em; margin-top: 6px; }
 
-.illust { text-align: center; font-size: 2em; margin: 4px 0; }
+.illust { text-align: center; font-size: 1.6em; margin: 2px 0; }
 </style>
 </head>
 <body>
@@ -129,7 +131,7 @@ h1 .brand { font-size: 1.1em; color: #333; }
 
 </div>
 
-<div style="text-align:center; margin: 20px 0;">
+<div class="download-btn" style="text-align:center; margin: 20px 0;">
 <a href="switchbot-proposal.png" download="SwitchBotおねがい.png" style="display:inline-block; background:#d81b60; color:#fff; padding:14px 28px; border-radius:30px; text-decoration:none; font-family:'Zen Maru Gothic',sans-serif; font-weight:700; font-size:1.1em;">📥 画像をダウンロード</a>
 </div>
 </body>
