@@ -44,7 +44,9 @@
   - 学習フェーズで.cuda()→.to(device)、autocast、f0サイズ不一致、spectrogram描画等を全修正
   - しかしDataLoaderのforward pass後にハング（CPU/MPS両方）
   - 結論: M1 8GBではRVC学習は現実的でない。推論のみ可能な環境
-  - **次の選択肢: ElevenLabs Starter（月$5）が最も現実的**
+  - **次の選択肢（優先順）:**
+    1. Voxtral TTS（Mistral AI、オープンソース、3GB RAM、無料、声クローン3秒）※日本語非対応が懸念
+    2. ElevenLabs Starter（月$5、1ヶ月で解約）
 - [x] 声クローン試行: Spark TTS, Qwen3-TTS（動いたが似てなかった）
 - [x] mlx-audio環境構築（Python 3.12 venv、Kokoro/Spark/Qwen3モデル）
 - [x] ElevenLabs調査（声クローンは有料Starter $5/月、ボイスデザインは無料）
