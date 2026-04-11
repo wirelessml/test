@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>おねがい！SwitchBotにかえてほしいな！</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Zen Maru Gothic', sans-serif; background: #fff9f0; min-height: 100vh; display: flex; justify-content: center; padding: 20px; }
+.page { max-width: 580px; width: 100%; background: #fff; border: 4px dashed #f5a0b5; border-radius: 20px; padding: 30px 25px; position: relative; }
+.page::before { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 2px dotted #fce4ec; border-radius: 14px; pointer-events: none; }
+.deco { position: absolute; font-size: 1.2em; }
+.deco-1 { top: 12px; left: 18px; } .deco-2 { top: 12px; right: 18px; } .deco-3 { bottom: 12px; left: 18px; } .deco-4 { bottom: 12px; right: 18px; }
+
+h1 { text-align: center; font-size: 1.6em; color: #d81b60; line-height: 1.4; margin-bottom: 4px; }
+h1 .brand { font-size: 1.1em; color: #333; }
+.subtitle { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 20px; background: linear-gradient(transparent 60%, #e3f2fd 60%); display: inline-block; width: 100%; }
+
+.section { margin-bottom: 18px; }
+.section-title { font-size: 1.15em; font-weight: 900; padding: 6px 12px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.section-title.problem { background: #fff3e0; color: #e65100; }
+.section-title.solution { background: #e8f5e9; color: #2e7d32; }
+.section-title.money { background: #e3f2fd; color: #1565c0; }
+.section-title.parent { background: #fce4ec; color: #c2185b; }
+.section-title.final { background: #f3e5f5; color: #7b1fa2; }
+
+.items { list-style: none; padding-left: 8px; }
+.items li { padding: 4px 0; font-size: 0.95em; line-height: 1.5; display: flex; align-items: flex-start; gap: 6px; }
+.items li::before { content: '💔'; flex-shrink: 0; }
+.items.good li::before { content: '✨'; }
+.items.heart li::before { content: '💕'; }
+
+.highlight { background: linear-gradient(transparent 50%, #ffeb3b80 50%); font-weight: 700; }
+.red { color: #d32f2f; font-weight: 700; }
+
+.compare { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; }
+.compare th, .compare td { border: 2px solid #f8bbd0; padding: 8px 6px; text-align: center; }
+.compare th { background: #fce4ec; font-weight: 700; }
+.compare td:first-child { font-weight: 700; text-align: left; padding-left: 10px; }
+.circle { color: #4caf50; font-size: 1.4em; font-weight: 900; }
+.cross { color: #f44336; font-size: 1.4em; font-weight: 900; }
+.triangle { color: #ff9800; font-size: 1.4em; font-weight: 900; }
+
+.money-box { background: #e3f2fd; border-radius: 12px; padding: 14px; margin: 10px 0; }
+.money-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.95em; }
+.money-row .label { font-weight: 700; }
+.money-row .vs { color: #888; font-size: 0.8em; }
+.money-row .price { font-weight: 900; font-size: 1.1em; }
+.money-row .price.old { color: #999; text-decoration: line-through; }
+.money-row .price.new { color: #2e7d32; }
+.money-save { text-align: center; font-size: 1.1em; font-weight: 900; color: #d32f2f; margin-top: 6px; padding: 8px; background: #fff9c4; border-radius: 8px; }
+
+.closing { background: #fce4ec; border-radius: 12px; padding: 14px; text-align: center; font-size: 0.95em; line-height: 1.6; margin-top: 10px; }
+.closing .message { font-style: italic; }
+.closing .name { font-weight: 900; font-size: 1.1em; margin-top: 6px; }
+
+.illust { text-align: center; font-size: 2em; margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+<span class="deco deco-1">⭐</span><span class="deco deco-2">🌸</span><span class="deco deco-3">💖</span><span class="deco deco-4">✨</span>
+
+<h1>おねがい！おうちのライトを<br><span class="brand">『SwitchBot』</span>にかえてほしいな！</h1>
+<div class="subtitle">〜パパとママとわたしがハッピーになる大さくせん〜</div>
+
+<div class="section">
+<div class="section-title problem">⚠️ いまのライト（けいこうとう）の「こまった」</div>
+<ul class="items">
+<li>ときどき<span class="highlight">「チカチカ」</span>して、目がいたくなっちゃう</li>
+<li>夜、本をよむと光がちらついて読みにくい</li>
+<li>「ジジジ…」って<span class="highlight">うるさい音</span>がして、しゅうちゅうできない</li>
+<li>朝、いきなりまぶしくなって<span class="highlight">おきるのがつらい</span></li>
+<li>毎年でんきゅうをこうかんするのがたいへん！</li>
+<li>でんきだいが<span class="red">もったいない！</span></li>
+</ul>
+</div>
+
+<div class="illust">💡➡️✨</div>
+
+<div class="section">
+<div class="section-title solution">🌟 SwitchBotの「すごいところ」</div>
+<ul class="items good">
+<li>LED光だから<span class="highlight">チカチカしない</span>！目にやさしい</li>
+<li>音がしないから、<span class="highlight">おべんきょうがはかどる</span>！</li>
+<li>朝はゆっくり明るくなるから、<span class="highlight">きもちよく起きれる</span></li>
+<li>スマホやこえで「おおとんのやから<span class="highlight">こえ</span>でけせる！」</li>
+<li>おふとんの中からリモコンなしでけせる</li>
+<li><span class="highlight">5年はこうかんふよう</span>！きゃくたてもいらない</li>
+</ul>
+</div>
+
+<div class="section">
+<div class="section-title money">💰 おかねのはなし</div>
+<div class="money-box">
+<div class="money-row">
+<span class="label">💡 いまのライト</span>
+<span class="price old">毎年のでんき代 やく6,000円</span>
+</div>
+<div class="money-row">
+<span class="label">✨ SwitchBot</span>
+<span class="price new">毎年のでんき代 やく3,000円</span>
+</div>
+<div class="money-save">👉 毎年やく3,000円おとく！<br>🎂 5年で15,000円もおとく！</div>
+</div>
+<ul class="items good" style="margin-top:8px;">
+<li>SwitchBotシーリングライト: <span class="highlight">6,580円</span>（6じょう）</li>
+<li>やく2年ちょっとで元がとれる！</li>
+</ul>
+</div>
+
+<div class="section">
+<div class="section-title parent">👨‍👩‍👧 パパとママにもいいこと</div>
+<table class="compare">
+<tr><th></th><th>ながもち</th><th>でんきだい</th><th>べんりさ</th><th>目にやさしい</th></tr>
+<tr><td>いまのライト</td><td class="cross">✕</td><td class="cross">✕</td><td class="triangle">△</td><td class="cross">✕</td></tr>
+<tr><td>SwitchBot</td><td class="circle">◎</td><td class="circle">◎</td><td class="circle">◎</td><td class="circle">◎</td></tr>
+</table>
+</div>
+
+<div class="section">
+<div class="section-title final">📝 さいごに</div>
+<div class="closing">
+<div class="message">「これにかえたら、わたしもっとおべんきょうがんばれるし、<br>はやおきもきちんとするよ！おねがいします！」</div>
+<div class="name">より 💖</div>
+</div>
+</div>
+
+</div>
+
+<div style="text-align:center; margin: 20px 0;">
+<a href="switchbot-proposal.png" download="SwitchBotおねがい.png" style="display:inline-block; background:#d81b60; color:#fff; padding:14px 28px; border-radius:30px; text-decoration:none; font-family:'Zen Maru Gothic',sans-serif; font-weight:700; font-size:1.1em;">📥 画像をダウンロード</a>
+</div>
+</body>
+</html>
