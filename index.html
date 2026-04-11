@@ -3,45 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screenshot Log</title>
+  <title>AIミニマリストしぶ</title>
   <style>
-    body { font-family: -apple-system, sans-serif; background: #1a1a1a; color: #fff; padding: 20px; }
-    h1 { margin-bottom: 20px; }
-    .gallery { display: flex; flex-direction: column; gap: 16px; }
-    .entry { background: #2a2a2a; border-radius: 8px; padding: 12px; }
-    .entry img { width: 100%; border-radius: 4px; }
-    .entry p { color: #999; font-size: 14px; margin-top: 8px; }
+    body { font-family: -apple-system, sans-serif; background: #1a1a1a; color: #fff; padding: 20px; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card { background: linear-gradient(135deg, #1a1a2e, #16213e); border-radius: 16px; padding: 32px 24px; text-align: center; max-width: 480px; width: 100%; }
+    .label { font-size: 0.85em; color: #4fc3f7; margin-bottom: 8px; }
+    .quote { font-size: 1.1em; line-height: 1.7; color: #e0e0e0; margin-bottom: 20px; }
+    audio { width: 100%; max-width: 400px; }
+    .source { font-size: 0.75em; color: #666; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:24px;margin-bottom:24px;text-align:center;">
-    <div style="font-size:0.85em;color:#4fc3f7;margin-bottom:6px;">AIミニマリストしぶ</div>
-    <div style="font-size:1.1em;line-height:1.6;color:#e0e0e0;margin-bottom:16px;">
-      「生活費が分かるミニマムライフコスト計算シート、<br>AIのしぶに相談できるAIミニマリストしぶなど、<br>特典の配布は予告なく終了することがあるので<br>お早めに受け取りお願いします」
+  <div class="card">
+    <div class="label">AIミニマリストしぶ</div>
+    <div class="quote">
+      「生活費が分かるミニマムライフコスト計算シート、<br>
+      AIのしぶに相談できるAIミニマリストしぶなど、<br>
+      特典の配布は予告なく終了することがあるので<br>
+      お早めに受け取りお願いします」
     </div>
-    <audio controls style="width:100%;max-width:400px;">
+    <audio controls preload="auto">
       <source src="docs/shibu-voice-clip.mp3" type="audio/mpeg">
     </audio>
-    <div style="font-size:0.75em;color:#666;margin-top:8px;">出典: ミニマリストしぶ YouTube (2026/4/11)</div>
+    <div class="source">出典: ミニマリストしぶ YouTube (2026/4/11)</div>
   </div>
-
-  <h1>Screenshot Log</h1>
-  <div class="gallery" id="gallery"></div>
-  <script>
-    fetch('screenshots/log.json')
-      .then(r => r.json())
-      .then(entries => {
-        const gallery = document.getElementById('gallery');
-        entries.reverse().forEach(e => {
-          const div = document.createElement('div');
-          div.className = 'entry';
-          div.innerHTML = `<img src="screenshots/${e.file}" alt="screenshot"><p>${e.time}</p>`;
-          gallery.appendChild(div);
-        });
-      })
-      .catch(() => {
-        document.getElementById('gallery').innerHTML = '<p>No screenshots yet.</p>';
-      });
-  </script>
 </body>
 </html>
