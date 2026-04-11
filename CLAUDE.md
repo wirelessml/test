@@ -39,6 +39,17 @@
 
 ## 完了（4/11）
 
+- [ ] RVC声クローン学習中（M1 MPS、特徴抽出→学習20エポック→推論テスト）
+  - RVC-WebUI-MacOS: /tmp/RVC-WebUI-MacOS/（Python 3.10 venv）
+  - 学習データ: datasets/shibu/shibu_train.wav（10分）
+  - 依存関係解決に苦戦（numba/omegaconf/gradio/jinja2/starlette）→全て解決済み
+  - WebUI: http://127.0.0.1:7865
+  - hubertモデル: assets/hubert/hubert_base.pt（180MB）
+- [x] 声クローン試行: Spark TTS, Qwen3-TTS（動いたが似てなかった）
+- [x] mlx-audio環境構築（Python 3.12 venv、Kokoro/Spark/Qwen3モデル）
+- [x] ElevenLabs調査（声クローンは有料Starter $5/月、ボイスデザインは無料）
+- [x] HuggingFaceアカウント作成・トークン取得（wirelessml）
+- [x] SwitchBotシーリングライト提案書HTML+PNG（A4印刷対応）
 - [x] しぶ新動画 字幕取得+ナレッジ化: YAJddeKh914（かなさん53歳、3時間、モノ減らしコーチング）
 - [x] しぶ音声クリップ切り出し→トップページに埋め込み（「AIミニマリストしぶ」言及箇所）
   - ffmpegの-ss位置問題で無音→修正完了
