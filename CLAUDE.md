@@ -39,8 +39,21 @@
 
 ## 完了（4/11）
 
+- [x] しぶ新動画 字幕取得+ナレッジ化: YAJddeKh914（かなさん53歳、3時間、モノ減らしコーチング）
+- [x] しぶ音声クリップ切り出し→トップページに埋め込み（「AIミニマリストしぶ」言及箇所）
+  - ffmpegの-ss位置問題で無音→修正完了
+  - https://wirelessml.github.io/test/
+- [x] しぶ画像分析レポートHTML公開（219枚、カテゴリフィルタ+検索機能）
+  - https://wirelessml.github.io/test/docs/shibu-photos-report.html
+- [x] しぶ画像219枚をWindows PCで詳細分析（25枚バッチ×8回、レート制限1回）
+  - `ai-minimalist-shibu/knowledge/google-photos-analysis.md`（70KB）
+- [x] しぶ関連画像219枚を`ai-minimalist-shibu/photos/`に集約（182MB、ローカル管理）
 - [x] Google Photos全画像エクスポート・しぶ関連272枚特定（Google Takeout→HEIC変換→6エージェント並列チェック）
 - [x] Google Photos MCP再認証・修正（STDIOモードの.env読み込み問題修正、環境変数付きMCP再登録）
+- [x] しぶ小説2編作成:「自前のVision ProとComputer Use」「誰もいない部屋のComputer Use」
+- [x] しぶAI導入ナレッジ作成（31歳誕生日、しぶ次郎Bot、Claude用M5購入）
+- [x] テスラナレッジ更新（ナンバー詳細、アメリカ旅行、年越し2026）
+- [x] SwitchBotシーリングライト提案書HTML+PNG（A4印刷対応）
 - [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
 - [x] Google Photos MCPセットアップ完了（OAuth認証・Claude Code登録）
 - [x] Whisperインストール済み
