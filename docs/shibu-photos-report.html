@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Photos しぶ関連画像分析レポート</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; line-height: 1.6; }
+.header { background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 40px 20px; text-align: center; border-bottom: 1px solid #333; }
+.header h1 { font-size: 1.8em; color: #fff; margin-bottom: 8px; }
+.header p { color: #888; font-size: 0.95em; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; padding: 20px; max-width: 900px; margin: 0 auto; }
+.stat { background: #1a1a2e; border: 1px solid #333; border-radius: 8px; padding: 16px; text-align: center; }
+.stat .num { font-size: 2em; font-weight: bold; color: #4fc3f7; }
+.stat .label { font-size: 0.8em; color: #888; margin-top: 4px; }
+.filters { padding: 16px 20px; max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { background: #1a1a2e; border: 1px solid #444; color: #ccc; padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+.filters button:hover, .filters button.active { background: #4fc3f7; color: #000; border-color: #4fc3f7; }
+.search { padding: 0 20px; max-width: 900px; margin: 8px auto; }
+.search input { width: 100%; padding: 10px 16px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 0.95em; }
+.search input::placeholder { color: #666; }
+.table-wrap { padding: 16px 20px; max-width: 900px; margin: 0 auto; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+th { background: #1a1a2e; color: #4fc3f7; padding: 10px 8px; text-align: left; position: sticky; top: 0; border-bottom: 2px solid #333; white-space: nowrap; }
+td { padding: 8px; border-bottom: 1px solid #222; vertical-align: top; }
+tr:hover { background: #1a1a2e; }
+td:nth-child(1) { color: #666; width: 35px; text-align: center; }
+td:nth-child(2) { font-family: monospace; font-size: 0.85em; color: #81c784; white-space: nowrap; }
+td:nth-child(3) { white-space: nowrap; }
+td:nth-child(4) { white-space: nowrap; color: #ffb74d; }
+td:nth-child(5) { max-width: 400px; }
+.cat-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; }
+.cat-tesla { background: #1b3a4b; color: #4fc3f7; }
+.cat-america { background: #3b2a1a; color: #ffb74d; }
+.cat-ai { background: #1a3b2a; color: #81c784; }
+.cat-book { background: #3b1a3b; color: #ce93d8; }
+.cat-media { background: #3b3b1a; color: #fff176; }
+.cat-disciple { background: #1a2a3b; color: #90caf9; }
+.cat-coaching { background: #2a1a3b; color: #b39ddb; }
+.cat-daily { background: #2a2a2a; color: #bbb; }
+.cat-chatbot { background: #1a3b3b; color: #80cbc4; }
+.cat-youtube { background: #3b1a1a; color: #ef9a9a; }
+.cat-apple { background: #2a2a2a; color: #e0e0e0; }
+.cat-other { background: #222; color: #999; }
+.hidden { display: none; }
+.footer { text-align: center; padding: 30px; color: #555; font-size: 0.8em; border-top: 1px solid #222; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Google Photos しぶ関連画像分析</h1>
+<p>全219枚を1枚ずつ目視確認 | 2026-04-11 Windows Claude Code分析</p>
+</div>
+<div class="stats" id="stats"></div>
+<div class="search"><input type="text" id="searchBox" placeholder="検索（ファイル名、カテゴリ、人物、説明）"></div>
+<div class="filters" id="filters"></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>#</th><th>ファイル</th><th>カテゴリ</th><th>人物</th><th>説明</th></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+<div class="footer">Powered by Claude Code (Mac + Windows並列) | Google Takeout + HEIC変換 + 6エージェント並列チェック</div>
+<script>
+const RAW_URL = "https://raw.githubusercontent.com/wirelessml/test/main/ai-minimalist-shibu/knowledge/google-photos-analysis.md";
+const catMap = {
+  "テスラ": "tesla", "車上生活": "tesla", "車中泊": "tesla",
+  "アメリカ": "america", "ビバリー": "america", "サイバー": "america", "Waymo": "america", "ディズニー": "america",
+  "AI": "ai", "Claude": "ai", "Discord": "ai", "Obsidian": "ai", "OpenClaw": "ai",
+  "書籍": "book", "著書": "book", "文庫": "book",
+  "メディア": "media", "プレジデント": "media", "中日新聞": "media", "新聞": "media",
+  "りくと": "disciple", "minimalist_sho": "disciple", "minimalist___jun": "disciple", "ikeai_minimalist": "disciple", "弟子": "disciple", "Minimal Arts": "disciple",
+  "コーチング": "coaching", "片付け": "coaching", "モノ減ら": "coaching",
+  "チャットボット": "chatbot", "AIミニマリストしぶ": "chatbot", "生活費計算": "chatbot",
+  "YouTube": "youtube", "LINE": "youtube", "セミナー": "youtube",
+  "Apple": "apple", "MacBook": "apple", "iPhone": "apple",
+};
+const catLabels = {
+  tesla: "テスラ/車上生活", america: "アメリカ旅行", ai: "AI活用", book: "著書",
+  media: "メディア掲載", disciple: "弟子/関連", coaching: "コーチング",
+  daily: "日常", chatbot: "チャットボット", youtube: "YouTube/LINE", apple: "Apple/ガジェット", other: "その他"
+};
+function classifyCat(cat, desc) {
+  const text = cat + " " + desc;
+  for (const [k, v] of Object.entries(catMap)) {
+    if (text.includes(k)) return v;
+  }
+  return "other";
+}
+let allRows = [];
+let activeFilter = null;
+async function init() {
+  const res = await fetch(RAW_URL);
+  const md = await res.text();
+  const lines = md.split("\n").filter(l => l.startsWith("|") && !l.startsWith("| #") && !l.startsWith("|---"));
+  const tbody = document.getElementById("tbody");
+  const catCounts = {};
+  lines.forEach(line => {
+    const cols = line.split("|").map(c => c.trim()).filter(c => c);
+    if (cols.length < 5) return;
+    const [num, file, cat, person, desc] = cols;
+    const cls = classifyCat(cat, desc);
+    if (!catCounts[cls]) catCounts[cls] = 0;
+    catCounts[cls]++;
+    allRows.push({ num, file, cat, person, desc, cls, el: null });
+  });
+  allRows.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.dataset.cls = r.cls;
+    tr.innerHTML = `<td>${r.num}</td><td>${r.file}</td><td><span class="cat-tag cat-${r.cls}">${r.cat}</span></td><td>${r.person}</td><td>${r.desc}</td>`;
+    tbody.appendChild(tr);
+    r.el = tr;
+  });
+  // Stats
+  const statsEl = document.getElementById("stats");
+  const shibuDirect = allRows.filter(r => r.person.includes("しぶ")).length;
+  const categories = Object.keys(catCounts).length;
+  statsEl.innerHTML = `
+    <div class="stat"><div class="num">${allRows.length}</div><div class="label">総画像数</div></div>
+    <div class="stat"><div class="num">${shibuDirect}</div><div class="label">しぶ本人</div></div>
+    <div class="stat"><div class="num">${categories}</div><div class="label">カテゴリ</div></div>
+    <div class="stat"><div class="num">8</div><div class="label">コミット数</div></div>
+  `;
+  // Filters
+  const filtersEl = document.getElementById("filters");
+  const allBtn = document.createElement("button");
+  allBtn.textContent = `全て (${allRows.length})`;
+  allBtn.classList.add("active");
+  allBtn.onclick = () => { activeFilter = null; applyFilter(); document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active")); allBtn.classList.add("active"); };
+  filtersEl.appendChild(allBtn);
+  const sorted = Object.entries(catCounts).sort((a, b) => b[1] - a[1]);
+  sorted.forEach(([cls, count]) => {
+    const btn = document.createElement("button");
+    btn.textContent = `${catLabels[cls] || cls} (${count})`;
+    btn.onclick = () => { activeFilter = cls; applyFilter(); document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active")); btn.classList.add("active"); };
+    filtersEl.appendChild(btn);
+  });
+  // Search
+  document.getElementById("searchBox").addEventListener("input", applyFilter);
+}
+function applyFilter() {
+  const q = document.getElementById("searchBox").value.toLowerCase();
+  allRows.forEach(r => {
+    const matchFilter = !activeFilter || r.cls === activeFilter;
+    const matchSearch = !q || (r.file + r.cat + r.person + r.desc).toLowerCase().includes(q);
+    r.el.classList.toggle("hidden", !(matchFilter && matchSearch));
+  });
+}
+init();
+</script>
+</body>
+</html>
