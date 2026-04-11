@@ -39,12 +39,12 @@
 
 ## 完了（4/11）
 
-- [ ] RVC声クローン学習中（M1 MPS、特徴抽出→学習20エポック→推論テスト）
-  - RVC-WebUI-MacOS: /tmp/RVC-WebUI-MacOS/（Python 3.10 venv）
-  - 学習データ: datasets/shibu/shibu_train.wav（10分）
-  - 依存関係解決に苦戦（numba/omegaconf/gradio/jinja2/starlette）→全て解決済み
-  - WebUI: http://127.0.0.1:7865
-  - hubertモデル: assets/hubert/hubert_base.pt（180MB）
+- [x] RVC声クローン断念（M1 8GBでは学習不可）
+  - WebUI起動・データ処理・特徴抽出まで成功
+  - 学習フェーズで.cuda()→.to(device)、autocast、f0サイズ不一致、spectrogram描画等を全修正
+  - しかしDataLoaderのforward pass後にハング（CPU/MPS両方）
+  - 結論: M1 8GBではRVC学習は現実的でない。推論のみ可能な環境
+  - **次の選択肢: ElevenLabs Starter（月$5）が最も現実的**
 - [x] 声クローン試行: Spark TTS, Qwen3-TTS（動いたが似てなかった）
 - [x] mlx-audio環境構築（Python 3.12 venv、Kokoro/Spark/Qwen3モデル）
 - [x] ElevenLabs調査（声クローンは有料Starter $5/月、ボイスデザインは無料）
