@@ -20,8 +20,26 @@
 ## AI導入後の活用
 - Claude CoworkとDispatchでスマホ遠隔操作（CapCutで動画編集）
 - 「指示出し5分で3〜4時間分の作業完了」
-- M5チップMacBook Air 13インチ（424,800円）を「Claude動かしっぱなし用」に購入
 - テスラ車内でもAI作業
+
+## M5 MacBook Air購入（2026/4/12 Instagramストーリー）
+- 「感動のあまりポチってしまった😳」
+- 用途: 「自立型AI入門、家に置いてClaude動かしっぱなし用🖥」
+- スペック:
+  - M5チップ 10コアCPU / 10コアGPU / 16コアNeural Engine
+  - 32GBユニファイドメモリ
+  - 4TB SSD
+  - 13インチ ミッドナイト
+  - Touch ID Magic Keyboard 英語(US)
+  - Thunderbolt 4 x2, MagSafe 3, Wi-Fi 7, Bluetooth 6
+  - 最大2台の外部ディスプレイ対応
+- 価格: 424,800円
+- 31歳の誕生日（2026/3/30）の自分へのプレゼント
+
+## 旧MacBook Airの譲渡
+- しぶの旧MacBook Air（M1）をりくと（@rikuto_takemoto）に譲渡
+- りくとのストーリー: 「MacBook Air しぶモデル受け継いだ！これでAIと友達になります！感謝です！🙏」
+- しぶからりくとへのAI入門支援の一環
 
 ## ChatGPT 5.2の実験
 - 「これまで私があなたをどのように扱ってきたか、画像にして」と質問
