@@ -83,10 +83,27 @@ def generate_reply(question):
         return "ちょっと待って。"
 
 def play_audio(path):
+    """音声をキューに追加（ffmpegストリームに直接ミックス）"""
+    import shutil
+    queue_dir = '/tmp/shibu-voice-queue'
+    os.makedirs(queue_dir, exist_ok=True)
+    dest = os.path.join(queue_dir, f'{time.time():.3f}.mp3')
+    shutil.copy(path, dest)
+    # 再生完了を待つ（音声の長さ分）
     try:
-        subprocess.run(['afplay', path], timeout=30)
+        result = subprocess.run(
+            [os.path.expanduser('~/local/bin/ffmpeg'), '-i', path, '-f', 'null', '-'],
+            capture_output=True, text=True, timeout=10
+        )
+        # ffmpegの出力からdurationを取得
+        import re
+        match = re.search(r'Duration: (\d+):(\d+):(\d+)\.(\d+)', result.stderr)
+        if match:
+            h, m, s, ms = int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4))
+            duration = h*3600 + m*60 + s + ms/100
+            time.sleep(duration + 0.5)  # 再生完了まで待つ
     except:
-        pass
+        time.sleep(3)  # フォールバック
 
 def process_comments():
     """コメント処理ワーカー"""

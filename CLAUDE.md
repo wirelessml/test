@@ -1,40 +1,46 @@
 # プロジェクトコンテキスト
 
-## 現在のセッション状態（4/12夕方、ライブ配信システム構築）
+## 現在のセッション状態（4/12夜、Mac再起動前）
 
 ### 直前の状況
-- Terminal.appでClaude Code直接起動（Cursorなし、メモリ66%空き）
-- しぶライブ配信システム v2 完成・テスト済み
-- YouTube Live配信テスト実施（ステータス「非常に良い」達成）
-- **YouTube 24時間有効化待ち**（初回ライブ配信のチャンネル制限）
+- YouTube Live配信テスト多数実施、以下を達成:
+  - YouTube Live公開配信成功（`playabilityStatus: OK`, `isLive: true`）
+  - YouTube Chat自動取得成功（pytchat + signalパッチ）
+  - しぶ声読み上げ成功（ElevenLabs→afplay→マイク経由で配信に乗った）
+  - BGM再生成功（ローファイBGMをffmpegで直接ミックス）
+- **BlackHole 2ch インストール済み（再起動で有効化）**
+- **SwitchAudioSource インストール済み**（`brew install switchaudio-osx`）
+- audio-mixer.sh作成済み（FIFOパイプ方式の全デジタル音声ルーティング）
+
+### YouTube Live配信の教訓（重要）
+- **ffmpegは絶対に再起動しない** — 再起動するとストリームが切れて「動画を再生できません」になる
+- **子ども向けでない + チャットON + 公開 + 通常の遅延** で設定してから接続
+- **古いストリームを終了してから**新しいストリームを作成（ストリームキーが古いのに紐付く）
+- **avfoundationデバイスインデックスは変動する** — 起動時に `ffmpeg -list_devices` で確認
+- ノイズフィルタ `noise=alls=20:allf=t+u` + `-preset ultrafast` でCPU負荷と品質のバランス
+- 音声出力先確認: `SwitchAudioSource -c`、切替: `SwitchAudioSource -s "MacBook Airのスピーカー"`
 
 ### YouTube Live配信情報
-- **仲啓輔アカウント**: ストリームキー `pg5g-27x1-k8s9-a6um-1srj`、有効化予想 4/13 17:00頃
-- **ゆいかアカウント**: ストリームキー `31ph-0za2-ce26-my5j-bxga`、有効化予想 4/13 17:33
+- **仲啓輔アカウント**: ストリームキー `pg5g-27x1-k8s9-a6um-1srj`
+  - 全機能有効（標準/中級/上級すべて緑）、24時間制限なし
+- **ゆいかアカウント**: ストリームキー `31ph-0za2-ce26-my5j-bxga`
 - ストリームURL: `rtmp://a.rtmp.youtube.com/live2`
-- **重要**: 静的画面キャプチャはビットレートが極端に低くなる → ノイズフィルタ(`noise=alls=40:allf=t+u`)で1800Kbps確保が必須
-- ffmpegコマンド: `~/local/bin/ffmpeg -f avfoundation -framerate 30 -capture_cursor 1 -capture_mouse_clicks 1 -i "2:2" -vf "scale=1280:720,noise=alls=40:allf=t+u" -pix_fmt yuv420p -c:v libx264 -preset fast -profile:v high -level:v 4.1 -b:v 2500k -bufsize 1000k -g 60 -c:a aac -b:a 128k -ar 44100 -f flv`
+- YouTube Studio設定必須: 子ども向けでない / チャットON / 公開 / 通常の遅延 / デュアルストリームOFF
 
-### しぶライブ配信システム（shibu-live.py v2）
+### しぶライブ配信システム（shibu-live.py v2.1）
 - **オーバーレイサーバー**: `http://localhost:8789/overlay`（Q&Aカード、3秒自動更新）
-- **しぶ声読み上げ**: 質問 + 回答の両方をElevenLabsで生成・再生
+- **しぶ声読み上げ**: 質問 + 回答の両方をElevenLabsで生成
+- **音声出力**: FIFOパイプ方式（audio-mixer.sh）またはafplay（スピーカー経由）
 - **AI回答**: Claude CLI (`--print`) でしぶ口調50文字以内
-- **YouTube Chat自動取得**: chat_downloader（APIキー不要、動画が公開再生可能になれば動作）
-- **起動方法**:
-  ```bash
-  export YOUTUBE_VIDEO_ID="動画ID"
-  python3 ~/Desktop/shibu-live.py
-  open http://localhost:8789/overlay
-  ```
+- **YouTube Chat自動取得**: pytchat + signalモンキーパッチ（APIキー不要）
+- **BGM**: `~/Desktop/lofi-bgm.mp3`（10分22秒、ループ再生可能）
 
-### 継続タスク
-- **仲啓輔アカウントからゆいかライブにコメントできない問題の調査**
-  - 参加者モードは「全員」なのにコメント不可
-  - 可能性: Googleアカウント年齢制限 / チャンネルのコメント制限 / ブラウザのログイン状態
-  - 切り分け: 別ブラウザ（Safari）で仲啓輔アカウントログイン → コメント試行
-- 仲啓輔アカウントでのライブ配信（子ども向けでない + チャットON で再テスト）
-- ライブ配信の長時間安定性テスト
-- 配信起動ワンコマンド化（start-live.sh）
+### 再起動後にやること
+1. **BlackHole 2ch が有効になっているか確認** — Audio MIDI設定で確認
+2. **avfoundationデバイスインデックス確認** — `~/local/bin/ffmpeg -f avfoundation -list_devices true -i ""`
+3. **全部を1コマンドで起動するstart-live.sh作成**（ffmpegは1回だけ接続）
+4. **音声ルーティング**: BlackHole経由 or FIFOパイプ方式で全デジタル化
+5. YouTube Studioで配信作成 → 設定確認 → 接続 → テスト
 
 ### ElevenLabs声クローン情報
 - APIキー: `~/.zshrc`の`ELEVENLABS_API_KEY`
