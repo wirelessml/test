@@ -224,6 +224,11 @@ async function playVoice() {
   const msg = document.getElementById('msg').value.trim();
   if (!msg) return;
   const btn = document.getElementById('voice-btn');
+  const audio = document.getElementById('voice-audio');
+  // iOS Safari: ユーザー操作のコールスタック内でplay()を呼ぶ必要がある
+  // 無音データで即座にplay()してオーディオコンテキストを解除
+  audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwBHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
+  try { await audio.play(); } catch(e) {}
   btn.textContent = '...';
   btn.disabled = true;
   try {
@@ -235,11 +240,10 @@ async function playVoice() {
     if (!res.ok) throw new Error('Voice API error');
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
-    const audio = document.getElementById('voice-audio');
     audio.src = url;
-    audio.play();
+    await audio.play();
   } catch(e) {
-    alert('音声生成に失敗しました');
+    alert('音声生成に失敗しました: ' + e.message);
   }
   btn.textContent = '🔊';
   btn.disabled = false;
@@ -610,7 +614,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         # 音声生成エンドポイント
         if self.path == '/api/voice':
             body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
-            text = body.get('text', '')[:200]
+            text = body.get('text', '')[:678]
             if not text:
                 self.send_response(400)
                 self.end_headers()

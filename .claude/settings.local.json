@@ -33,7 +33,11 @@
       "Bash(dev-browser *)",
       "Bash(npx dev-browser *)",
       "Bash(mkdir -p ~/.claude/local-notes)",
-      "Bash(cat)"
+      "Bash(cat)",
+      "WebFetch(domain:venturebeat.com)",
+      "WebFetch(domain:elevenlabs.io)",
+      "WebFetch(domain:ai-reboot.io)",
+      "WebFetch(domain:design-offset.com)"
     ]
   }
 }
