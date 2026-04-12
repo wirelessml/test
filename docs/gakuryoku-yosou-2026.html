@@ -563,7 +563,25 @@ footer { text-align: center; padding: 30px; color: #999; font-size: 0.85em; }
 
 </div>
 
-<footer>
+<!-- 採点パネル -->
+<div id="grade-panel" style="position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1a237e,#283593);color:white;padding:16px 20px;box-shadow:0 -4px 12px rgba(0,0,0,0.3);z-index:100;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
+<span style="font-size:0.9em;">回答が終わったら</span>
+<button onclick="submitAll('math')" style="background:#4caf50;color:white;border:none;padding:10px 24px;border-radius:24px;font-size:1em;font-weight:bold;cursor:pointer;">算数を採点する</button>
+<button onclick="submitAll('kokugo')" style="background:#c62828;color:white;border:none;padding:10px 24px;border-radius:24px;font-size:1em;font-weight:bold;cursor:pointer;">国語を採点する</button>
+</div>
+
+<!-- 採点結果モーダル -->
+<div id="result-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;overflow-y:auto;">
+<div style="max-width:600px;margin:40px auto;background:white;border-radius:12px;padding:24px;color:#333;">
+<div id="result-header" style="text-align:center;margin-bottom:20px;"></div>
+<div id="result-details"></div>
+<div style="text-align:center;margin-top:20px;">
+<button onclick="document.getElementById('result-modal').style.display='none'" style="background:#1565c0;color:white;border:none;padding:12px 32px;border-radius:24px;font-size:1em;cursor:pointer;">閉じる</button>
+</div>
+</div>
+</div>
+
+<footer style="padding-bottom:80px;">
 <p>過去11年分（平成27年〜令和7年）の全国学力・学習状況調査の出題傾向分析に基づき作成した予想問題です。</p>
 <p>実際の調査問題とは異なります。</p>
 <p style="margin-top:8px;">Generated with Claude Code | 2026-04-12</p>
@@ -572,6 +590,144 @@ footer { text-align: center; padding: 30px; color: #999; font-size: 0.85em; }
 </div>
 
 <script>
+const API_BASE = location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+  ? `${location.protocol}//${location.host}`
+  : (localStorage.getItem('gradeServer') || '');
+
+// 問題IDマッピング
+const QUESTION_MAP = {
+  math: [
+    {id:"math_1_1", section:0, q:0, type:"input"},
+    {id:"math_1_2", section:0, q:1, type:"input"},
+    {id:"math_1_3", section:0, q:2, type:"input"},
+    {id:"math_1_4", section:0, q:3, type:"input"},
+    {id:"math_1_5", section:0, q:4, type:"textarea"},
+    {id:"math_2_1", section:1, q:0, type:"input"},
+    {id:"math_2_2", section:1, q:1, type:"textarea"},
+    {id:"math_2_3", section:1, q:2, type:"input"},
+    {id:"math_3_1", section:2, q:0, type:"input"},
+    {id:"math_3_2", section:2, q:1, type:"input"},
+    {id:"math_3_3a", section:2, q:2, type:"input", inputIndex:0},
+    {id:"math_3_3b", section:2, q:2, type:"input", inputIndex:1},
+    {id:"math_4_1", section:3, q:0, type:"input"},
+    {id:"math_4_2", section:3, q:1, type:"textarea"},
+    {id:"math_4_3", section:3, q:2, type:"input"},
+    {id:"math_4_4", section:3, q:3, type:"input"},
+  ],
+  kokugo: [
+    {id:"kokugo_1_1", section:0, q:0, type:"input"},
+    {id:"kokugo_1_2", section:0, q:1, type:"input"},
+    {id:"kokugo_1_3", section:0, q:2, type:"input"},
+    {id:"kokugo_2_1", section:1, q:0, type:"input"},
+    {id:"kokugo_2_2a", section:1, q:1, type:"input", inputIndex:0},
+    {id:"kokugo_2_2b", section:1, q:1, type:"input", inputIndex:1},
+    {id:"kokugo_2_3", section:1, q:2, type:"textarea"},
+    {id:"kokugo_3_1", section:2, q:0, type:"input"},
+    {id:"kokugo_3_2", section:2, q:1, type:"textarea"},
+  ]
+};
+
+function getAnswerValue(subject, qmap) {
+  const sectionEl = document.getElementById('section-' + subject);
+  const mondais = sectionEl.querySelectorAll('.mondai');
+  const mondai = mondais[qmap.section];
+  if (!mondai) return '';
+  const questions = mondai.querySelectorAll('.question');
+  const question = questions[qmap.q];
+  if (!question) return '';
+  if (qmap.type === 'textarea') {
+    return question.querySelector('textarea')?.value || '';
+  } else {
+    const inputs = question.querySelectorAll('input[type="text"]');
+    const idx = qmap.inputIndex || 0;
+    return inputs[idx]?.value || '';
+  }
+}
+
+async function submitAll(subject) {
+  const serverUrl = API_BASE;
+  if (!serverUrl) {
+    const url = prompt('採点サーバーのURLを入力してください\n(例: https://xxx.trycloudflare.com)');
+    if (!url) return;
+    localStorage.setItem('gradeServer', url.replace(/\/$/,''));
+    location.reload();
+    return;
+  }
+
+  const answers = {};
+  const qmaps = QUESTION_MAP[subject];
+  let hasAnswer = false;
+  for (const qmap of qmaps) {
+    const val = getAnswerValue(subject, qmap);
+    if (val.trim()) hasAnswer = true;
+    answers[qmap.id] = val;
+  }
+
+  if (!hasAnswer) {
+    alert('まだ回答が入力されていません。問題に回答してから採点してください。');
+    return;
+  }
+
+  // ローディング表示
+  const modal = document.getElementById('result-modal');
+  const header = document.getElementById('result-header');
+  const details = document.getElementById('result-details');
+  modal.style.display = 'block';
+  header.innerHTML = '<div style="font-size:2em;">採点中...</div><p>記述問題はAIが採点しています。少しお待ちください。</p>';
+  details.innerHTML = '<div style="text-align:center;padding:40px;"><div class="loading-dots"><span>.</span><span>.</span><span>.</span></div></div>';
+
+  try {
+    const res = await fetch(serverUrl + '/api/grade-all', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({answers})
+    });
+    const data = await res.json();
+    showResults(subject, data);
+  } catch(e) {
+    header.innerHTML = '<div style="font-size:1.5em;color:#c62828;">採点サーバーに接続できません</div>';
+    details.innerHTML = `<p style="text-align:center;margin:20px 0;">サーバーが起動しているか確認してください。</p><p style="text-align:center;font-size:0.85em;color:#999;">${e.message}</p><p style="text-align:center;margin-top:12px;"><button onclick="localStorage.removeItem('gradeServer');location.reload()" style="background:#ff9800;color:white;border:none;padding:8px 16px;border-radius:16px;cursor:pointer;">サーバーURLを再設定</button></p>`;
+  }
+}
+
+function showResults(subject, data) {
+  const header = document.getElementById('result-header');
+  const details = document.getElementById('result-details');
+  const pct = data.percentage;
+  const subjectName = subject === 'math' ? '算数' : '国語';
+  const color = pct >= 80 ? '#4caf50' : pct >= 60 ? '#ff9800' : '#c62828';
+  const emoji = pct >= 80 ? 'S' : pct >= 60 ? 'A' : pct >= 40 ? 'B' : 'C';
+  const comment = pct >= 80 ? 'すばらしい！よくできました！' : pct >= 60 ? 'よくがんばりました！' : pct >= 40 ? 'もう少しがんばろう！' : 'ふく習して、もう一度チャレンジ！';
+
+  header.innerHTML = `
+    <div style="font-size:1.3em;font-weight:bold;margin-bottom:8px;">${subjectName} 採点結果</div>
+    <div style="width:120px;height:120px;border-radius:50%;background:${color};color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;">
+      <div style="font-size:2.2em;font-weight:bold;">${data.total_score}</div>
+      <div style="font-size:0.8em;">/ ${data.total_max}点</div>
+    </div>
+    <div style="margin-top:8px;font-size:1.1em;color:${color};font-weight:bold;">${pct}% ランク${emoji}</div>
+    <div style="margin-top:4px;font-size:0.95em;">${comment}</div>
+  `;
+
+  let html = '<div style="margin-top:16px;">';
+  const qmaps = QUESTION_MAP[subject];
+  for (const qmap of qmaps) {
+    const r = data.results[qmap.id];
+    if (!r) continue;
+    const icon = r.score === r.max ? '<span style="color:#4caf50;font-size:1.2em;">&#10004;</span>'
+               : r.score > 0 ? '<span style="color:#ff9800;font-size:1.2em;">&#9650;</span>'
+               : '<span style="color:#c62828;font-size:1.2em;">&#10008;</span>';
+    html += `<div style="padding:10px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:10px;">
+      ${icon}
+      <span style="font-weight:bold;min-width:100px;">${qmap.id.replace(/_/g,' ')}</span>
+      <span style="color:${r.score === r.max ? '#4caf50' : r.score > 0 ? '#ff9800' : '#c62828'};font-weight:bold;">${r.score}/${r.max}点</span>
+      <span style="font-size:0.85em;color:#666;">${r.feedback}</span>
+    </div>`;
+  }
+  html += '</div>';
+  details.innerHTML = html;
+}
+
 function showSection(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('section-' + name).classList.add('active');
