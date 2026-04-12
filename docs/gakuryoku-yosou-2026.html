@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>令和8年度 全国学力調査 予想問題（小6）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #1a237e, #283593); color: white; padding: 30px 20px; text-align: center; margin-bottom: 30px; border-radius: 8px; }
+header h1 { font-size: 1.6em; margin-bottom: 8px; }
+header p { font-size: 0.9em; opacity: 0.9; }
+.subject-tab { display: flex; gap: 10px; margin-bottom: 20px; }
+.subject-tab button { flex: 1; padding: 12px; font-size: 1.1em; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+.subject-tab button.active-math { background: #1565c0; color: white; }
+.subject-tab button.active-kokugo { background: #c62828; color: white; }
+.subject-tab button:not(.active-math):not(.active-kokugo) { background: #e0e0e0; color: #666; }
+.section { display: none; }
+.section.active { display: block; }
+.mondai { background: white; border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.mondai-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.mondai-num { background: #1565c0; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1em; }
+.mondai-num.kokugo { background: #c62828; }
+.mondai-header h3 { font-size: 1.1em; }
+.mondai-theme { background: #e3f2fd; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 0.95em; border-left: 4px solid #1565c0; }
+.mondai-theme.kokugo { background: #fce4ec; border-left-color: #c62828; }
+.question { margin: 16px 0; padding: 16px; background: #fafafa; border-radius: 6px; border: 1px solid #e0e0e0; }
+.question-label { font-weight: bold; color: #1565c0; margin-bottom: 8px; }
+.question-label.kokugo { color: #c62828; }
+.choices { margin: 12px 0 12px 20px; }
+.choices div { margin: 6px 0; padding: 4px 0; }
+.answer-area { margin-top: 12px; }
+.answer-area textarea { width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em; font-family: inherit; resize: vertical; }
+.answer-area input[type="text"] { width: 200px; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em; }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9em; }
+th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: center; }
+th { background: #e3f2fd; font-weight: bold; }
+.graph-area { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 16px; margin: 12px 0; }
+.bar-chart { display: flex; align-items: flex-end; gap: 16px; height: 200px; padding: 0 20px; justify-content: center; }
+.bar { display: flex; flex-direction: column; align-items: center; }
+.bar-fill { width: 50px; background: #1565c0; border-radius: 4px 4px 0 0; transition: height 0.5s; position: relative; }
+.bar-fill span { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.8em; font-weight: bold; white-space: nowrap; }
+.bar-label { margin-top: 6px; font-size: 0.8em; text-align: center; }
+.graph-title { text-align: center; font-weight: bold; margin-bottom: 12px; font-size: 0.95em; }
+.graph-unit { text-align: right; font-size: 0.8em; color: #666; margin-bottom: 4px; }
+.hint-btn { background: #ff9800; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em; margin-top: 8px; }
+.hint { display: none; margin-top: 8px; padding: 12px; background: #fff3e0; border-radius: 6px; font-size: 0.9em; border-left: 3px solid #ff9800; }
+.answer-btn { background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.9em; margin-top: 8px; }
+.answer-reveal { display: none; margin-top: 8px; padding: 12px; background: #e8f5e9; border-radius: 6px; font-size: 0.9em; border-left: 3px solid #4caf50; }
+.info-box { background: #fff8e1; padding: 16px; border-radius: 8px; margin: 16px 0; border: 1px solid #ffe082; font-size: 0.9em; }
+.speech { background: #f1f8e9; padding: 12px 16px; border-radius: 12px; margin: 8px 0; position: relative; font-size: 0.95em; }
+.speech .name { font-weight: bold; color: #33691e; margin-bottom: 4px; }
+.interview { background: #e8eaf6; padding: 12px 16px; border-radius: 12px; margin: 8px 0; }
+.interview .name { font-weight: bold; color: #283593; margin-bottom: 4px; }
+.chirashi { border: 2px solid #333; padding: 20px; margin: 12px 0; border-radius: 4px; background: #fffde7; }
+.chirashi h4 { text-align: center; font-size: 1.2em; margin-bottom: 12px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+.note { font-size: 0.85em; color: #666; margin-top: 8px; }
+.analysis { background: #e8eaf6; padding: 16px; border-radius: 8px; margin: 20px 0; }
+.analysis h3 { color: #283593; margin-bottom: 8px; }
+footer { text-align: center; padding: 30px; color: #999; font-size: 0.85em; }
+.fig-area { text-align: center; margin: 12px 0; }
+.grid-paper { display: inline-block; border: 1px solid #ccc; background: repeating-linear-gradient(0deg, transparent, transparent 19px, #e0e0e0 19px, #e0e0e0 20px), repeating-linear-gradient(90deg, transparent, transparent 19px, #e0e0e0 19px, #e0e0e0 20px); }
+.pie-chart { width: 180px; height: 180px; border-radius: 50%; margin: 0 auto; position: relative; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>
+<h1>令和8年度 全国学力・学習状況調査 予想問題</h1>
+<p>小学校第6学年 国語・算数</p>
+<p>過去11年分（H27〜R7）の出題傾向分析に基づく予想問題</p>
+</header>
+
+<div class="analysis">
+<h3>出題傾向分析に基づく予想</h3>
+<p>過去11年間で<strong>毎年出題</strong>されている分野を中心に構成しました：</p>
+<ul style="margin: 8px 0 0 20px;">
+<li><strong>算数</strong>：グラフ読み取り、割合・倍、図形の面積、分数・小数、記述（式+言葉）</li>
+<li><strong>国語</strong>：話し合い・インタビュー、ちらし・報告文、複数資料の読解、漢字、記述（60〜100字）</li>
+</ul>
+</div>
+
+<div class="subject-tab">
+<button id="btn-math" class="active-math" onclick="showSection('math')">算数</button>
+<button id="btn-kokugo" onclick="showSection('kokugo')">国語</button>
+</div>
+
+<!-- ==================== 算数 ==================== -->
+<div id="section-math" class="section active">
+
+<!-- 大問1: 防災・備蓄 -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num">1</div>
+<h3>防災備蓄と水の量</h3>
+</div>
+<div class="mondai-theme">
+ゆいさんたちは、地震などの災害に備えて、家庭で水を備蓄することについて調べています。
+</div>
+
+<div class="info-box">
+災害時には、1人が1日に必要な飲み水は約<strong>3L</strong>とされています。最低<strong>3日分</strong>の備蓄が推奨されています。
+</div>
+
+<div class="question">
+<div class="question-label">(1)</div>
+<p>ゆいさんは、全国の家庭の水の備蓄状況について、次のグラフ1を見つけました。</p>
+<div class="graph-area">
+<div class="graph-title">グラフ1　家庭での飲料水備蓄の割合</div>
+<div class="bar-chart">
+<div class="bar"><div class="bar-fill" style="height:94px;"><span>47%</span></div><div class="bar-label">2016年</div></div>
+<div class="bar"><div class="bar-fill" style="height:106px;"><span>53%</span></div><div class="bar-label">2018年</div></div>
+<div class="bar"><div class="bar-fill" style="height:114px;"><span>57%</span></div><div class="bar-label">2020年</div></div>
+<div class="bar"><div class="bar-fill" style="height:126px;"><span>63%</span></div><div class="bar-label">2022年</div></div>
+<div class="bar"><div class="bar-fill" style="height:136px;"><span>68%</span></div><div class="bar-label">2024年</div></div>
+</div>
+<p class="note" style="text-align:center;margin-top:8px;">（内閣府「防災に関する世論調査」による。数値は架空）</p>
+</div>
+<p>グラフ1から分かることとして正しいものを、次の1から4までの中から1つ選んで、その番号を書きましょう。</p>
+<div class="choices">
+<div>1　2024年の備蓄割合は、2016年の備蓄割合の約2倍である。</div>
+<div>2　2024年の備蓄割合は、2016年の備蓄割合の約1.4倍である。</div>
+<div>3　備蓄割合は、2年ごとに10%ずつ増えている。</div>
+<div>4　2024年には、すべての家庭が水を備蓄している。</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：2</strong><br>47%の約1.4倍は65.8%で、68%に近い。約2倍なら94%になるので1は誤り。増加幅は6%→4%→6%→5%で一定ではないので3も誤り。</div>
+</div>
+
+<div class="question">
+<div class="question-label">(2)</div>
+<p>ゆいさんの家族は4人です。3日分の飲み水を備蓄するには、何Lの水が必要ですか。求める式と答えを書きましょう。</p>
+<div class="answer-area"><input type="text" placeholder="式：" style="width:300px;"><br><br><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>式：3 × 4 × 3 = 36</strong><br><strong>答え：36L</strong><br>1人1日3L × 4人 × 3日 = 36L</div>
+</div>
+
+<div class="question">
+<div class="question-label">(3)</div>
+<p>スーパーで売っている2Lのペットボトルの水を備蓄する場合、36Lの水を用意するには何本必要ですか。</p>
+<div class="answer-area"><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：18本</strong><br>36 ÷ 2 = 18</div>
+</div>
+
+<div class="question">
+<div class="question-label">(4)</div>
+<p>ゆいさんは、2Lのペットボトルの水が1箱6本入りで売られていることを知りました。36Lの水を箱で買うとき、何箱買えばよいですか。式と答えを書きましょう。</p>
+<div class="answer-area"><input type="text" placeholder="式：" style="width:300px;"><br><br><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>式：18 ÷ 6 = 3</strong><br><strong>答え：3箱</strong></div>
+</div>
+
+<div class="question">
+<div class="question-label">(5)</div>
+<p>ゆいさんの学校では、全校児童420人分の3日分の飲み水を備蓄することになりました。2Lのペットボトルは何本必要ですか。求め方を式や言葉を使って書きましょう。</p>
+<div class="answer-area"><textarea placeholder="求め方を書きましょう"></textarea></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>求め方の例：</strong><br>まず、全校児童420人の3日分に必要な水の量を求めます。<br>3 × 420 × 3 = 3780（L）<br>次に、2Lのペットボトルの本数を求めます。<br>3780 ÷ 2 = 1890<br><strong>答え：1890本</strong></div>
+</div>
+</div>
+
+<!-- 大問2: 図形 -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num">2</div>
+<h3>図形の性質と面積</h3>
+</div>
+<div class="mondai-theme">
+こうたさんたちは、いろいろな図形の面積の求め方をふり返っています。
+</div>
+
+<div class="question">
+<div class="question-label">(1)</div>
+<p>下のような台形ABCDがあります。上底が4cm、下底が8cm、高さが5cmのとき、この台形の面積を求めましょう。</p>
+<div class="answer-area"><input type="text" placeholder="式：" style="width:300px;"><br><br><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>式：(4 + 8) × 5 ÷ 2 = 30</strong><br><strong>答え：30cm&sup2;</strong></div>
+</div>
+
+<div class="question">
+<div class="question-label">(2)</div>
+<p>こうたさんは、1辺が1cmの方眼紙に下のような六角形をかきました。この六角形の面積を、三角形や四角形に分けて求めます。</p>
+<div class="fig-area">
+<svg width="280" height="200" viewBox="0 0 280 200" style="background:#fff;border:1px solid #ccc;">
+<defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#e0e0e0" stroke-width="0.5"/></pattern></defs>
+<rect width="280" height="200" fill="url(#grid)"/>
+<polygon points="84,28 196,28 252,84 196,168 84,168 28,84" fill="none" stroke="#1565c0" stroke-width="2"/>
+<text x="80" y="20" font-size="13" fill="#333">ア</text>
+<text x="200" y="20" font-size="13" fill="#333">イ</text>
+<text x="258" y="88" font-size="13" fill="#333">ウ</text>
+<text x="200" y="185" font-size="13" fill="#333">エ</text>
+<text x="75" y="185" font-size="13" fill="#333">オ</text>
+<text x="10" y="88" font-size="13" fill="#333">カ</text>
+<text x="130" y="14" font-size="11" fill="#999">4cm</text>
+<text x="130" y="195" font-size="11" fill="#999">4cm</text>
+<text x="250" y="140" font-size="11" fill="#999" transform="rotate(-45,250,140)">2cm</text>
+</svg>
+</div>
+<p>この六角形を2つの図形に分けて面積を求めるとき、あなたならどのように分けますか。2つの図形の面積の求め方を、式や言葉を使って書きましょう。</p>
+<div class="answer-area"><textarea placeholder="求め方を書きましょう"></textarea></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>求め方の例：</strong><br>直線アエで上の台形と下の台形に分けます。<br>上の台形（アイウエ）：(4 + 8) × 2 ÷ 2 = 12（cm&sup2;）<br>下の台形（アエオカ）：(8 + 4) × 2 ÷ 2 = 12（cm&sup2;）<br>合計：12 + 12 = 24（cm&sup2;）<br>※分け方によって式は変わります。長方形から三角形を引く方法でもOKです。</div>
+</div>
+
+<div class="question">
+<div class="question-label">(3)</div>
+<p>下の1から5までの中で、線対称な図形はどれですか。すべて選んで、その番号を書きましょう。</p>
+<div class="choices">
+<div>1　正三角形　　2　平行四辺形　　3　ひし形　　4　正五角形　　5　正六角形</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：1, 3, 4, 5</strong><br>平行四辺形は点対称であるが、線対称ではありません。</div>
+</div>
+</div>
+
+<!-- 大問3: 分数・小数 -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num">3</div>
+<h3>分数と小数の計算</h3>
+</div>
+<div class="mondai-theme">
+みさきさんたちは、分数や小数の計算のしくみをふり返っています。
+</div>
+
+<div class="question">
+<div class="question-label">(1)</div>
+<p>次の計算をしましょう。</p>
+<p style="font-size:1.2em;margin:12px 0;">　　<sup>2</sup>/<sub>3</sub> + <sup>3</sup>/<sub>4</sub></p>
+<div class="answer-area"><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：<sup>17</sup>/<sub>12</sub>（= 1<sup>5</sup>/<sub>12</sub>）</strong><br>通分すると <sup>8</sup>/<sub>12</sub> + <sup>9</sup>/<sub>12</sub> = <sup>17</sup>/<sub>12</sub></div>
+</div>
+
+<div class="question">
+<div class="question-label">(2)</div>
+<p>みさきさんは、0.6 + 0.25 を小数のしくみを使って考えています。</p>
+<div class="speech">
+<div class="name">みさきさん</div>
+0.6は <strong>㋐</strong> の60個分、0.25は <strong>㋐</strong> の25個分です。<br>
+0.6 + 0.25 の計算は、<strong>㋐</strong> をもとにすると、60 + 25 を使って考えることができます。
+</div>
+<p>上の <strong>㋐</strong> にはすべて同じ数が入ります。㋐ に入る数を書きましょう。</p>
+<div class="answer-area"><input type="text" placeholder="㋐ = "></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：0.01</strong><br>0.6 = 0.01 × 60、0.25 = 0.01 × 25</div>
+</div>
+
+<div class="question">
+<div class="question-label">(3)</div>
+<p>次の数直線のア、イの目もりが表す数を分数で書きましょう。</p>
+<div style="margin:16px 0;">
+<svg width="500" height="60" viewBox="0 0 500 60">
+<line x1="30" y1="30" x2="470" y2="30" stroke="#333" stroke-width="2"/>
+<line x1="30" y1="22" x2="30" y2="38" stroke="#333" stroke-width="2"/>
+<line x1="250" y1="22" x2="250" y2="38" stroke="#333" stroke-width="2"/>
+<line x1="470" y1="22" x2="470" y2="38" stroke="#333" stroke-width="2"/>
+<text x="26" y="52" font-size="14">0</text>
+<text x="246" y="52" font-size="14">1</text>
+<text x="466" y="52" font-size="14">2</text>
+<!-- ア: 1/4の位置 -->
+<line x1="85" y1="25" x2="85" y2="35" stroke="#c62828" stroke-width="2"/>
+<text x="80" y="18" font-size="13" fill="#c62828">ア</text>
+<!-- イ: 7/4の位置 -->
+<line x1="415" y1="25" x2="415" y2="35" stroke="#c62828" stroke-width="2"/>
+<text x="410" y="18" font-size="13" fill="#c62828">イ</text>
+<!-- 目盛り -->
+<line x1="85" y1="28" x2="85" y2="32" stroke="#999" stroke-width="1"/>
+<line x1="140" y1="28" x2="140" y2="32" stroke="#999" stroke-width="1"/>
+<line x1="195" y1="28" x2="195" y2="32" stroke="#999" stroke-width="1"/>
+<line x1="305" y1="28" x2="305" y2="32" stroke="#999" stroke-width="1"/>
+<line x1="360" y1="28" x2="360" y2="32" stroke="#999" stroke-width="1"/>
+<line x1="415" y1="28" x2="415" y2="32" stroke="#999" stroke-width="1"/>
+</svg>
+</div>
+<div class="answer-area">ア = <input type="text" placeholder="" style="width:80px;"> 　 イ = <input type="text" placeholder="" style="width:80px;"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>ア = <sup>1</sup>/<sub>4</sub>　　イ = <sup>7</sup>/<sub>4</sub>（= 1<sup>3</sup>/<sub>4</sub>）</strong></div>
+</div>
+</div>
+
+<!-- 大問4: エコバッグ・割合 -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num">4</div>
+<h3>エコバッグと買い物</h3>
+</div>
+<div class="mondai-theme">
+あかりさんたちは、エコバッグの利用について調べています。
+</div>
+
+<div class="question">
+<div class="question-label">(1)</div>
+<p>あかりさんの学校で、エコバッグを持っている人の割合を調べたところ、全校児童360人のうち75%がエコバッグを持っていました。エコバッグを持っている人は何人ですか。</p>
+<div class="answer-area"><input type="text" placeholder="式：" style="width:300px;"><br><br><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>式：360 × 0.75 = 270</strong><br><strong>答え：270人</strong></div>
+</div>
+
+<div class="question">
+<div class="question-label">(2)</div>
+<p>あかりさんは、下の表でスーパーのレジ袋の値段を調べました。</p>
+<div class="table-wrap">
+<table>
+<tr><th>サイズ</th><th>小</th><th>中</th><th>大</th></tr>
+<tr><td>値段</td><td>3円</td><td>5円</td><td>8円</td></tr>
+<tr><td>容量</td><td>6L</td><td>12L</td><td>20L</td></tr>
+</table>
+</div>
+<p>1Lあたりの値段がいちばん安いのはどのサイズですか。求め方を式や言葉を使って書きましょう。</p>
+<div class="answer-area"><textarea placeholder="求め方を書きましょう"></textarea></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>求め方：</strong><br>1Lあたりの値段を、それぞれ求めます。<br>小：3 ÷ 6 = 0.5（円）<br>中：5 ÷ 12 ≒ 0.42（円）<br>大：8 ÷ 20 = 0.4（円）<br>0.4 が一番小さいので、<strong>大サイズ</strong>がいちばん安いです。</div>
+</div>
+
+<div class="question">
+<div class="question-label">(3)</div>
+<p>あかりさんのお母さんは、エコバッグを800円で買いました。レジ袋（大・8円）をもらわずに済む場合、エコバッグの代金のもとを取るには、少なくとも何回買い物をすればよいですか。</p>
+<div class="answer-area"><input type="text" placeholder="式：" style="width:300px;"><br><br><input type="text" placeholder="答え："></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>式：800 ÷ 8 = 100</strong><br><strong>答え：100回</strong></div>
+</div>
+
+<div class="question">
+<div class="question-label">(4)</div>
+<p>エコバッグが「20%OFF」で売られています。もとの値段が800円のとき、割引後の値段は何円ですか。</p>
+<p>㋐ に当てはまる数を、下の1から4までの中から1つ選んで、その番号を書きましょう。</p>
+<p style="text-align:center;font-size:1.1em;margin:12px 0;">割引後の値段 = 800 × <strong>㋐</strong></p>
+<div class="choices">
+<div>1　0.2　　2　0.8　　3　20　　4　80</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：2（0.8）</strong><br>20%OFF = 80%の値段 = もとの値段の0.8倍。800 × 0.8 = 640円。</div>
+</div>
+</div>
+
+</div>
+
+<!-- ==================== 国語 ==================== -->
+<div id="section-kokugo" class="section">
+
+<!-- 大問1: 話し合い・インタビュー -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num kokugo">1</div>
+<h3>防災についてのインタビュー</h3>
+</div>
+<div class="mondai-theme kokugo">
+高木さんの学級では、地域の防災について調べるために、消防署の山田さんにインタビューすることにしました。次の【話し合いの様子】と【インタビューの様子の一部】をよく読んで、あとの問いに答えましょう。
+</div>
+
+<div class="speech">
+<div class="name">高木さん</div>
+私は、消防士さんがどんなことを大切にして働いているかを聞きたいな。きっと、住民の安全を大切にしていると思うな。
+</div>
+<div class="speech">
+<div class="name">中村さん</div>
+ぼくは、災害に備えて私たちができることも聞きたいな。
+</div>
+<div class="speech">
+<div class="name">高木さん</div>
+いいね。「仕事で大切にしていること」で話してくれたことをきっかけにして、「私たちにできること」を聞くことができるかもしれないよ。
+</div>
+
+<div class="question">
+<div class="question-label kokugo">一</div>
+<p>高木さんは、インタビューをどのように進めようと考えていますか。最も適切なものを、次の1から4までの中から一つ選んで、その番号を書きましょう。</p>
+<div class="choices">
+<div>1　複数の質問を関連づけて聞くことで、聞きたいことを相手から引き出そうとしている。</div>
+<div>2　複数の質問のちがいを明確にして聞くことで、相手が答えやすい内容を選べるようにしている。</div>
+<div>3　質問する内容を一つにしぼって、くわしく聞こうとしている。</div>
+<div>4　相手が自由に話せるように、質問の順序を決めないようにしている。</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：1</strong><br>「仕事で大切にしていること」→「私たちにできること」と、前の答えをきっかけに次の質問につなげる=関連づけて聞く進め方。</div>
+</div>
+
+<p style="margin:16px 0;font-weight:bold;">【インタビューの様子の一部】</p>
+<div class="interview">
+<div class="name">高木さん</div>
+消防士として山田さんが大切にしていることを教えてください。
+</div>
+<div class="interview">
+<div class="name">山田さん</div>
+やはり、住民のみなさんの命を守ることです。そのために、毎日の訓練を欠かしません。
+</div>
+<div class="interview">
+<div class="name">高木さん</div>
+<span style="border-bottom:2px solid #c62828;">ア</span>毎日訓練されているのですね。たとえば、どのような訓練をされているのですか。
+</div>
+<div class="interview">
+<div class="name">山田さん</div>
+放水訓練やはしご車の操作、救助訓練などです。実は、消防署だけでなく、地域の方々と合同で避難訓練をすることもあるんですよ。
+</div>
+<div class="interview">
+<div class="name">高木さん</div>
+えっ、地域の方々とも訓練するのですか。
+</div>
+<div class="interview">
+<div class="name">山田さん</div>
+はい。災害のときには消防だけでは限界があります。地域のみなさんが自分たちで助け合うことがとても大切なんです。
+</div>
+<div class="interview">
+<div class="name">高木さん</div>
+<span style="border-bottom:2px solid #c62828;">イ</span>なるほど。消防士さんだけでなく、地域全体で命を守っているのですね。私たちが思っていた以上に、地域の協力が大切だということが分かりました。
+</div>
+
+<div class="question">
+<div class="question-label kokugo">二</div>
+<p>高木さんが <span style="border-bottom:2px solid #c62828;">ア</span> のように発言した目的として最も適切なものを、次の1から4までの中から一つ選んで、その番号を書きましょう。</p>
+<div class="choices">
+<div>1　質問する理由を相手に正しく伝えるため。</div>
+<div>2　自分が知りたいことをより具体的に知るため。</div>
+<div>3　自分の理解が正しいかどうかを相手に確かめるため。</div>
+<div>4　相手が伝えたいことの中心を明確にするため。</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：2</strong><br>「たとえば、どのような訓練を」と聞いているのは、「訓練」の具体的な内容をより詳しく知るための発言。</div>
+</div>
+
+<div class="question">
+<div class="question-label kokugo">三</div>
+<p>高木さんが <span style="border-bottom:2px solid #c62828;">イ</span> のように発言した理由として最も適切なものを、次の1から4までの中から一つ選んで、その番号を書きましょう。</p>
+<div class="choices">
+<div>1　相手の答えは自分の予想どおりであることが分かったから。</div>
+<div>2　自分が共感した内容を取り上げて、話題を広げようと考えたから。</div>
+<div>3　相手の答えと自分の考えを比べて、考えを深めることができたから。</div>
+<div>4　自分が聞こうとしていた内容のほかに、新たに聞きたいことが見つかったから。</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：3</strong><br>「私たちが思っていた以上に」と、自分の予想と相手の答えを比べた上で、「地域の協力が大切」という新たな理解に至っている＝考えを深めている。</div>
+</div>
+</div>
+
+<!-- 大問2: ちらし・書く -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num kokugo">2</div>
+<h3>地域の防災マップのちらし</h3>
+</div>
+<div class="mondai-theme kokugo">
+中村さんは、インタビューで学んだことをもとに、地域の防災について呼びかけるちらしを作ることにしました。次の【ちらし】をよく読んで、あとの問いに答えましょう。
+</div>
+
+<div class="chirashi">
+<h4>自分たちの町を守ろう！ 防災マップを作ろう</h4>
+<p><strong>よびかけ1　身の回りの危険を知ろう</strong></p>
+<p>みなさんの通学路に、地震のときに<span style="border-bottom:2px solid #c62828;">ア</span>きけんな場所はありませんか。古いブロックべいや、高い看板など、<span style="border-bottom:2px solid #c62828;">ア</span>たおれてくるかもしれないものを調べてみましょう。</p>
+<p style="margin-top:12px;"><strong>よびかけ2　避難場所を確認しよう</strong></p>
+<p>みなさんは、自分の家からいちばん近い避難場所を知っていますか。避難場所までの道を実際に歩いて<span style="border-bottom:2px solid #c62828;">イ</span>かくにんしておくと安心です。</p>
+<p style="margin-top:12px;">このように、<span style="text-decoration:underline;">防災マップを作ることで、自分たちの町の危険な場所と安全な場所の両方を知ることができます。</span>みなさんもぜひ作ってみてください。</p>
+</div>
+
+<div class="question">
+<div class="question-label kokugo">一</div>
+<p>中村さんが文章の構成をどのようにくふうしているかを説明したものとして最も適切なものを、次の1から4までの中から一つ選んで、その番号を書きましょう。</p>
+<div class="choices">
+<div>1　伝えたいことの中心を明確にして、内容のまとまりごとに分けて書いている。</div>
+<div>2　読んでほしい順序を明確にして、時間の流れに沿って書いている。</div>
+<div>3　文章の筋道が整うように、原因と結果を明らかにして書いている。</div>
+<div>4　読み手の目的に応じて読めるように、手順に沿って書いている。</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：1</strong><br>「よびかけ1」「よびかけ2」と内容のまとまりごとに分けて書いている。</div>
+</div>
+
+<div class="question">
+<div class="question-label kokugo">二</div>
+<p>【ちらし】の <span style="border-bottom:2px solid #c62828;">ア</span>、<span style="border-bottom:2px solid #c62828;">イ</span> を漢字でていねいに書きましょう。</p>
+<div class="answer-area">ア <input type="text" placeholder="" style="width:120px;"> 　 イ <input type="text" placeholder="" style="width:120px;"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>ア：危険　　イ：確認</strong></div>
+</div>
+
+<div class="question">
+<div class="question-label kokugo">三</div>
+<p>中村さんは、【ちらし】の下線部をよりくわしく書いた方がよいと考えました。消防署でのインタビューで聞いた次の【メモ】をもとに、下線部を書き直します。</p>
+<div class="info-box">
+<strong>【メモ】</strong><br>
+・防災マップを作ると、避難のときに安全な道を選べる<br>
+・地域の人と一緒に確認すると、大人しか知らない危険な場所も分かる<br>
+・マップを家族と共有すると、はなれていても集合場所が分かる
+</div>
+<p>あなたが中村さんなら、どのように書き直しますか。次の条件に合わせて書きましょう。</p>
+<div class="info-box">
+<strong>条件</strong><br>
+・【メモ】から言葉や文を取り上げて書くこと。<br>
+・六十字以上、百字以内にまとめて書くこと。
+</div>
+<div class="answer-area"><textarea placeholder="書き直した文章を書きましょう（60〜100字）" style="min-height:120px;"></textarea></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>解答例：</strong><br>防災マップを作ることで、避難のときに安全な道を選ぶことができます。また、地域の人と一緒に確認すると、大人しか知らない危険な場所も分かります。さらに、家族と共有すれば、はなれていても集合場所が分かるので安心です。（98字）</div>
+</div>
+</div>
+
+<!-- 大問3: 言葉・資料 -->
+<div class="mondai">
+<div class="mondai-header">
+<div class="mondai-num kokugo">3</div>
+<h3>言葉の使い方と変化</h3>
+</div>
+<div class="mondai-theme kokugo">
+田中さんの学級では、言葉の使い方について調べています。次の【資料1】と【資料2】をよく読んで、あとの問いに答えましょう。
+</div>
+
+<div class="info-box">
+<strong>【資料1】「やばい」の意味の変化</strong><br><br>
+「やばい」はもともと「危険だ」「不都合だ」という意味で使われていました。しかし、近年では「すごくよい」「感動的だ」という、もとの意味とは反対の意味でも使われるようになりました。文化庁の調査では、10代・20代の約90%が「すごくよい」の意味で使っていることが分かっています。
+<br><br>
+（架空の資料）
+</div>
+
+<div class="info-box">
+<strong>【資料2】言葉の変化への向き合い方</strong><br><br>
+言葉は時代とともに変化するものです。新しい意味が広まることは自然なことであり、それ自体が「間違い」とは言い切れません。しかし、世代によって意味のとらえ方がちがうと、伝え合うときに誤解が生まれることもあります。大切なのは、相手や場面に応じて、どの意味で使っているかを意識することです。
+<br><br>
+（架空の資料）
+</div>
+
+<div class="question">
+<div class="question-label kokugo">一</div>
+<p>田中さんは、【資料1】を読み、次の【経験】を思い出しました。田中さんが経験を通して気づいたこととして最も適切なものを、1から4の中から一つ選んで、その番号を書きましょう。</p>
+<div class="info-box">
+<strong>【田中さんの経験】</strong><br>
+友達が「この映画、やばい！」と言ったので、つまらないのかと思ったら、実はとても面白いという意味だった。
+</div>
+<div class="choices">
+<div>1　世代によって言葉の使い方が変わらないこと。</div>
+<div>2　時代とともに言葉の意味が変わること。</div>
+<div>3　時代とともにものの使い方が変わること。</div>
+<div>4　世代によってものの呼び方がちがうこと。</div>
+</div>
+<div class="answer-area"><input type="text" placeholder="番号を書きましょう"></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>答え：2</strong><br>「やばい」が「危険だ」から「すごくよい」に変わったのは、言葉の意味の変化。</div>
+</div>
+
+<div class="question">
+<div class="question-label kokugo">二</div>
+<p>田中さんは、【資料1】と【資料2】を読んで、言葉の変化について自分が一番なっとくしたことをまとめることにしました。あなたが田中さんなら、どのようにまとめますか。次の条件に合わせて書きましょう。</p>
+<div class="info-box">
+<strong>条件</strong><br>
+・なっとくしたことを【資料1】、【資料2】から言葉や文を取り上げて書くこと。<br>
+・なっとくした理由を書くこと。<br>
+・八十字以上、百二十字以内にまとめて書くこと。
+</div>
+<div class="answer-area"><textarea placeholder="あなたの考えを書きましょう（80〜120字）" style="min-height:140px;"></textarea></div>
+<button class="answer-btn" onclick="toggleAnswer(this)">答えを見る</button>
+<div class="answer-reveal"><strong>解答例：</strong><br>私は、「相手や場面に応じて、どの意味で使っているかを意識すること」が大切だという考えになっとくしました。なぜなら、「やばい」のように同じ言葉でも意味のとらえ方がちがうと、誤解が生まれることがあるからです。言葉を使うときには、相手に伝わるかどうかを考えることが大切だと思います。（115字）</div>
+</div>
+</div>
+
+</div>
+
+<footer>
+<p>過去11年分（平成27年〜令和7年）の全国学力・学習状況調査の出題傾向分析に基づき作成した予想問題です。</p>
+<p>実際の調査問題とは異なります。</p>
+<p style="margin-top:8px;">Generated with Claude Code | 2026-04-12</p>
+</footer>
+
+</div>
+
+<script>
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.getElementById('btn-math').className = name === 'math' ? 'active-math' : '';
+  document.getElementById('btn-kokugo').className = name === 'kokugo' ? 'active-kokugo' : '';
+}
+function toggleAnswer(btn) {
+  const reveal = btn.nextElementSibling;
+  reveal.style.display = reveal.style.display === 'block' ? 'none' : 'block';
+  btn.textContent = reveal.style.display === 'block' ? '答えを隠す' : '答えを見る';
+}
+</script>
+</body>
+</html>
