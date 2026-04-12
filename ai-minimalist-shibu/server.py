@@ -213,11 +213,37 @@ header small { color: var(--muted); font-size: 11px; }
 <div id="input-area">
 <textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!('ontouchstart' in window)){event.preventDefault();send()}" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,120)+'px';document.getElementById('char-count').textContent=this.value.length>0?this.value.length:''"></textarea>
 <button id="mic-btn" onclick="toggleMic()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:10px;cursor:pointer;flex-shrink:0">🎤</button>
+<button id="voice-btn" onclick="playVoice()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:10px;cursor:pointer;flex-shrink:0" title="しぶの声で読む">🔊</button>
 <span id="char-count" style="font-size:10px;color:var(--muted);align-self:center"></span>
 <button id="send-btn" onclick="send()">送信</button>
+<audio id="voice-audio" style="display:none"></audio>
 </div>
 <script>
 let history = [];
+async function playVoice() {
+  const msg = document.getElementById('msg').value.trim();
+  if (!msg) return;
+  const btn = document.getElementById('voice-btn');
+  btn.textContent = '...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/voice', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: msg})
+    });
+    if (!res.ok) throw new Error('Voice API error');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = document.getElementById('voice-audio');
+    audio.src = url;
+    audio.play();
+  } catch(e) {
+    alert('音声生成に失敗しました');
+  }
+  btn.textContent = '🔊';
+  btn.disabled = false;
+}
 function addMsg(role, text) {
   const chat = document.getElementById('chat');
   const div = document.createElement('div');
@@ -580,6 +606,49 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def do_POST(self):
         import time as _time
+
+        # 音声生成エンドポイント
+        if self.path == '/api/voice':
+            body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+            text = body.get('text', '')[:200]
+            if not text:
+                self.send_response(400)
+                self.end_headers()
+                return
+            api_key = os.environ.get('ELEVENLABS_API_KEY', '')
+            if not api_key:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'API key not set'}).encode())
+                return
+            try:
+                import urllib.request
+                req = urllib.request.Request(
+                    'https://api.elevenlabs.io/v1/text-to-speech/LIDNtfJHRfi2AFJWPFeV',
+                    data=json.dumps({
+                        'text': text,
+                        'model_id': 'eleven_v3',
+                        'voice_settings': {'stability': 0.5, 'similarity_boost': 1.0, 'style': 0.0}
+                    }).encode(),
+                    headers={'xi-api-key': api_key, 'Content-Type': 'application/json', 'Accept': 'audio/mpeg'}
+                )
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    audio = resp.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'audio/mpeg')
+                self.send_header('Content-Length', str(len(audio)))
+                self.end_headers()
+                self.wfile.write(audio)
+                print(f"[voice] {len(text)}chars -> {len(audio)//1024}KB")
+            except Exception as e:
+                print(f"[voice error] {e}")
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}, ensure_ascii=False).encode())
+            return
+
         client = self.client_address[0]
         now = _time.time()
         if client in last_request and now - last_request[client] < RATE_LIMIT_SEC:
