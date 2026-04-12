@@ -1,14 +1,35 @@
 # プロジェクトコンテキスト
 
-## 現在のセッション状態（4/12朝、Mac再起動後に継続）
+## 現在のセッション状態（4/12夕方、ライブ配信システム構築）
 
 ### 直前の状況
-- ElevenLabs声クローン音声の生成・調整が完了
-- 『詳説日本史改訂版』荘園記述の変更点をしぶの声で読み上げ（eleven_v3、1分18秒）
-- サイトに公開済み: https://wirelessml.github.io/test/ai-minimalist-shibu/#voice
-- キーリピート設定済み（KeyRepeat=1, InitialKeyRepeat=10）→ 再起動で反映
-- Claude Desktopは閉じた（不要なリソース消費を避けるため）
-- Cursor Rendererが100%に張り付いていた → 再起動で解消予定
+- Terminal.appでClaude Code直接起動（Cursorなし、メモリ66%空き）
+- しぶライブ配信システム v2 完成・テスト済み
+- YouTube Live配信テスト実施（ステータス「非常に良い」達成）
+- **YouTube 24時間有効化待ち**（初回ライブ配信のチャンネル制限）
+
+### YouTube Live配信情報
+- **仲啓輔アカウント**: ストリームキー `pg5g-27x1-k8s9-a6um-1srj`、有効化予想 4/13 17:00頃
+- **ゆいかアカウント**: ストリームキー `31ph-0za2-ce26-my5j-bxga`、有効化予想 4/13 17:33
+- ストリームURL: `rtmp://a.rtmp.youtube.com/live2`
+- **重要**: 静的画面キャプチャはビットレートが極端に低くなる → ノイズフィルタ(`noise=alls=40:allf=t+u`)で1800Kbps確保が必須
+- ffmpegコマンド: `~/local/bin/ffmpeg -f avfoundation -framerate 30 -capture_cursor 1 -capture_mouse_clicks 1 -i "2:2" -vf "scale=1280:720,noise=alls=40:allf=t+u" -pix_fmt yuv420p -c:v libx264 -preset fast -profile:v high -level:v 4.1 -b:v 2500k -bufsize 1000k -g 60 -c:a aac -b:a 128k -ar 44100 -f flv`
+
+### しぶライブ配信システム（shibu-live.py v2）
+- **オーバーレイサーバー**: `http://localhost:8789/overlay`（Q&Aカード、3秒自動更新）
+- **しぶ声読み上げ**: 質問 + 回答の両方をElevenLabsで生成・再生
+- **AI回答**: Claude CLI (`--print`) でしぶ口調50文字以内
+- **YouTube Chat自動取得**: chat_downloader（APIキー不要、動画が公開再生可能になれば動作）
+- **起動方法**:
+  ```bash
+  export YOUTUBE_VIDEO_ID="動画ID"
+  python3 ~/Desktop/shibu-live.py
+  open http://localhost:8789/overlay
+  ```
+
+### 継続タスク
+- YouTube 24時間有効化待ち → 明日17:00以降に再テスト
+- ライブ配信フルテスト（公開再生 + Chat自動取得 + オーバーレイ）
 
 ### ElevenLabs声クローン情報
 - APIキー: `~/.zshrc`の`ELEVENLABS_API_KEY`
@@ -17,13 +38,6 @@
 - パラメータ: stability=0.5, similarity_boost=1.0, style=0.0
 - プラン: Starter解約済み（2026/5/11まで有効、残約35,000クレジット）
 - 生成コマンド: MacからcurlでAPI直叩き（Python SDK不要）
-
-### 議論中だったトピック
-- Superwhisper（音声入力）→ コワーキングでは使えない
-- AIコーディングハーネスはGitHubからDLする時代
-- LLMへの知識注入がスキルになっている
-- AIが書くコードのデフォルト冗長性問題
-- M1 8GBのリソース管理（Electronアプリの定期再起動が重要）
 
 ## TODO（次回Mac前での作業）
 
@@ -61,6 +75,20 @@
 - ストーリーズ定期チェック: 毎時17分（cron、セッション内のみ）
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
+
+## 完了（4/12夕方）
+
+- [x] しぶライブ配信システム v2 構築（shibu-live.py 271→403行）
+  - v1（プロトタイプ）→ v2（オーバーレイ・Chat連携・回答読み上げ）
+  - オーバーレイHTTPサーバー（localhost:8789、Q&Aカード表示、CSS animation）
+  - YouTube Live Chat自動取得（chat_downloader、APIキー不要）
+  - 質問+回答の両方をしぶ声読み上げ（ElevenLabs eleven_v3）
+  - YouTube RTMP配信テスト成功（画面キャプチャ、ステータス「非常に良い」）
+  - ノイズフィルタで1800Kbps確保（静的画面では42Kbps→1800Kbpsに改善）
+  - YouTube 24時間有効化待ち（初回ライブ配信のチャンネル制限）
+- [x] chat_downloader, pytchat インストール
+- [x] gcloud SDK認証試行（expect/FIFO等、最終的にブラウザ認証が必要と判明）
+- [x] Google Cloud YouTube Data API v3 有効化確認（プロジェクト: My First Project）
 
 ## 完了（4/11）
 
