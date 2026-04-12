@@ -107,9 +107,54 @@ Mac再起動後、Terminal.appでClaude Code直接起動の実験を実施。Cur
 - macOS: 26.5.0
 - Terminal.app: 標準
 
+### 9. 全国学力・学習状況調査 過去問分析
+- 過去11年分（H27〜R7）の小学校国語・算数のPDFを全取得
+- poppler（pdftotext）をbrew installしてテキスト抽出（30ファイル）
+- 3エージェント並列で分析:
+  - 算数 R3〜R7（7年分）
+  - 国語 R3〜R7（7年分）
+  - 算数 H27〜H30（A/B分割時代4年分）
+
+#### 出題傾向の結論
+- **毎年出題（11年連続）**: グラフ読み取り、割合・倍、記述問題（式+言葉）
+- **国語**: 話し合い/インタビュー、ちらし/報告文、漢字、60〜100字記述が定番
+- **制度変更**: H30以前はA問題（知識）+B問題（活用）の2分割 → H31以降は統合1冊
+- **題材変化**: 学校生活→社会問題→実生活密着へ
+
+### 10. 令和8年度（2026年度）予想問題作成
+- 過去問分析に基づき算数4問・国語3問の予想問題をHTML作成
+- **算数**: 防災備蓄（グラフ・割合）、図形（面積・対称）、分数小数、エコバッグ（単位量・割合）
+- **国語**: 防災インタビュー（話す聞く）、防災マップちらし（書く・漢字）、言葉の変化（資料読解・記述）
+- 全問に答え付き、ボタンで表示/非表示切替
+- GitHub Pages公開: https://wirelessml.github.io/test/docs/gakuryoku-yosou-2026.html
+
+### 11. AI採点サーバー構築
+- **gakuryoku-server.py**: Python HTTPサーバー（ポート8788）
+- 選択肢/計算問題（16問）: サーバー側で即時採点
+- 記述問題（5問）: Claude CLI（`claude --print`）経由でAI採点
+  - 採点基準をプロンプトに含めてJSON形式で点数+フィードバック返却
+- 採点結果をモーダルで表示（得点/ランク S/A/B/C/フィードバック）
+- Cloudflare Tunnel経由で外部公開: https://statutes-cuts-isa-amount.trycloudflare.com
+- API: `/api/grade-all`（POST、全問一括採点）
+
+### 12. 定時報告ループ継続
+- 5分間隔×23回（10:54〜12:46）→ 1時間間隔に変更（12:46〜）
+- 13:49の報告でClaude CLI 728MB（PDF処理で過去最高）
+- Pages free 808MB（大幅回復）
+- 3時間28分安定稼働
+
+## バージョン情報（追記）
+- poppler: 26.04.0（brew install、pdftotext用）
+- cloudflared: 2026.3.0（Cloudflare Tunnel）
+- 採点サーバー: Python 3 + Claude CLI
+
 ## 教訓
 - **M1 8GBでのClaude Code最適構成 = Terminal.app + bypass permissions**
 - Cursorは不要（Electronのメモリ圧迫がボトルネック）
 - Claude CLIメモリは600〜650MBで安定（圧縮サイクルが有効）
 - CPUは19%程度でM1には十分な余力がある
 - ボトルネックは常にメモリ（8GB）
+- **PDF処理**: popplerのpdftotext + Claude Code Readツールの組み合わせが有効
+- **エージェント並列**: 3エージェント並列でPDF分析を高速化（合計5分程度）
+- **AI採点**: Claude CLIの`--print`オプション + stdinプロンプトで記述問題も採点可能
+- **採点サーバー構成**: Python HTTPServer + Claude CLI + Cloudflare Tunnel = 追加費用ゼロ
