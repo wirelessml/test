@@ -8,11 +8,20 @@
 import subprocess, json, os, sys, time, threading, queue, urllib.request, tempfile
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
+import signal
+_original_signal = signal.signal
+def _safe_signal(signum, handler):
+    try:
+        return _original_signal(signum, handler)
+    except ValueError:
+        return None  # スレッドからのsignal呼び出しを無視
+signal.signal = _safe_signal
+
 try:
-    from chat_downloader import ChatDownloader
-    HAS_CHAT_DL = True
+    import pytchat
+    HAS_CHAT = True
 except ImportError:
-    HAS_CHAT_DL = False
+    HAS_CHAT = False
 
 # 設定
 ELEVENLABS_API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
@@ -272,29 +281,25 @@ def start_overlay_server():
     print(f"[overlay] http://localhost:{OVERLAY_PORT}/overlay")
     server.serve_forever()
 
-# --- YouTube Live Chat (chat_downloader、APIキー不要) ---
+# --- YouTube Live Chat (pytchat、APIキー不要) ---
 
 def poll_youtube_chat(video_id):
-    """chat_downloaderでYouTube Live Chatを監視（APIキー不要）"""
-    if not HAS_CHAT_DL:
-        print("[chat] chat_downloader未インストール: pip3 install chat-downloader")
+    """pytchatでYouTube Live Chatを監視（signalパッチ済み）"""
+    if not HAS_CHAT:
+        print("[chat] pytchat未インストール: pip3 install pytchat")
         return
     if not video_id:
         print("[chat] VIDEO_ID未設定")
         return
 
-    url = f"https://www.youtube.com/watch?v={video_id}"
     print(f"[chat] YouTube Live Chat監視開始 (video: {video_id})")
-
     while True:
         try:
-            chat = ChatDownloader().get_chat(url)
-            for msg in chat:
-                author = msg.get('author', {}).get('name', '視聴者')
-                text = msg.get('message', '')
-                if text:
-                    comment_queue.put({'user': author, 'text': text})
-                    print(f"[chat] {author}: {text}")
+            chat = pytchat.create(video_id=video_id)
+            while chat.is_alive():
+                for c in chat.get().sync_items():
+                    comment_queue.put({'user': c.author.name, 'text': c.message})
+                    print(f"[chat] {c.author.name}: {c.message}")
         except Exception as e:
             print(f"[chat error] {e}")
             time.sleep(10)
@@ -351,7 +356,7 @@ def manual_input():
                     cnt = len(chat_history)
                 print(f"  ElevenLabs: {'OK' if ELEVENLABS_API_KEY else '未設定'}")
                 print(f"  配信: {'OK' if STREAM_KEY else 'ローカル'}")
-                print(f"  Chat: {'pytchat OK' if HAS_CHAT_DL and VIDEO_ID else '手動入力'}")
+                print(f"  Chat: {'pytchat OK' if HAS_CHAT and VIDEO_ID else '手動入力'}")
                 print(f"  処理済みコメント: {cnt}")
                 continue
 
@@ -365,7 +370,7 @@ if __name__ == '__main__':
     print("AIミニマリストしぶ ライブ配信システム v2")
     print("=" * 50)
     print(f"  ElevenLabs: {'OK' if ELEVENLABS_API_KEY else '未設定'}")
-    chat_ready = HAS_CHAT_DL and VIDEO_ID
+    chat_ready = HAS_CHAT and VIDEO_ID
     print(f"  YouTube配信: {'OK' if STREAM_KEY else 'ローカルモード'}")
     print(f"  YouTube Chat: {'OK (pytchat)' if chat_ready else '手動入力モード'}")
     print(f"  オーバーレイ: http://localhost:{OVERLAY_PORT}/overlay")
@@ -389,7 +394,7 @@ if __name__ == '__main__':
     if '--video-id' in sys.argv:
         idx = sys.argv.index('--video-id')
         vid = sys.argv[idx + 1]
-    if vid and HAS_CHAT_DL:
+    if vid and HAS_CHAT:
         chat_thread = threading.Thread(target=poll_youtube_chat, args=(vid,), daemon=True)
         chat_thread.start()
 
