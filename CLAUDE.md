@@ -1,5 +1,30 @@
 # プロジェクトコンテキスト
 
+## 現在のセッション状態（4/12朝、Mac再起動後に継続）
+
+### 直前の状況
+- ElevenLabs声クローン音声の生成・調整が完了
+- 『詳説日本史改訂版』荘園記述の変更点をしぶの声で読み上げ（eleven_v3、1分18秒）
+- サイトに公開済み: https://wirelessml.github.io/test/ai-minimalist-shibu/#voice
+- キーリピート設定済み（KeyRepeat=1, InitialKeyRepeat=10）→ 再起動で反映
+- Claude Desktopは閉じた（不要なリソース消費を避けるため）
+- Cursor Rendererが100%に張り付いていた → 再起動で解消予定
+
+### ElevenLabs声クローン情報
+- APIキー: `~/.zshrc`の`ELEVENLABS_API_KEY`
+- Voice ID: `LIDNtfJHRfi2AFJWPFeV`
+- モデル: `eleven_v3`（最新）
+- パラメータ: stability=0.5, similarity_boost=1.0, style=0.0
+- プラン: Starter解約済み（2026/5/11まで有効、残約35,000クレジット）
+- 生成コマンド: MacからcurlでAPI直叩き（Python SDK不要）
+
+### 議論中だったトピック
+- Superwhisper（音声入力）→ コワーキングでは使えない
+- AIコーディングハーネスはGitHubからDLする時代
+- LLMへの知識注入がスキルになっている
+- AIが書くコードのデフォルト冗長性問題
+- M1 8GBのリソース管理（Electronアプリの定期再起動が重要）
+
 ## TODO（次回Mac前での作業）
 
 全てブラウザGUI操作が必要なため、リモートからは実行不可。
