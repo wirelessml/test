@@ -67,43 +67,31 @@ def generate_voice(text, output_path):
         return False
 
 def generate_reply(question):
-    """Claude CLIでしぶとして回答"""
-    try:
-        prompt = f"{SYSTEM_PROMPT}\n\n視聴者の質問: {question}\nしぶ:"
-        result = subprocess.run(
-            ['claude', '--print'], input=prompt,
-            capture_output=True, text=True, timeout=30
-        )
-        reply = result.stdout.strip().replace('**', '')
-        if len(reply) > 80:
-            reply = reply[:77] + '...'
-        return reply
-    except Exception as e:
-        print(f"[reply error] {e}")
-        return "ちょっと待って。"
+    """"""
+    import random
+    responses = [
+        "いいね。",
+        "シンプルが一番だよ。",
+        "それ、手放そう。",
+        "ありがとう。",
+        "まさにそうだね。",
+        "モノより経験だよ。",
+        "いい質問だね。",
+        "自分らしく生きよう。",
+    ]
+    return random.choice(responses)
 
 def play_audio(path):
-    """音声をキューに追加（ffmpegストリームに直接ミックス）"""
+    """afplayで音声を再生"""
     import shutil
     queue_dir = '/tmp/shibu-voice-queue'
     os.makedirs(queue_dir, exist_ok=True)
     dest = os.path.join(queue_dir, f'{time.time():.3f}.mp3')
     shutil.copy(path, dest)
-    # 再生完了を待つ（音声の長さ分）
     try:
-        result = subprocess.run(
-            [os.path.expanduser('~/local/bin/ffmpeg'), '-i', path, '-f', 'null', '-'],
-            capture_output=True, text=True, timeout=10
-        )
-        # ffmpegの出力からdurationを取得
-        import re
-        match = re.search(r'Duration: (\d+):(\d+):(\d+)\.(\d+)', result.stderr)
-        if match:
-            h, m, s, ms = int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4))
-            duration = h*3600 + m*60 + s + ms/100
-            time.sleep(duration + 0.5)  # 再生完了まで待つ
-    except:
-        time.sleep(3)  # フォールバック
+        subprocess.run(['/usr/bin/afplay', path], timeout=30)
+    except Exception as e:
+        print(f"[audio error] {e}")
 
 def process_comments():
     """コメント処理ワーカー"""
@@ -115,32 +103,20 @@ def process_comments():
 
             username = comment.get('user', '視聴者')
             text = comment.get('text', '')
-            print(f"\n[コメント] {username}: {text}")
+            print(f"[コメント] {username}: {text}")
 
-            # 1. 質問をしぶ声で読み上げ
+            # コメントを読み上げ
             voice_path = tempfile.mktemp(suffix='.mp3')
-            print(f"[声] 質問を読み上げ中...")
+            print(f"[声] 読み上げ中...")
             if generate_voice(text, voice_path):
                 play_audio(voice_path)
                 try: os.unlink(voice_path)
                 except: pass
 
-            # 2. しぶとして回答生成
-            print(f"[AI] 回答生成中...")
-            reply = generate_reply(text)
-            print(f"[しぶ] {reply}")
-
-            # 3. 回答をしぶ声で読み上げ
-            reply_path = tempfile.mktemp(suffix='.mp3')
-            if generate_voice(reply, reply_path):
-                play_audio(reply_path)
-                try: os.unlink(reply_path)
-                except: pass
-
-            # 4. 履歴に追加（オーバーレイ用）
+            # 履歴に追加（オーバーレイ用）
             entry = {
                 'user': username, 'question': text,
-                'reply': reply, 'timestamp': time.strftime('%H:%M:%S')
+                'reply': '', 'timestamp': time.strftime('%H:%M:%S')
             }
             with chat_lock:
                 chat_history.append(entry)
@@ -151,6 +127,7 @@ def process_comments():
             continue
         except Exception as e:
             print(f"[error] {e}")
+
 
 # --- オーバーレイHTTPサーバー ---
 
@@ -299,24 +276,58 @@ def start_overlay_server():
     server.serve_forever()
 
 # --- YouTube Live Chat (pytchat、APIキー不要) ---
+# --- YouTube Live Chat (YouTube Data API) ---
+
+YOUTUBE_API_KEY = 'AIzaSyDlzlAopeD4LB9rQ6Co-tMmIlUfs4DS0R8'
+
+def get_live_chat_id(video_id):
+    url = f'https://www.googleapis.com/youtube/v3/videos?id={video_id}&part=liveStreamingDetails&key={YOUTUBE_API_KEY}'
+    try:
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            items = data.get('items', [])
+            if items:
+                return items[0].get('liveStreamingDetails', {}).get('activeLiveChatId', '')
+    except Exception as e:
+        print(f"[chat error] liveChatId: {e}")
+    return ''
 
 def poll_youtube_chat(video_id):
-    """pytchatでYouTube Live Chatを監視（signalパッチ済み）"""
-    if not HAS_CHAT:
-        print("[chat] pytchat未インストール: pip3 install pytchat")
-        return
     if not video_id:
-        print("[chat] VIDEO_ID未設定")
+        print("[chat] VIDEO_ID not set")
         return
-
-    print(f"[chat] YouTube Live Chat監視開始 (video: {video_id})")
+    print(f"[chat] YouTube Live Chat start (video: {video_id})")
+    chat_id = get_live_chat_id(video_id)
+    if not chat_id:
+        print("[chat error] cannot get liveChatId")
+        return
+    print("[chat] liveChatId OK")
+    page_token = ''
+    seen_ids = set()
     while True:
         try:
-            chat = pytchat.create(video_id=video_id)
-            while chat.is_alive():
-                for c in chat.get().sync_items():
-                    comment_queue.put({'user': c.author.name, 'text': c.message})
-                    print(f"[chat] {c.author.name}: {c.message}")
+            url = f'https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId={chat_id}&part=snippet,authorDetails&key={YOUTUBE_API_KEY}'
+            if page_token:
+                url += f'&pageToken={page_token}'
+            req = urllib.request.Request(url)
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+            page_token = data.get('nextPageToken', '')
+            poll_ms = data.get('pollingIntervalMillis', 5000)
+            for item in data.get('items', []):
+                msg_id = item.get('id', '')
+                if msg_id in seen_ids:
+                    continue
+                seen_ids.add(msg_id)
+                snippet = item.get('snippet', {})
+                author = item.get('authorDetails', {})
+                text = snippet.get('displayMessage', '')
+                username = author.get('displayName', 'viewer')
+                if text:
+                    comment_queue.put({'user': username, 'text': text})
+                    print(f"[chat] {username}: {text}")
+            time.sleep(max(poll_ms / 1000, 3))
         except Exception as e:
             print(f"[chat error] {e}")
             time.sleep(10)
@@ -334,7 +345,7 @@ def start_youtube_stream():
         os.path.expanduser('~/local/bin/ffmpeg'),
         '-f', 'avfoundation', '-framerate', '30',
         '-capture_cursor', '1', '-capture_mouse_clicks', '1',
-        '-i', '2:2',  # 画面キャプチャ:MacBook Airマイク
+        '-i', '1:0',  # 画面キャプチャ:MacBook Airマイク
         '-vf', 'scale=1280:720',
         '-c:v', 'libx264', '-preset', 'ultrafast', '-tune', 'zerolatency',
         '-b:v', '2500k', '-maxrate', '2500k', '-bufsize', '5000k',
@@ -387,9 +398,9 @@ if __name__ == '__main__':
     print("AIミニマリストしぶ ライブ配信システム v2")
     print("=" * 50)
     print(f"  ElevenLabs: {'OK' if ELEVENLABS_API_KEY else '未設定'}")
-    chat_ready = HAS_CHAT and VIDEO_ID
+    chat_ready = bool(VIDEO_ID)
     print(f"  YouTube配信: {'OK' if STREAM_KEY else 'ローカルモード'}")
-    print(f"  YouTube Chat: {'OK (pytchat)' if chat_ready else '手動入力モード'}")
+    print(f"  YouTube Chat: {'OK (YouTube API)' if chat_ready else '手動入力モード'}")
     print(f"  オーバーレイ: http://localhost:{OVERLAY_PORT}/overlay")
 
     # 1. オーバーレイサーバー起動
@@ -411,7 +422,7 @@ if __name__ == '__main__':
     if '--video-id' in sys.argv:
         idx = sys.argv.index('--video-id')
         vid = sys.argv[idx + 1]
-    if vid and HAS_CHAT:
+    if vid:
         chat_thread = threading.Thread(target=poll_youtube_chat, args=(vid,), daemon=True)
         chat_thread.start()
 
