@@ -285,21 +285,29 @@ def poll_youtube_chat(video_id):
         print("[chat error] pytchat not installed")
         return
     print(f"[chat] YouTube Live Chat start (video: {video_id}, pytchat)")
-    try:
-        chat = pytchat.create(video_id=video_id)
-        print(f"[chat] pytchat connected (alive: {chat.is_alive()})")
-        while chat.is_alive():
-            for c in chat.get().sync_items():
-                text = c.message
-                username = c.author.name
-                if text:
-                    print(f"[chat] @{username}: {text}")
-                    comment_queue.put({'user': f'@{username}', 'text': text})
-            time.sleep(2)
-        print("[chat] pytchat disconnected")
-    except Exception as e:
-        print(f"[chat error] pytchat: {e}")
-        print("[chat] 手動入力モードで続行")
+    retry_count = 0
+    max_retries = 50
+    while retry_count < max_retries:
+        try:
+            chat = pytchat.create(video_id=video_id)
+            print(f"[chat] pytchat connected (alive: {chat.is_alive()})")
+            retry_count = 0
+            while chat.is_alive():
+                for c in chat.get().sync_items():
+                    text = c.message
+                    username = c.author.name
+                    if text:
+                        print(f"[chat] @{username}: {text}")
+                        comment_queue.put({'user': f'@{username}', 'text': text})
+                time.sleep(2)
+            print("[chat] pytchat disconnected")
+        except Exception as e:
+            print(f"[chat error] pytchat: {e}")
+        retry_count += 1
+        wait = min(10 * retry_count, 60)
+        print(f"[chat] {wait}秒後に再接続... (試行 {retry_count}/{max_retries})")
+        time.sleep(wait)
+    print("[chat] 再接続上限到達、手動入力モードで続行")
 
 # --- 配信 ---
 

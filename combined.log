@@ -202,3 +202,4 @@
 2026-04-13T09:08:43.429Z [INFO]: Found valid authentication tokens.
 2026-04-13T09:08:43.431Z [INFO]: Google Photos MCP server connected via STDIO
 2026/04/13 19:36 - 4K配信中, load 1.65, shibu-chat再起動
+2026/04/13 20:35 - 4K配信1h45m, load 2.32, shibu-chat安定, pytchat自動再接続追加
