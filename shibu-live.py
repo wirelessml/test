@@ -276,61 +276,30 @@ def start_overlay_server():
     server.serve_forever()
 
 # --- YouTube Live Chat (pytchat、APIキー不要) ---
-# --- YouTube Live Chat (YouTube Data API) ---
-
-YOUTUBE_API_KEY = 'AIzaSyDlzlAopeD4LB9rQ6Co-tMmIlUfs4DS0R8'
-
-def get_live_chat_id(video_id):
-    url = f'https://www.googleapis.com/youtube/v3/videos?id={video_id}&part=liveStreamingDetails&key={YOUTUBE_API_KEY}'
-    try:
-        req = urllib.request.Request(url)
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
-            items = data.get('items', [])
-            if items:
-                return items[0].get('liveStreamingDetails', {}).get('activeLiveChatId', '')
-    except Exception as e:
-        print(f"[chat error] liveChatId: {e}")
-    return ''
 
 def poll_youtube_chat(video_id):
     if not video_id:
         print("[chat] VIDEO_ID not set")
         return
-    print(f"[chat] YouTube Live Chat start (video: {video_id})")
-    chat_id = get_live_chat_id(video_id)
-    if not chat_id:
-        print("[chat error] cannot get liveChatId")
+    if not HAS_CHAT:
+        print("[chat error] pytchat not installed")
         return
-    print("[chat] liveChatId OK")
-    page_token = ''
-    seen_ids = set()
-    while True:
-        try:
-            url = f'https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId={chat_id}&part=snippet,authorDetails&key={YOUTUBE_API_KEY}'
-            if page_token:
-                url += f'&pageToken={page_token}'
-            req = urllib.request.Request(url)
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
-            page_token = data.get('nextPageToken', '')
-            poll_ms = data.get('pollingIntervalMillis', 5000)
-            for item in data.get('items', []):
-                msg_id = item.get('id', '')
-                if msg_id in seen_ids:
-                    continue
-                seen_ids.add(msg_id)
-                snippet = item.get('snippet', {})
-                author = item.get('authorDetails', {})
-                text = snippet.get('displayMessage', '')
-                username = author.get('displayName', 'viewer')
+    print(f"[chat] YouTube Live Chat start (video: {video_id}, pytchat)")
+    try:
+        chat = pytchat.create(video_id=video_id)
+        print(f"[chat] pytchat connected (alive: {chat.is_alive()})")
+        while chat.is_alive():
+            for c in chat.get().sync_items():
+                text = c.message
+                username = c.author.name
                 if text:
-                    comment_queue.put({'user': username, 'text': text})
-                    print(f"[chat] {username}: {text}")
-            time.sleep(max(poll_ms / 1000, 3))
-        except Exception as e:
-            print(f"[chat error] {e}")
-            time.sleep(10)
+                    print(f"[chat] @{username}: {text}")
+                    comment_queue.put({'user': f'@{username}', 'text': text})
+            time.sleep(2)
+        print("[chat] pytchat disconnected")
+    except Exception as e:
+        print(f"[chat error] pytchat: {e}")
+        print("[chat] 手動入力モードで続行")
 
 # --- 配信 ---
 
@@ -400,7 +369,7 @@ if __name__ == '__main__':
     print(f"  ElevenLabs: {'OK' if ELEVENLABS_API_KEY else '未設定'}")
     chat_ready = bool(VIDEO_ID)
     print(f"  YouTube配信: {'OK' if STREAM_KEY else 'ローカルモード'}")
-    print(f"  YouTube Chat: {'OK (YouTube API)' if chat_ready else '手動入力モード'}")
+    print(f"  YouTube Chat: {'OK (pytchat)' if chat_ready else '手動入力モード'}")
     print(f"  オーバーレイ: http://localhost:{OVERLAY_PORT}/overlay")
 
     # 1. オーバーレイサーバー起動

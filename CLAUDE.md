@@ -1,24 +1,30 @@
 # プロジェクトコンテキスト
 
-## 現在のセッション状態（4/12夜、Mac再起動前）
+## 現在のセッション状態（4/13夕方）
 
-### 直前の状況
-- YouTube Live配信テスト多数実施、以下を達成:
-  - YouTube Live公開配信成功（`playabilityStatus: OK`, `isLive: true`）
-  - YouTube Chat自動取得成功（pytchat + signalパッチ）
-  - しぶ声読み上げ成功（ElevenLabs→afplay→マイク経由で配信に乗った）
-  - BGM再生成功（ローファイBGMをffmpegで直接ミックス）
-- **BlackHole 2ch インストール済み（再起動で有効化）**
-- **SwitchAudioSource インストール済み**（`brew install switchaudio-osx`）
-- audio-mixer.sh作成済み（FIFOパイプ方式の全デジタル音声ルーティング）
+### 配信状態
+- **YouTube Live配信中**（動画ID: `mRE18XYo6rg`、ゆいかアカウント）
+- **OBS 32.1.1** でRTMP配信（プロファイル: YouTube Live）
+- **しぶ声コメント読み上げ稼働中**（shibu-live.py、screenセッション `shibu-chat`）
+
+### 4/13 Mac側セッションで実施した内容
+- **gh CLI再認証**（wirelessml、ブラウザOAuth + GitHub Mobile認証）
+- **YouTube Data API 403修正**: クォータ超過 → **pytchat**に切り替え（APIキー不要、クォータなし）
+- **OBSマイクミュート**: 環境音を配信から除去（しぶ声はBlackHole経由なのでマイク不要）
+- **マルチ出力デバイス作成**: Audio MIDI設定でMacBook Airスピーカー + BlackHole 2ch
+  - 最終的にBlackHole 2chのみに設定（スピーカー音不要）
+- **OBS画面キャプチャ追加**: screen_capture、display ID=2（LG ULTRAWIDE 5120x2160）
+  - OBSに画面収録権限を付与 → OBS再起動で有効化
+  - 5120x2160 → 1280x720キャンバスにscale 0.25で全画面フィット（上下90px黒帯）
+- **OBS配信再開**: 停止→OBS再起動→配信開始をOBS WebSocket経由で実行
 
 ### YouTube Live配信の教訓（重要）
-- **ffmpegは絶対に再起動しない** — 再起動するとストリームが切れて「動画を再生できません」になる
+- **YouTube Data APIはクォータに注意** — 10,000ユニット/日、ポーリングですぐ枯渇する
+- **pytchatを使う**（APIキー不要、クォータなし、signalモンキーパッチ必要）
 - **子ども向けでない + チャットON + 公開 + 通常の遅延** で設定してから接続
 - **古いストリームを終了してから**新しいストリームを作成（ストリームキーが古いのに紐付く）
-- **avfoundationデバイスインデックスは変動する** — 起動時に `ffmpeg -list_devices` で確認
-- ノイズフィルタ `noise=alls=20:allf=t+u` + `-preset ultrafast` でCPU負荷と品質のバランス
-- 音声出力先確認: `SwitchAudioSource -c`、切替: `SwitchAudioSource -s "MacBook Airのスピーカー"`
+- **OBS画面キャプチャ**: display IDはmacOS再起動で変わる可能性あり（現在ID=2）
+- 音声出力先確認: `SwitchAudioSource -c`、切替: `SwitchAudioSource -s "BlackHole 2ch"`
 
 ### YouTube Live配信情報
 - **仲啓輔アカウント**: ストリームキー `pg5g-27x1-k8s9-a6um-1srj`
@@ -27,20 +33,20 @@
 - ストリームURL: `rtmp://a.rtmp.youtube.com/live2`
 - YouTube Studio設定必須: 子ども向けでない / チャットON / 公開 / 通常の遅延 / デュアルストリームOFF
 
-### しぶライブ配信システム（shibu-live.py v2.1）
+### しぶライブ配信システム（shibu-live.py v2.2）
+- **映像**: OBS画面キャプチャ → YouTube RTMP（ffmpeg不要）
 - **オーバーレイサーバー**: `http://localhost:8789/overlay`（Q&Aカード、3秒自動更新）
-- **しぶ声読み上げ**: 質問 + 回答の両方をElevenLabsで生成
-- **音声出力**: FIFOパイプ方式（audio-mixer.sh）またはafplay（スピーカー経由）
-- **AI回答**: Claude CLI (`--print`) でしぶ口調50文字以内
-- **YouTube Chat自動取得**: pytchat + signalモンキーパッチ（APIキー不要）
+- **しぶ声読み上げ**: コメントをElevenLabsでTTS生成、afplayで再生
+- **音声ルーティング**: afplay → BlackHole 2ch → OBS coreaudio_input_capture → YouTube配信
+- **YouTube Chat取得**: pytchat + signalモンキーパッチ（APIキー不要、クォータなし）
+- **OBS WebSocket**: ポート4455、リモートから配信開始/停止/ソース操作可能
 - **BGM**: `~/Desktop/lofi-bgm.mp3`（10分22秒、ループ再生可能）
 
-### 再起動後にやること
-1. **BlackHole 2ch が有効になっているか確認** — Audio MIDI設定で確認
-2. **avfoundationデバイスインデックス確認** — `~/local/bin/ffmpeg -f avfoundation -list_devices true -i ""`
-3. **全部を1コマンドで起動するstart-live.sh作成**（ffmpegは1回だけ接続）
-4. **音声ルーティング**: BlackHole経由 or FIFOパイプ方式で全デジタル化
-5. YouTube Studioで配信作成 → 設定確認 → 接続 → テスト
+### 配信起動手順
+1. OBS起動（画面キャプチャ + BlackHole Audio入力済み）
+2. `screen -dmS shibu-chat bash -c 'source ~/.zshrc; export YOUTUBE_VIDEO_ID=<ID>; export PYTHONUNBUFFERED=1; cd ~/Desktop; python3 -u shibu-live.py 2>&1 | tee /tmp/shibu-chat.log'`
+3. OBS WebSocket経由で配信開始
+4. ログ確認: `tail -f /tmp/shibu-chat.log`
 
 ### ElevenLabs声クローン情報
 - APIキー: `~/.zshrc`の`ELEVENLABS_API_KEY`
@@ -86,6 +92,26 @@
 - ストーリーズ定期チェック: 毎時17分（cron、セッション内のみ）
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
+
+## 完了（4/13夕方）
+
+- [x] gh CLI再認証（wirelessml、OAuth + GitHub Mobile）
+- [x] YouTube Data API 403修正 → pytchatに切り替え（クォータ不要）
+- [x] OBSマイクミュート（環境音除去）
+- [x] マルチ出力デバイス作成（MacBook Airスピーカー + BlackHole 2ch）
+- [x] OBS画面キャプチャ追加・権限付与・OBS再起動
+- [x] 画面キャプチャのdisplay ID修正（0→2）+ スケーリング（5120x2160→1280x720）
+- [x] OBS配信再開（WebSocket経由）
+- [x] Windowsマシン作業の把握（セッションログ・マニュアル・claude-mem等）
+
+## 完了（4/13午前、Windowsマシン）
+
+- [x] YouTube Live コメント読み上げ問題修正（動画ID・pytchat→YouTube API・afplay追加）
+- [x] youtube-live-manual.md 作成（Win操作→Mac配信の完全マニュアル230行）
+- [x] claude-mem インストール（Windows + Mac両方）
+- [x] Mac定時報告再開（report.sh + cron毎時33分）
+- [x] Claude Code settings.json最適化（両マシン）
+- [x] Mac Claude Codeログイン修復（Windows credentials.jsonをSFTP転送）
 
 ## 完了（4/12夕方）
 
