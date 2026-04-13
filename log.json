@@ -1,23 +1,16 @@
 {
-  "last_updated": "2026-04-10T15:02:00+09:00",
-  "session": "2026-04-10",
+  "last_updated": "2026-04-13T13:20:53+09:00",
+  "session": "2026-04-13",
   "status": "active",
-  "screenshot": "screenshots/remote_20260410_150226.png",
+  "screenshot": "(unavailable from SSH/cron)",
   "network": {
     "type": "Wi-Fi",
-    "ssid": "YKSmas318",
-    "location": "コワーキングスペース",
-    "band": "5GHz 802.11ax",
-    "ip": "192.168.2.135"
+    "ssid": "",
+    "ip": "192.168.2.145"
   },
   "services": {
-    "shibu_server": "稼働中（localhost:8787）",
-    "cloudflare_tunnel": "稼働中（estate-walt-discusses-supplies.trycloudflare.com）",
-    "windows_pc": "オンライン（192.168.2.248）"
-  },
-  "desktop_state": {
-    "cursor": "Claude Code実行中（ウルトラワイドモニター全画面）",
-    "claude_desktop": "サインイン画面表示中（未サインイン）"
-  },
-  "notes": "定時報告。セルフ開発ループ53件完了/55件作成（#41-#95）。ナレッジ27ファイル6MB。pushは5件まとめに変更（GitHub Pagesデプロイ制限対策）。新規ナレッジ: SNS戦略、収益構造、食生活、用語辞典、1日のルーティン、名言集、持ち物リスト、著書リスト。サーバー機能追加: キャッシュ、自動リロード、CORS、graceful shutdown、uptime。"
+    "shibu_chat": "running",
+    "obs": "running",
+    "load": " 2.44 2.25 2.33 "
+  }
 }
