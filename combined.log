@@ -218,3 +218,33 @@
 2026/04/14 03:35 - 4K配信8h45m, load 1.64, 全安定, 送信76GB, しぶ一日一食ページ公開
 2026-04-14 04:39:00 - 定時報告 04:37 JST - OBS配信9h48m/82.7GB, Wi-Fi:YKSmas318(5GHz), shibu-chat稼働中, 全システム安定
 2026-04-14 05:36:36 - 定時報告 05:35 JST - OBS配信10h45m/90.9GB, Wi-Fi:YKSmas318(5GHz), shibu-chat稼働中, Maestriインストール・Claude Code 2台接続済, 全システム安定
+
+---
+## 定時報告 2026/04/14 06:36 JST
+
+### システム状態
+- **稼働時間**: 1日8時間26分
+- **負荷**: load 2.33 / 2.73 / 2.79（安定）
+- **メモリ**: free 135MB(8443pages), wired 1.7GB, active 1.8GB, inactive 1.8GB
+
+### トップCPUプロセス
+1. OBS 52.9%（12時間36分稼働、メモリ665MB）
+2. Claude Code 30.9%
+3. Terminal 10.7%
+4. WindowServer 6.5%
+5. AppleBCMWLAN 3.7%
+
+### ネットワーク
+- Wi-Fi: YKSmas318（5GHz 802.11ax、ch52、信号-54dBm/雑音-93dBm）
+
+### しぶライブ配信
+- shibu-chat: screen session 29406 稼働中（Detached）
+- pytchat: connected→disconnected→自動再接続ループ（正常動作）
+- OBS: 12時間36分連続稼働中（PID 20174）
+
+### 完了タスク（前回報告以降）
+- Maestri使い方ガイドHTML作成・GitHub Pages公開
+  - https://wirelessml.github.io/test/docs/maestri-guide.html
+
+### スクリーンショット
+- /Users/yuika/Desktop/screenshots/status_20260414_063529.png
