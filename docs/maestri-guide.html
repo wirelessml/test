@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maestri 使い方ガイド</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Hiragino Sans', sans-serif; background: #0d0d0d; color: #e8e8e8; min-height: 100vh; }
+    .container { max-width: 680px; margin: 0 auto; padding: 40px 20px 80px; }
+    h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: #888; font-size: 0.85em; margin-bottom: 40px; }
+    h2 { font-size: 1.2em; font-weight: 600; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid #222; color: #fff; }
+    h3 { font-size: 1em; font-weight: 600; margin: 20px 0 8px; color: #ccc; }
+    p { font-size: 0.92em; line-height: 1.75; color: #aaa; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 16px 20px; }
+    li { font-size: 0.92em; line-height: 1.7; color: #bbb; margin-bottom: 4px; }
+    .card { background: #141414; border-radius: 12px; padding: 18px 20px; margin: 16px 0; }
+    .card-title { font-size: 0.8em; color: #666; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .card p, .card li { color: #ccc; }
+    .kbd { display: inline-block; background: #222; border: 1px solid #333; border-radius: 4px; padding: 1px 7px; font-size: 0.85em; font-family: monospace; color: #e0e0e0; }
+    .step { display: flex; gap: 14px; margin-bottom: 16px; }
+    .step-num { flex-shrink: 0; width: 28px; height: 28px; background: #1a1a2e; border: 1px solid #2a2a4e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; color: #7c8cf7; }
+    .step-body { flex: 1; }
+    .step-body p { margin-bottom: 4px; }
+    .tag { display: inline-block; background: #1a2e1a; border: 1px solid #2e4a2e; border-radius: 6px; padding: 2px 8px; font-size: 0.78em; color: #6fbf6f; margin-right: 4px; }
+    .tag.pro { background: #2e2a1a; border-color: #4a4228; color: #d4a846; }
+    .tag.free { background: #1a2e1a; border-color: #2e4a2e; color: #6fbf6f; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.88em; }
+    th { text-align: left; padding: 8px 10px; border-bottom: 1px solid #333; color: #888; font-weight: 500; }
+    td { padding: 8px 10px; border-bottom: 1px solid #1a1a1a; color: #bbb; }
+    .warn { background: #1a1812; border-left: 3px solid #d4a846; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; }
+    .warn p { color: #c8b060; margin: 0; }
+    .divider { height: 1px; background: #1a1a1a; margin: 40px 0; }
+    .source { color: #444; font-size: 0.75em; margin-top: 40px; text-align: center; }
+    a { color: #7c8cf7; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Maestri 使い方ガイド</h1>
+    <p class="subtitle">複数AIエージェントを無限キャンバスで操る macOS ターミナルアプリ</p>
+
+    <h2>Maestriとは</h2>
+    <p>Maestriは、Claude Code・Codex・OpenCodeなどのAIコーディングエージェントを1つの無限キャンバス上に並べて同時に操作できるmacOSネイティブアプリ。Swift + Metal製で軽量、エージェント間の接続・対話も可能。</p>
+
+    <div class="card">
+      <div class="card-title">基本スペック</div>
+      <table>
+        <tr><th>項目</th><th>内容</th></tr>
+        <tr><td>対応OS</td><td>macOS 26.2+（Apple Silicon）</td></tr>
+        <tr><td>価格</td><td>無料（Pro $18 買い切り）</td></tr>
+        <tr><td>ダウンロード</td><td><a href="https://www.themaestri.app/en">themaestri.app</a></td></tr>
+        <tr><td>技術</td><td>Swift / SwiftUI / Metal GPU</td></tr>
+      </table>
+    </div>
+
+    <h2>インストール</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><p>公式サイトからDMGをダウンロード</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><p>DMGを開き、Maestri.appを /Applications にドラッグ</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><p>初回起動時にGatekeeper警告が出たら「開く」を選択<br>または <span class="kbd">xattr -cr /Applications/Maestri.app</span> で解除</p></div>
+    </div>
+
+    <h2>ターミナルの作成</h2>
+    <p>キャンバス上にAIエージェントのターミナルを配置する方法。</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><p>上部ツールバーの <strong>ターミナル</strong> アイコンをクリック（ショートカット: <span class="kbd">T</span>）</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><p>キャンバス上の好きな場所をクリック</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><p>「新規ターミナル」ダイアログでエージェントを選択</p>
+        <ul>
+          <li><strong>Claude Code</strong> — コマンド: <span class="kbd">claude</span></li>
+          <li><strong>Codex</strong> — OpenAIのコーディングエージェント</li>
+          <li><strong>Gemini CLI</strong> — GoogleのAIエージェント</li>
+          <li><strong>OpenCode</strong> — オープンソースエージェント</li>
+          <li><strong>Shell</strong> — 通常のシェル</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body"><p>「作成」をクリック → キャンバスにターミナルが出現</p></div>
+    </div>
+
+    <h2>ターミナル間の接続</h2>
+    <p>2つのターミナルを繋ぐと、エージェント同士が直接対話できるようになる。</p>
+
+    <h3>接続方法</h3>
+    <div class="card">
+      <div class="card-title">方法1: サブツールバー</div>
+      <ol>
+        <li>接続元のターミナルのタイトルバーをクリックして選択</li>
+        <li>サブツールバー（上部中央に出現）の <strong>Y字アイコン</strong>（「ターミナルに接続」）をクリック</li>
+        <li>カーソルに線がついてくる → 接続先のターミナルをクリック</li>
+        <li>物理アニメーション付きのケーブルで接続完了</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="card-title">方法2: キーボードショートカット</div>
+      <p>ターミナルをカード選択状態（内部フォーカスなし）で <span class="kbd">L</span> を押す → 接続先をクリック</p>
+      <p>※ターミナル内部にフォーカスがあると <span class="kbd">L</span> が入力されてしまうので注意</p>
+    </div>
+
+    <h3>接続で何ができるか</h3>
+    <ul>
+      <li>Maestri Agent Skill が各ターミナルに自動インストールされる</li>
+      <li>エージェント間でプロンプトの送受信が可能</li>
+      <li>エージェント非依存 — Claude Code ↔ Codex ↔ OpenCode どの組み合わせもOK</li>
+      <li>1つのターミナルに複数の接続を持てる</li>
+    </ul>
+
+    <h3>使い方の例</h3>
+    <div class="card">
+      <p>「Claude Code #2に、shibu-live.pyのコードレビューを依頼して」</p>
+      <p>→ エージェントが自動で隣のエージェントにプロンプトを送信・回答を受信</p>
+    </div>
+    <p>スキルが自動読み込みされない場合: 「maestriを使って[エージェント名]に聞いて」と指示する。</p>
+
+    <h2>ノートとの接続</h2>
+    <p>ターミナルをノート（付箋）に接続することも可能。接続すると、エージェントがノートの読み書きをMaestri CLI経由で行える。セッションをまたいで情報を残す共有メモとして機能する。</p>
+    <p>ノート同士をチェーンやツリー状に接続でき、エントリーポイントのノートだけターミナルに繋げば、エージェントが全体を辿れる。</p>
+
+    <h2>エージェントロール</h2>
+    <p>各ターミナルに役割を割り当てて、自動的にエージェントの振る舞いを制御する。</p>
+
+    <div class="card">
+      <div class="card-title">ロールの例</div>
+      <table>
+        <tr><th>ロール</th><th>役割</th></tr>
+        <tr><td>Lead</td><td>全体を統括し、タスクを他のエージェントに委任</td></tr>
+        <tr><td>Coder</td><td>実装に集中</td></tr>
+        <tr><td>Reviewer</td><td>コードレビューと指摘</td></tr>
+        <tr><td>Tester</td><td>テスト作成と実行</td></tr>
+      </table>
+    </div>
+    <p>設定: <strong>Settings → Agents</strong> でロールの作成・編集。各ロールには名前・カラーバッジ・指示セットを設定。ロールはサブディレクトリの <span class="kbd">CLAUDE.md</span> や <span class="kbd">AGENTS.md</span> を通じてエージェントに注入される。</p>
+
+    <div class="warn">
+      <p>チーム開発時は <span class="kbd">.maestri</span> を <span class="kbd">.gitignore</span> に追加すること（ロール設定は現在共有不可）</p>
+    </div>
+
+    <h2>キーボードショートカット</h2>
+    <div class="card">
+      <table>
+        <tr><th>操作</th><th>ショートカット</th></tr>
+        <tr><td>ポインター（選択）</td><td><span class="kbd">V</span> または <span class="kbd">▶</span>ボタン</td></tr>
+        <tr><td>ターミナル追加</td><td><span class="kbd">T</span></td></tr>
+        <tr><td>ノート追加</td><td><span class="kbd">N</span></td></tr>
+        <tr><td>添付</td><td><span class="kbd">I</span></td></tr>
+        <tr><td>ファイルツリー</td><td><span class="kbd">F</span></td></tr>
+        <tr><td>ポータル</td><td><span class="kbd">P</span></td></tr>
+        <tr><td>テキスト</td><td><span class="kbd">A</span></td></tr>
+        <tr><td>描画（スケッチ）</td><td><span class="kbd">B</span></td></tr>
+        <tr><td>接続開始</td><td><span class="kbd">L</span>（カード選択状態で）</td></tr>
+        <tr><td>ターミナル切替</td><td><span class="kbd">⌘</span> 長押し → 数字キー（1〜9）</td></tr>
+        <tr><td>ターミナル閉じる</td><td><span class="kbd">⌘W</span></td></tr>
+        <tr><td>前のワークスペース</td><td>メニュー: 表示 → 前のワークスペース</td></tr>
+        <tr><td>次のワークスペース</td><td>メニュー: 表示 → 次のワークスペース</td></tr>
+      </table>
+    </div>
+
+    <h2>ワークスペースとFloors</h2>
+
+    <h3>ワークスペース</h3>
+    <p>プロジェクトごとに別のキャンバスを作成。tmux風ショートカットで瞬時に切り替え可能。</p>
+    <ul>
+      <li><span class="tag free">Free</span> 1ワークスペース</li>
+      <li><span class="tag pro">Pro $18</span> ワークスペース無制限 + Mac 2台</li>
+    </ul>
+
+    <h3>Floors</h3>
+    <p>ワークスペースの分離コピーをAPFS copy-on-writeで即座に作成。ディスク使用量は最小限。別ブランチの並行作業を干渉なしで実行し、後でマージまたは破棄できる。</p>
+
+    <h2>Ombro（オンデバイスAI）</h2>
+    <p>Apple Foundation Models搭載のアシスタント。エージェントの進捗を監視し、タスク完了時に要約と次のステップを提案する。アプリ外のフローティングウィンドウで表示。</p>
+    <ul>
+      <li>API不要、クラウド送信なし — 完全ローカル処理</li>
+      <li>メニュー: ファイル → Ombro</li>
+    </ul>
+
+    <h2>ツールバー一覧</h2>
+    <div class="card">
+      <div class="card-title">メインツールバー（上部中央）</div>
+      <table>
+        <tr><th>アイコン</th><th>名称</th><th>機能</th></tr>
+        <tr><td>▶</td><td>ポインター</td><td>カードの選択・移動</td></tr>
+        <tr><td>画面</td><td>ターミナル</td><td>AIエージェントのターミナルを配置</td></tr>
+        <tr><td>メモ</td><td>ノート</td><td>付箋メモを配置</td></tr>
+        <tr><td>クリップ</td><td>添付</td><td>ファイルを添付</td></tr>
+        <tr><td>フォルダ</td><td>ファイルツリー</td><td>プロジェクトのファイル構造を表示</td></tr>
+        <tr><td>地球</td><td>ポータル</td><td>Webポータルを開く</td></tr>
+        <tr><td>あ</td><td>テキスト</td><td>テキストを配置</td></tr>
+        <tr><td>円</td><td>描画</td><td>フリーハンドで図を描く</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">サブツールバー（ターミナル選択時）</div>
+      <table>
+        <tr><th>アイコン</th><th>機能</th></tr>
+        <tr><td>ペン</td><td>ターミナルを編集（名前・コマンド・ロール変更）</td></tr>
+        <tr><td>Y字</td><td>ターミナルに接続（Connection作成）</td></tr>
+        <tr><td>矢印</td><td>リロード</td></tr>
+        <tr><td>ゴミ箱</td><td>削除</td></tr>
+      </table>
+    </div>
+
+    <h2>M1 8GBでの運用Tips</h2>
+    <div class="warn">
+      <p>Apple Silicon 8GBメモリではMaestri + OBS同時運用は高負荷になる。以下を推奨:</p>
+    </div>
+    <ul>
+      <li>Chromeなどの重いアプリは閉じる（Chrome終了でload 18→2に改善した実績あり）</li>
+      <li>Claude Codeは1セッション約26% CPU / 340MB RAM消費</li>
+      <li>Maestri自体は約27-30% CPU</li>
+      <li>OBS配信(50%) + Maestri(30%) + Claude Code 2台(50%) = load 5〜7程度</li>
+      <li>3台以上のClaude Codeは16GB以上のMacを推奨</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="card">
+      <div class="card-title">料金プラン</div>
+      <table>
+        <tr><th></th><th>Free</th><th>Pro（$18 買い切り）</th></tr>
+        <tr><td>ワークスペース</td><td>1つ</td><td>無制限</td></tr>
+        <tr><td>エージェント数</td><td>無制限</td><td>無制限</td></tr>
+        <tr><td>スケッチ・ノート</td><td>全機能</td><td>全機能</td></tr>
+        <tr><td>接続（Connection）</td><td>全機能</td><td>全機能</td></tr>
+        <tr><td>Ombro</td><td>全機能</td><td>全機能</td></tr>
+        <tr><td>Mac台数</td><td>1台</td><td>2台</td></tr>
+      </table>
+    </div>
+
+    <div class="source">
+      AI分析 by Claude Code / wirelessml.github.io/test<br>
+      公式ドキュメント: <a href="https://www.themaestri.app/en/docs/connections">Connections</a> · <a href="https://www.themaestri.app/en/docs/terminals">Terminals</a>
+    </div>
+  </div>
+</body>
+</html>
