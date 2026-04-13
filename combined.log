@@ -210,3 +210,4 @@
 2026-04-13T12:01:52.865Z [INFO]: Found valid authentication tokens.
 2026-04-13T12:01:52.868Z [INFO]: Google Photos MCP server connected via STDIO
 2026/04/13 21:35 - 4K配信2h45m, load 1.54, pytchat自動再接続成功確認, プラグイン5つ追加
+2026/04/13 22:35 - 4K配信3h45m, load 1.44, Chrome高負荷79%, pytchat自動再接続OK, 送信33GB
