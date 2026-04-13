@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>しぶの一日一食</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Hiragino Sans', sans-serif; background: #0d0d0d; color: #e8e8e8; min-height: 100vh; }
+    .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 1.6em; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #888; font-size: 0.85em; margin-bottom: 40px; }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #222; }
+    .meal { position: relative; margin-bottom: 36px; }
+    .meal::before { content: ''; position: absolute; left: -28px; top: 4px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #333; background: #0d0d0d; }
+    .meal.active::before { border-color: #fff; background: #fff; }
+    .time { font-size: 0.8em; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .meal-title { font-size: 1.1em; font-weight: 600; margin-bottom: 6px; }
+    .meal-desc { color: #999; font-size: 0.9em; line-height: 1.6; }
+    .meal-items { list-style: none; margin-top: 10px; }
+    .meal-items li { padding: 6px 0; color: #ccc; font-size: 0.95em; border-bottom: 1px solid #1a1a1a; }
+    .meal-items li:last-child { border-bottom: none; }
+    .divider { height: 1px; background: #1a1a1a; margin: 40px 0; }
+    .summary { background: #111; border-radius: 12px; padding: 20px; margin-top: 20px; }
+    .summary-title { font-size: 0.85em; color: #666; margin-bottom: 12px; }
+    .summary p { font-size: 0.9em; color: #aaa; line-height: 1.7; }
+    .source { color: #444; font-size: 0.75em; margin-top: 40px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>しぶの一日一食</h1>
+    <p class="subtitle">ミニマリストしぶの食事を2本の動画から分析</p>
+
+    <div class="timeline">
+      <div class="meal">
+        <div class="time">朝</div>
+        <div class="meal-title">食べない</div>
+        <div class="meal-desc">寝袋で寝て、起きたらすぐ作業。</div>
+      </div>
+
+      <div class="meal">
+        <div class="time">昼</div>
+        <div class="meal-title">食べない</div>
+        <div class="meal-desc">プロテインやダークチョコで済ませる。<br>これは「食事」ではなく空腹しのぎ。</div>
+        <ul class="meal-items">
+          <li>プロテイン 1杯</li>
+          <li>ダークチョコ(高カカオ) 2〜3粒</li>
+        </ul>
+      </div>
+
+      <div class="meal active">
+        <div class="time">夜</div>
+        <div class="meal-title">唯一の食事</div>
+        <div class="meal-desc">1日で「ご飯を食べる」のはこの1回だけ。</div>
+        <ul class="meal-items">
+          <li>納豆ご飯</li>
+          <li>アボカド</li>
+          <li>キムチ</li>
+          <li>サバ缶</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="summary">
+      <div class="summary-title">分析元</div>
+      <p>
+        「モノ減らし相談会（1年半ぶり）」2025/10/11<br>
+        「ミニマリストしぶの新居が完成しました。」2025/3/30
+      </p>
+    </div>
+
+    <div class="source">AI分析 by Claude Code / wirelessml.github.io/test</div>
+  </div>
+</body>
+</html>
