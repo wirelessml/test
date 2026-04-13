@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Claude エコシステム</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: #0d0d0d; color: #e0e0e0; line-height: 1.7; }
+    .container { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+    h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 4px; color: #fff; }
+    .subtitle { color: #888; font-size: 0.9em; margin-bottom: 40px; }
+    h2 { font-size: 1.3em; font-weight: 700; color: #fff; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #222; }
+    h3 { font-size: 1.05em; font-weight: 600; color: #ccc; margin: 24px 0 10px; }
+    p { color: #aaa; font-size: 0.92em; margin-bottom: 12px; }
+    .badge { display: inline-block; font-size: 0.7em; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+    .badge-core { background: #1a3a2a; color: #4caf50; }
+    .badge-plugin { background: #1a2a3a; color: #42a5f5; }
+    .badge-advanced { background: #3a2a1a; color: #ff9800; }
+
+    /* TOC */
+    .toc { background: #111; border-radius: 12px; padding: 20px 24px; margin-bottom: 40px; }
+    .toc-title { font-size: 0.8em; color: #666; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .toc a { display: block; color: #888; font-size: 0.88em; padding: 4px 0; text-decoration: none; border-bottom: 1px solid #1a1a1a; }
+    .toc a:last-child { border-bottom: none; }
+    .toc a:hover { color: #fff; }
+
+    /* Section cards */
+    .section { background: #111; border-radius: 12px; padding: 24px; margin-bottom: 20px; border-left: 3px solid #333; }
+    .section.vault { border-left-color: #7c4dff; }
+    .section.claude { border-left-color: #d4a574; }
+    .section.plugin { border-left-color: #42a5f5; }
+    .section.prompt { border-left-color: #66bb6a; }
+    .section.workflow { border-left-color: #ef5350; }
+    .section.auto { border-left-color: #ff9800; }
+    .section.daily { border-left-color: #26c6da; }
+    .section.advanced { border-left-color: #ab47bc; }
+    .section.visual { border-left-color: #ec407a; }
+    .section.maint { border-left-color: #78909c; }
+
+    .item-list { list-style: none; margin-top: 12px; }
+    .item-list li { padding: 8px 12px; color: #bbb; font-size: 0.9em; border-bottom: 1px solid #1a1a1a; display: flex; align-items: flex-start; gap: 10px; }
+    .item-list li:last-child { border-bottom: none; }
+    .item-icon { flex-shrink: 0; width: 20px; text-align: center; color: #666; font-size: 0.85em; }
+    .item-content { flex: 1; }
+    .item-content strong { color: #ddd; font-weight: 600; }
+    .item-content .desc { color: #888; font-size: 0.88em; margin-top: 2px; }
+
+    /* Code blocks */
+    code { background: #1a1a1a; color: #d4a574; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'SF Mono', 'Fira Code', monospace; }
+    pre { background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 12px 0; }
+    pre code { background: none; padding: 0; font-size: 0.85em; color: #ccc; }
+
+    /* Tips */
+    .tip { background: #1a2a1a; border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 0.88em; color: #8bc34a; }
+    .tip::before { content: 'TIP'; font-weight: 700; font-size: 0.75em; letter-spacing: 0.05em; display: block; margin-bottom: 4px; color: #4caf50; }
+    .warn { background: #2a1a1a; border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 0.88em; color: #ef9a9a; }
+    .warn::before { content: 'NOTE'; font-weight: 700; font-size: 0.75em; letter-spacing: 0.05em; display: block; margin-bottom: 4px; color: #ef5350; }
+
+    /* Folder tree */
+    .tree { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 8px; padding: 16px 20px; margin: 12px 0; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.82em; line-height: 1.9; color: #888; }
+    .tree .folder { color: #d4a574; }
+    .tree .file { color: #aaa; }
+
+    .divider { height: 1px; background: #1a1a1a; margin: 48px 0; }
+    .source { color: #444; font-size: 0.75em; margin-top: 48px; text-align: center; }
+
+    /* Keyboard shortcut */
+    kbd { background: #222; border: 1px solid #333; border-radius: 4px; padding: 1px 6px; font-size: 0.85em; font-family: inherit; color: #ccc; }
+
+    /* Grid layout for features */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+    .grid-item { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 8px; padding: 14px; }
+    .grid-item strong { color: #ddd; font-size: 0.9em; display: block; margin-bottom: 4px; }
+    .grid-item p { font-size: 0.82em; color: #777; margin: 0; }
+    @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Obsidian Claude エコシステム</h1>
+    <p class="subtitle">Obsidian + Claude Code で構築する究極のナレッジシステム</p>
+
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <a href="#vault">1. ボールト基礎</a>
+      <a href="#claude">2. Claude 統合</a>
+      <a href="#plugins">3. コアプラグイン</a>
+      <a href="#prompts">4. プロンプトライブラリ</a>
+      <a href="#workflow">5. 知識ワークフロー</a>
+      <a href="#auto">6. 自動化</a>
+      <a href="#daily">7. デイリーシステム</a>
+      <a href="#advanced">8. 高度なテクニック</a>
+      <a href="#visual">9. 可視化</a>
+      <a href="#maint">10. メンテナンス & 最適化</a>
+      <a href="#resources">11. リソース & 進化</a>
+    </div>
+
+    <!-- 1. ボールト基礎 -->
+    <h2 id="vault">1. ボールト基礎</h2>
+    <div class="section vault">
+      <h3>フォルダ構造（PARA + Zettelkasten）</h3>
+      <p>Obsidianボールトの基本はフォルダ構造。PROJECTSに進行中の仕事、AREASに継続的な関心領域、RESOURCESに参照素材、ARCHIVEに完了物を置く。</p>
+      <div class="tree">
+        <span class="folder">Vault/</span><br>
+        <span class="folder">&nbsp;&nbsp;00-Inbox/</span> <span class="file">... 未整理のメモ</span><br>
+        <span class="folder">&nbsp;&nbsp;10-Projects/</span> <span class="file">... 進行中プロジェクト</span><br>
+        <span class="folder">&nbsp;&nbsp;20-Areas/</span> <span class="file">... 継続的な関心領域</span><br>
+        <span class="folder">&nbsp;&nbsp;30-Resources/</span> <span class="file">... 参照素材・ナレッジ</span><br>
+        <span class="folder">&nbsp;&nbsp;40-Archive/</span> <span class="file">... 完了・非アクティブ</span><br>
+        <span class="folder">&nbsp;&nbsp;Templates/</span> <span class="file">... テンプレート</span><br>
+        <span class="folder">&nbsp;&nbsp;Attachments/</span> <span class="file">... 画像・PDF等</span>
+      </div>
+
+      <h3>MOCs（Map of Content）& ハブノート</h3>
+      <p>MOCはトピックの「地図」。関連ノートへのリンクを集約し、知識の全体像を俯瞰する。各AreaやProjectにMOCを1つ作る。</p>
+      <pre><code># MOC: AI活用
+## コア概念
+- [[プロンプトエンジニアリング]]
+- [[コンテキストウィンドウ最適化]]
+## ツール
+- [[Claude Code セットアップ]]
+- [[MCP サーバー一覧]]
+## プロジェクト
+- [[AIミニマリストしぶ]]</code></pre>
+
+      <h3>テンプレートシステム</h3>
+      <p>Templaterプラグインで動的テンプレートを作成。日付、カーソル位置、条件分岐を埋め込める。</p>
+      <pre><code>---
+created: &lt;% tp.date.now("YYYY-MM-DD") %&gt;
+tags: [draft]
+type: note
+---
+# &lt;% tp.file.title %&gt;
+## 要約
+&lt;% tp.file.cursor(1) %&gt;
+## 関連
+- </code></pre>
+
+      <h3>メタデータ & Dataview</h3>
+      <p>YAMLフロントマターでメタデータを構造化。Dataviewで動的にクエリ・集計できる。</p>
+      <pre><code>---
+tags: [project, active]
+status: in-progress
+due: 2026-04-30
+priority: high
+---</code></pre>
+    </div>
+
+    <!-- 2. Claude 統合 -->
+    <h2 id="claude">2. Claude 統合</h2>
+    <div class="section claude">
+      <h3>CLAUDE.md 設定</h3>
+      <p>ボールトのルートに <code>CLAUDE.md</code> を置くことで、Claude Codeにプロジェクトコンテキストを渡す。ボールトの構造、命名規則、ワークフローを記述する。</p>
+      <pre><code># My Knowledge Vault
+
+## ボールト構造
+- 00-Inbox: 未処理メモ
+- 10-Projects: アクティブプロジェクト
+- 30-Resources: ナレッジベース
+
+## 命名規則
+- ファイル名: ケバブケース（例: claude-code-tips.md）
+- タグ: スネークケース（例: #ai_tools）
+
+## Claudeへの指示
+- ノート作成時は必ずYAMLフロントマターを付与
+- 既存ノートへのリンク [[]] を積極的に使う
+- 新規ノートは00-Inboxに作成</code></pre>
+
+      <h3>Claude Code / デスクトップ セットアップ</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">1</span><div class="item-content"><strong>ボールトをカレントディレクトリに</strong><div class="desc"><code>cd ~/Documents/MyVault && claude</code> で起動。CLAUDE.mdが自動読み込み。</div></div></li>
+        <li><span class="item-icon">2</span><div class="item-content"><strong>ターミナルプラグイン連携</strong><div class="desc">Obsidian内蔵ターミナルからClaude Codeを直接起動。ノート操作がシームレス。</div></div></li>
+        <li><span class="item-icon">3</span><div class="item-content"><strong>Claudeデスクトップアプリ</strong><div class="desc">MCPサーバー経由でファイルシステムアクセス。ボールト全体をコンテキストに。</div></div></li>
+      </ul>
+
+      <h3>MCP ツール & スキル</h3>
+      <p>MCPサーバーでClaudeの能力を拡張。ファイル操作、Web検索、外部API連携が可能。</p>
+      <div class="grid">
+        <div class="grid-item"><strong>filesystem</strong><p>ボールト内ファイルの読み書き・検索</p></div>
+        <div class="grid-item"><strong>memory</strong><p>セッション跨ぎの記憶保持</p></div>
+        <div class="grid-item"><strong>web-search</strong><p>リアルタイム情報の取得</p></div>
+        <div class="grid-item"><strong>google-photos</strong><p>写真の検索・分類・整理</p></div>
+      </div>
+
+      <h3>.claude/commands フォルダ</h3>
+      <p>カスタムスラッシュコマンドを定義。繰り返しのワークフローを1コマンドで実行。</p>
+      <pre><code># .claude/commands/process-inbox.md
+Inboxフォルダの未処理ノートを確認し、
+以下の基準で分類してください:
+- タグ付け（内容に基づく）
+- 適切なフォルダへ移動
+- 関連ノートへのリンク追加
+- MOCへの追記</code></pre>
+
+      <h3>コンテキスト読み込み戦略</h3>
+      <div class="tip">ボールト全体を毎回読み込むのは非効率。MOCをエントリポイントにして、必要なノートだけ段階的に読み込む「漏斗型」戦略が最適。</div>
+      <ul class="item-list">
+        <li><span class="item-icon">1</span><div class="item-content"><strong>CLAUDE.md</strong><div class="desc">プロジェクト全体の構造とルール（自動読み込み）</div></div></li>
+        <li><span class="item-icon">2</span><div class="item-content"><strong>MOC / ハブノート</strong><div class="desc">トピックの全体像と関連リンク一覧</div></div></li>
+        <li><span class="item-icon">3</span><div class="item-content"><strong>個別ノート</strong><div class="desc">必要に応じてRead。過剰読み込みを避ける</div></div></li>
+      </ul>
+    </div>
+
+    <!-- 3. コアプラグイン -->
+    <h2 id="plugins">3. コアプラグイン</h2>
+    <div class="section plugin">
+      <h3>必須プラグイン一覧</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">T</span><div class="item-content"><strong>Templater</strong><div class="desc">動的テンプレート。日付変数、条件分岐、JavaScriptスニペット対応。QuickAddと組み合わせて最強。</div></div></li>
+        <li><span class="item-icon">D</span><div class="item-content"><strong>Dataview</strong><div class="desc">SQLライクなクエリでノートを動的集計。タスク管理、進捗追跡、統計表示に。</div></div></li>
+        <li><span class="item-icon">Q</span><div class="item-content"><strong>QuickAdd</strong><div class="desc">マクロ・キャプチャ・テンプレート適用をホットキー1つで。Inboxへの高速メモ投入に最適。</div></div></li>
+        <li><span class="item-icon">P</span><div class="item-content"><strong>Periodic Notes</strong><div class="desc">日次・週次・月次・四半期・年次ノートを自動生成。レビューサイクルの土台。</div></div></li>
+        <li><span class="item-icon">C</span><div class="item-content"><strong>Canvas</strong><div class="desc">ビジュアルボード。ノート・画像・リンクを自由配置。ブレインストーミングやプロジェクト設計に。</div></div></li>
+        <li><span class="item-icon">G</span><div class="item-content"><strong>Graph View（コア機能）</strong><div class="desc">ノート間の関係を可視化。孤立ノートの発見、知識クラスターの把握に。</div></div></li>
+      </ul>
+
+      <h3>ターミナル + Claude Code</h3>
+      <p>Obsidian Terminalプラグインでボールト内から直接Claude Codeを起動。ノートの読み書き、リファクタリング、一括処理がターミナルから可能。</p>
+      <pre><code># Obsidianターミナルから
+claude "このフォルダの未タグノートにタグを付けて"
+claude "/process-inbox"  # カスタムコマンド</code></pre>
+
+      <h3>Dataview クエリ例</h3>
+      <pre><code>```dataview
+TABLE status, due, priority
+FROM #project
+WHERE status != "done"
+SORT priority ASC, due ASC
+```</code></pre>
+    </div>
+
+    <!-- 4. プロンプトライブラリ -->
+    <h2 id="prompts">4. プロンプトライブラリ</h2>
+    <div class="section prompt">
+      <h3>思考ツール</h3>
+      <p>Claude Codeのカスタムスラッシュコマンドとして保存し、ナレッジワークを加速する。</p>
+      <ul class="item-list">
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/trace</strong><div class="desc">アイデアの起源を遡る。「この概念はどこから来た？何と繋がる？」</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/challenge</strong><div class="desc">仮説に反論する。「この前提は本当に正しい？反例は？」</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/connect</strong><div class="desc">異分野の知識を結合。「AとBの共通パターンは？」</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/simplify</strong><div class="desc">複雑な概念を分解。「5歳児に説明するなら？」</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/extend</strong><div class="desc">アイデアを発展。「この先にあるのは？応用できる領域は？」</div></div></li>
+      </ul>
+
+      <h3>ノート処理プロンプト</h3>
+      <pre><code># .claude/commands/refine-note.md
+以下のノートを改善してください:
+1. YAMLフロントマターの補完（tags, type, status）
+2. 見出し構造の整理
+3. 関連する既存ノートへの [[リンク]] 追加
+4. 要約セクションの追加
+5. 未解決の疑問を ## Questions に記載</code></pre>
+
+      <h3>振り返り & 統合</h3>
+      <pre><code># .claude/commands/weekly-review.md
+今週のデイリーノートを読み、以下を生成:
+1. 週のハイライト（3-5項目）
+2. 学んだこと（知識の差分）
+3. 未完了タスクの棚卸し
+4. 来週の優先事項
+5. ボールト内の関連ノートとの新しい接続</code></pre>
+    </div>
+
+    <!-- 5. 知識ワークフロー -->
+    <h2 id="workflow">5. 知識ワークフロー</h2>
+    <div class="section workflow">
+      <h3>キャプチャ → 処理 → 接続</h3>
+      <p>知識の流れを3段階で管理する。</p>
+      <ul class="item-list">
+        <li><span class="item-icon">1</span><div class="item-content"><strong>キャプチャ（Inbox）</strong><div class="desc">思いついたこと、読んだもの、聞いたことを素早くメモ。形式は問わない。QuickAddで高速投入。</div></div></li>
+        <li><span class="item-icon">2</span><div class="item-content"><strong>処理（Process）</strong><div class="desc">Inboxを定期的に処理。タグ付け、フロントマター追加、適切なフォルダへ移動。Claudeに一括処理させる。</div></div></li>
+        <li><span class="item-icon">3</span><div class="item-content"><strong>接続（Connect）</strong><div class="desc">既存ノートとのリンク作成、MOC更新、新しいパターンの発見。ここが知識の価値が生まれる段階。</div></div></li>
+      </ul>
+
+      <h3>文献ノート vs 永続ノート</h3>
+      <div class="grid">
+        <div class="grid-item"><strong>文献ノート</strong><p>本・記事・動画の内容を自分の言葉で要約。原文の引用を最小限に。出典を必ず記録。</p></div>
+        <div class="grid-item"><strong>永続ノート</strong><p>自分の思考・洞察を1ノート1概念で記述。文献ノートから抽出した「原則」や「パターン」。</p></div>
+      </div>
+      <div class="tip">Claudeに「この記事から永続ノートを3つ抽出して」と依頼すると、文献ノートから原則を自動抽出できる。</div>
+
+      <h3>プロジェクト管理</h3>
+      <p>Dataviewでプロジェクト一覧を動的生成。ステータス・期限・優先度でフィルタリング。</p>
+      <pre><code>```dataview
+TASK
+FROM #project AND !"40-Archive"
+WHERE !completed
+GROUP BY file.link
+```</code></pre>
+    </div>
+
+    <!-- 6. 自動化 -->
+    <h2 id="auto">6. 自動化</h2>
+    <div class="section auto">
+      <h3>カスタム Claude スキル</h3>
+      <p><code>.claude/commands/</code> にMarkdownファイルを置くだけでスラッシュコマンドとして使える。</p>
+      <ul class="item-list">
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/tag-all</strong><div class="desc">フォルダ内の全ノートに内容ベースで自動タグ付け</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/link-orphans</strong><div class="desc">孤立ノートを検出し、関連ノートへのリンクを提案</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/summarize-folder</strong><div class="desc">フォルダ内の全ノートを要約してMOCを自動生成</div></div></li>
+        <li><span class="item-icon">/</span><div class="item-content"><strong>/daily-review</strong><div class="desc">今日のノートを振り返り、明日のタスクを整理</div></div></li>
+      </ul>
+
+      <h3>自動タグ付け & リンク</h3>
+      <pre><code># .claude/commands/auto-link.md
+30-Resources/ 内の全.mdファイルを走査し:
+1. 他ノートのタイトルが本文に出現 → [[リンク]] に変換
+2. 内容からタグを推定 → フロントマターに追加
+3. 関連度の高いノートペアをリストアップ
+4. MOCに未登録のノートを追記</code></pre>
+
+      <h3>デイリーレビュー自動化</h3>
+      <p>cronまたはPeriodicNotesのフックで、毎日決まった時間にClaudeが前日のノートをレビュー。</p>
+      <pre><code># 毎朝9時に自動レビュー
+0 9 * * * cd ~/Vault && claude "/daily-review" --print</code></pre>
+    </div>
+
+    <!-- 7. デイリーシステム -->
+    <h2 id="daily">7. デイリーシステム</h2>
+    <div class="section daily">
+      <h3>デイリーノート テンプレート</h3>
+      <pre><code>---
+created: &lt;% tp.date.now("YYYY-MM-DD") %&gt;
+type: daily
+tags: [daily]
+---
+# &lt;% tp.date.now("YYYY-MM-DD ddd") %&gt;
+
+## Today's Focus
+- [ ]
+
+## Log
+-
+
+## Grateful
+1.
+
+## Review
+- Energy: /5
+- Productivity: /5
+- Mood: /5</code></pre>
+
+      <h3>週次/月次レビュー</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">W</span><div class="item-content"><strong>週次レビュー</strong><div class="desc">完了タスク振り返り、来週の計画、ボールト整理（Inbox処理）。Claudeに要約生成を依頼。</div></div></li>
+        <li><span class="item-icon">M</span><div class="item-content"><strong>月次レビュー</strong><div class="desc">目標進捗、知識成長の測定（新規ノート数、リンク密度）、Area の見直し。</div></div></li>
+      </ul>
+
+      <h3>Claude を用いたジャーナリング</h3>
+      <p>Claudeをジャーナリングの壁打ち相手に。書いた内容に質問で深掘りしてもらう。</p>
+      <pre><code># .claude/commands/journal.md
+デイリーノートのLogセクションを読み、
+以下の角度で深掘り質問を3つしてください:
+- なぜそう感じた？
+- 何が学びだった？
+- 明日に活かせることは？</code></pre>
+    </div>
+
+    <!-- 8. 高度なテクニック -->
+    <h2 id="advanced">8. 高度なテクニック</h2>
+    <div class="section advanced">
+      <h3>エージェント的ノート取り</h3>
+      <p>Claudeをナレッジエージェントとして運用。ボールトを自律的に探索・整理・拡張させる。</p>
+      <pre><code># エージェント的ワークフロー
+claude "ボールト内の #concept タグのノートを全て読み、
+共通するパターンを3つ特定して、
+それぞれ新しい永続ノートとして作成してください。
+MOCも更新してください。"</code></pre>
+
+      <h3>多段階推論</h3>
+      <p>複雑な問題を段階的に分解し、各段階の思考をノートとして保存。思考プロセス自体をナレッジにする。</p>
+      <ul class="item-list">
+        <li><span class="item-icon">1</span><div class="item-content"><strong>問題定義ノート</strong><div class="desc">何を解決したいのか、制約条件は何か</div></div></li>
+        <li><span class="item-icon">2</span><div class="item-content"><strong>仮説ノート群</strong><div class="desc">考えられるアプローチを個別ノートで展開</div></div></li>
+        <li><span class="item-icon">3</span><div class="item-content"><strong>検証ノート</strong><div class="desc">各仮説の検証結果と判断根拠</div></div></li>
+        <li><span class="item-icon">4</span><div class="item-content"><strong>結論ノート</strong><div class="desc">最終的な答えと、そこに至るリンクチェーン</div></div></li>
+      </ul>
+
+      <h3>ボールト・アズ・コンテキスト工学</h3>
+      <p>ボールト全体をClaude向けのコンテキストとして設計する考え方。</p>
+      <div class="tip">ノートの粒度、命名、タグ体系のすべてが「Claudeが効率的に必要な情報にアクセスできるか」を基準に設計される。人間にもAIにも読みやすいノートが最強。</div>
+
+      <h3>クロスノート分析</h3>
+      <pre><code># 複数ノートの横断分析
+claude "以下の5つのノートを読んで、
+矛盾している記述があれば指摘し、
+統合的な見解をまとめてください:
+- [[メモA]]
+- [[メモB]]
+- [[メモC]]
+- [[メモD]]
+- [[メモE]]"</code></pre>
+    </div>
+
+    <!-- 9. 可視化 -->
+    <h2 id="visual">9. 可視化</h2>
+    <div class="section visual">
+      <h3>グラフビュー最適化</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">-</span><div class="item-content"><strong>フィルタリング</strong><div class="desc">タグ・パスでフィルタして特定領域のグラフだけ表示。全体表示は大規模ボールトでは重い。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>グループカラー</strong><div class="desc">フォルダやタグでノードに色を付ける。知識クラスターが視覚的に把握できる。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>孤立ノート発見</strong><div class="desc">リンクのないノードを見つけて接続する。定期的なボールト健康診断。</div></div></li>
+      </ul>
+
+      <h3>Canvas ワークスペース</h3>
+      <p>Canvasでプロジェクトボード、マインドマップ、意思決定マトリクスを作成。ノートカード・テキスト・画像・Webページを自由配置。</p>
+
+      <h3>進捗ダッシュボード</h3>
+      <pre><code>```dataview
+LIST length(rows) AS "ノート数"
+FROM ""
+GROUP BY type
+```
+
+```dataview
+TABLE length(file.inlinks) AS "被リンク数"
+FROM #concept
+SORT length(file.inlinks) DESC
+LIMIT 10
+```</code></pre>
+    </div>
+
+    <!-- 10. メンテナンス -->
+    <h2 id="maint">10. メンテナンス & 最適化</h2>
+    <div class="section maint">
+      <h3>ボールトヘルスチェック</h3>
+      <pre><code># .claude/commands/vault-health.md
+ボールトの健康状態を診断してください:
+1. 孤立ノート数（リンクなし）
+2. デッドリンク（存在しないノートへの [[]] ）
+3. 空ノート
+4. タグなしノート
+5. 30日以上未更新のInboxノート
+6. 重複タイトル</code></pre>
+
+      <h3>バックアップ & Git 同期</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">-</span><div class="item-content"><strong>Obsidian Git プラグイン</strong><div class="desc">自動コミット（10分間隔）。プッシュ/プルもスケジュール可能。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>.gitignore 設定</strong><div class="desc"><code>.obsidian/workspace.json</code>, <code>.obsidian/cache</code>, <code>.trash/</code> を除外。プラグイン設定は含める。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>マルチデバイス同期</strong><div class="desc">Git + iCloud/Syncthing。コンフリクト時はGit優先。</div></div></li>
+      </ul>
+
+      <h3>Claude コンテキスト最適化</h3>
+      <div class="warn">大きなボールト（1000+ノート）ではClaude Codeのコンテキストウィンドウに注意。MOC経由の段階的読み込み、Grep/Globでの絞り込みを活用する。全ノートを一度に読ませるのはNG。</div>
+
+      <h3>パフォーマンスチューニング</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">-</span><div class="item-content"><strong>プラグイン最小化</strong><div class="desc">使わないプラグインは無効化。起動速度に直結。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>添付ファイル管理</strong><div class="desc">画像はAttachmentsフォルダに集約。巨大ファイルはGit LFSまたは外部リンク。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>Dataviewキャッシュ</strong><div class="desc">重いクエリはdataviewjsでキャッシュ。ページ読み込みが遅い場合に有効。</div></div></li>
+      </ul>
+    </div>
+
+    <!-- 11. リソース & 進化 -->
+    <h2 id="resources">11. リソース & 進化</h2>
+    <div class="section" style="border-left-color: #ffd54f;">
+      <h3>推奨プラグイン まとめ</h3>
+      <div class="grid">
+        <div class="grid-item"><strong>Templater</strong><p>動的テンプレート</p></div>
+        <div class="grid-item"><strong>Dataview</strong><p>ノートクエリエンジン</p></div>
+        <div class="grid-item"><strong>QuickAdd</strong><p>高速キャプチャ</p></div>
+        <div class="grid-item"><strong>Periodic Notes</strong><p>定期ノート自動生成</p></div>
+        <div class="grid-item"><strong>Obsidian Git</strong><p>自動バックアップ</p></div>
+        <div class="grid-item"><strong>Calendar</strong><p>日次ノートカレンダー</p></div>
+        <div class="grid-item"><strong>Kanban</strong><p>タスクボード</p></div>
+        <div class="grid-item"><strong>Excalidraw</strong><p>手描き図解</p></div>
+      </div>
+
+      <h3>スケーリング戦略</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">-</span><div class="item-content"><strong>マルチボールト管理</strong><div class="desc">仕事・個人・プロジェクト別にボールト分離。共通ナレッジはシンボリックリンクで共有。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>チームコラボレーション</strong><div class="desc">Git + 共有ボールト。CLAUDE.mdにチームルールを記述。コンフリクト解消手順を明文化。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>長期知識進化</strong><div class="desc">四半期ごとにボールト構造を見直し。成長に合わせてフォルダ・タグ体系をリファクタ。</div></div></li>
+      </ul>
+
+      <h3>次レベルの AI 統合</h3>
+      <ul class="item-list">
+        <li><span class="item-icon">-</span><div class="item-content"><strong>Maestri連携</strong><div class="desc">複数Claude Codeエージェントで並列ノート処理。1台がリサーチ、1台が執筆。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>claude-mem</strong><div class="desc">セッション間記憶。過去の会話コンテキストを自動参照。</div></div></li>
+        <li><span class="item-icon">-</span><div class="item-content"><strong>NotebookLM連携</strong><div class="desc">ボールトのノートをNotebookLMにインポート。音声ポッドキャスト自動生成。</div></div></li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+    <div class="source">AI分析 by Claude Code / wirelessml.github.io/test</div>
+  </div>
+</body>
+</html>
