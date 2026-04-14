@@ -23,6 +23,17 @@ try:
 except ImportError:
     HAS_CHAT = False
 
+try:
+    import pykakasi
+    _kakasi = pykakasi.kakasi()
+    def to_hiragana(text):
+        return ''.join([item['hira'] for item in _kakasi.convert(text)])
+    HAS_KAKASI = True
+except ImportError:
+    def to_hiragana(text):
+        return text
+    HAS_KAKASI = False
+
 # 設定
 ELEVENLABS_API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
 VOICE_ID = 'LIDNtfJHRfi2AFJWPFeV'
@@ -52,7 +63,7 @@ def generate_voice(text, output_path):
         req = urllib.request.Request(
             f'https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}',
             data=json.dumps({
-                'text': text[:678],
+                'text': to_hiragana(text[:678]),
                 'model_id': VOICE_MODEL,
                 'voice_settings': {'stability': 0.5, 'similarity_boost': 1.0, 'style': 0.0}
             }).encode(),
@@ -67,31 +78,49 @@ def generate_voice(text, output_path):
         return False
 
 def generate_reply(question):
-    """"""
+    """Claude CLIでしぶとして回答"""
+    try:
+        prompt = f"{SYSTEM_PROMPT}\n\n視聴者のコメント: {question}\n\nしぶとして50文字以内で返答:"
+        result = subprocess.run(
+            ['/Users/yuika/.local/bin/claude', '--print', '--model', 'claude-haiku-4-5-20251001', prompt],
+            capture_output=True, text=True, timeout=30
+        )
+        reply = result.stdout.strip()
+        if reply:
+            # 長すぎる場合は切る
+            if len(reply) > 80:
+                reply = reply[:80]
+            print(f"[AI回答] {reply}", flush=True)
+            return reply
+    except Exception as e:
+        print(f"[AI回答エラー] {e}", flush=True)
+    # フォールバック
     import random
-    responses = [
-        "いいね。",
-        "シンプルが一番だよ。",
-        "それ、手放そう。",
-        "ありがとう。",
-        "まさにそうだね。",
-        "モノより経験だよ。",
-        "いい質問だね。",
-        "自分らしく生きよう。",
-    ]
-    return random.choice(responses)
+    return random.choice(["いいね。", "シンプルが一番だよ。", "それ、手放そう。", "ありがとう。"])
 
 def play_audio(path):
-    """afplayで音声を再生"""
-    import shutil
+    """afplayで音声を再生（BGMを一時停止）"""
+    import shutil, signal
     queue_dir = '/tmp/shibu-voice-queue'
     os.makedirs(queue_dir, exist_ok=True)
     dest = os.path.join(queue_dir, f'{time.time():.3f}.mp3')
     shutil.copy(path, dest)
+    # BGM一時停止
+    bgm_pids = []
     try:
-        subprocess.run(['/usr/bin/afplay', path], timeout=30)
+        r = subprocess.run(['pgrep', '-f', 'afplay.*shinsekatsu'], capture_output=True, text=True)
+        bgm_pids = [int(p) for p in r.stdout.strip().split('\n') if p.strip()]
+        for pid in bgm_pids:
+            os.kill(pid, signal.SIGSTOP)
+    except: pass
+    try:
+        subprocess.run(['/usr/bin/afplay', '-v', '10', path], timeout=30)
     except Exception as e:
         print(f"[audio error] {e}")
+    # BGM再開
+    for pid in bgm_pids:
+        try: os.kill(pid, signal.SIGCONT)
+        except: pass
 
 def process_comments():
     """コメント処理ワーカー"""
@@ -107,16 +136,33 @@ def process_comments():
 
             # コメントを読み上げ
             voice_path = tempfile.mktemp(suffix='.mp3')
-            print(f"[声] 読み上げ中...")
-            if generate_voice(text, voice_path):
-                play_audio(voice_path)
-                try: os.unlink(voice_path)
-                except: pass
+            print(f"[声] コメント読み上げ: '{text}'", flush=True)
+            try:
+                ok = generate_voice(text, voice_path)
+                if ok:
+                    play_audio(voice_path)
+                    try: os.unlink(voice_path)
+                    except: pass
+            except Exception as e:
+                print(f"[声エラー] {e}", flush=True)
+
+            # しぶ回答を生成して読み上げ
+            reply = generate_reply(text)
+            print(f"[回答] {reply}", flush=True)
+            reply_path = tempfile.mktemp(suffix='.mp3')
+            try:
+                ok = generate_voice(reply, reply_path)
+                if ok:
+                    play_audio(reply_path)
+                    try: os.unlink(reply_path)
+                    except: pass
+            except Exception as e:
+                print(f"[回答声エラー] {e}", flush=True)
 
             # 履歴に追加（オーバーレイ用）
             entry = {
                 'user': username, 'question': text,
-                'reply': '', 'timestamp': time.strftime('%H:%M:%S')
+                'reply': reply, 'timestamp': time.strftime('%H:%M:%S')
             }
             with chat_lock:
                 chat_history.append(entry)

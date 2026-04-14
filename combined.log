@@ -338,3 +338,47 @@
 
 ### スクリーンショット
 - screenshots/status_20260414_093526.png
+2026-04-14T01:01:39.253Z [INFO]: Starting Google Photos MCP server in STDIO mode
+2026-04-14T01:01:39.276Z [INFO]: Found valid authentication tokens.
+2026-04-14T01:01:39.290Z [INFO]: Google Photos MCP server connected via STDIO
+2026-04-14T01:06:25.020Z [INFO]: Starting Google Photos MCP server in STDIO mode
+2026-04-14T01:06:25.036Z [INFO]: Found valid authentication tokens.
+2026-04-14T01:06:25.046Z [INFO]: Google Photos MCP server connected via STDIO
+
+---
+## 定時報告 2026/04/14 10:35 JST
+
+### システム状態
+- **稼働時間**: 1日12時間26分
+- **負荷**: load 2.78 / 2.37 / 2.62（安定）
+- **メモリ**: free 115MB(7205pages), wired 2.2GB, active 1.5GB, inactive 1.4GB
+
+### トップCPUプロセス
+1. OBS 138.6%（16時間36分稼働、メモリ655MB）
+2. Claude Code 63.0%
+3. WindowServer 39.2%
+4. Terminal 14.8%
+5. coreaudiod 10.3%（BGM+しぶ声再生）
+
+### ネットワーク
+- Wi-Fi: YKSmas318（5GHz 802.11ax、ch52、信号-54dBm/雑音-93dBm）
+
+### しぶライブ配信
+- shibu-chat: screen session 7519 稼働中、pytchat connected
+- AI回答動作確認済み:「新生活」→「新生活いいね。物は足りなくなったら買えば大丈夫。今は手ぶらで始めようよ。」
+- BGM: screen session 4521「新生活/騒音のない世界」ループ再生中（音量0.1%）
+- OBS: 16時間36分連続稼働中（PID 20174）
+
+### 前回以降の作業
+- shibu-live.py大幅改善:
+  - AI回答: Claude Haiku 4.5でしぶとして回答生成（--model修正、timeout 30s）
+  - 漢字→ひらがな変換（pykakasi）でTTS読み正確化
+  - BGM音量調整（0.1%）、しぶ声音量UP（1000%）
+  - しぶ声再生中BGM自動ミュート（SIGSTOP/SIGCONT）
+  - コメント読み上げ+AI回答読み上げの2段構成
+- Windows PC: Claude Code npm版削除→スタンドアロン統一、自動更新設定
+- masu-p55 Tailscale復旧
+- Maestri解説動画ナレッジ保存
+
+### スクリーンショット
+- screenshots/status_20260414_103531.png
