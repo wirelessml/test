@@ -133,6 +133,26 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## 完了（4/14午後）
+
+- [x] M365 Copilot Chat Claude Opus 4.6 調査・ナレッジ作成（docs/m365-copilot-claude-opus.md）
+- [x] Copilot Studio仕様調査（料金・モデル・制限事項・Mac対応）
+- [x] Copilot Studio Claude Opus/Sonnet 4.6 プライマリモデルGA情報追記
+- [x] Claudeデスクトップアプリ不要の判断を記録（Dispatch唯一の差別化だがリソースコスト過大）
+- [x] Microsoft Edge インストール（Homebrew、Mac）
+- [x] EdgeでCopilot Studio URL表示（Microsoftサインイン画面まで）
+- [x] Safari終了（Copilot Studio非推奨）
+- [x] Windows PC全プロセス終了→再起動（SSH経由 shutdown /r /t 0）
+- [x] Windows Claude Code認証修復（Mac OAuth keychain→Windows転送）
+- [x] Windows Claude Code Bunクラッシュ対応（Segmentation fault、メモリ不足が原因）
+- [x] OBS・Maestri・shibu-chat・BGM全停止（CPU負荷軽減）
+- [x] afplay BGM 19プロセス重複→クリーンアップ（1プロセスに）
+- [x] claude.ai M365コネクタ未ロールアウト確認
+- [x] 定時報告3回（15:35, 16:35, 17:35）
+- [x] CPU/メモリ監視・定時報告の定期実行停止（ユーザー指示）
+- [x] Claude Code 2.1.105→2.1.107アップデート
+- [x] Copilot Studio Edgeログイン画面スクリーンショット→GitHub Pages公開
+
 ## 完了（4/14午前）
 
 - [x] 定時報告6回実施（04:37, 05:35, 06:35, 07:35, 08:35, 09:35, 10:35）
