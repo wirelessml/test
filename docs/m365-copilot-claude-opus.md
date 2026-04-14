@@ -25,9 +25,18 @@
 2. 右上の「自動 ▼」ドロップダウンをクリック
 3. 「Opus - Claude」を選択
 
-## 料金
-- M365サブスクリプション保有者は追加費用なし（Copilot Chat Basic）
-- 上位版: 月$30/ユーザー（Microsoft 365 Copilot）
+## 料金・プランの区別（重要）
+
+| プラン | 料金 | Claude Opus | GPT-5.4 | Officeアプリ内Copilot |
+|--------|------|-------------|---------|---------------------|
+| **Copilot Chat (Basic)** | 無料（M365契約者） | Cowork経由で利用可 | ？ | なし |
+| **Microsoft 365 Copilot** | 月$30/ユーザー（購入必要） | Excel等のエージェントで選択可 | 利用可 | Word/Excel/PPT内で利用可 |
+
+- **無料のCopilot Chat**と**有料のMicrosoft 365 Copilot**は別物
+- PowerPoint内でClaude Opus 4.6でスライド生成 → **有料版（Microsoft 365 Copilot）**
+- Excel内のエージェントでOpus選択 → **有料版**
+- GPT-5.4 Think Deeper → **有料版（個人版でも利用可）**
+- 有料版はじわじわと機能追加中（2026年4月時点）
 
 ## claude.ai側のM365コネクタ
 - **2026/04/14時点**: まだロールアウトされていない（検索しても表示されず）
