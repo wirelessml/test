@@ -577,3 +577,30 @@
 - Mac側もClaude Code以外すべて終了
 - Copilot Studio: 両マシンともスペック不足で断念
 - 定時報告・CPU/メモリ監視の定期実行を停止
+
+========================================
+定時報告 2026-04-14 17:35 JST
+========================================
+
+## System Health
+- Uptime: 1 day 19:26
+- Load: 1.71 / 1.71 / 1.67（安定）
+- Memory: free=297MB, wired=1583MB
+- Top CPU: claude(27.6%), bun(17.5%), Terminal(10.1%)
+
+## Network
+- Wi-Fi: YKSmas318 (5GHz 802.11ax, ch52, -55dBm)
+- テザリング: 未接続
+
+## Services
+- しぶライブ/BGM/OBS/Chrome/Claude Desktop/Safari: すべて停止中
+- Microsoft Edge: 稼働中（Copilot Studio ログイン画面）
+
+## Windows PC (MASU-P55)
+- 再起動済み、Tailscaleオンラインだがsshd未起動
+
+## Work Summary (16:35→17:35)
+- Edge インストール（Homebrew）→ Copilot Studio URL表示
+- Safari終了（非推奨）
+- Copilot Studio仕様調査・ナレッジ追記
+- Claudeデスクトップアプリ不要の判断を記録
