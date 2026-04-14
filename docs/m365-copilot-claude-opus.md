@@ -45,7 +45,31 @@
 - 設定URL: https://claude.ai/customize/connectors
 - 利用可能なコネクタ（現時点）: GitHub, Gmail, Google Calendar, Google Drive, マネーフォワードクラウド
 
+## Copilot Studio — Claude がプライマリモデルとしてGA
+
+- **確認日**: 2026/04/14
+- **公式ドキュメント**: https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-select-primary-model
+- Claude Sonnet 4.6 / Claude Opus 4.6 が**プライマリAIモデル**として一般提供（GA）
+- エージェント全体のメインAIとしてClaudeを選択可能（モード切替ではなく、エージェントの根幹モデル）
+- GPT-4.1（デフォルト）、GPT-5、Claude Sonnet 4.5/4.6、Claude Opus から選択
+- GCC（米国政府クラウド）環境では非対応
+
+### Copilot Studio 概要
+- 旧Power Virtual Agentsの後継、ローコードAIエージェント構築プラットフォーム
+- URL: https://copilotstudio.microsoft.com
+- 自然言語でエージェント自動生成、Power Automate連携、MCPサーバー接続
+- Teams/SharePoint/Web/WhatsApp等へ展開可能
+
+### Copilot Studio 料金
+| プラン | 価格 | 内容 |
+|--------|------|------|
+| プリペイドパック | $200/月 | 25,000クレジット/パック |
+| 従量課金 | 使用量に応じて | Azure課金 |
+| M365 Copilotライセンス付帯 | 追加費用なし | 社内チャネル限定 |
+| 試用版（バイラル試験版） | 無料 | 作成・テストのみ、公開不可 |
+
 ## 意義
 - MicrosoftがAnthropicモデルを公式採用（OpenAI独占からの脱却）
 - 双方向統合: M365→Claude（Cowork）+ Claude→M365（コネクタ、近日）
 - 同一UI内でGPTとClaudeを切り替え比較可能
+- Copilot StudioでエージェントのプライマリモデルとしてClaude Opus選択可能
