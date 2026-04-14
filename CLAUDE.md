@@ -487,6 +487,11 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 
 - computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
 - Dispatchは使わない、CLIで完結させる
+- **Claudeデスクトップアプリは不要**（4/14判断）
+  - Dispatch（iPhone操作）だけが唯一の差別化だが、SSH経由でClaude Code CLIを直接操作可能
+  - M1 8GBではDesktop起動でload急増（Electron製、load 85まで跳ねた実績あり）
+  - MCP・Computer Use等の機能はCLIでも利用可能
+  - リソースコストに見合わないため、今後は起動しない方針
 - ブラウザはcomputer-useでtier "read"（クリック不可）、URLを開くことはできるが再生・停止などの操作は不可
 - Web情報取得はWebFetch/curl優先
 - ブラウザ自動化は**agent-browser優先**（Rust高速CLI、トークン93%削減、snapshotベース）
