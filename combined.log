@@ -489,3 +489,35 @@
 
 ### スクリーンショット
 - screenshots/screenshot_20260414_133529.png
+
+---
+
+## 定時報告 2026-04-14 14:37 JST
+
+### システム状態
+- **load**: 4.36 / 3.29 / 4.06
+- **メモリ**: free=107MB, inactive=1.6GB, wired=1.8GB
+- **稼働時間**: 1日16時間28分
+
+### トップCPUプロセス
+- OBS: 201% (20時間38分稼働)
+- WindowServer: 60%
+- Claude Code: 30%
+- Maestri: 7%（バックグラウンド）
+
+### Wi-Fi
+- SSID: YKSmas318（5GHz 802.11ax, Ch52）
+
+### 配信状態
+- **OBS**: 20:37:47経過、配信継続中
+- **shibu-chat**: pytchat接続中、自動再接続正常
+- **BGM**: afplay 4プロセス
+
+### 前回報告（13:35）以降の作業
+- M365 Copilot Studio接続試行（Mac Safari/Playwright/SSH全て認証壁で失敗）
+- Windows Claude Code認証修復（MacキーチェーンからOAuthトークン転送→成功）
+- Windows Claude Code Remote Control有効化（session_01QmjjtjitsDDbjx81Ayon3u）
+- Windows Claudeデスクトップアプリ起動
+
+### スクリーンショット
+- screenshots/screenshot_20260414_143700.png
