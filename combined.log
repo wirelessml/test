@@ -301,3 +301,40 @@
 
 ### スクリーンショット
 - screenshots/status_20260414_083527.png
+
+---
+## 定時報告 2026/04/14 09:35 JST
+
+### システム状態
+- **稼働時間**: 1日11時間26分
+- **負荷**: load 2.28 / 2.63 / 2.50（安定）
+- **メモリ**: free 135MB(8462pages), wired 2.2GB, active 1.6GB, inactive 1.6GB
+
+### トップCPUプロセス
+1. OBS 149.3%（15時間36分稼働、メモリ659MB）
+2. Claude Code 60.8%
+3. WindowServer 41.2%
+4. Terminal 17.9%
+5. coreaudiod 5.2%（BGM再生中のため上昇）
+
+### ネットワーク
+- Wi-Fi: YKSmas318（5GHz 802.11ax、ch52、信号-55dBm/雑音-93dBm）
+
+### しぶライブ配信
+- shibu-chat: screen session 2042 稼働中（再起動済み、pytchat connected）
+- BGM: screen session 1397「新生活/騒音のない世界」ループ再生中
+- OBS: 15時間36分連続稼働中（PID 20174）
+- コメント読み上げ: ElevenLabs OK、声生成まで到達確認済み
+
+### 前回以降の作業
+- Obsidian Claude エコシステム ガイドHTML作成・公開
+- Windows PC SSH接続・Claude Code npm版→スタンドアロン版統一・2.1.105アップデート
+- Windows PC Claude Code自動更新スケジュール設定（毎日0:00）
+- Windows PC npm版インストールブロック設定
+- masu-p55 Tailscale復旧（masupユーザーのtailscale-ipnが原因）
+- Maestri解説動画ナレッジ保存（まさおAIじっくり解説ch）
+- BGM変更: 「新生活/騒音のない世界」ループ再生開始
+- shibu-chat再起動（コメント読み上げ問題対応）
+
+### スクリーンショット
+- screenshots/status_20260414_093526.png
