@@ -1,6 +1,6 @@
 # プロジェクトコンテキスト
 
-## 現在のセッション状態（4/14早朝）
+## 現在のセッション状態（4/14午前）
 
 ### 配信状態
 - **YouTube Live配信中**（動画ID: `mRE18XYo6rg`、ゆいかアカウント）
@@ -19,10 +19,26 @@
 - 無料版: ワークスペース1つ、エージェント無制限 / Pro $18買い切り: ワークスペース無制限
 - CPU使用量: 約27-30%（M1 8GBではOBS同時稼働でギリギリ）
 
-### 4/14早朝セッションで実施した内容
-- 定時報告2回（04:37, 05:35）
+### 4/14午前セッションで実施した内容
+- 定時報告6回（04:37, 05:35, 06:35, 07:35, 08:35, 09:35, 10:35）
 - Maestriインストール・起動・Claude Code 2台作成・接続
 - Chrome高負荷（load 18超）のため終了 → load 2台に改善
+- Maestri使い方ガイドHTML作成・GitHub Pages公開
+- Obsidian Claude エコシステム ガイドHTML作成・公開
+- Windows PC SSH接続・Claude Code統一（npm版削除→スタンドアロン版のみ）
+- Windows PC Claude Code 2.1.104→2.1.105アップデート
+- Windows PC Claude Code自動更新スケジュール設定（毎日0:00 タスクスケジューラ）
+- Windows PC npm版インストールブロック（@anthropic-ai スコープレジストリ無効化）
+- masu-p55 Tailscale復旧（masupユーザーのtailscale-ipn停止で解決）
+- Maestri解説動画ナレッジ保存（まさおAIじっくり解説ch 2026/04/13）
+- BGM変更:「新生活/騒音のない世界」をYouTubeからDL→ループ再生
+- shibu-live.py大幅改善:
+  - AI回答: Claude Haiku 4.5でしぶとして回答生成
+  - 漢字→ひらがな変換（pykakasi）でTTS読み正確化
+  - BGM音量0.1% / しぶ声音量1000%に調整
+  - しぶ声再生中BGM自動ミュート（SIGSTOP/SIGCONT）
+  - コメント読み上げ+AI回答読み上げの2段構成
+  - デバッグログ追加
 
 ### 4/13 Mac側セッションで実施した内容
 - **gh CLI再認証**（wirelessml、ブラウザOAuth + GitHub Mobile認証）
@@ -50,14 +66,17 @@
 - ストリームURL: `rtmp://a.rtmp.youtube.com/live2`
 - YouTube Studio設定必須: 子ども向けでない / チャットON / 公開 / 通常の遅延 / デュアルストリームOFF
 
-### しぶライブ配信システム（shibu-live.py v2.2）
+### しぶライブ配信システム（shibu-live.py v3）
 - **映像**: OBS画面キャプチャ → YouTube RTMP（ffmpeg不要）
 - **オーバーレイサーバー**: `http://localhost:8789/overlay`（Q&Aカード、3秒自動更新）
-- **しぶ声読み上げ**: コメントをElevenLabsでTTS生成、afplayで再生
+- **しぶ声読み上げ**: コメント+AI回答をElevenLabsでTTS生成、afplayで再生（音量10倍）
+- **AI回答**: Claude Haiku 4.5でしぶとして回答生成（50文字以内、タイムアウト30秒）
+- **漢字→ひらがな変換**: pykakasi使用、TTS読み正確化
 - **音声ルーティング**: afplay → BlackHole 2ch → OBS coreaudio_input_capture → YouTube配信
+- **BGM**: `~/Desktop/shinsekatsu-bgm.mp3`（新生活/騒音のない世界、3分33秒、音量0.1%ループ）
+- **BGM自動ミュート**: しぶ声再生中はBGMをSIGSTOP、再生後SIGCONT
 - **YouTube Chat取得**: pytchat + signalモンキーパッチ（APIキー不要、クォータなし）
 - **OBS WebSocket**: ポート4455、リモートから配信開始/停止/ソース操作可能
-- **BGM**: `~/Desktop/lofi-bgm.mp3`（10分22秒、ループ再生可能）
 
 ### 配信起動手順
 1. OBS起動（画面キャプチャ + BlackHole Audio入力済み）
@@ -114,9 +133,21 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## 完了（4/14午前）
+
+- [x] 定時報告6回実施（04:37, 05:35, 06:35, 07:35, 08:35, 09:35, 10:35）
+- [x] Maestri使い方ガイドHTML作成・GitHub Pages公開（docs/maestri-guide.html）
+- [x] Obsidian Claude エコシステム ガイドHTML作成・公開（docs/obsidian-claude-guide.html）
+- [x] Windows PC Claude Code npm版削除→スタンドアロン版統一（2.1.105）
+- [x] Windows PC Claude Code自動更新設定（タスクスケジューラ毎日0:00）
+- [x] Windows PC npm版インストールブロック（@anthropic-ai スコープ無効化）
+- [x] masu-p55 Tailscale復旧（masupのtailscale-ipn停止で解決）
+- [x] Maestri解説動画ナレッジ保存（docs/maestri-youtube-masao.md）
+- [x] BGM変更: 新生活/騒音のない世界（shinsekatsu-bgm.mp3）
+- [x] shibu-live.py v3: AI回答（Claude Haiku）、ひらがなTTS（pykakasi）、BGMミュート、音量調整
+
 ## 完了（4/14早朝）
 
-- [x] 定時報告2回実施（04:37, 05:35 — Gmail下書き・git push済み）
 - [x] Maestriインストール（themaestri.app、DMG→/Applications/Maestri.app）
 - [x] Maestri上にClaude Code 2台作成（ターミナルツール→Claude Codeクイックスタート）
 - [x] 2台のClaude Code間を接続（Connection機能、物理アニメーション付きケーブル）
