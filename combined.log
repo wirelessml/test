@@ -604,3 +604,12 @@
 - Safari終了（非推奨）
 - Copilot Studio仕様調査・ナレッジ追記
 - Claudeデスクトップアプリ不要の判断を記録
+2026-04-14T09:31:09.140Z [INFO]: Starting Google Photos MCP server in STDIO mode
+2026-04-14T09:31:09.146Z [INFO]: Found valid authentication tokens.
+2026-04-14T09:31:09.149Z [INFO]: Google Photos MCP server connected via STDIO
+2026-04-14T09:34:05.340Z [INFO]: Starting Google Photos MCP server in STDIO mode
+2026-04-14T09:34:05.342Z [INFO]: Found valid authentication tokens.
+2026-04-14T09:34:05.345Z [INFO]: Google Photos MCP server connected via STDIO
+2026-04-14T20:51:09.837Z [INFO]: Starting Google Photos MCP server in STDIO mode
+2026-04-14T20:51:09.844Z [INFO]: Found valid authentication tokens.
+2026-04-14T20:51:09.848Z [INFO]: Google Photos MCP server connected via STDIO
