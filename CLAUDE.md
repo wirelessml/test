@@ -151,6 +151,16 @@
     - 内部: `Mscrm.SystemUserActions.promoteToAdmin()` → `/_grid/cmds/dlg_promotetoadmin.aspx?userid=<id>`
     - サーバー側でAzure AD Global Admin権限を直接チェックし、prvAssignRoleをバイパス
 - [x] Copilot Studio正常アクセス確認（「追加のアクセスが必要です」エラー解消、ウェルカム画面表示）
+- [x] Copilot Studioエージェント作成・Claude Opus 4.5をプライマリモデルに設定
+  - エージェント名: Copilot Studio エージェント（Claude Opus 4.5）
+  - エージェントID: 7555f9b5-6b38-f111-88b5-6045bd51375e
+  - 環境: SUMA-p (default) / Default-f0460786-8be9-4e25-8de6-291b84b9c42e
+  - 指示: 日本語AIアシスタント（Web検索有効）
+  - チャネル: Microsoft Teams / Microsoft 365 Copilot
+  - Teams Web動作確認済み（富士山の質問に表付き回答）
+  - 公開日: 2026/4/15
+  - Copilot Studio URL: https://copilotstudio.microsoft.com
+  - Teams URL: https://teams.cloud.microsoft/ → Copilot → エージェント選択
 
 ## 完了（4/14午後）
 
