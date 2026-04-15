@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dataverse システム管理者ロール付与マニュアル</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Hiragino Sans', sans-serif; background: #0d0d0d; color: #e8e8e8; min-height: 100vh; }
+    .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+    h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: #888; font-size: 0.85em; margin-bottom: 40px; }
+    h2 { font-size: 1.2em; font-weight: 600; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid #222; color: #fff; }
+    h3 { font-size: 1em; font-weight: 600; margin: 20px 0 8px; color: #ccc; }
+    p { font-size: 0.92em; line-height: 1.75; color: #aaa; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 16px 20px; }
+    li { font-size: 0.92em; line-height: 1.7; color: #bbb; margin-bottom: 4px; }
+    .card { background: #141414; border-radius: 12px; padding: 18px 20px; margin: 16px 0; }
+    .card-title { font-size: 0.8em; color: #666; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .card p, .card li { color: #ccc; }
+    code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.88em; font-family: 'SF Mono', 'Menlo', monospace; color: #e0e0e0; }
+    pre { background: #111; border: 1px solid #222; border-radius: 8px; padding: 14px 18px; margin: 12px 0 16px; overflow-x: auto; font-size: 0.85em; line-height: 1.6; font-family: 'SF Mono', 'Menlo', monospace; color: #ccc; }
+    .step { display: flex; gap: 14px; margin-bottom: 18px; }
+    .step-num { flex-shrink: 0; width: 28px; height: 28px; background: #1a1a2e; border: 1px solid #2a2a4e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; color: #7c8cf7; }
+    .step-body { flex: 1; }
+    .step-body p { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.88em; }
+    th { text-align: left; padding: 8px 10px; border-bottom: 1px solid #333; color: #888; font-weight: 500; }
+    td { padding: 8px 10px; border-bottom: 1px solid #1a1a1a; color: #bbb; vertical-align: top; }
+    .warn { background: #1a1812; border-left: 3px solid #d4a846; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; }
+    .warn p { color: #c8b060; margin: 0; }
+    .success { background: #121a12; border-left: 3px solid #46d46a; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; }
+    .success p { color: #60c870; margin: 0; }
+    .error { background: #1a1212; border-left: 3px solid #d44646; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 16px 0; }
+    .error p { color: #c86060; margin: 0; }
+    .tag { display: inline-block; background: #1a2e1a; border: 1px solid #2e4a2e; border-radius: 6px; padding: 2px 8px; font-size: 0.78em; color: #6fbf6f; margin-right: 4px; }
+    .tag.fail { background: #2e1a1a; border-color: #4a2e2e; color: #bf6f6f; }
+    .tag.ok { background: #1a2e1a; border-color: #2e4a2e; color: #6fbf6f; }
+    .tag.key { background: #1a1a2e; border-color: #2a2a4e; color: #7c8cf7; }
+    .divider { height: 1px; background: #1a1a1a; margin: 40px 0; }
+    .source { color: #444; font-size: 0.75em; margin-top: 40px; text-align: center; }
+    a { color: #7c8cf7; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .toc { background: #111; border: 1px solid #1a1a1a; border-radius: 10px; padding: 16px 20px; margin: 20px 0 30px; }
+    .toc-title { font-size: 0.8em; color: #666; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .toc a { color: #999; font-size: 0.88em; }
+    .toc li { margin-bottom: 2px; }
+    .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 16px; }
+    .flow-item { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 6px 12px; font-size: 0.85em; color: #bbb; }
+    .flow-arrow { color: #444; font-size: 1.1em; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dataverse システム管理者ロール付与</h1>
+    <p class="subtitle">Global Admin なのに Copilot Studio で「追加のアクセスが必要です」が出るときの解決法</p>
+
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+        <li><a href="#problem">問題の概要</a></li>
+        <li><a href="#cause">根本原因</a></li>
+        <li><a href="#solution">解決手順</a></li>
+        <li><a href="#programmatic">プログラムからの実行</a></li>
+        <li><a href="#failed">失敗するアプローチ一覧</a></li>
+        <li><a href="#technical">技術的な背景</a></li>
+        <li><a href="#reference">リファレンス</a></li>
+      </ol>
+    </div>
+
+    <!-- ========== 問題の概要 ========== -->
+    <h2 id="problem">問題の概要</h2>
+    <p>Microsoft 365 の Global Administrator（グローバル管理者）でログインしているにもかかわらず、以下のサービスでアクセス拒否が発生する。</p>
+
+    <div class="card">
+      <div class="card-title">よくある症状</div>
+      <ul>
+        <li><strong>Copilot Studio</strong>: 「追加のアクセスが必要です」画面で停止</li>
+        <li><strong>Power Platform 管理センター</strong>: セキュリティロールのメンバー追加で権限エラー</li>
+        <li><strong>Dynamics 365</strong>: ユーザーレコードが読み取り専用、「ロールの管理」ボタン非表示</li>
+        <li><strong>Dataverse Web API</strong>: <code>403 prvAssignRole</code> エラー</li>
+      </ul>
+    </div>
+
+    <!-- ========== 根本原因 ========== -->
+    <h2 id="cause">根本原因</h2>
+    <p>Dataverse 環境が自動プロビジョニングされた際に、Global Admin に「システム管理者」セキュリティロールが自動付与されない場合がある（プロビジョニングバグ）。</p>
+
+    <div class="card">
+      <div class="card-title">チキン＆エッグ問題</div>
+      <p>Dataverse のセキュリティロールを割り当てるには <code>prvAssignRole</code> 権限が必要だが、この権限は「システム管理者」ロールにしか含まれていない。環境内に人間のシステム管理者が一人もいない場合、通常の方法ではロールを割り当てることが不可能になる。</p>
+    </div>
+
+    <div class="warn">
+      <p>Azure AD のロール（Global Admin 等）と Dataverse のセキュリティロール（システム管理者等）は完全に別の権限体系。Global Admin であっても Dataverse 内では権限がない場合がある。</p>
+    </div>
+
+    <!-- ========== 解決手順 ========== -->
+    <h2 id="solution">解決手順</h2>
+    <p>レガシー Dynamics 365 Web Client の「管理者に昇格」機能を使用する。この機能はサーバー側で Azure AD の Global Admin 権限を直接チェックし、Dataverse の <code>prvAssignRole</code> をバイパスする<strong>唯一の方法</strong>。</p>
+
+    <h3>前提条件</h3>
+    <ul>
+      <li>Azure AD で Global Administrator または Power Platform Administrator ロールを持っていること</li>
+      <li>対象ユーザーが Dataverse 環境に同期済みであること（ユーザーレコードが存在すること）</li>
+    </ul>
+
+    <h3>GUI 手順</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p><strong>レガシー設定画面にアクセス</strong></p>
+        <p>ブラウザで以下の URL にアクセスする（<code>{org}</code> は環境の組織名に置き換え）:</p>
+        <pre>https://{org}.crm7.dynamics.com/main.aspx?settingsonly=true</pre>
+        <p>例: <code>https://org996569cf.crm7.dynamics.com/main.aspx?settingsonly=true</code></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p><strong>セキュリティ → ユーザー に移動</strong></p>
+        <div class="flow">
+          <span class="flow-item">設定</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">システム</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">セキュリティ</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">ユーザー</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p><strong>ユーザーを選択</strong></p>
+        <p>一覧から対象ユーザーのチェックボックスを選択する。ユーザー一覧が空の場合はビューを「有効なユーザー」に切り替えるか、プログラム的手法（後述）を使用する。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p><strong>「管理者に昇格」ボタンをクリック</strong></p>
+        <p>ツールバー（リボン）に表示される「管理者に昇格」ボタンをクリック。確認ダイアログで「OK」を押す。</p>
+      </div>
+    </div>
+
+    <div class="success">
+      <p>成功すると、対象ユーザーに「システム管理者」セキュリティロールが即座に付与される。ページの再読み込みやサインアウトは不要。</p>
+    </div>
+
+    <!-- ========== プログラムからの実行 ========== -->
+    <h2 id="programmatic">プログラムからの実行</h2>
+    <p>ユーザー一覧が空の場合（権限不足で表示されない場合）、ブラウザの開発者コンソールまたは自動化ツールから JavaScript で直接呼び出せる。</p>
+
+    <h3>方法 A: JavaScript 関数の直接呼び出し</h3>
+    <p>レガシー設定画面（<code>main.aspx?settingsonly=true</code>）のセキュリティ → ユーザー ページで、ブラウザの開発者コンソール (F12) を開き、以下を実行:</p>
+    <pre>// {userId} は対象ユーザーの Dataverse systemuserid (GUID)
+Mscrm.SystemUserActions.promoteToAdmin(["{userId}"]);</pre>
+    <p>確認ダイアログが表示されるので「OK」をクリック。</p>
+
+    <h3>方法 B: ASPXダイアログの直接アクセス</h3>
+    <p>以下の URL をブラウザで直接開く（認証済みセッション内で）:</p>
+    <pre>https://{org}.crm7.dynamics.com/_grid/cmds/dlg_promotetoadmin.aspx?userid={userId}</pre>
+    <p>「選択したユーザーを管理者に昇格します。」と表示されるので「OK」をクリック。</p>
+
+    <h3>方法 C: Playwright 等の自動化ツールから</h3>
+    <pre>// 1. レガシー設定画面に移動
+await page.goto('https://{org}.crm7.dynamics.com/main.aspx?settingsonly=true');
+// 2. セキュリティ → ユーザー に移動（略）
+// 3. JavaScript で直接呼び出し
+await page.evaluate(() => {
+  Mscrm.SystemUserActions.promoteToAdmin(["{userId}"]);
+});
+// 4. 新しいタブで開くダイアログで OK をクリック
+// （ダイアログは新しいタブとして開く場合がある）</pre>
+
+    <h3>確認方法</h3>
+    <p>Dataverse Web API でロール割り当てを確認:</p>
+    <pre>GET /api/data/v9.2/systemusers({userId})/systemuserroles_association?$select=name</pre>
+    <p>レスポンスに <code>"name": "システム管理者"</code> が含まれていれば成功。</p>
+
+    <!-- ========== 失敗するアプローチ一覧 ========== -->
+    <h2 id="failed">失敗するアプローチ一覧</h2>
+    <p>以下のアプローチはすべて、Dataverse の <code>prvAssignRole</code> 権限チェックに阻まれて失敗する。公式ドキュメントで案内されている方法も含まれるが、「環境内にシステム管理者が一人もいない」状況では機能しない。</p>
+
+    <table>
+      <tr><th>アプローチ</th><th>結果</th><th>理由</th></tr>
+      <tr>
+        <td>Dataverse Web API<br><code>Associate</code></td>
+        <td><span class="tag fail">403</span></td>
+        <td><code>prvAssignRole</code> 権限不足</td>
+      </tr>
+      <tr>
+        <td>BAP Admin API<br><code>addUser</code></td>
+        <td><span class="tag fail">200 だが未付与</span></td>
+        <td>ユーザーの同期のみ。ロール付与機能なし</td>
+      </tr>
+      <tr>
+        <td>BAP Admin API<br><code>roleAssignments</code></td>
+        <td><span class="tag fail">403</span></td>
+        <td><code>LinkedEnvironmentForbiddenOperation</code><br>Dataverse 環境では無効化されている</td>
+      </tr>
+      <tr>
+        <td>PPAC UI<br>「ユーザーの追加」</td>
+        <td><span class="tag fail">権限エラー</span></td>
+        <td>内部で Dataverse API を透過的に呼び出すため</td>
+      </tr>
+      <tr>
+        <td>PowerShell<br><code>Set-AdminPowerApp<br>EnvironmentRoleAssignment</code></td>
+        <td><span class="tag fail">403</span></td>
+        <td>CDS（Dataverse）環境では明示的に非対応</td>
+      </tr>
+      <tr>
+        <td>PowerShell<br><code>Add-AdminPowerApp<br>sSyncUser</code></td>
+        <td><span class="tag fail">200 だが未付与</span></td>
+        <td>BAP <code>addUser</code> と同じ。同期のみ</td>
+      </tr>
+      <tr>
+        <td>MSCRMCallerID<br>偽装ヘッダー</td>
+        <td><span class="tag fail">403</span></td>
+        <td><code>prvActOnBehalfOfAnotherUser</code> 権限も不足</td>
+      </tr>
+      <tr>
+        <td>Dynamics 365 UCI<br>「ロールの管理」</td>
+        <td><span class="tag fail">非表示</span></td>
+        <td>権限不足でボタン自体が表示されない</td>
+      </tr>
+      <tr>
+        <td>Power Platform API<br><code>api.powerplatform.com</code></td>
+        <td><span class="tag fail">404</span></td>
+        <td>ロール管理エンドポイント自体が存在しない</td>
+      </tr>
+    </table>
+
+    <!-- ========== 技術的な背景 ========== -->
+    <h2 id="technical">技術的な背景</h2>
+
+    <h3>dlg_promotetoadmin.aspx の仕組み</h3>
+    <div class="card">
+      <div class="card-title">内部動作</div>
+      <ol>
+        <li>クライアント側: <code>Mscrm.SystemUserActions.promoteToAdmin()</code> が <code>/_grid/cmds/dlg_promotetoadmin.aspx?userid={id}</code> をダイアログとして開く</li>
+        <li>サーバー側: ASPXページが<strong>Azure AD のディレクトリロール</strong>（Global Admin / Power Platform Admin）を直接チェック</li>
+        <li>認証バイパス: Dataverse の <code>prvAssignRole</code> 権限チェックを<strong>スキップ</strong>して、直接 systemuserroles_association にレコードを挿入</li>
+        <li>結果: 対象ユーザーに「システム管理者」ロールが付与される</li>
+      </ol>
+    </div>
+
+    <h3>なぜこの問題が発生するのか</h3>
+    <p>Dataverse のデフォルト環境が自動プロビジョニングされる際、通常は Global Admin に自動的にシステム管理者ロールが付与される。しかし以下のケースでは同期が発生しないことがある:</p>
+    <ul>
+      <li>テナント作成後、しばらく経ってから Dataverse が追加された場合</li>
+      <li>Power Platform 管理センターから手動で Dataverse を有効化した場合</li>
+      <li>環境のリージョンが特定の地域（日本等）の場合</li>
+      <li>タイミングの問題（Azure AD 同期ジョブの遅延・失敗）</li>
+    </ul>
+
+    <h3>関連する ID 一覧</h3>
+    <div class="card">
+      <div class="card-title">環境情報の取得方法</div>
+      <table>
+        <tr><th>情報</th><th>取得場所</th></tr>
+        <tr><td>組織名（{org}）</td><td>PPAC → 環境 → 環境URL の先頭部分</td></tr>
+        <tr><td>systemuserid</td><td>Dataverse API: <code>GET /api/data/v9.2/systemusers?$filter=internalemailaddress eq '{email}'&$select=systemuserid</code></td></tr>
+        <tr><td>システム管理者 roleid</td><td>Dataverse API: <code>GET /api/data/v9.2/roles?$filter=name eq 'システム管理者'&$select=roleid</code></td></tr>
+        <tr><td>CRM リージョン</td><td>日本: <code>.crm7.dynamics.com</code><br>北米: <code>.crm.dynamics.com</code><br>欧州: <code>.crm4.dynamics.com</code></td></tr>
+      </table>
+    </div>
+
+    <!-- ========== リファレンス ========== -->
+    <h2 id="reference">リファレンス</h2>
+    <div class="card">
+      <div class="card-title">キーワード</div>
+      <ul>
+        <li><code>dlg_promotetoadmin.aspx</code> — レガシー管理者昇格ダイアログ</li>
+        <li><code>Mscrm.SystemUserActions.promoteToAdmin()</code> — JavaScript API</li>
+        <li><code>prvAssignRole</code> — Dataverse ロール割り当て権限</li>
+        <li><code>LinkedEnvironmentForbiddenOperation</code> — BAP API の CDS 環境制限エラー</li>
+        <li><code>main.aspx?settingsonly=true</code> — レガシー設定画面エントリポイント</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="source">2026/04/15 作成 &mdash; Power Platform (Dataverse 9.2) / M365 テナント (SUMA-p) にて検証</p>
+  </div>
+</body>
+</html>
