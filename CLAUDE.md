@@ -140,6 +140,14 @@
 
 ## 完了（4/15午後）
 
+- [x] 毎朝TODOリスト配信を設定（2系統）
+  - リモートエージェント: 毎朝8:00 JST → Gmail下書き（trig_01AXQE4PAYPQW4wyfXKFZBqY）
+  - ローカルcron: 毎朝8:00 → /tmp/todo-check.log
+  - スクリプト: ~/Desktop/todo-check.sh
+- [x] Claude Webルーチン知見: Slack日次要約をDMに自動送信するプロンプト安定化
+  - slack_search_public_and_private + after:YYYY-MM-DD
+  - Slack記法対応（##不可→【】■*太字*使用）
+  - user_idをchannel_idとして直接指定
 - [x] GitHub Copilot CLI v1.0.27 インストール（npm経由、gh copilot組み込み済み）
   - Freeプラン: 月50プレミアムリクエスト、GPT-5 miniがデフォルト
   - 非インタラクティブモード: `copilot -p "prompt"` でClaude Codeから指示可能
