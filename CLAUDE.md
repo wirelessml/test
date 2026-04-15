@@ -133,6 +133,20 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## 完了（4/15昼）
+
+- [x] Claudeデスクトップアプリ Dispatch/Coworkサブプロセスが Sonnet 4.6 固定であることを発見
+  - UIで「Opus 4.6」を選んでもCoworkサブプロセスには反映されない
+  - psコマンドで `--model claude-sonnet-4-6` を確認
+  - app.asar解析でコード上もモデル選択がUI非連動と判明
+  - Mac/Windows両方で確認済み（v1.2581.0、同一app.asar）
+  - DispatchはComputer Useの要で、Windowsではこれが唯一の手段
+  - 設定ファイルでの変更手段なし
+- [x] Claude Code CLI最新確認（Mac/Windows両方 2.1.108、最新）
+- [x] Claudeデスクトップアプリ最新確認（v1.2581.0、Homebrew cask 1.2278.0より新しい、自動更新済み）
+- [x] Mac/Windows両方のClaudeデスクトップアプリ終了
+- [x] しぶチャットボット復活（サーバー起動 + Cloudflare Tunnel公開）
+
 ## 完了（4/15午前）
 
 - [x] Dataverse「システム管理者」ロールを仲啓輔に付与
