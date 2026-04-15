@@ -100,6 +100,11 @@
 
 全てブラウザGUI操作が必要なため、リモートからは実行不可。
 
+### 4. ChromeでXにログイン
+- アカウント: minimalistneko
+- ログイン後: `agent-reach configure --from-browser chrome` でCookie取得
+- Agent-ReachのTwitter/Xチャネルを有効化するため
+
 ### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
 - Standalone版(pkg)でシステム拡張機能を許可→接続成功
 - macbook-air: 100.99.41.2（Tailscale 1.96.5、macOS 26.5.0）
@@ -132,6 +137,25 @@
 - ストーリーズ定期チェック: 毎時17分（cron、セッション内のみ）
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
+
+## 完了（4/15午後）
+
+- [x] GitHub Copilot CLI v1.0.27 インストール（npm経由、gh copilot組み込み済み）
+  - Freeプラン: 月50プレミアムリクエスト、GPT-5 miniがデフォルト
+  - 非インタラクティブモード: `copilot -p "prompt"` でClaude Codeから指示可能
+  - GitHub MCP経由でリポジトリアクセス確認済み
+- [x] ElevenLabs残高確認（32,472/40,000クレジット、5/11まで有効）
+- [x] DaVinci Resolve 21 写真編集ページのナレッジ保存（docs/davinci-resolve-photo-editing.md）
+- [x] Mind Render / AI Drill 調査（東大共同開発ML教材、2026/4月に無料公開）
+- [x] Unity Hub 3.16.4 インストール（brew、Unity 2021.3 LTSインストールは保留）
+- [x] Agent-Reach v1.4.0 インストール（pipx、GitHub zip）
+  - 8/16チャネル有効: GitHub, YouTube, 微信公衆号, V2EX, RSS, Exa検索, Jina Reader, Bilibili
+  - yt-dlp（pipx版）、rdt-cli v0.4.1 追加インストール
+  - twitter-cli インストール済み（Cookie未設定、ChromeでXログイン後に設定予定）
+  - Claude Codeスキルとして自動登録済み
+- [x] pipx 1.11.1 インストール（brew）
+- [x] 操作ルール追加: 削除・一括更新前は件数報告+確認必須
+- [x] AI駆動開発ツール時系列まとめ（Copilot→Cursor→Cline→Replit→Claude Code→Codex→OpenCode）
 
 ## 完了（4/15昼）
 
@@ -548,6 +572,7 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 
 ## 操作上の注意
 
+- **記事の削除や一括更新をする前は、必ず件数を教えて確認を取ること。それ以外は確認不要**
 - computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
 - Dispatchは使わない、CLIで完結させる
 - **Claudeデスクトップアプリは不要**（4/14判断）
