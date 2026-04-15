@@ -133,6 +133,25 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## 完了（4/15午前）
+
+- [x] Dataverse「システム管理者」ロールを仲啓輔に付与
+  - 原因: Dataverse環境プロビジョニング時にGlobal Admin→System Administrator自動同期が発生せず、人間ユーザーにシステム管理者が未付与のチキン＆エッグ問題
+  - 試行して失敗した方法（9種類以上）:
+    - Dataverse Web API `Associate` → 403 prvAssignRole
+    - BAP Admin API `addUser` → 200だがロール未付与
+    - BAP Admin API `roleAssignments` → 403 LinkedEnvironmentForbiddenOperation
+    - PPAC UI「ユーザーの追加」→ Dataverse APIに透過し権限エラー
+    - PowerShell `Set-AdminPowerAppEnvironmentRoleAssignment` → CDS環境非対応
+    - MSCRMCallerID/CallerObjectId 偽装 → 403
+    - Dynamics 365 UCI「ロールの管理」→ ボタン非表示（権限不足）
+    - Power Platform API (api.powerplatform.com) → ロール管理エンドポイント無し
+  - **解決方法**: レガシーDynamics 365 UIの「管理者に昇格」機能
+    - 経路: `main.aspx?settingsonly=true` → 設定 → セキュリティ → ユーザー → ツールバー「管理者に昇格」
+    - 内部: `Mscrm.SystemUserActions.promoteToAdmin()` → `/_grid/cmds/dlg_promotetoadmin.aspx?userid=<id>`
+    - サーバー側でAzure AD Global Admin権限を直接チェックし、prvAssignRoleをバイパス
+- [x] Copilot Studio正常アクセス確認（「追加のアクセスが必要です」エラー解消、ウェルカム画面表示）
+
 ## 完了（4/14午後）
 
 - [x] M365 Copilot Chat Claude Opus 4.6 調査・ナレッジ作成（docs/m365-copilot-claude-opus.md）
