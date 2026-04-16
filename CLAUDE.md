@@ -157,6 +157,22 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## 完了（4/17未明）
+
+- [x] Claude Opus 4.7 リリース確認（claude-opus-4-7、エージェントコーディング大幅向上、Opus 4.6はLegacy化）
+  - 新トークナイザー、知識カットオフ2026年1月、Adaptive Thinking採用
+  - 現セッションは4.6、新セッションで `claude --model opus` で4.7に切替可能
+- [x] Google Gemini Mac/Windowsネイティブアプリ情報確認
+  - Mac: Option+Space（コンパクト）/ Option+Shift+Space（フル）、Swift製
+  - Windows: Alt+Space、TODO #5 で4/17朝インストール予定
+  - Mac版は `/Applications/Gemini.app` v1.45.6.217 インストール済み
+- [x] GitHub Copilot CLI brew版確認（brew install copilot-cli、Ctrl+Vスクショ入力対応）
+- [x] YouTubeショーツ非表示設定の情報確認（保護者設定で0分制限→完全非表示）
+- [x] Claude Codeデスクトップアプリ /btw Side chat マルチターン対応の発見
+- [x] visionOS向けYouTubeアプリv1.01更新情報確認
+- [x] Wi-Fi切替: 彩羽（iPad）→ 結花（iPhone 15 Pro）
+- [x] Windows PC（masu-p55）オフライン確認（9時間前からオフライン）
+
 ## 完了（4/16午後）
 
 - [x] Windows XP SP3 日本語版 QEMU VMセットアップ完了
