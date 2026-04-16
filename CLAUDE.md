@@ -144,6 +144,29 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## 完了（4/16午後）
+
+- [x] Windows XP SP3 日本語版 QEMU VMセットアップ完了
+  - 目的: コーエー「維新の嵐 幕末志士伝」（1998年Windows用）をM1 Macでプレイ
+  - ゲームCDはメルカリで注文済み（コーエー定番シリーズ版、¥2,450）
+  - ISO: Internet Archiveからダウンロード（ja_windows_xp_professional_with_service_pack_3_x86_dvd_vl_x14-74058.iso、630MB）
+  - QEMU 10.2.2（Homebrew）でi386エミュレーション
+  - 仮想ディスク: `~/Desktop/winxp.qcow2`（10GB QCOW2）
+  - インストール全工程をQEMU telnetモニター経由で自動操作（sendkey/mouse_move/screendump）
+  - VLプロダクトキー: MRX3F-47B9T-2487J-KWKMF-RPWBY
+  - ユーザー: Administrator（パスワードなし）、ネットワークなし
+  - VMスナップショット `winxp_ready`（310MB）保存済み → 次回即起動可能
+  - 起動スクリプト: `~/Desktop/winxp-start.sh`（`--cdrom ISO` オプション対応）
+  - QEMUモニター: `telnet 127.0.0.1:4444`
+- [x] 維新の嵐 幕末志士伝 パッチ1.1.0.0の網羅的調査（結果: オンラインでは入手不可）
+- [x] 初代「維新の嵐」Switch 2/PS5 本日配信開始の情報確認
+  - コンソールアーカイブスで配信、SNS反応はまだ少ない
+  - 5chスレッドはSSL証明書障害でアクセス不可
+- [x] Claudeデスクトップアプリ分析（docs/claude-desktop-app-analysis.md）
+  - Code モード統合、モデル選択、工数設定、環境セレクター
+  - クラウド環境はTailscale到達不可（サンドボックス外）
+  - 結論: 2層構成（Mac CLI + クラウド）が最適、アプリ不要の判断維持
+
 ## 完了（4/15午後）
 
 - [x] 毎朝TODOリスト配信を設定（2系統）
