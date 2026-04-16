@@ -589,6 +589,11 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
   - MCP・Computer Use等の機能はCLIでも利用可能
   - リソースコストに見合わないため、今後は起動しない方針
 - ブラウザはcomputer-useでtier "read"（クリック不可）、URLを開くことはできるが再生・停止などの操作は不可
+- **X PWAアプリ（Chrome PWA）はcomputer-useでfull tier操作可能**
+  - バンドルID: `com.google.Chrome.app.lodlkdfmihgonocnmddehnfgiljnadcf`
+  - ブラウザ扱いではないのでクリック・入力・投稿が全てできる
+  - @minimalistnekoでログイン済み
+  - X投稿はこのPWA経由で操作する（Safari/Edge/Brave/Chromeは全てtier read）
 - Web情報取得はWebFetch/curl優先
 - ブラウザ自動化は**agent-browser優先**（Rust高速CLI、トークン93%削減、snapshotベース）
 - dev-browserも利用可能（Playwright API直接、1スクリプト完結型のタスク向け）
