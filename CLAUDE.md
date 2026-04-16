@@ -105,6 +105,12 @@
 - ログイン後: `agent-reach configure --from-browser chrome` でCookie取得
 - Agent-ReachのTwitter/Xチャネルを有効化するため
 
+### 5. Windows PCにGoogle App（Gemini）をインストール（4/17朝6時）
+- インストーラーはダウンロード済み: `C:\Users\gci_admin\Downloads\GoogleAppInstaller.exe`
+- ダブルクリック → UAC「はい」→ 自動インストール
+- Alt+Spaceでどの画面からでもGemini起動可能になる
+- Mac版は `/Applications/Gemini.app` にインストール済み（v1.45.6.217）
+
 ### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
 - Standalone版(pkg)でシステム拡張機能を許可→接続成功
 - macbook-air: 100.99.41.2（Tailscale 1.96.5、macOS 26.5.0）
