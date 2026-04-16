@@ -157,6 +157,21 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
+## セッション再開時TODO（4/17）
+
+### 即実行: Googleカレンダーにリマインダー登録
+- Claude Codeセッションスケジュール（5時間ごと、毎日繰り返し）
+  - セッション1: 8:00
+  - セッション2: 13:00
+  - セッション3: 18:00
+  - セッション4: 23:00
+- Google Calendar MCPの `gcal_create_event` で作成（前セッションでMCPアップグレードにより失敗）
+- colorId: 7（Peacock）、popup通知、RRULE:FREQ=DAILY
+
+### Opus 4.7切替
+- `claude --model opus` で新セッション開始
+- Opus 4.7: エージェントコーディング大幅向上、新トークナイザー、知識カットオフ2026年1月
+
 ## 完了（4/17未明）
 
 - [x] Claude Opus 4.7 リリース確認（claude-opus-4-7、エージェントコーディング大幅向上、Opus 4.6はLegacy化）
