@@ -111,6 +111,16 @@
 - Alt+Spaceでどの画面からでもGemini起動可能になる
 - Mac版は `/Applications/Gemini.app` にインストール済み（v1.45.6.217）
 
+### 6. ゲームCD到着後: 維新の嵐 幕末志士伝をWindows XP VMにインストール
+- メルカリ注文済み（コーエー定番シリーズ版、¥2,450）— CD到着待ち
+- 手順:
+  1. 外付けDVDドライブにCDを挿入
+  2. `dd if=/dev/disk? of=~/Desktop/ishin2.iso` でISOイメージ作成
+  3. `bash ~/Desktop/winxp-start.sh --cdrom ~/Desktop/ishin2.iso` でVM起動
+  4. マイコンピュータ → D:ドライブ → セットアップ実行
+- VM環境: QEMU i386、Windows XP SP3日本語版、スナップショット `winxp_ready` 保存済み
+- パッチ1.1.0.0はオンライン入手不可（Steam版は対応済みだがCD版用は配布終了）
+
 ### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
 - Standalone版(pkg)でシステム拡張機能を許可→接続成功
 - macbook-air: 100.99.41.2（Tailscale 1.96.5、macOS 26.5.0）
