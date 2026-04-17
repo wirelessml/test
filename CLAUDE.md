@@ -113,6 +113,12 @@
 - VM環境: QEMU i386、Windows XP SP3日本語版、スナップショット `winxp_ready` 保存済み
 - パッチ1.1.0.0はオンライン入手不可（Steam版は対応済みだがCD版用は配布終了）
 
+### 8. Codex for Mac「Computer Use」プラグインをインストール
+- 手順: Codex.app → Settings… → コンピュータの使用 → プラグイン → インストール
+- 前提: macOS システム設定 → プライバシーとセキュリティ → 画面収録 で computer-use MCP を許可
+- 許可後に再度 request_access を呼び、Codex を前面化してインストール操作を実行
+- 4/17 11:40 試行: 画面収録権限の許可ダイアログが出たため中断、ユーザ対応待ち
+
 ### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
 - Standalone版(pkg)でシステム拡張機能を許可→接続成功
 - macbook-air: 100.99.41.2（Tailscale 1.96.5、macOS 26.5.0）
@@ -221,6 +227,31 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - WSL SSH 環境は将来のため残す（keepaliveタスク・portproxy・.wslconfig すべて稼働中）
   - crashpad handler 残存プロセス（PID 608, v1.2773.0）も kill で掃除済み
 - [x] X投稿: Claude Desktop使わない結論: https://x.com/i/status/2044915100436558067
+
+## 完了（4/17 13:00セッション）
+
+- [x] メルペイ支払い確認（水道 13,068円 / ガス 8,522円 / 電気 11,554円 = **合計33,144円**、全てメルペイ）
+- [x] システムリソース確認（load 1.24 / Pages free 4,166・inactive 2.5GB、実質逼迫なし）
+- [x] **browser-use/video-use 導入完了**（Claude Code 用動画編集スキル、OSS、2026-04-12 公開、515★/41fork）
+  - クローン先: `~/Desktop/video-use`（414MB）
+  - シンボリックリンク: `~/.claude/skills/video-use` → `~/Desktop/video-use`
+  - Python 3.12 venv `.venv/` に `pip install -e .` 完了（librosa 0.11 / numpy 2.4 / matplotlib 3.10 / scipy 1.17 / numba 0.65 / scikit-learn 1.8 / pillow 12.2 他）
+  - `.env` に `ELEVENLABS_API_KEY` を `~/.zshrc` から転記
+  - ffmpeg 6.0 / yt-dlp 2026.03.17 既存利用
+  - 起動手順: 素材フォルダに `cd` → `claude` → `edit these into a launch video`
+  - 仕組み: LLM は動画を観ず**読む** — ElevenLabs Scribe で単語単位タイムスタンプ取得 → `takes_packed.md` (~12KB) に圧縮、`timeline_view` が必要時だけ filmstrip+波形+単語ラベル PNG を生成
+  - 機能: filler削除 / 自動カラーグレード / 30ms audio fade / 字幕焼き込み / Manim・Remotion・PIL でアニメ生成 / 自己評価ループ（最大3回やり直し）/ `project.md` でセッション記憶
+  - 次回新セッションから `video-use` スキル自動認識（現セッションは再起動で反映）
+
+## 完了（4/17 12:00セッション）
+
+- [x] MCPサーバー自動起動整理（メモリ逼迫対策、Pages free 3,942 → 97,421、約1.5GB解放）
+  - User-scope削除（`~/.claude.json` の `mcpServers`）: `context7` / `notebooklm-mcp` / `voicemode`
+  - Desktop project-scope削除（`~/.claude.json` の `projects["/Users/yuika/Desktop"].mcpServers`）: `chrome-devtools` / `google-photos` / `playwright`
+  - claude-mem プラグインは維持（セッション観察一覧・mem-search/smart-explore/make-plan/do/timeline-report/version-bump/knowledge-agent スキル稼働継続）
+  - バックアップ: `~/.claude.json.bak.20260417-1215`
+  - 再登録が必要になったら `claude mcp add <name> ...`
+  - 次回セッションから6個のMCPサーバーは自動起動しない
 
 ## 完了（4/17 10:00セッション・iPhone SSH）
 
