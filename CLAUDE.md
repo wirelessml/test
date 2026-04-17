@@ -100,17 +100,6 @@
 
 全てブラウザGUI操作が必要なため、リモートからは実行不可。
 
-### 4. ChromeでXにログイン
-- アカウント: minimalistneko
-- ログイン後: `agent-reach configure --from-browser chrome` でCookie取得
-- Agent-ReachのTwitter/Xチャネルを有効化するため
-
-### 5. Windows PCにGoogle App（Gemini）をインストール（4/17朝6時）
-- インストーラーはダウンロード済み: `C:\Users\gci_admin\Downloads\GoogleAppInstaller.exe`
-- ダブルクリック → UAC「はい」→ 自動インストール
-- Alt+Spaceでどの画面からでもGemini起動可能になる
-- Mac版は `/Applications/Gemini.app` にインストール済み（v1.45.6.217）
-
 ### 6. YouTubeプレミアムを解約する（4/19当日中）
 - ブラウザでYouTubeの設定 → 有料メンバーシップ → プレミアム解約
 
@@ -157,20 +146,29 @@
 - 新情報はai-minimalist-shibu/knowledge/shibu-ai-update.mdに追記
 - Google Photosしぶ関連画像: **約272枚/615枚**（44%）チェック完了 → `docs/google-photos-shibu-inventory.md`
 
-## セッション再開時TODO（4/17）
+## Claude Codeセッションスケジュール（4/17〜、毎日繰り返し、JST）
 
-### 即実行: Googleカレンダーにリマインダー登録
-- Claude Codeセッションスケジュール（5時間ごと、毎日繰り返し）
-  - セッション1: 8:00
-  - セッション2: 13:00
-  - セッション3: 18:00
-  - セッション4: 23:00
-- Google Calendar MCPの `gcal_create_event` で作成（前セッションでMCPアップグレードにより失敗）
-- colorId: 7（Peacock）、popup通知、RRULE:FREQ=DAILY
+Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/18 10:00に見直し予定。
 
-### Opus 4.7切替
-- `claude --model opus` で新セッション開始
-- Opus 4.7: エージェントコーディング大幅向上、新トークナイザー、知識カットオフ2026年1月
+| 時刻 | セッション | 主な用途 |
+|---|---|---|
+| 9:00 | セッション1 | 朝の状況確認・当日TODO整理・X情報収集 |
+| 14:00 | セッション2 | メイン作業・X情報収集 |
+| 19:00 | セッション3 | 夕方作業・配信メンテ・X情報収集 |
+| 0:00 | セッション4 | 1日のまとめ・git commit・X情報収集 |
+| 5:00 | セッション5 | 夜間監視ログ確認・X情報収集 |
+
+### X情報収集ルーチン（各セッション毎回実施）
+- **手段**: agent-reach の `twitter` CLI（Cookie取得済み、@minimalistneko）
+  - Cookie更新: `agent-reach configure --from-browser chrome`（Chromeでログイン維持すればOK）
+  - バックアップ手段: X PWA（`com.google.Chrome.app.lodlkdfmihgonocnmddehnfgiljnadcf`、full tier）
+- **対象**:
+  1. For Youタイムライン: `twitter -c feed | head -30`
+  2. キーワード検索: `twitter -c search "Claude"` / `"Anthropic"` / `"Opus 4.7"` など
+- **出力**:
+  1. `docs/x-daily-briefing.md` にセッション日時でセクション追記
+  2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
+- **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
 ## 完了（4/17未明）
 
@@ -187,6 +185,92 @@
 - [x] visionOS向けYouTubeアプリv1.01更新情報確認
 - [x] Wi-Fi切替: 彩羽（iPad）→ 結花（iPhone 15 Pro）
 - [x] Windows PC（masu-p55）オフライン確認（9時間前からオフライン）
+- [x] Claude Opus 4.7 切替完了（現セッション claude-opus-4-7 で稼働中）
+- [x] Googleカレンダー 1日5セッション・毎日繰り返しスケジュール作成（9/14/19/0/5時 JST、RRULE:FREQ=DAILY）
+- [x] X情報収集ルーチン確立（agent-reach twitter CLI、Cookie取得済み、`docs/x-daily-briefing.md` 追記運用）
+- [x] PowerShell 7.6.0 osx-arm64 インストール（brew不可のためtar.gz直、`~/local/bin/pwsh`、`CLAUDE_CODE_USE_POWERSHELL_TOOL=1` 設定済み）
+- [x] Windows PC（MASU-P55）への Google App（Gemini）インストール完了
+  - 既存DL済みインストーラーは 0x1252a（Omaha tag parse error）で失敗、`search.google/google-app/desktop` から再DLで解消
+  - `C:\Users\gci_admin\AppData\Local\Google\Google\latest\google.exe --start_hidden` で起動、Alt+Space で呼び出し可能
+  - v1.0.2.0（Canary 10%）は**英語UIのみ**、日本語ロケール未同梱（検索結果・AI Mode応答自体は日本語可）
+  - appguid: `{06A8089E-0B65-445D-B5C4-10B0D1B540F2}`、ClientState lang=ja-JP（将来の多言語化で反映見込み）
+- [x] Claudeデスクトップアプリ Code mode から Windows (WSL Ubuntu) への SSH 接続を実現
+  - Claude Desktop Code mode は **Linux/macOS のみサポート**（Windowsネイティブは `__bin_missing__` で弾かれる）→ WSL経由で回避
+  - Ed25519 鍵生成（`~/.ssh/id_ed25519`）→ WSL Ubuntu の `~/.ssh/authorized_keys` に登録
+  - 先に Windows OpenSSH 側にも `C:\ProgramData\ssh\administrators_authorized_keys` を登録（gci_admin がAdmin権限のため `~/.ssh/authorized_keys` は無視される仕様）
+  - WSL Ubuntu 24.04 に `openssh-server` インストール、sshd 有効化（systemd 管理）
+  - Windows `netsh interface portproxy` で `0.0.0.0:2222 → WSL:22` フォワード
+  - Windows ファイアウォール 2222/tcp 開放（`New-NetFirewallRule`）
+  - `.wslconfig` に `vmIdleTimeout=-1` でアイドル終了無効化
+  - `schtasks` で「WSL SSH Keepalive」をログオン時自動起動登録（`C:\Users\gci_admin\wsl-start.ps1` で sshd起動＋portproxy再設定＋`sleep infinity` でWSL永続化）
+  - Claude Desktop 設定: `gci_admin@100.125.21.47:2222` / IDファイル `~/.ssh/id_ed25519`
+  - ※ WSL IP（現 `192.168.254.131`）は再起動で変わる可能性あり、keepaliveスクリプトが自動更新
+  - WSL内Claudeが自身を `Linux 6.6.87.2-microsoft-standard-WSL2` として認識することを確認
+- [x] Claude Desktop v1.3109.0 Dispatch/Cowork サブプロセスのモデル確認
+  - `ps aux` で Dispatch 起動時のサブプロセス引数を確認: `/claude --model claude-sonnet-4-6 ...`
+  - Opus 4.7 GA後も **Sonnet 4.6 ハードコード継続**（4/15時点の制約が解消されていない）
+  - UIのモデル選択（Opus 4.7 等）はメイン会話のみ反映、Dispatch/Cowork内部呼び出しは app.asar 側で固定
+- [x] X投稿 2件
+  - Claude Desktop Dispatch Sonnet 4.6 固定の検証結果: https://x.com/i/status/2044900089647558987
+  - Claude Desktop Code mode Windows(WSL)接続の回避策: https://x.com/i/status/2044910455983050890
+- [x] Claudeデスクトップアプリを閉じた（4/14判断の再確認）
+  - Code mode で WSL Ubuntu への SSH 接続は実現したが、**親の Claude Code からオーケストレーションできない**ため実用性なしと判断
+  - Maestri は Electron 製の Claude Desktop を制御不可（ターミナル版 Claude Code 専用）
+  - Dispatch/Cowork は Sonnet 4.6 ハードコード継続、UIでモデル選択しても反映されない
+  - M1 8GB でのリソースコストに見合わない（Electron×10プロセス、~786MB / CPU 27.7%）
+  - WSL SSH 環境は将来のため残す（keepaliveタスク・portproxy・.wslconfig すべて稼働中）
+  - crashpad handler 残存プロセス（PID 608, v1.2773.0）も kill で掃除済み
+- [x] X投稿: Claude Desktop使わない結論: https://x.com/i/status/2044915100436558067
+
+## 完了（4/17 10:00セッション・iPhone SSH）
+
+- [x] GitHubアカウント `wirelessml` のリポジトリ確認: 公開1（test、370MB、362ファイル）/非公開0
+- [x] リポジトリ全文走査（README/scripts/docs全16md/shibu app code/shibu knowledge全80md/templates/.claude/.github/メモ memory/）
+  - 既知ファイル多数は SessionStart hookの prior observation で1行だけ返却（コンテキスト節約）
+- [x] Codex デスクトップアプリ Windows版 (MASU-P55) インストール状況確認
+  - Microsoft Store版 OpenAI.Codex 26.406.3494.0、`shell:AppsFolder\OpenAI.Codex_2p2nqsd0c76g0!App` で起動成功（PowerShell `!` エスケープのため base64 EncodedCommand 経由）
+  - 起動後プロセス6個・約620MB（Electron系）
+  - Microsoft Store displaycatalog API（9PLM9XGG6VKS）で最新版 **26.415.1938.0** (2026-04-16リリース) を確認
+  - MDM CIM `UpdateScanMethod` で更新スキャン発動（ReturnValue: 0）→ 反映なし
+  - `winget install --id 9PLM9XGG6VKS --source msstore --silent --force` 実行 → MS Store認証待ちでハング・タイムアウト
+  - rg-adguard.net で直接msixbundle URL取得試行 → Cloudflareチャレンジで失敗
+  - **未完了**: Windows版は古い 26.406.3494.0 のまま。MS Store GUI から手動更新が必要
+
+- [x] Codex デスクトップアプリ Mac版インストール
+  - `brew install --cask codex-app` → `/Applications/Codex.app` v26.415.20818 (build 1727) 配置
+  - `auto_updates` 対応、Apple Silicon専用 (arm64)、macOS ≥12 必須
+- [ ] Codex Mac版の **「コンピュータの使用」プラグイン (Computer Use, openai-bundled)** インストール — **未完了**
+  - SSH (iPhone 100.74.77.115 → Mac 100.99.41.2) からは Codex.app (Electron) が起動しない
+  - 直接バイナリ実行 → 32KB RSS で `_dyld_start` ハング → Window未登録（Quartz CGWindowList 確認）
+  - quarantine xattr 除去・署名検証OK・Notarized Developer ID・メモリ500MB+ 確保しても症状変わらず
+  - 原因: SSH経由 `open -a` ではAquaセッショントークンが正しく確立されない（Tahoe 26.5の制約と推測）
+  - Computer Use MCPサーバーは Claude Code CLI に未登録（GitHub #44209既知バグ、Claude Desktop専用機能）
+  - cliclick / osascript / pyautogui / Playwright(Web専用) いずれも screencap+正確座標が取れず断念
+  - 解決策: ユーザがMac前で Spotlight → Codex → Settings → コンピュータの使用 → インストール を直接クリック必要
+
+- [x] 重いプロセス整理（Codex起動メモリ確保用）
+  - `claude-sonnet-4-6` サブエージェント（PID 39103, 287MB）→ kill（既に消滅）
+  - `chroma-mcp` (PID 1002, 333MB) → kill 成功
+  - `chrome-devtools-mcp` 系 (PID 27280/27281/27245, 計140MB) → kill（その後MCP切断通知あり）
+  - `bun` plugin worker (PID 967, 95MB) → kill
+  - `context7-mcp` (PID 27111, 45MB) → kill
+  - 結果: Pages free 6,443 → 34,341（約470MB空き増）、Total RSS 7,257MB → 6,615MB
+
+- [x] X 投稿系の準備調査: 「2時間で企業向けLP作成」ポストの取り扱いを確認（X投稿/実装/スキル化/保存の選択肢を提示、未着手）
+
+## 完了（4/17 9:00セッション1）
+
+- [x] Claude Code 最新バージョン確認: **2.1.112**（Mac既に最新、npm最新も2.1.112）
+- [x] 9:00セッションの仕組み再確認: Googleカレンダーは通知のみで自動起動なし（運用上は手動でClaude Code起動）
+- [x] X情報収集ルーチン実施（docs/x-daily-briefing.md 追記、9:10 JST実施）
+  - 注目: Claude Code週次使用制限リセット（4/16深夜）/ OpenAI Codex大型アップデート（Macアプリ操作・gpt-image-1.5） / Perplexity Comet（iMessage統合）
+  - Opus 4.7の反応: @SuguruKun_ai 103 / @bioshok3 47 / @AI_masaou 38 / @claudecode_lab 35
+  - "Opus 4.7は賢くなったより崩れずに走り切るのが上手くなった"（@AI_masaou）
+- [x] Windows PC（MASU-P55）稼働確認: 今朝06:46:15起動、正常稼働中（Tailscale 100.125.21.47経由SSH成功）
+- [x] git worktree の概念を説明（並列AI開発コンテキストで）
+- [x] Claude Code 1Mコンテキスト有効化: `~/.claude/settings.json` から `CLAUDE_CODE_DISABLE_1M_CONTEXT` 削除
+  - 次回新セッションから1M context有効、現セッションは起動時環境変数なので反映されない
+  - 使用制限に注意（Maxプランでも週次リミットあり）
 
 ## 完了（4/16午後）
 
