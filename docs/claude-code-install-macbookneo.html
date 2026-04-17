@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code CLI インストールマニュアル（MacBookNEO / M1 Mac 8GB）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0d0d;
+    color: #e8e8e8;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", sans-serif;
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .meta {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #222;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 40px 0 16px;
+    padding-left: 12px;
+    border-left: 3px solid #4a9eff;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: #d8d8d8;
+  }
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    color: #b8b8b8;
+  }
+  p { margin-bottom: 12px; font-size: 14px; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 14px; }
+  li { margin-bottom: 6px; }
+  a { color: #4a9eff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { color: #fff; font-weight: 600; }
+  em { color: #d8d8d8; font-style: normal; font-weight: 500; }
+
+  .card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 12px 0;
+    padding: 12px;
+    background: #1a1a1a;
+    border-radius: 6px;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: #4a9eff;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  code {
+    background: #1f1f1f;
+    color: #ffb86c;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+  }
+
+  pre {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+  pre code {
+    background: transparent;
+    color: #e8e8e8;
+    padding: 0;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .cmd { color: #50fa7b; }
+  .cmt { color: #6272a4; }
+  .str { color: #f1fa8c; }
+  .kw  { color: #ff79c6; }
+
+  .kbd {
+    display: inline-block;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-family: "SF Mono", monospace;
+    color: #f0f0f0;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-right: 6px;
+    font-weight: 600;
+  }
+  .tag.ok    { background: #1b3a1b; color: #7ee787; }
+  .tag.warn  { background: #3a2a1b; color: #ffb86c; }
+  .tag.bad   { background: #3a1b1b; color: #ff7b72; }
+  .tag.info  { background: #1b2a3a; color: #4a9eff; }
+
+  .warn {
+    background: #2a1818;
+    border-left: 3px solid #ff5555;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .tip {
+    background: #1a2a1a;
+    border-left: 3px solid #50fa7b;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .note {
+    background: #1a1f2a;
+    border-left: 3px solid #4a9eff;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #222;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #1a1a1a;
+    color: #b8b8b8;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  tr:hover td { background: #151515; }
+
+  .toc {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0 32px;
+    font-size: 13px;
+  }
+  .toc ol { margin-left: 20px; }
+  .toc li { margin-bottom: 4px; }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #222;
+    color: #666;
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 20px 12px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 17px; }
+    table { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Claude Code CLI インストールマニュアル</h1>
+<p class="subtitle">MacBookNEO（M1 MacBook Air 8GB, macOS 26.5）向け</p>
+<p class="meta">作成 2026-04-17 / 対象バージョン 2.1.112 / 初回起動 2026-04-05 07:30 JST</p>
+
+<div class="toc">
+<strong>目次</strong>
+<ol>
+<li><a href="#overview">概要</a></li>
+<li><a href="#prereq">前提条件</a></li>
+<li><a href="#install">インストール</a></li>
+<li><a href="#auth">初回起動・認証</a></li>
+<li><a href="#settings">推奨設定</a></li>
+<li><a href="#project">プロジェクト別設定（MCP）</a></li>
+<li><a href="#model">モデル・コンテキスト</a></li>
+<li><a href="#commands">よく使うコマンド</a></li>
+<li><a href="#update">アップデート</a></li>
+<li><a href="#trouble">トラブルシュート</a></li>
+<li><a href="#plugin">プラグイン・スキル</a></li>
+<li><a href="#uninstall">アンインストール</a></li>
+<li><a href="#compare">Windows PC との比較</a></li>
+</ol>
+</div>
+
+<!-- 1. 概要 -->
+<h2 id="overview">1. 概要</h2>
+<div class="card">
+<table>
+<tr><th>項目</th><th>値</th></tr>
+<tr><td>インストール方式</td><td><strong>スタンドアロン版（native）推奨</strong></td></tr>
+<tr><td>バイナリ場所</td><td><code>~/.local/bin/claude</code> → <code>~/.local/share/claude/versions/&lt;VERSION&gt;</code></td></tr>
+<tr><td>設定</td><td><code>~/.claude/</code>（共通） / <code>~/.claude.json</code>（プロジェクト別）</td></tr>
+<tr><td>認証</td><td>Claude Max OAuth（Keychain保存）or <code>ANTHROPIC_API_KEY</code></td></tr>
+<tr><td>現行版</td><td>2.1.112（2026-04-17）</td></tr>
+</table>
+
+<h3>選定根拠: なぜスタンドアロン版か</h3>
+<div class="warn">
+<strong>npm版は避ける。</strong> <code>@anthropic-ai/claude-code</code> をグローバルインストールすると、Node.js 更新・npm cache 操作で壊れる。Windows PC（MASU-P55）で npm版とスタンドアロン版が競合した事故実績あり（2026-04-14 対応済）。
+</div>
+<ul>
+<li><strong>単一バイナリ</strong>（約200MB）、依存なし</li>
+<li>CLI内蔵アップデーターが新版をバックグラウンドDL → 次回起動で symlink 差し替え</li>
+<li>アンインストールは <code>rm -rf ~/.local/share/claude ~/.local/bin/claude ~/.claude ~/.claude.json</code> だけ</li>
+</ul>
+</div>
+
+<!-- 2. 前提条件 -->
+<h2 id="prereq">2. 前提条件</h2>
+
+<div class="card">
+<h3>必須</h3>
+<pre><code><span class="cmd">sw_vers -productVersion</span>   <span class="cmt"># 26.5（12以上で動作）</span>
+<span class="cmd">uname -m</span>                   <span class="cmt"># arm64（Apple Silicon）</span>
+<span class="cmd">echo $SHELL</span>                <span class="cmt"># /bin/zsh</span></code></pre>
+
+<h3>推奨（便利ツール）</h3>
+<ul>
+<li><strong>Homebrew 5.x</strong> <span class="tag info">任意</span> <code>brew --version</code></li>
+<li><strong>Node.js 20+</strong> <span class="tag info">任意</span> MCP サーバー用、現環境 v22.15.0</li>
+<li><strong>Git 2.x</strong> <span class="tag info">任意</span> Claude Code が自動で git 状態を読む</li>
+<li><strong>gh CLI 2.x</strong> <span class="tag info">任意</span> GitHub操作の補助</li>
+</ul>
+
+<h3>PATH 確認</h3>
+<pre><code><span class="cmd">echo $PATH | tr </span><span class="str">':' '\n'</span><span class="cmd"> | grep -q </span><span class="str">"$HOME/.local/bin"</span><span class="cmd"> &amp;&amp; echo OK || echo MISSING</span></code></pre>
+<p>無い場合は <code>~/.zshrc</code> に追記:</p>
+<pre><code><span class="cmd">echo </span><span class="str">'export PATH="$HOME/.local/bin:$PATH"'</span><span class="cmd"> &gt;&gt; ~/.zshrc
+source ~/.zshrc</span></code></pre>
+
+<div class="warn">
+<strong>絶対に避ける:</strong>
+<ul>
+<li><code>sudo npm install -g @anthropic-ai/claude-code</code></li>
+<li><code>/usr/local/bin</code> へのコピー（更新不能になる）</li>
+</ul>
+</div>
+</div>
+
+<!-- 3. インストール -->
+<h2 id="install">3. インストール</h2>
+
+<div class="card">
+<div class="step">
+<div class="step-num">1</div>
+<div>
+<strong>公式インストーラ実行</strong>
+<pre><code><span class="cmd">curl -fsSL https://claude.ai/install.sh | bash</span></code></pre>
+<p style="font-size:12px; color:#888;">
+所要時間 約30秒 / DL 約200MB / <code>~/.local/share/claude/versions/&lt;LATEST&gt;</code> に配置</p>
+</div>
+</div>
+
+<div class="step">
+<div class="step-num">2</div>
+<div>
+<strong>確認</strong>
+<pre><code><span class="cmd">which claude</span>              <span class="cmt"># /Users/yuika/.local/bin/claude</span>
+<span class="cmd">claude --version</span>          <span class="cmt"># 2.1.112 (Claude Code)</span>
+<span class="cmd">ls -la ~/.local/share/claude/versions/</span></code></pre>
+</div>
+</div>
+</div>
+
+<!-- 4. 認証 -->
+<h2 id="auth">4. 初回起動・認証</h2>
+
+<div class="card">
+<div class="step">
+<div class="step-num">1</div>
+<div>
+<strong>起動</strong>
+<pre><code><span class="cmd">cd ~/Desktop
+claude</span></code></pre>
+</div>
+</div>
+
+<div class="step">
+<div class="step-num">2</div>
+<div>
+<strong>OAuth 認証（Claude Max）</strong>
+<ul>
+<li>起動時プロンプト or <code>/login</code> で OAuth URL 表示</li>
+<li>ブラウザで <code>console.anthropic.com/oauth/authorize</code> へ遷移</li>
+<li>claude.ai アカウント（<code>wirelessml@gmail.com</code>）でログイン</li>
+<li>「Claude Code がアクセスを要求しています」→ <strong>許可</strong></li>
+<li>localhost リダイレクト → CLIに戻って認証完了</li>
+<li>Keychain にトークン保存（サービス名: <code>Claude Code-credentials</code>）</li>
+</ul>
+</div>
+</div>
+
+<div class="step">
+<div class="step-num">3</div>
+<div>
+<strong>確認</strong>
+<pre><code><span class="cmd">/login status</span>   <span class="cmt"># Logged in as wirelessml@gmail.com (Max plan)</span></code></pre>
+</div>
+</div>
+
+<div class="note">
+<strong>API キー認証（代替）:</strong><br>
+<code>export ANTHROPIC_API_KEY="sk-ant-..."</code> を <code>~/.zshrc</code> に追加すれば従量課金モードで起動。<br>
+Max 契約があるなら OAuth 一択。
+</div>
+</div>
+
+<!-- 5. 推奨設定 -->
+<h2 id="settings">5. 推奨設定（<code>~/.claude/settings.json</code>）</h2>
+
+<div class="card">
+<pre><code>{
+  <span class="str">"env"</span>: {
+    <span class="str">"CLAUDE_CODE_DISABLE_AUTO_MEMORY"</span>: <span class="str">"1"</span>,
+    <span class="str">"CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING"</span>: <span class="str">"1"</span>,
+    <span class="str">"CLAUDE_CODE_SUBAGENT_MODEL"</span>: <span class="str">"sonnet"</span>
+  },
+  <span class="str">"permissions"</span>: { <span class="str">"allow"</span>: [<span class="str">"*"</span>] },
+  <span class="str">"enabledPlugins"</span>: {
+    <span class="str">"claude-mem@thedotmack"</span>: true,
+    <span class="str">"superpowers@claude-plugins-official"</span>: true,
+    <span class="str">"frontend-design@claude-plugins-official"</span>: true,
+    ...
+  },
+  <span class="str">"effortLevel"</span>: <span class="str">"high"</span>,
+  <span class="str">"showThinkingSummaries"</span>: true,
+  <span class="str">"bypassPermissions"</span>: true
+}</code></pre>
+
+<table>
+<tr><th>キー</th><th>意味</th><th>本機設定</th></tr>
+<tr><td><code>CLAUDE_CODE_DISABLE_AUTO_MEMORY</code></td><td>自動メモリ無効化（git管理優先）</td><td><code>1</code></td></tr>
+<tr><td><code>CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING</code></td><td>Opus 4.7 の適応的思考を固定化</td><td><code>1</code></td></tr>
+<tr><td><code>CLAUDE_CODE_SUBAGENT_MODEL</code></td><td>サブエージェント既定モデル</td><td><code>sonnet</code></td></tr>
+<tr><td><code>effortLevel</code></td><td>思考深度（low/…/max）</td><td><code>high</code></td></tr>
+<tr><td><code>bypassPermissions</code></td><td>危険モード常時有効</td><td><code>true</code></td></tr>
+</table>
+
+<div class="tip">
+<strong>1M context 有効化:</strong> <code>CLAUDE_CODE_DISABLE_1M_CONTEXT</code> を <strong>書かない</strong>ことで既定の 1M が効く。2026-04-17 に既存設定から削除済み。環境変数は<strong>起動時に読まれる</strong>ため、反映は次セッションから。
+</div>
+</div>
+
+<!-- 6. プロジェクト・MCP -->
+<h2 id="project">6. プロジェクト別設定（<code>~/.claude.json</code>）</h2>
+
+<div class="card">
+<h3>主な項目（現環境の値）</h3>
+<pre><code>installMethod:            <span class="str">"native"</span>
+autoUpdates:              false
+firstStartTime:           <span class="str">"2026-04-04T22:30:41.651Z"</span>
+claudeCodeFirstTokenDate: <span class="str">"2026-02-28T23:46:48.733765Z"</span>
+theme:                    <span class="str">"dark-ansi"</span>
+numStartups:              63
+userID:                   b53efdc4...</code></pre>
+
+<h3>MCP サーバー登録</h3>
+<pre><code><span class="cmt"># 登録</span>
+<span class="cmd">claude mcp add chrome-devtools --url https://...</span>
+<span class="cmd">claude mcp add google-photos -- node /path/to/index.js</span>
+
+<span class="cmt"># 確認・削除</span>
+<span class="cmd">claude mcp list</span>
+<span class="cmd">claude mcp remove &lt;name&gt;</span>
+
+<span class="cmt"># セッション内確認</span>
+<span class="cmd">/mcp</span></code></pre>
+
+<div class="note">
+<strong>メモリ節約:</strong> 2026-04-17 12:00 にuser-scope から <code>context7</code>, <code>notebooklm-mcp</code>, <code>voicemode</code>、Desktop project-scope から <code>chrome-devtools</code>, <code>google-photos</code>, <code>playwright</code> を削除。約1.5GB解放。バックアップ: <code>~/.claude.json.bak.20260417-1215</code>
+</div>
+</div>
+
+<!-- 7. モデル -->
+<h2 id="model">7. モデル選択・コンテキスト</h2>
+
+<div class="card">
+<table>
+<tr><th>モデル</th><th>ID</th><th>用途</th><th>消費</th></tr>
+<tr><td><strong>Opus 4.7 (1M)</strong></td><td><code>claude-opus-4-7[1m]</code></td><td>メイン・複雑タスク</td><td><span class="tag bad">重</span></td></tr>
+<tr><td>Opus 4.7</td><td><code>claude-opus-4-7</code></td><td>一般</td><td><span class="tag warn">中</span></td></tr>
+<tr><td>Sonnet 4.6</td><td><code>claude-sonnet-4-6</code></td><td>サブエージェント</td><td><span class="tag ok">軽</span></td></tr>
+<tr><td>Haiku 4.5</td><td><code>claude-haiku-4-5-20251001</code></td><td>高頻度・軽作業</td><td><span class="tag ok">最軽</span></td></tr>
+</table>
+
+<h3>切替コマンド</h3>
+<pre><code><span class="cmt"># セッション内</span>
+<span class="cmd">/model opus</span>
+<span class="cmd">/model opusplan</span>   <span class="cmt"># ★推奨: Opus思考 + Sonnet実行</span>
+<span class="cmd">/model sonnet</span>
+<span class="cmd">/model haiku</span>
+
+<span class="cmt"># 起動時</span>
+<span class="cmd">claude --model opus --effort max</span></code></pre>
+
+<div class="tip">
+<strong><code>/model opusplan</code> が標準運用。</strong> 計画精度は Opus、実行は Sonnet で週次リミット消費を抑える。
+</div>
+</div>
+
+<!-- 8. コマンド -->
+<h2 id="commands">8. よく使うコマンド</h2>
+
+<div class="card">
+<h3>スラッシュコマンド</h3>
+<table>
+<tr><th>コマンド</th><th>用途</th></tr>
+<tr><td><code>/model &lt;name&gt;</code></td><td>モデル切替</td></tr>
+<tr><td><code>/mcp</code></td><td>MCP 接続確認</td></tr>
+<tr><td><code>/skill</code></td><td>スキル一覧</td></tr>
+<tr><td><code>/login status</code></td><td>認証状態</td></tr>
+<tr><td><code>/plugin install &lt;id&gt;</code></td><td>プラグイン追加</td></tr>
+<tr><td><code>/fast</code></td><td>高速モード（Opus 4.6）</td></tr>
+<tr><td><code>/rc</code></td><td>リモコン（本環境固有）</td></tr>
+<tr><td><span class="kbd">Esc</span> 2回</td><td>1ターン前へ戻る</td></tr>
+</table>
+
+<h3>起動オプション</h3>
+<pre><code><span class="cmd">claude -c</span>                       <span class="cmt"># 直前セッション継続</span>
+<span class="cmd">claude --fork-session -c</span>        <span class="cmt"># 継続+新ID</span>
+<span class="cmd">claude -p </span><span class="str">"質問"</span>                  <span class="cmt"># 一問一答モード</span>
+<span class="cmd">claude --add-dir /path/other</span>    <span class="cmt"># 追加ディレクトリ許可</span>
+<span class="cmd">claude --bare</span>                    <span class="cmt"># 最小モード（hook/LSP/plugin 無効）</span></code></pre>
+</div>
+
+<!-- 9. アップデート -->
+<h2 id="update">9. アップデート</h2>
+
+<div class="card">
+<ul>
+<li><code>autoUpdates: false</code> でも CLI 内部で新版チェック → バックグラウンドDL</li>
+<li>新版は <code>~/.local/share/claude/versions/X.Y.Z</code> に配置</li>
+<li><strong>次回起動時に symlink が最新へ差し替わる</strong></li>
+<li>過去2〜3世代は残存、以前は自動削除</li>
+</ul>
+
+<pre><code><span class="cmt"># 現行版</span>
+<span class="cmd">claude --version</span>
+
+<span class="cmt"># 全バージョン</span>
+<span class="cmd">ls ~/.local/share/claude/versions/</span>
+
+<span class="cmt"># 強制更新</span>
+<span class="cmd">curl -fsSL https://claude.ai/install.sh | bash</span>
+
+<span class="cmt"># ダウングレード（symlink を手動で張り替え）</span>
+<span class="cmd">ln -sf ~/.local/share/claude/versions/2.1.110 ~/.local/bin/claude</span></code></pre>
+</div>
+
+<!-- 10. トラブル -->
+<h2 id="trouble">10. トラブルシュート</h2>
+
+<div class="card">
+<h3><span class="tag bad">症状</span> <code>claude: command not found</code></h3>
+<p>PATH 漏れ。<code>export PATH="$HOME/.local/bin:$PATH"</code> を <code>~/.zshrc</code> に追加 → <code>source ~/.zshrc</code></p>
+
+<h3><span class="tag bad">症状</span> OAuth 認証が通らない</h3>
+<ul>
+<li>Keychain ロック: <code>security unlock-keychain ~/Library/Keychains/login.keychain-db</code></li>
+<li>トークン破損: <code>rm ~/.claude/.credentials.json</code> → 再 <code>/login</code></li>
+</ul>
+
+<h3><span class="tag bad">症状</span> 起動時 Bun クラッシュ（Segmentation fault）</h3>
+<p>原因: メモリ不足（M1 8GB で他アプリ多い）</p>
+<ul>
+<li>OBS / Claude Desktop / Chrome を終了</li>
+<li><strong>Claude Desktop は常用しない</strong>（4/14 で停止済）</li>
+</ul>
+
+<h3><span class="tag bad">症状</span> 1M context が効かない</h3>
+<p><code>~/.claude/settings.json</code> の <code>env</code> から <code>CLAUDE_CODE_DISABLE_1M_CONTEXT</code> を削除。環境変数は起動時読み込みのため<strong>新セッションから有効</strong>。</p>
+
+<h3><span class="tag bad">症状</span> MCP 接続失敗</h3>
+<pre><code><span class="cmd">/mcp</span>                  <span class="cmt"># 状態確認</span>
+<span class="cmd">claude --mcp-debug</span>    <span class="cmt"># デバッグ起動</span></code></pre>
+
+<h3><span class="tag bad">症状</span> "Usage Limit Reached"</h3>
+<ul>
+<li>Max プランの週次/月次リミット到達</li>
+<li>対処: 待つ（週次は木曜リセット）/ <code>/model sonnet</code> へ切替 / <code>/model opusplan</code> 採用</li>
+</ul>
+
+<h3><span class="tag bad">症状</span> セッションが固まる</h3>
+<pre><code><span class="cmd">ps aux | grep -i claude | grep -v grep</span>
+<span class="cmd">pkill -f </span><span class="str">"claude$"</span></code></pre>
+</div>
+
+<!-- 11. プラグイン -->
+<h2 id="plugin">11. プラグイン・スキル</h2>
+
+<div class="card">
+<h3>現在有効なプラグイン</h3>
+<table>
+<tr><th>プラグイン</th><th>用途</th></tr>
+<tr><td><code>claude-mem@thedotmack</code></td><td>セッション横断メモリ検索</td></tr>
+<tr><td><code>superpowers@*</code></td><td>ブレスト・デバッグ・TDD</td></tr>
+<tr><td><code>frontend-design@*</code></td><td>UI設計</td></tr>
+<tr><td><code>code-review@*</code></td><td>PRレビュー</td></tr>
+<tr><td><code>github@*</code></td><td>GitHub 統合</td></tr>
+<tr><td><code>ui-ux-pro-max@*</code></td><td>UI/UX 特化</td></tr>
+</table>
+
+<h3>よく使うスキル</h3>
+<ul>
+<li><code>mem-search</code> — 過去セッション検索</li>
+<li><code>make-plan</code> → <code>do</code> — 多段実装</li>
+<li><code>video-use</code> — 動画編集</li>
+<li><code>agent-reach</code> — Web/SNS 調査</li>
+<li><code>superpowers:brainstorming</code> — 要件探索</li>
+<li><code>superpowers:systematic-debugging</code> — デバッグ</li>
+</ul>
+
+<h3>追加</h3>
+<pre><code><span class="cmd">/plugin install &lt;marketplace&gt;:&lt;plugin-id&gt;</span></code></pre>
+</div>
+
+<!-- 12. アンインストール -->
+<h2 id="uninstall">12. アンインストール</h2>
+
+<div class="card">
+<h3>完全削除</h3>
+<pre><code><span class="cmt"># バイナリ</span>
+<span class="cmd">rm -rf ~/.local/share/claude
+rm ~/.local/bin/claude</span>
+
+<span class="cmt"># 設定・セッション</span>
+<span class="cmd">rm -rf ~/.claude
+rm ~/.claude.json</span>
+
+<span class="cmt"># Keychain</span>
+<span class="cmd">security delete-generic-password -s </span><span class="str">"Claude Code-credentials"</span></code></pre>
+
+<h3>設定だけリセット</h3>
+<pre><code><span class="cmd">cp ~/.claude/settings.json ~/.claude/settings.json.bak
+cp ~/.claude.json ~/.claude.json.bak
+rm ~/.claude/settings.json ~/.claude.json</span></code></pre>
+</div>
+
+<!-- 13. 比較 -->
+<h2 id="compare">13. Windows PC（MASU-P55）との比較</h2>
+
+<div class="card">
+<table>
+<tr><th>項目</th><th>MacBookNEO</th><th>MASU-P55</th></tr>
+<tr><td>OS</td><td>macOS 26.5</td><td>Windows 11 25H2</td></tr>
+<tr><td>バージョン</td><td>2.1.112</td><td>2.1.105</td></tr>
+<tr><td>方式</td><td>standalone (native)</td><td>standalone（npm版ブロック）</td></tr>
+<tr><td>自動更新</td><td>内部機構</td><td>タスクスケジューラ 毎日0:00</td></tr>
+<tr><td>認証</td><td>Keychain</td><td>資格情報マネージャー</td></tr>
+<tr><td>SSH</td><td>ローカル</td><td><code>gci_admin@100.125.21.47:22</code>（Tailscale）</td></tr>
+<tr><td>WSL</td><td>N/A</td><td>Ubuntu 24.04 + portproxy 2222</td></tr>
+</table>
+</div>
+
+<footer>
+<p>
+参考: <code>docs/claude-code-tips-2025.md</code> / <code>docs/claude-computer-use-guide.md</code> /
+<code>CLAUDE.md</code>
+</p>
+<p>
+作成 2026-04-17 · MacBookNEO (M1 8GB) · Claude Code 2.1.112
+</p>
+</footer>
+
+</div>
+</body>
+</html>
