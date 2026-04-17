@@ -95,6 +95,7 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
 - **2026/04/19**: YouTubeプレミアムを解約する（当日中に手続き必要）
+- **2026/04/30**: Microsoft 365 Copilot Business 解約予定日（admin.cloud.microsoft で「有効期限切れ時にキャンセル」選択済、SUMA-p アカウント、MCA）— 当日以降にサブスクリプション一覧から消失していることを確認
 - **2026/05/11**: ElevenLabs Starter プラン失効（声クローン・Scribe 使用不可に）— それまでに使い倒す
 
 ## TODO（次回Mac前での作業）
@@ -130,6 +131,26 @@
   4. 100W GaN PD 給電動作確認
 - 接続フロー: Switch 2 → USB-C(100W入力) → GC313Pro → HDMI(パススルー) → モニター / GC313Pro → USB-C(PC側) → Mac M1
 - 別途 Switch 2 本体購入が必要（未購入）
+
+### ~~10. GHFS（GitHub仮想ファイルシステム）セットアップ~~ ✅ 完了（4/18 6:25am）
+- `/Applications/GHFS.app` v0.1.2（FSKit使用、macFUSE不要、H73VKH7W9W 署名）
+- マウント先: **`/Users/yuika/ghfs`**（ホーム直下、wirelessml リポ配下を Finder で参照可能）
+- **ハマりポイント（Apple 未文書）**: マウント先を `~/Desktop/` / `~/Documents/` / `~/Downloads/` 配下にすると **mount(2) が errno 1 (EPERM) で失敗** する。これは TCC 保護ディレクトリに対して root の fskitd ですら mount 不可のため（`fskitd: mount(2) error: 1` `mount launch failed with result "Operation not permitted"`）。macOS 26.5 beta でウィザードが勝手に `~/Desktop/ghfs/ghfs` を提案することがあるので、**必ず `~/ghfs` など非TCC保護パスに変更**すること
+- ウィザードから変更できない場合は: `defaults write com.indragie.GHFS mountPath -string "/Users/yuika/ghfs"` → GHFS 再起動
+- 用途: video-use / claude-mem など参照系リポをクローンせず Finder/grep で閲覧、容量節約
+
+### 11. iPhone から Mac の Windows XP VM をリモート操作（VNC）
+- 目的: 外出先（iPhone）から Mac 上の `winxp.qcow2` を操作。維新の嵐 CD 到着後はゲームも触れる
+- 方式: Mac 側 QEMU に VNC サーバー追加 → iPhone の VNC Viewer から Tailscale 経由で接続
+- Mac 側手順:
+  1. `~/Desktop/winxp-start.sh` の QEMU 起動コマンドに `-vnc 0.0.0.0:0` を追記（ポート 5900）
+  2. QEMU 再起動（`winxp_ready` スナップショットから復帰可）
+  3. （任意）Tailscale ACL でポート 5900 を iPhone のみに制限
+- iPhone 側手順:
+  1. App Store で **VNC Viewer**（RealVNC 製、無料）をインストール
+  2. 接続先: `100.99.41.2:5900`（Tailscale 経由）
+- タッチ操作が辛ければ **A案: Mac に UTM (`brew install --cask utm`) 入れて winxp.qcow2 取り込み → UTM Server 有効化 → iPhone の UTM Remote (インストール済み未確認) でペアリング** に乗り換え
+- 関連: TODO #7（維新の嵐 CD 到着待ち）
 
 ### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
 - Standalone版(pkg)でシステム拡張機能を許可→接続成功
@@ -219,6 +240,35 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/18 5:00セッション・早朝）
+
+- [x] **GHFS（GitHub仮想ファイルシステム）セットアップ完了** — TODO #10 クローズ
+  - マウント先: `/Users/yuika/ghfs`（wirelessml リポ配下を Finder で参照可能）
+  - **根本原因特定**: macOS 26.5 Tahoe は ~/Desktop / ~/Documents / ~/Downloads 配下への FSKit マウントを TCC 保護で必ず拒否（fskitd が root でも mount(2) errno 1/EPERM）
+  - 診断ログ: `fskitd: will mount over LIFSv2` → `mount(2) error: 1` → `mount launch failed with result "Operation not permitted"`
+  - システム設定「ファイルシステム機能拡張」のトグルが反応しない件は macOS 26.5 beta の syspolicyd バグ（`qtn_proc: 3` 多発）、pluginkit -e use で CLI 強制有効化可能だがカーネル承認は別レイヤーで、実際の解決は TCC 非保護パスへの変更
+  - CLAUDE.md TODO #10 に注意書き追記（wizard が `~/Desktop/ghfs/ghfs` を提案することがあるので必ず `~/ghfs` 等へ変更）、Apple 未文書の落とし穴として記録
+
+- [x] **はりきゅう整体しゅん LP を GitHub Pages 公開**（外出先アクセス可）
+  - URL: https://wirelessml.github.io/test/docs/hari-seitai-shun.html#info
+  - `docs/hari-seitai-shun.html`（637行）を add → commit (06d7a9b) → push、HTTP 200 確認
+
+- [x] **Claude Desktop Code mode → Windows WSL Ubuntu SSH 接続完了**（Opus 4.7 1M Max 稼働）
+  - Mac Claude Desktop → Tailscale (100.125.21.47:2222) → Windows portproxy → WSL Ubuntu sshd
+  - wirelessml/test リポを WSL に shallow clone (`/home/gci_admin/test`)
+  - Claude Desktop 作業フォルダに `/home/gci_admin/test` を設定、Opus 4.7 1M Max + Code mode でリモートコーディング可能
+  - iPhone Claude Desktop からも同設定を呼び出せる → 外出先から Windows 側作業継続可能に
+
+- [x] **Claudeデスクトップアプリ評価を改定**（CLAUDE.md 更新済み）
+  - 4/14「不要」判断 → 4/18「Code mode / メイン会話のみ使える」に改定
+  - **使える**: メイン会話、Code mode（SSH 越しの WSL 作業）
+  - **使えない（不変）**: Dispatch と Cowork は app.asar 側で Sonnet 4.6 がハードコードされており UI 非連動、Opus 4.7 GA 後の 4/17 再確認でも未解消
+  - リソースコスト（Electron ×10プロセス、~786MB）は依然重いので他重処理と同時稼働は避ける
+
+- [x] **X投稿**: Claude Desktop Code mode + WSL SSH + Opus 4.7 1M Max セットアップ
+  - URL: https://x.com/i/status/2045264433656819866
+  - redacted スクショ（user@host ぼかし、モデル選択ポップオーバー込み）付き
+
 ## 完了（4/17未明）
 
 - [x] Claude Opus 4.7 リリース確認（claude-opus-4-7、エージェントコーディング大幅向上、Opus 4.6はLegacy化）
@@ -241,8 +291,9 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
 - [x] Windows PC（MASU-P55）への Google App（Gemini）インストール完了
   - 既存DL済みインストーラーは 0x1252a（Omaha tag parse error）で失敗、`search.google/google-app/desktop` から再DLで解消
   - `C:\Users\gci_admin\AppData\Local\Google\Google\latest\google.exe --start_hidden` で起動、Alt+Space で呼び出し可能
-  - v1.0.2.0（Canary 10%）は**英語UIのみ**、日本語ロケール未同梱（検索結果・AI Mode応答自体は日本語可）
+  - v1.0.2.0 は**英語UIのみ**、日本語ロケール未同梱（検索結果・AI Mode応答自体は日本語可）
   - appguid: `{06A8089E-0B65-445D-B5C4-10B0D1B540F2}`、ClientState lang=ja-JP（将来の多言語化で反映見込み）
+  - 2026/4/17 16:07 時点：Cohort が `Canary - 10% - General Availability` に更新（= Canary 10% → GA 昇格済み）。Omaha 毎時問い合わせで `status:noupdate` を返すため v1.0.2.0 が現 GA 最新版。AlternativeTo 2026/4/14 記事「Google's upgraded desktop app is now available on Windows」のグローバル公開分は本バージョンで同一
 - [x] Claudeデスクトップアプリ Code mode から Windows (WSL Ubuntu) への SSH 接続を実現
   - Claude Desktop Code mode は **Linux/macOS のみサポート**（Windowsネイティブは `__bin_missing__` で弾かれる）→ WSL経由で回避
   - Ed25519 鍵生成（`~/.ssh/id_ed25519`）→ WSL Ubuntu の `~/.ssh/authorized_keys` に登録
@@ -270,6 +321,7 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - WSL SSH 環境は将来のため残す（keepaliveタスク・portproxy・.wslconfig すべて稼働中）
   - crashpad handler 残存プロセス（PID 608, v1.2773.0）も kill で掃除済み
 - [x] X投稿: Claude Desktop使わない結論: https://x.com/i/status/2044915100436558067
+- [x] X投稿: Google Windows App v1.0.2.0 Canary→GA 昇格の実態: https://x.com/i/status/2045051837313888636
 
 ## 完了（4/17 14:00セッション）
 
@@ -821,11 +873,11 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - **記事の削除や一括更新をする前は、必ず件数を教えて確認を取ること。それ以外は確認不要**
 - computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
 - Dispatchは使わない、CLIで完結させる
-- **Claudeデスクトップアプリは不要**（4/14判断）
-  - Dispatch（iPhone操作）だけが唯一の差別化だが、SSH経由でClaude Code CLIを直接操作可能
-  - M1 8GBではDesktop起動でload急増（Electron製、load 85まで跳ねた実績あり）
-  - MCP・Computer Use等の機能はCLIでも利用可能
-  - リソースコストに見合わないため、今後は起動しない方針
+- **Claudeデスクトップアプリは Code mode / メイン会話のみ使える**（4/18再評価）
+  - **使える**: メイン会話・**Code mode**（Opus 4.7 1M Max で Tailscale 経由 Windows WSL Ubuntu に SSH 接続、iPhone からも同設定で外出先作業可）
+  - **使えない（不変）**: **Dispatch** と **Cowork** は app.asar 側で `--model claude-sonnet-4-6` がハードコードされており、UI でモデル選択しても反映されない（4/15 Mac/Windows 両方で確認、Opus 4.7 GA 後の 4/17 再確認でも未解消）
+  - リソースコストは依然重い（M1 8GB で Electron ×10プロセス、~786MB）ので他重処理と同時稼働は避ける
+  - 4/14旧判断の背景: 当時は Opus 4.6 で Code mode の SSH も未検証、Dispatch/Cowork が Sonnet 固定で実用性に乏しかった
 - ブラウザはcomputer-useでtier "read"（クリック不可）、URLを開くことはできるが再生・停止などの操作は不可
 - **X PWAアプリ（Chrome PWA）はcomputer-useでfull tier操作可能**
   - バンドルID: `com.google.Chrome.app.lodlkdfmihgonocnmddehnfgiljnadcf`
