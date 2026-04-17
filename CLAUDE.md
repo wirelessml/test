@@ -120,6 +120,17 @@
 - 許可後に再度 request_access を呼び、Codex を前面化してインストール操作を実行
 - 4/17 11:40 試行: 画面収録権限の許可ダイアログが出たため中断、ユーザ対応待ち
 
+### 9. Switch 2キャプチャ環境構築（GC313Pro到着後）
+- 注文済み: Amazon.co.jp 中古ブラック ¥9,833（残り1点）— AVerMedia Live GENERATOR POCKET ポケットキャプチャー GC313Pro BK DV0963
+- US Amazon $129.99（¥22,000〜）/ メルカリ新品 ¥14,961 と比較して最安
+- 中古品のため到着後動作確認:
+  1. 通電・LED点灯確認
+  2. Mac M1 で OBS → 映像キャプチャデバイス（UVC、ドライバ不要）として認識されるか
+  3. 1080p60 出力可否・遅延確認
+  4. 100W GaN PD 給電動作確認
+- 接続フロー: Switch 2 → USB-C(100W入力) → GC313Pro → HDMI(パススルー) → モニター / GC313Pro → USB-C(PC側) → Mac M1
+- 別途 Switch 2 本体購入が必要（未購入）
+
 ### ~~1. Tailscaleログイン~~ ✅ 完了（4/11）
 - Standalone版(pkg)でシステム拡張機能を許可→接続成功
 - macbook-air: 100.99.41.2（Tailscale 1.96.5、macOS 26.5.0）
@@ -259,6 +270,13 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - WSL SSH 環境は将来のため残す（keepaliveタスク・portproxy・.wslconfig すべて稼働中）
   - crashpad handler 残存プロセス（PID 608, v1.2773.0）も kill で掃除済み
 - [x] X投稿: Claude Desktop使わない結論: https://x.com/i/status/2044915100436558067
+
+## 完了（4/17 14:00セッション）
+
+- [x] Switch 2 ドックなしMac接続キャプチャ製品調査（純正ドックなしではDP Alt Modeブロック、サードパーティ互換ドック・キャプチャ製品リスト化）
+- [x] AVerMedia GC313Pro ELITE GO（日本商品名: Live GENERATOR POCKET ポケットキャプチャー、SKU DV0963）特定 — 100W GaN PD + 1080p60 UVCキャプチャ内蔵
+- [x] メルカリ出品（¥14,961 新品未使用 正規代理店保証1年）と Amazon.co.jp 中古（¥9,833 残り1点）を比較、Amazon中古を購入決定
+- [x] CLAUDE.md TODO #9 Switch 2キャプチャ環境構築（到着後動作確認手順）追記
 
 ## 完了（4/17 13:00セッション）
 
