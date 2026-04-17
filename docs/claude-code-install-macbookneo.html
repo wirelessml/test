@@ -224,7 +224,8 @@
 
 <div class="toc">
 <strong>目次</strong>
-<ol>
+<ol start="0">
+<li><a href="#agent">AI エージェントへの依頼</a></li>
 <li><a href="#overview">概要</a></li>
 <li><a href="#prereq">前提条件</a></li>
 <li><a href="#install">インストール</a></li>
@@ -239,6 +240,43 @@
 <li><a href="#uninstall">アンインストール</a></li>
 <li><a href="#compare">Windows PC との比較</a></li>
 </ol>
+</div>
+
+<p style="margin-top:1.2em;opacity:.85;">この手順は人間が手動で実行することも、AI エージェント（Claude Desktop Code mode / Codex Computer Use / Manus My Computer）に依頼して自動実行させることも可能です。エージェントに依頼する場合は次節 §0 のプロンプト例を使用。</p>
+
+<!-- 0. AI エージェントへの依頼 -->
+<h2 id="agent">0. AI エージェントへの依頼（新規 Mac セットアップ時）</h2>
+<div class="card">
+<p>MacBookNEO で <strong>Claude Desktop / Codex / Manus</strong> のいずれかを先に起動して本人がサインイン済みなら、下記プロンプトをそのまま貼ってインストールを一任できる。</p>
+
+<h3>0.1 共通プロンプト（どのエージェントでも使える）</h3>
+<pre><code>https://wirelessml.github.io/test/docs/claude-code-install-macbookneo.html
+の手順に従って、この Mac に Claude Code CLI を**スタンドアロン版で**インストールしてください。
+
+必須ルール:
+1. npm 版は絶対に入れない（§2.3）。
+2. パスは ~/.local/bin/claude、データは ~/.local/share/claude に置く（§3.1）。
+3. OAuth 認証は私が手動でブラウザに入力するので、claude コマンド初回起動までやったら待機してください（§4.1〜4.2）。
+4. `~/.claude/settings.json` は §5.1 の現行内容をそのまま書き込んでください（`CLAUDE_CODE_DISABLE_1M_CONTEXT` は<strong>削除</strong>したまま）。
+5. インストール後に `claude --version` と `claude doctor` の出力を私に見せてください。
+
+途中で権限ダイアログが出たら止めて私に確認してください。シェル操作は可能な限り最小限の承認範囲で。</code></pre>
+
+<h3>0.2 エージェント別の補足</h3>
+<ul>
+<li><strong>Manus（My Computer）</strong>: 自律実行が最も得意。上記プロンプトをそのまま投げれば、Terminal 起動 → <code>curl</code> 実行 → 認証前ステップまで完走する想定。</li>
+<li><strong>Codex（Computer Use）</strong>: Terminal.app を事前に「常に許可するアプリ」へ追加しておくと都度承認ダイアログが減る。</li>
+<li><strong>Claude Desktop Code mode</strong>: ローカル Mac を操作する場合は SSH 越しが基本のため、自機を <code>localhost</code> SSH 先として登録するか、代わりにメイン会話でコマンドを出してもらって手動コピペする運用が無難。</li>
+</ul>
+
+<h3>0.3 エージェント実行時の最小コマンド列（監視用）</h3>
+<p>エージェントが何を打っているか確認したいときの対応。下記5行で認証直前まで到達する。</p>
+<pre><code>curl -fsSL https://claude.ai/install.sh | bash
+export PATH="$HOME/.local/bin:$PATH"
+claude --version
+mkdir -p ~/.claude
+# settings.json は §5.1 から転記</code></pre>
+<p>認証以降（§4.2）は人間が手動で行う前提。</p>
 </div>
 
 <!-- 1. 概要 -->

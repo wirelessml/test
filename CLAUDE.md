@@ -115,11 +115,10 @@
 - VM環境: QEMU i386、Windows XP SP3日本語版、スナップショット `winxp_ready` 保存済み
 - パッチ1.1.0.0はオンライン入手不可（Steam版は対応済みだがCD版用は配布終了）
 
-### 8. Codex for Mac「Computer Use」プラグインをインストール
-- 手順: Codex.app → Settings… → コンピュータの使用 → プラグイン → インストール
-- 前提: macOS システム設定 → プライバシーとセキュリティ → 画面収録 で computer-use MCP を許可
-- 許可後に再度 request_access を呼び、Codex を前面化してインストール操作を実行
-- 4/17 11:40 試行: 画面収録権限の許可ダイアログが出たため中断、ユーザ対応待ち
+### ~~8. Codex for Mac「Computer Use」プラグインをインストール~~ ✅ 完了（4/18 早朝）
+- `/Applications/Codex.app` v26.415.30602 build 1773 に Computer Use v1.0.750 (openai-bundled) が有効
+- Codex Settings → コンピュータの使用 → プラグイン に ✓ 表示で確認
+- 「常に許可するアプリ」は未登録（都度承認ダイアログが出る状態、Codex が実際に使い始めてから必要に応じて追加）
 
 ### 9. Switch 2キャプチャ環境構築（GC313Pro到着後）
 - 注文済み: Amazon.co.jp 中古ブラック ¥9,833（残り1点）— AVerMedia Live GENERATOR POCKET ポケットキャプチャー GC313Pro BK DV0963
@@ -873,6 +872,14 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
 - **記事の削除や一括更新をする前は、必ず件数を教えて確認を取ること。それ以外は確認不要**
 - computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
 - Dispatchは使わない、CLIで完結させる
+- **Manus デスクトップアプリを Computer Use の最有力候補に採用**（4/18 朝決定）
+  - `/Applications/Manus.app` v1.5.3（署名: Team 5V8XDGQQB6、arm64、Meta 傘下）
+  - iPhone Manus (pirosi80@yahoo.co.jp) と Mac でアカウント自動連携、**7964 クレジット + 毎日更新 300**（00:00 リフレッシュ）
+  - 過去利用履歴: SwitchBotリサーチ -213 / AI塾テキスト -36 / Claude Code分析 -56 等、1タスク 30〜210 クレジット消費の目安
+  - イベント報酬 +6,000 + リデンプション +1,000 の蓄積あり
+  - 左メニュー「My Computer」が OS 操作本体、クラウドブラウザ・スキル・コネクタ・スケジュール化タスク等の自律エージェント機能一式を無料枠で使える
+  - Claude Desktop / Codex と比べて: (1) 無料で Computer Use 可、(2) 自律タスク実行時間が長い、(3) クラウド実行とローカル実行を選べる
+  - 競合候補も残すが、日常使い筆頭は Manus。Claude Desktop Code mode (Opus 4.7 1M Max) は SSH 遠隔コーディング用、Codex は補助
 - **Claudeデスクトップアプリは Code mode / メイン会話のみ使える**（4/18再評価）
   - **使える**: メイン会話・**Code mode**（Opus 4.7 1M Max で Tailscale 経由 Windows WSL Ubuntu に SSH 接続、iPhone からも同設定で外出先作業可）
   - **使えない（不変）**: **Dispatch** と **Cowork** は app.asar 側で `--model claude-sonnet-4-6` がハードコードされており、UI でモデル選択しても反映されない（4/15 Mac/Windows 両方で確認、Opus 4.7 GA 後の 4/17 再確認でも未解消）

@@ -3,6 +3,50 @@
 本稿は **MacBookNEO（M1 MacBook Air 8GB、macOS 26.5）** に Claude Code CLI を導入する手順をまとめたもの。
 2026-04-05 に実施済みの現行セットアップをリバースエンジニアリングした上で、Windows PC（MASU-P55）での教訓を反映した完全版。
 
+**この手順は人間が手動で実行することも、AI エージェント（Claude Desktop Code mode / Codex Computer Use / Manus My Computer）に依頼して自動実行させることも可能です。** エージェントに依頼する場合は次節 0 のプロンプト例を使用。
+
+---
+
+## 0. AI エージェントへの依頼（新規 Mac セットアップ時）
+
+MacBookNEO で **Claude Desktop / Codex / Manus** のいずれかを先に起動して本人がサインイン済みなら、下記プロンプトをそのまま貼ってインストールを一任できる。
+
+### 0.1 共通プロンプト（どのエージェントでも使える）
+
+```
+https://wirelessml.github.io/test/docs/claude-code-install-macbookneo.html
+の手順に従って、この Mac に Claude Code CLI を**スタンドアロン版で**インストールしてください。
+
+必須ルール:
+1. npm 版は絶対に入れない（§2.3）。
+2. パスは ~/.local/bin/claude、データは ~/.local/share/claude に置く（§3.1）。
+3. OAuth 認証は私が手動でブラウザに入力するので、claude コマンド初回起動までやったら待機してください（§4.1〜4.2）。
+4. `~/.claude/settings.json` は §5.1 の現行内容をそのまま書き込んでください（`CLAUDE_CODE_DISABLE_1M_CONTEXT` は**削除**したまま）。
+5. インストール後に `claude --version` と `claude doctor` の出力を私に見せてください。
+
+途中で権限ダイアログが出たら止めて私に確認してください。シェル操作は可能な限り最小限の承認範囲で。
+```
+
+### 0.2 エージェント別の補足
+
+- **Manus（My Computer）**: 自律実行が最も得意。上記プロンプトをそのまま投げれば、Terminal 起動 → `curl` 実行 → 認証前ステップまで完走する想定。
+- **Codex（Computer Use）**: Terminal.app を事前に「常に許可するアプリ」へ追加しておくと都度承認ダイアログが減る（§11 相当、本手順内では不要）。
+- **Claude Desktop Code mode**: ローカル Mac を操作する場合は SSH 越しが基本のため、自機を `localhost` SSH 先として登録するか、代わりにメイン会話でコマンドを出してもらって手動コピペする運用が無難。
+
+### 0.3 エージェント実行時の最小コマンド列（監視用）
+
+エージェントが何を打っているか確認したいときの対応。下記5行で認証直前まで到達する。
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+export PATH="$HOME/.local/bin:$PATH"
+claude --version
+mkdir -p ~/.claude
+# settings.json は §5.1 から転記
+```
+
+認証以降（§4.2）は人間が手動で行う前提。
+
 ---
 
 ## 1. 概要
