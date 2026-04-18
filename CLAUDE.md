@@ -256,6 +256,30 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/18 17:11〜17:30 セッション、F5 送信キー検証＋alt+space へ置換）
+
+- [x] **F5 → chat:submit の実戦検証と macOS Fn キー横取り問題の特定**
+  - 新セッション開始（`claude --chrome -c`）時の StatusLine 実値: Weekly **31%** / 5h **24%**（リセット 4/24 04:00 JST）、16:00 セッションから微増（想定内）
+  - F5 単押し → 反応なし、Fn+F5 → 反応なし、双方で送信発火せず
+  - 診断結果:
+    - `defaults read -g com.apple.keyboard.fnState` = 0（デフォルト、F1-F12 はメディアキー扱い）
+    - `defaults read com.apple.HIToolbox AppleFnUsageType` = **2（Fn キーは絵文字ピッカー呼び出しに割当）**
+    - Claude Code バイナリ (`~/.local/bin/claude`) の内部 key parser には `f1`〜`f12` 文字列が含まれる = アプリ側は F-key を受け入れる実装
+    - 結論: **macOS 側で Fn/F-key が横取り**されて Terminal に物理 F5 キーコードが届かない
+  - Claude Code の keybindings 仕様を再確認: 有効修飾キーは `ctrl` / `alt` / `shift` / `meta` の 4種のみ。**Fn は修飾キーとして使えない**（OS・ファームレベルで処理されアプリから観測不可）
+  - 修飾キー単独（`alt` だけ等）もバインド不可、必ず他のキーと組合せが必要
+
+- [x] **`alt+space` で chat:submit バインド置換**
+  - `~/.claude/keybindings.json` を編集、`"f5"` → `"alt+space"` へ
+  - Alt（=Option, ⌥）+ Space は Mac OS の予約ショートカットではない（Spotlight は Cmd+Space）ので衝突なし
+  - 注意点: Mac では Opt+Space が NBSP（ノーブレークスペース）入力になるケースあり、Terminal.app の挙動次第で要再検証
+  - 反映は新セッションから、検証は `claude --chrome -c` 再起動後のチャット入力欄で
+
+- [x] **キーバインド系の学び（4/22 MacBookNEO セットアップに流用可）**
+  - Claude Code の F-key 指定は可能だが、**macOS Fn 設定（AppleFnUsageType）に依存**するため単押し F-key は非推奨
+  - 信頼できる送信キー候補: `alt+enter` / `cmd+enter`（Slack 流）/ `alt+space`（現採用）/ `ctrl+s`（既定の chat:stash と競合するので要 null 解除）
+  - `~/.claude/keybindings.json` は git 外（ホーム配下）、MacBookNEO 移植時は内容を手動コピー or scp 転送
+
 ## 完了（4/18 16:00〜17:00 セッション、Chrome MCP 再起動＋MUZINA Discord 交流）
 
 - [x] **Claude Code を `claude --chrome -c` で再起動、Chrome MCP 有効化**
