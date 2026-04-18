@@ -260,10 +260,17 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - 新機能: `--connect` リモートセッション接続 / `--print-debug-info` 診断フラグ / 週次制限 75%・90% 警告 / auto モデル選択 / レート制限時のキュー自動再試行
   - `copilot --print-debug-info` 動作確認: Apple Terminal v470.2 / arm64 / local terminal 検出
 
-- [x] **MacBookNEO 新規 Mac セットアップ計画を3アプリに絞り込み**（4/22 16:30 予定枠）
-  - **インストール対象の3アプリ**: ①Claude Desktop / ②Codex + Computer Use / ③Manus — Claude Code CLI は慣れてから後日追加
+- [x] **MacBookNEO 新規 Mac セットアップ計画を確定**（4/22 16:30 予定枠、全て当日実施）
+  - **当日インストール完全リスト**:
+    1. **Tailscale**（pkg 版、brew ではなく Standalone、https://pkgs.tailscale.com/stable/#macos、GUI ログイン + システム拡張許可必須）
+    2. **SSH 鍵生成**（`ssh-keygen -t ed25519`、公開鍵を現 Mac `100.99.41.2` の `~/.ssh/authorized_keys` に追加）
+    3. **Manus**（DMG、pirosi80@yahoo.co.jp でサインイン）
+    4. **Claude Desktop**（DMG、仲結花 Max でサインイン、Code mode に `yuika@100.99.41.2:22` 登録）
+    5. **Codex**（brew または DMG）
+    6. **Claude Code CLI**（docs/claude-code-install-macbookneo.md §0 のプロンプトで Manus に依頼して自動インストール）
   - **当日の使用優先順位（4/18更新）**: **① Manus（Claude 週枠を消費しない、Free 7,964 クレジット残、自律実行が最適）→ ② Claude Desktop（Manus で詰まった箇所のメイン会話フォールバック、週枠消費）** — Codex は当日は使わない方針（Free 週枠 71% 消費済で余裕なし）
   - 4/22 は Claude 週枠を大量消費予想のため、**4/18〜4/21 の間は Claude Code セッションを軽量運用（X情報収集と軽い更新のみ）** に抑える。重い作業は 4/24 金 4:00 以降の新週に後送
+  - **現 Mac 側の事前準備（4/22 より前にやること）**: システム設定 → 一般 → 共有 → リモートログイン ON（現在 OFF のはず、当日 MacBookNEO からの SSH 受け入れ用）
 
 - [x] **docs/claude-code-install-macbookneo.md + .html に §0「AI エージェントへの依頼」追加**
   - Manus / Codex / Claude Desktop の3系統共通プロンプト、エージェント別補足、監視用5行コマンド列を追記
