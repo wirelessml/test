@@ -270,7 +270,7 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
     6. **Claude Code CLI**（docs/claude-code-install-macbookneo.md §0 のプロンプトで Manus に依頼して自動インストール）
   - **当日の使用優先順位（4/18更新）**: **① Manus（Claude 週枠を消費しない、Free 7,964 クレジット残、自律実行が最適）→ ② Claude Desktop（Manus で詰まった箇所のメイン会話フォールバック、週枠消費）** — Codex は当日は使わない方針（Free 週枠 71% 消費済で余裕なし）
   - 4/22 は Claude 週枠を大量消費予想のため、**4/18〜4/21 の間は Claude Code セッションを軽量運用（X情報収集と軽い更新のみ）** に抑える。重い作業は 4/24 金 4:00 以降の新週に後送
-  - **現 Mac 側の事前準備（4/22 より前にやること）**: システム設定 → 一般 → 共有 → リモートログイン ON（現在 OFF のはず、当日 MacBookNEO からの SSH 受け入れ用）
+  - **現 Mac 側の事前準備（4/18 済み）**: システム設定 → 一般 → 共有 → リモートログイン **既に ON** を確認済（ローカルホスト名 `yuika.local`、Tailscale `100.99.41.2:22` で MacBookNEO から受け入れ可能）
 
 - [x] **docs/claude-code-install-macbookneo.md + .html に §0「AI エージェントへの依頼」追加**
   - Manus / Codex / Claude Desktop の3系統共通プロンプト、エージェント別補足、監視用5行コマンド列を追記
