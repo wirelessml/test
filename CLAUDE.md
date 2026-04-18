@@ -239,6 +239,38 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/18 9:00セッション前作業）
+
+- [x] **Codex Computer Use プラグイン動作確認・TODO #8 クローズ**
+  - Codex v26.415.30602（build 1773、Mac 版）で「コンピュータの使用」設定に Computer Use v1.0.750 (openai-bundled) ✓ 表示で有効
+  - 「常に許可するアプリ」は Settings UI からは read-only、**Codex チャットで Computer Use 許可ダイアログで「常に許可」チェック→許可でアプリ追加される仕組み** と判明
+  - 検証として "Finder でホームフォルダを開いてスクリーンショットを撮って" プロンプトを投げ → 許可ダイアログで常に許可チェック → Finder が 常に許可するアプリ リストに登録確認
+  - Free プラン週次レート 71% 消費（リセット 4/25）、以降の追加アプリ登録は 4/25 以降に温存決定
+
+- [x] **Manus デスクトップアプリ (Meta 傘下) インストール・サインイン・最有力 Computer Use 候補に採用**
+  - `/Applications/Manus.app` v1.5.3（署名 Team 5V8XDGQQB6、arm64、Meta 傘下、`download.manus.im/Manus-Setup-1.5.3.dmg` 141MB）
+  - iPhone Manus (pirosi80@yahoo.co.jp) と Mac でアカウント自動連携、7964 クレジット + 毎日更新 300（00:00 リフレッシュ）
+  - 左メニュー: アカウント / 設定 / 使用状況 / スケジュールタスク / Mail Manus / データ管理 / クラウドブラウザ / **My Computer** / パーソナライゼーション / スキル / コネクタ / 統合 / About / ヘルプ
+  - 過去利用履歴: SwitchBotリサーチ -213 / AI塾テキスト -36 / Claude Code分析 -56 等、**1タスク 30〜210 クレジット消費**目安
+  - **Manus Pro は¥6,000/月 (8,000クレジット)** — Free の 300/日×30=9,000 と同等以上なので契約不要、1〜2か月 Free で様子見判断
+  - CLAUDE.md 上、Claude Desktop Code mode は SSH 遠隔用、Codex は補助、Manus が日常使い筆頭の3層構成に
+
+- [x] **Copilot CLI v1.0.31 → v1.0.32 アップデート**
+  - `npm install -g @github/copilot@latest`（パッケージ名は `@github/copilot`、`@github/copilot-cli` ではない）
+  - 新機能: `--connect` リモートセッション接続 / `--print-debug-info` 診断フラグ / 週次制限 75%・90% 警告 / auto モデル選択 / レート制限時のキュー自動再試行
+  - `copilot --print-debug-info` 動作確認: Apple Terminal v470.2 / arm64 / local terminal 検出
+
+- [x] **MacBookNEO 新規 Mac セットアップ計画を3アプリに絞り込み**（4/22 16:30 予定枠）
+  - ①Claude Desktop（GUI で Code mode、最優先）/ ②Codex + Computer Use / ③Manus — Claude Code CLI は慣れてから後日追加方針
+  - インストールは上記3アプリのいずれかに依頼して自動実行予定（Manus 筆頭）
+
+- [x] **docs/claude-code-install-macbookneo.md + .html に §0「AI エージェントへの依頼」追加**
+  - Manus / Codex / Claude Desktop の3系統共通プロンプト、エージェント別補足、監視用5行コマンド列を追記
+  - GitHub Pages デプロイ確認（commit 3aaab68）: https://wirelessml.github.io/test/docs/claude-code-install-macbookneo.html#agent
+
+- [x] **はりきゅう整体しゅん LP GitHub Pages 公開**（外出先閲覧可）
+  - https://wirelessml.github.io/test/docs/hari-seitai-shun.html#info（commit 06d7a9b）
+
 ## 完了（4/18 5:00セッション・早朝）
 
 - [x] **GHFS（GitHub仮想ファイルシステム）セットアップ完了** — TODO #10 クローズ
