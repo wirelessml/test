@@ -256,6 +256,63 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/18 夜〜4/19 朝セッション、AI 自動ゲームプレイ研究 3段階実験＋VoiceBox 発見）
+
+- [x] **Crown & Coin デモの AI 自動プレイ研究（実験A・B・C 完走）**
+  - **動機**: 維新の嵐 CD 到着後の AI 自動プレイ TODO #7 に向けた知見収集、および MacBookNEO 4/22 セットアップ後の Manus/Codex 運用基盤構築
+  - **実験A: フルスクリーン効果検証** — **AI 自動化不可を確定**
+    - macOS のフルスクリーン = 別 Space（仮想デスクトップ）に隔離される
+    - screencapture / cliclick / Quartz bounds すべて現在 Space 限定
+    - Quartz bounds は stale 値を返す（X=5108, Y=-69 でオフスクリーン判定）
+    - 復旧手段: Mission Control (F3 = key code 160) → Esc → `osascript set position` でウィンドウ呼び戻し成功
+    - **結論: フルスクリーンアプリの AI 自動化は macOS レベルで不可能**、維新の嵐 VM は QEMU ウィンドウモード（別 Space を作らない）なので問題なし
+  - **実験B: 固定座標クリックシーケンス** — **成立、半自動化達成**
+    - ウィンドウ位置/サイズ固定状態で 6 クリックシーケンスを確立
+    - 酒場 → 酒場の親父と話す → 仕事 → 用心棒カード → 受ける → 完了
+    - 1 イテレーション ~10秒、+128〜245F の報酬
+    - 初期成功: 2,127F → 8,387F（6,260F ゲイン、複数バッチ分）
+    - 複数回の window resize / move で座標が無効化、再キャリブレーションが必要
+  - **実験C: Vision 頻度最適化（ピクセルシグネチャ方式）** — **実装完了、戦闘イベントで限界露呈**
+    - Python スクリプト `/tmp/grinding.py` 作成、money 領域 (280, 200, 620, 290) の MD5 ハッシュで iteration 成否判定
+    - Claude vision 呼び出しは「連続3失敗時のみ」まで削減、quota 大幅節約
+    - 連続2失敗で auto_recover（Esc + 中立位置クリック）、連続3で停止
+    - **成功率データ**:
+      - 100 iter チャレンジ × 3回実施（round 1: 61/100, round 2: 16/100, round 3: 18/100）
+      - 平均 **32 iter で戦闘トリガー**（酔っぱらい / 野盗 / ガラの悪い男）
+      - 成功率 84〜100%（戦闘手前まで）
+    - **本質的結論: 用心棒 grinding は定期的に BATAILLE（タクティカル SLG 戦闘画面）遷移する設計、AI クリックだけでは戦闘をクリアできず完全自動化は不可能**。だが戦闘前までは安定自動化可能
+    - `/tmp/grinding.py` スクリプト、ピクセルシグネチャ検出、auto-recovery ロジックは維新の嵐・Manus 長時間タスク等に流用可能な基盤
+
+- [x] **MUZINA GAMES が日本人ソロ開発者と確定**（4/19 02:44 JST 発言）
+  - Discord #chat で Dominion さんの質問「solo dev or team?」に **"I'm a solo developer from Japan!"** と本人回答
+  - 史実人物 1,015 人 + 5 シナリオ + 22 エンディングを**1人で実装中**という規模感（極めて野心的な個人開発）
+  - "dev mode で集中すると返信遅れる"自認、「太閤立志伝V の過酷さに自分自身従いすぎ」発言など、**作家性の強さ**が腑に落ちる文脈
+  - 4/22 MacBookNEO セットアップ後もコミュニケーション継続予定の貴重なコミュニティ
+
+- [x] **VoiceBox（ElevenLabs 完全無料ローカル代替）発見・検証**
+  - @so_ainsight 3連投スレッドで紹介、2026/04/16 v0.4.0 リリースの**超タイムリー**ツール
+  - **GitHub**: https://github.com/jamiepine/voicebox （MIT License、20.5k star）
+  - 技術基盤: **Alibaba Qwen3-TTS** ラッパー、Tauri (Rust) + React + FastAPI
+  - **macOS Apple Silicon DMG**: https://voicebox.sh/download/mac-arm、MLX ネイティブ対応
+  - **5 TTS エンジン**: Qwen3-TTS / LuxTTS / Chatterbox Multilingual / Chatterbox Turbo / HumeAI TADA
+  - **23言語対応** + **DAW タイムライン**（複数話者・ポッドキャスト編集）+ **REST API**（プログラマブル）
+  - **ユーザー主張の裏付け**: 月額$6 → $0 ✓、100% ローカル ✓、DAW は他 TTS にない差別化 ✓
+  - ⚠️ **4/11 検証の既知事項**: Qwen3-TTS は過去に試して「動いたが似てなかった」（しぶ声再現度低い）
+  - **未検証の期待エンジン**: LuxTTS / Chatterbox / HumeAI TADA（しぶ声クローン検証の価値あり）
+  - **ElevenLabs Starter 5/11 失効対策**として最有力候補、CLAUDE.md TODO のしぶ音声編集パイプライン (D→A→B→C) の基盤技術になり得る
+  - M1 8GB での同時稼働リスク: Claude Desktop + Claude Code + claude-mem + VoiceBox Qwen3 推論 = 5〜7GB 見込み、ゲーム自動化と排他運用推奨
+
+- [x] **AI ツール業界の「楽観 vs 批判 vs 実用」トリオ観察**
+  - **楽観**: @so_ainsight VoiceBox「レッドブル飲んでる間に 20本 YouTube 動画量産」的ヒャッハー
+  - **批判**: Microsoft Copilot 未実装機能一覧（プロンプトリライト / エージェントハンドオフ / Researcher の Computer Use = 実はブラウザ）
+  - **実用**: Superwhisper + Groq + Llama 選定記「速く・時々間違える > 遅く・稀に間違えない」UX 哲学
+  - 3層を並べて「AI 実装の実態 vs 発表」の構造的理解、本日の実験C 所見と連動
+
+- [x] **ゲーム進捗 & ユーザー手動 + AI 自動合算**
+  - セッション開始 (4/18 18:15) 所持金 2,127F
+  - 4/19 07:55 時点: AI 自動 grinding 進行中（round 4、60/100 iter、56成功/4失敗）
+  - セッション中のトータル獲得: +10,000F 以上（ユーザー手動 + AI 自動の合算）
+
 ## 完了（4/18 17:11〜17:30 セッション、F5 送信キー検証＋alt+space へ置換）
 
 - [x] **F5 → chat:submit の実戦検証と macOS Fn キー横取り問題の特定**
