@@ -256,6 +256,78 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/18 11:52〜16:00 セッション、昼〜午後）
+
+- [x] **Crown & Coin: The Hundred Years Demo（百年戦争立志伝）インストール・起動・自動プレイ検証**
+  - 作者 @SuguruKun_ai の解説スレッド発見 → ユーザー興味 → デモ導入
+  - **Steam** 未インストール状態から `brew install --cask steam` で導入（~60秒）
+  - **Rosetta 2 インストール**（`softwareupdate --install-rosetta --agree-to-license`、~1分、削除困難な旨を Homebrew cask 警告通り把握、実害なしで永続化）
+  - Steam Guard QR コードログイン成功（iPhone Steam Mobile アプリから PC の QR コードスキャン＋承認、ID/パスワード/Guard コード一切入力不要）
+  - `steam://install/4619520` でデモ DL（~2分、2.78GB、依存ランタイム込みで downloading/ に 2.6GB 蓄積後 common/ へ展開）
+  - **デモ app_id: 4619520**（製品版 app_id: 4476270）
+  - **実行ファイル**: `Mach-O 64-bit arm64`（**Apple Silicon ネイティブ**、Rosetta 不要）、Bundle ID `com.crownandcoin.demo`、Electron + Vulkan SwiftShader、日本語 `ja.pak` 同梱
+  - 起動 `open steam://rungameid/4619520` → 5プロセス（メイン + GPU + Renderer + ネットワーク + オーディオ）、`--lang=ja` 日本語ロケール確認
+  - カスタムフェイス用 `~/Library/Application Support/CrownAndCoin/Characterface` 生成 = キャラメイク機能あり
+  - **自動プレイ検証**: `screencapture -l <window_id>` + `cliclick c:X,Y` + Read tool（Claude vision）のループで開幕ナレーション数画面を自動進行成功（「1355年──フランス王国は、終わりの見えない戦争の中にあった」→「あなたの世界は──」→ 次画面）
+  - 詰まりポイント: グレースケール農家シーンの「0/15」カウンター画面でクリック反応なし、隠れオブジェクト探しか特定 UI 必要と推定 → 自動プレイ停止、ユーザー手動進行へハンドオフ
+  - **学び**: computer-use MCP は Steam 内パス（`&amp;amp;` HTML 二重エンコード含む）を LaunchServices スキャンで認識できず（エラー -10811）、symlink 作成も効果なし → 代替ルート（screencapture + cliclick + Read）で回避可能
+
+- [x] **太閤立志伝ライクの位置づけ判明**
+  - Game*Spark 記事（2026/04/17 デモ版公開時、https://www.gamespark.jp/article/2026/04/17/165315.html）で「**太閤立志伝ライクな百年戦争舞台の中世歴史サンドボックスRPG**」と明言
+  - 史実人物 1,000〜1,015 人（黒太子・ジャンヌ・デュ・ゲクラン等）は製品版解禁、**デモはオリキャラのみ**
+  - 5 シナリオ + 22 タロット系エンディング + カスタムシナリオ
+  - TODO #7 の維新の嵐（Koei 太閤立志伝系）と同じ系譜 → 両者は直接比較可能な資産
+  - **開発**: MUZINA GAMES（スタジオ）
+  - **公式 Discord**: https://discord.gg/xEpyDFQxCr（デモ公開直後は開発者も活発）
+  - **Steam コミュニティ**: まだスレッド 2 件のみ（英語 Bug Reports + 中国語 1 件）、日本語コミュニティ未形成
+
+- [x] **Claude Code 週次使用量を可視化する StatusLine + SessionStart hook 構築**
+  - 従来: `/status` `/cost` `/usage` はダイアログ表示のみ、Claude 側から数値把握する手段なし
+  - claude-code-guide エージェントで調査 → **Claude Code は statusline スクリプトに `rate_limits.seven_day.used_percentage` / `rate_limits.five_hour.used_percentage` を stdin JSON で毎ターン渡す**と判明
+  - **`~/.claude/statusline.sh`**: stdin JSON パース → `/tmp/claude-usage.json` に週次 / 5h % + リセット unix 保存、画面下部に `[Opus 4.7 (1M context)] W:XX%→MM/DD 5h:XX%` 表示
+  - **`~/.claude/hooks/inject-usage.sh`**: SessionStart 時に `/tmp/claude-usage.json` 読み込み → `{hookSpecificOutput: {hookEventName, additionalContext}}` JSON で Claude のコンテキストに注入
+  - **`~/.claude/settings.json`**: `statusLine` + `hooks.SessionStart` 追加、既存設定（env / permissions / plugins / effortLevel 等）は完全保持
+  - **現在値（4/18 14:45 取得）**: **週次 29.0% 使用**（残 71%、リセット **4/24 04:00 JST**）、5時間 4% 使用（リセット 4/18 19:00 JST） — CLAUDE.md の「4/24 金 4:00 以降の新週」記述と完全一致
+  - 次セッションから私（Claude）が冒頭で残枠を自動把握可能に
+  - MacBookNEO 4/22 16:30 セットアップに向けて、残枠管理が定量化された
+
+- [x] **しぶ Instagram 4連投（同日物語構造）を knowledge 追記**
+  - `ai-minimalist-shibu/knowledge/shibu-ai-update.md` にセクション「テスラ改造：サイバー空間化（2026/4/18 Instagramストーリー）」展開
+  - #1 11:44 EVNOVA Before/After（@evnova_custom、福岡 320 モデルY、アンビエントLED サイバー化）
+  - #2 11:44 紫ライト車中泊フルベッド（没入感演出）
+  - #3 12:48 ポケモンチャンピオンズ マスターIV 5連勝中（「家よりゲーミング部屋っぽい」20時間プレイ）
+  - #4 13:01 トレーナーID「ミニスカート」レート 1643.619（「ミニマリストって肩書きないからミニスカートで代用」）
+  - 物語構造: テスラ改造 → ゲーミング化 → 実戦ランクIV → アイデンティティ表明、の4段プロット
+  - 読み解き: ミニマリズムブランドの中に「無駄の極致」に見えるゲーム実戦を織り込む、矛盾を活かす更新パターン
+
+- [x] **X Daily Briefing 追記: @SuguruKun_ai の video-use 解説スレッド（3連投）**
+  - `docs/x-daily-briefing.md` に新規セクション（commit b1a02a5）、初回 commit なのでファイル自体も git 管理下へ昇格
+  - 投稿1: 素材フォルダ→完成mp4 自動生成の強調フック
+  - 投稿2: ElevenLabs Scribe 単語タイムスタンプ + takes_packed.md 設計
+  - 投稿3: `git clone` → ln -s → `pip install -e .` のインストール3行、`cd video-use` 抜けの注意点併記
+  - 自分の 4/17 導入実績との突合で精度チェック、takes_packed.md / 自己評価ループ等スレッド未言及ポイントも記録
+
+- [x] **iPad → TV（Panasonic VIERA TH-40CX700）HDMI 接続の HDR 設定逆転現象を記録**（2015年 4K TV、HDR 非対応確認済）
+  - ユーザー発見: 「優先ディスプレイ設定 = HDR」にしたら映った
+  - 解釈: iPad UI 上では HDR=推奨 / SDR=互換性優先だが実際は HDR=**コンテンツ適応モード**（TV 能力を EDID で確認してフォールバック）/ SDR=**強制固定**（60.00Hz+10bit+広色域で非対応 TV が受け入れ拒否）
+  - 非 HDR TV には HDR 指定が正解、という UI 命名の罠を確認
+
+- [x] **HyperDeck Studio HD Mini + iPad HDMI 接続失敗の原因特定**
+  - 原因: iPad 60.00Hz/VRR/広色域 vs HyperDeck 1080p59.94 SMPTE 固定、Micro Converter BiDirect SDI/HDMI は電気的変換のみでフレームシンク無し
+  - 解決策: Blackmagic UpDownCross HD Mini（約¥70,000、HDMI→SDI+フレームシンク）/ ATEM Mini（約¥40,000、入力フレームシンク搭載、HDMI 出力 1080p59.94 conform）/ Decimator MD-CROSS V2（約¥100,000）
+  - 放送規格 59.94Hz の NTSC 由来（カラーサブキャリアとの干渉回避で 0.1% 下げた呪い）を教科書的に整理
+  - 今後配信系機材拡張時の参照になる学び
+
+- [x] **Chrome 拡張 "Claude" 検出（ID: fcoeoabgfenejglbffodgkkbkcdhcgfn）**
+  - `/Applications/Claude.app/Contents/Helpers/chrome-native-host` プロセス稼働中、Claude Desktop と Chrome 間の native host 確立済
+  - 現 Claude Code セッションは `claude --dangerously-skip-permissions` のみで起動、`--chrome` フラグ無し → Chrome MCP ツール未ロード
+  - 次回 Chrome MCP を使いたいときは `claude --chrome -c` で再起動する（コンテキスト継承可）
+  - 当面の用途: MUZINA Discord で Crown & Coin 質問投稿（行動力切れ・病気治療の詰まりを解消したい）
+
+- [x] **iPhone Steam Mobile アプリ同定**（com.valvesoftware.Steam、Valve Corporation 公式）
+  - 類似兄弟アプリ Steam Chat / Steam Link は認証機能なしで別物
+  - QR コードログイン対応で ID・パスワード不要のサインインが可能、本セッションで実証済
+
 ## 完了（4/18 9:00セッション前作業）
 
 - [x] **Codex Computer Use プラグイン動作確認・TODO #8 クローズ**
