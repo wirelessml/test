@@ -256,6 +256,35 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/18 16:00〜17:00 セッション、Chrome MCP 再起動＋MUZINA Discord 交流）
+
+- [x] **Claude Code を `claude --chrome -c` で再起動、Chrome MCP 有効化**
+  - 再起動直後に SessionStart hook が `rate_limits` を読み込み、Claude コンテキスト冒頭に「Weekly 29% / 5h 10% / resets 04/24 04:00 JST」を自動注入
+  - **StatusLine 表示 + hook 注入のパイプライン完全動作確認**（設計どおり）
+  - `claude-in-chrome` MCP ツール群が ToolSearch 経由でロード可能に（`mcp__claude-in-chrome__*` 17 本）
+
+- [x] **MUZINA GAMES Discord（Crown & Coin The Hundred Years サーバー）で開発者と直接対話**
+  - 全チャンネル偵察: `#news` / `#welcome` / `#chat` / `#bug-reports` / `#hundred-years-war` / `#history-misc`、計 27 投稿のごく小さなコミュニティ
+  - 開発者 **MUZINA GAMES 本人** が活発に返信、`#hundred-years-war` から「ゲーム質問は #chat へ」と明示的誘導あり
+  - `#chat` に質問 3 件投稿（病気治療 / ゲーム内ヘルプ Wiki / セーブ後 Edward に切替わる現象）、**回答全てを数分で獲得**:
+    - 「**行動力 0 でも行動可能**、病気 AND HP ≤10 で無制限化」
+    - 「**病気治療: Barber-surgeon（理髪外科医）に薬調合依頼→飲む** or **自宅で休息して自然治癒**（デモ版は老衰死 無効）」
+    - 「公式マニュアル・Wiki は現時点なし」
+    - 「**macOS 版 save/load 機能がバグで破損、次回アップデートで修正予定**。当面は再起動時 **C+O+M 3キー同時押し**で Serf（農奴）時代スキップして続きから再開可能」— これが「セーブすると Edward 42歳になる現象」の正体
+    - 「**テキスト送り: Space または Z キー**」
+    - 「**酒場の老人 NPC に話しかけると、キーボードショートカットや隠しコツを教えてくれる**」= 事実上のゲーム内ヘルプ機能
+  - **「太閤立志伝V（初代 PS2版）リスペクト」を開発者本人が明言**（CLAUDE.md 4/18 午後の「太閤立志伝ライク」と完全整合、ルーツ確認）
+  - 日本人プレイヤー **きりん** さんも同時間帯に Discord 参加、ミニゲーム難易度フィードバック投稿（開発者が日本語で返信、「プレイアブルキャラ親愛度 MAX でミニゲーム OFF 機能」将来実装方針を回答）
+  - **投稿 UI 学習**: Chrome MCP の `computer.type` アクション内の改行 `\n` が Discord Slate editor で **Enter=送信**として解釈される → 長文改行付きテキストが意図せず複数メッセージに分割送信される挙動。**1行テキスト（改行なし）+ Return キー単発 = 1メッセージ送信** が正しいパターン
+
+- [x] **F5 キーを chat:submit（送信）に追加バインド**
+  - `~/.claude/keybindings.json` 新規作成、Chat コンテキストで `"f5": "chat:submit"` 追加
+  - Enter は既定のまま（additive バインディング）= Enter + F5 両方送信可
+  - 反映は新セッションから、`/doctor` で警告なし確認推奨
+  - 4/22 MacBookNEO セットアップ時、F5 での送信が好みなら同ファイルを移植することで流用可能
+
+- [x] **しぶ #3 #4 Instagram ストーリー knowledge 追記コミット反映確認**（commit 2e5a1c2 で反映済、事後検証）
+
 ## 完了（4/18 11:52〜16:00 セッション、昼〜午後）
 
 - [x] **Crown & Coin: The Hundred Years Demo（百年戦争立志伝）インストール・起動・自動プレイ検証**
