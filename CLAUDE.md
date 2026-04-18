@@ -261,8 +261,9 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - `copilot --print-debug-info` 動作確認: Apple Terminal v470.2 / arm64 / local terminal 検出
 
 - [x] **MacBookNEO 新規 Mac セットアップ計画を3アプリに絞り込み**（4/22 16:30 予定枠）
-  - ①Claude Desktop（GUI で Code mode、最優先）/ ②Codex + Computer Use / ③Manus — Claude Code CLI は慣れてから後日追加方針
-  - インストールは上記3アプリのいずれかに依頼して自動実行予定（Manus 筆頭）
+  - **インストール対象の3アプリ**: ①Claude Desktop / ②Codex + Computer Use / ③Manus — Claude Code CLI は慣れてから後日追加
+  - **当日の使用優先順位（4/18更新）**: **① Manus（Claude 週枠を消費しない、Free 7,964 クレジット残、自律実行が最適）→ ② Claude Desktop（Manus で詰まった箇所のメイン会話フォールバック、週枠消費）** — Codex は当日は使わない方針（Free 週枠 71% 消費済で余裕なし）
+  - 4/22 は Claude 週枠を大量消費予想のため、**4/18〜4/21 の間は Claude Code セッションを軽量運用（X情報収集と軽い更新のみ）** に抑える。重い作業は 4/24 金 4:00 以降の新週に後送
 
 - [x] **docs/claude-code-install-macbookneo.md + .html に §0「AI エージェントへの依頼」追加**
   - Manus / Codex / Claude Desktop の3系統共通プロンプト、エージェント別補足、監視用5行コマンド列を追記
