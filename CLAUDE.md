@@ -140,13 +140,30 @@
 ### 9. Switch 2キャプチャ環境構築（GC313Pro到着後）
 - 注文済み: Amazon.co.jp 中古ブラック ¥9,833（残り1点）— AVerMedia Live GENERATOR POCKET ポケットキャプチャー GC313Pro BK DV0963
 - US Amazon $129.99（¥22,000〜）/ メルカリ新品 ¥14,961 と比較して最安
-- 中古品のため到着後動作確認:
-  1. 通電・LED点灯確認
-  2. Mac M1 で OBS → 映像キャプチャデバイス（UVC、ドライバ不要）として認識されるか
-  3. 1080p60 出力可否・遅延確認
-  4. 100W GaN PD 給電動作確認
-- 接続フロー: Switch 2 → USB-C(100W入力) → GC313Pro → HDMI(パススルー) → モニター / GC313Pro → USB-C(PC側) → Mac M1
+- **4/22 到着確認済**、4/21 に MASU-P55 で OBS 動作確認済（iPhone 縦画面キャプチャ成功）
+- **重要仕様判明（公式ページより、4/22）**:
+  - **HDMI IN なし！** 映像入力は **USB-C1 の DisplayPort Alt Mode 専用**
+  - USB-C2: PC 接続（OBS キャプチャ転送）
+  - HDMI OUT: **4K60 パススルー**
+  - キャプチャ: 最大 **1080p60**
+  - macOS 13+、M1 動作確認済
+  - 給電: 単一ポート 100W PD、複数同時 95W（負荷分散）
+  - 折りたたみ式 AC プラグ内蔵（電源アダプタ兼用）
+- **接続可能デバイス**（USB-C DP Alt Mode 対応機のみ）:
+  - ✓ iPhone 15 / 15 Pro、USB-C iPad、USB-C Android、USB-C ノート PC
+  - ✓ **Switch 2（AVerMedia 公式動作確認済、4/22 判明）**: 純正ドック不要で本体 USB-C 直結、要ファーム v24.8.30.16.1.19.30+
+  - ❌ PS5 / Xbox Series X / Blu-ray プレーヤー / 旧世代ゲーム機（HDMI 出力のみ、接続不可）
+- **接続フロー（訂正版）**:
+  ```
+  USB-C 機器 [DP Alt Mode] → GC313Pro USB-C1（入力）
+    → GC313Pro HDMI OUT → モニター/TV（4K60 パススルー）
+    → GC313Pro USB-C2 → Mac M1 or MASU-P55（OBS キャプチャ、1080p60）
+    → GC313Pro 折りたたみピン → AC コンセント（100W PD 給電源）
+  ```
+- **4/21 誤った情報の訂正**: iPhone USB-C → HDMI アダプタは**不要**（直結可能）
 - 別途 Switch 2 本体購入が必要（未購入）
+- **Switch 2 購入の技術的前提**: 4/22 AVerMedia 公式動作確認済と判明、**接続はクリア**。あとは本体価格 ¥50,000+ の購入判断のみ
+- **Windows PC（MASU-P55）経由でファーム更新 → 4/22 実施、既に最新 v24.8.30.16.1.19.30 だった**（更新作業不要、Switch 2 互換性・iPhone 17 Pro 充電断続問題 既に修正済）
 
 ### ~~10. GHFS（GitHub仮想ファイルシステム）セットアップ~~ ✅ 完了（4/18 6:25am）
 - `/Applications/GHFS.app` v0.1.2（FSKit使用、macFUSE不要、H73VKH7W9W 署名）
@@ -255,6 +272,400 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   1. `docs/x-daily-briefing.md` にセッション日時でセクション追記
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
+
+## 完了（4/20 セッション、Claude Design 本番化＋Google Workspace CLI 導入）
+
+- [x] **Claude Design ハンドオフバンドル → 本番公開フロー確立**
+  - **動機**: iPhone claude.ai Design メーター 0% 未使用 → 試用、AIミニマリストしぶ LP を生成 → ハンドオフ経由で本番化
+  - **Claude Design 実測フロー**:
+    - 10:20 プロンプト送信 → 10:28 生成完了（**8 分**、Hi-fi + インタラクティブプロトタイプ）
+    - 10:31 "Handoff to Claude Code..." エクスポート選択、`https://api.anthropic.com/v1/design/h/<hash>?open_file=<filename>` 形式の fetch コマンドと「Download zip instead」オプション提示
+    - 10:40 push → ~10:41 GitHub Pages live
+    - 生成 → 実装公開まで **総所要 ~20 分**
+  - **ハンドオフバンドル構造**（tarball gzip、9.7KB）:
+    - `lp/README.md`: コーディングエージェント向け指示書（「チャット先読・メイン HTML 全読・ambiguous ならユーザー確認・pixel-perfect 再現」）
+    - `lp/chats/chat1.md`: ユーザー原文プロンプト + Assistant 設計理由（デザインシステム・セクション構成）
+    - `lp/project/Shibu LP.html`: 26KB、856行の実装 HTML（React/ReactDOM/Babel CDN + Tweaks パネル + TWEAK_DEFAULS IIFE + postMessage edit-mode wiring 付き）
+  - **WebFetch は gzip を返す → `file` で検出 → `tar -xzf` で展開** のルーチンを確立（Claude Design 特有のプロトコル）
+  - **本番化（dev-only harness 除去）戦略**:
+    - 除去: React/ReactDOM/Babel CDN `<script>`（3タグ、~40KB）/ `#tweaksPanel` div ブロック / `.tweaks` CSS / TWEAK_DEFAULS IIFE state 管理 / postMessage edit-mode wiring (`__activate_edit_mode` 等)
+    - 保持: 全ビジュアル CSS（`mix-blend-mode: difference` ナビ、`oklch()` アクセント、`clamp()` レスポンシブ字間）/ セマンティック HTML / コピー / reveal-on-scroll IntersectionObserver
+    - 結果: 689行・19.5KB のピクセルパーフェクト本番 HTML
+  - **GitHub Pages 公開**: `~/Desktop/docs/shibu-lp.html` → commit **d2479ed**（"Claude Design handoff 実装: しぶ LP を docs/ に公開"）→ push → https://wirelessml.github.io/test/docs/shibu-lp.html
+  - GH Pages 初回 404 → 30〜90秒ビルド待ちで live（標準挙動）
+  - **デザイン仕様**（原作尊重）: 黒背景 × オフホワイト #F5F3EE × `oklch(0.78 0.12 75)` ゴールド、Noto Serif JP（明朝）+ Noto Sans JP + Inter、Hero タイトル「手放せば、見えてくる。」、4段プロセス（棚卸し→問い直し→手放す→続ける）、3本柱（引き算/対話/余白）、¥48,000/3回の1on1オファーカード、最終CTA「まず、話してみる。」
+  - **判断履歴**: 実在の写真差し替えは「公開GitHub Pages上での肖像権/ライセンス懸念」で保留 → プレースホルダ（260×260 concentric rings）のまま公開、必要なら後日差し替え可能
+
+- [x] **Google Workspace CLI (gws) v0.22.5 導入**
+  - **動機**: GitHub で googleworkspace/cli 発見、Drive/Gmail/Sheets/Docs/Calendar を Claude Code から直接操作できる Rust 製 CLI
+  - **アーキテクチャ特徴**: Google Discovery Service から実行時に動的にサブコマンド構築（=新 API 追加時にバイナリ更新不要）
+  - **インストール**: `brew install googleworkspace-cli` → `/opt/homebrew/Cellar/googleworkspace-cli/0.22.5`（arm64 native bottle、15.6MB）
+  - **Agent Skills 95 本一括インストール**: `npx --yes skills add https://github.com/googleworkspace/cli --all -g`
+    - `--all` = `--skill '*' --agent '*' -y` の省略形（デフォルトは interactive 選択でハング）
+    - 保存先: `~/.agents/skills/`、`~/.claude/skills/` 等にシンボリックリンク
+    - 内訳: `gws-*`（Drive/Gmail/Sheets/Docs/Calendar/Slides/Keep/Forms/Tasks/Chat/Meet/Script/Classroom/Events/ModelArmor/AdminReports/People）+ `recipe-*`（複合ワークフロー: Drive共有+メール通知、Gmail→Tasks変換、Calendar週次整理 等）+ `persona-*`（exec-assistant / content-creator / sales-ops 等）+ `gws-workflow-*`（週次ダイジェスト/スタンドアップレポート/会議準備）
+  - **gcloud SDK 564.0.0 既インストール確認**（既存 photos-mcp 設定と共存可能）
+  - **OAuth 手順はユーザー実行待ち**（SSO/OAuth は Prohibited Actions に該当、ブラウザ同意はユーザーのみが実行）:
+    1. `gcloud auth login`
+    2. `gcloud projects list` → `gcloud config set project <PROJECT_ID>`（photos-mcp と同じ "My First Project" で OK、新規 Desktop 型 OAuth クライアント作成）
+    3. `gws auth setup`
+    4. `gws auth login -s drive,gmail,sheets,docs,calendar`（testing mode は最大 ~25 scopes 制限、狭く開始推奨）
+    5. `gws drive files list --params '{"pageSize": 5}'`（検証）
+  - **注意点**: 既存 photos-mcp は Web 型クライアント、gws は Desktop 型必要 → 同プロジェクト内で別クライアント並立可
+  - OAuth 完了後: CLAUDE.md に追記 + 試運転プロンプト（Drive一覧・Gmail検索・複合ワークフロー）提案予定
+
+- [x] **Claude Design 産物の扱いルール確立**（プロトタイプ → 本番 HTML 変換パターン）
+  - Tweaks パネル・React harness・edit-mode wiring は Claude Design iframe 内での live-editable 機能 → 本番では不要、削除対象
+  - ビジュアル（CSS・HTML構造・コピー）は pixel-perfect 維持
+  - コミットメッセージに判断を明記（後から「何を捨て何を残したか」を追える）
+  - 将来のハンドオフで再利用可能な変換パターン
+
+- [x] **セッション再接続ログ（4/20 午後）**
+  - 16:27 前セッション終了（Weekly 39% / 5h 0%）
+  - 16:33 Opus 4.7 1M context max で再開 → 4/20 セッション記録を CLAUDE.md 追記（Claude Design + gws 本件）
+  - 16:36 「無限ループ再開」発言後 /exit（作業なし）
+  - 17:06 再接続（Weekly 40% / 5h 5%）、約 30 分で Weekly +1pt / 5h +5pt
+  - 直近は /loop 系の軽量タスク想定、gws OAuth 完了報告待ち状態継続
+
+## 完了（4/20 夕方〜夜セッション、マルチツール一気導入＋しぶエコ人物特定）
+
+- [x] **Crown & Coin 無限 grinding ループ再開→戦闘で停止**
+  - `/tmp/grind-loop.sh`（90秒間隔 auto-restart wrapper）+ `/tmp/grinding.py`（pixel signature 検出）で昨日と同じパターン
+  - Round 1 (17:11-17:20): **Success 47 / Fail 5**、所持金 317,795F から +~8,500F
+  - Round 2 (17:21-17:25): iter 20 で BATAILLE（戦闘画面）突入、Success 20
+  - Round 3-16: 戦闘画面のまま即 stuck（Etienne vs 敵3体、40分+間不変）
+  - 17:54 ユーザー要求で停止、wrapper + grinding.py kill 済
+  - **確認事項**: 昨日の用心棒 grinding 座標は「街→依頼一覧」画面でも当たる（最初の Round 1 の 90% 成功率を確認）
+
+- [x] **Gmail TODO 下書き更新（4/20 版）**
+  - 旧版 19da80e2a80c8f73（4/19、8件）→ 新版 r-5141956222652409298（4/20、**15件**）
+  - 追加セクション:
+    - 【gws OAuth セットアップ】5コマンド手順（gcloud auth login → gws auth login -s drive,gmail,...）
+    - 【MacBookNEO セットアップ（4/22 16:30）】6アプリ導入順
+    - 【重要期日リマインダー】4/21 / 4/24 / 4/30 / 5/11 / 5/20 / 5/29-30 の6件
+  - 旧下書きは残存、ユーザー手動削除依頼
+
+- [x] **McDonald's Support Bot バイラル動画の正体特定**
+  - 当初 mcdonalds.com の Help Center と推測 → 間違い
+  - **正体: echoai.so/e/mcdonalds**（Echo AI = 第三者プラットフォームでユーザーが作れる AI assistant）
+  - 運営: echoai.so（@echoai_so、Supabase + GCS backend、PWA 対応）
+  - 「Stop paying Claude Code, McDonald's support bot is free」ネタの正体 = Echo AI 上で誰かが McD 風装飾した Claude/GPT ラッパー
+  - 登録不要・無料で即チャット可、直接 URL 開くだけ
+  - バイラル動画の Alok (@_.alok_anmol._and_three_fs) はネタ投稿者
+
+- [x] **Claude Design が動画制作も可能と確認（@shota7180 の証拠動画）**
+  - 4/20 14:00 投稿（44いいね / 7,727views）: 「Claude Design は、スライドや資料だけでなく、動画制作も可能です↓」
+  - 動画 DL (`/tmp/claude-design-video/shota7180-claude-design-video.mp4`、37.89秒、1816×1080 60fps、5.4MB)
+  - 13 フレーム抽出・視覚解析結果:
+    - **入力**: HTML モック（cloudtime-pages.html / cloudtime-dashboard.html）+ 企画 PPTX + Design System + テキストプロンプト（「動画のトーン: 信頼感・先進性・洗練・わかりやすさ」）
+    - **出力**: ブラウザ内 **HTML モックをアニメ合成**した**インタラクティブ動画プロトタイプ**（Tweaks / Comment / Edit / Draw ツールバー、Present/Share ボタン付き）
+    - **Manim/手続き生成ではない** — 疑似 Chrome に product UI 配置 → SVG カーソルアニメ（x:644,y:656 等を実測合わせ）→ キャプション（「ワンタップで、今日が始まる。」）→ タイトルカード
+    - **反復編集**: cursor size/offset/AppChrome 外出し等、チャットで指示するとピクセル単位で再レンダリング
+  - **結論**: Claude Design の「動画」= インタラクティブ動画プロトタイプ、SaaS PR・製品デモ向き。HTML モック既にあれば 1 プロンプトで 25 秒尺 PR 動画生成
+  - ユーザーの LP ハンドオフ経験と連動: 既存 LP の HTML を食わせれば動画も作れる可能性
+
+- [x] **shadPS4 (PS4 エミュレータ) M1 Mac 評価**
+  - ⭐30,810、GPLv2、C++23 + SDL3 + Vulkan（MoltenVK 経由 macOS）
+  - 最新 v0.15.0 "RE6_PRIG"（2026-03-17）、macOS zip 20MB
+  - **M1 8GB での実用性: 低い** — (1) PS4 実機からの firmware dump 必須（ユーザー未所有）、(2) 8GB RAM では 16-24GB 推奨に対し不足、(3) ゲーム 30-100GB、Intel Mac は "heavy GPU bugs"
+  - 技術的には macOS 15.4+ / Apple Silicon 対応で起動は可能、**興味枠としては面白いが実プレイ困難**
+
+- [x] **claude-obsidian プラグイン導入（Obsidian 統合）**
+  - AgriciDaniel/claude-obsidian v1.4.3 (⭐2,211、MIT)、Karpathy's LLM Wiki パターンベース
+  - **Obsidian v1.12.7** も `brew install --cask obsidian` で併せて導入（`/Applications/Obsidian.app`）
+  - Marketplace 登録: `claude plugin marketplace add AgriciDaniel/claude-obsidian` 成功
+  - Plugin install: **初回 SSH 未設定で失敗** → `GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0="url.https://github.com/.insteadOf" GIT_CONFIG_VALUE_0="git@github.com:" claude plugin install ...` で**単発スコープの環境変数で HTTPS rewrite**（**git config は変更せず**、CLAUDE.md 安全ルール準拠）
+  - 主要コマンド: `/wiki`（scaffold）/ `/save [name]` / `/autoresearch [topic]` / `/canvas` / `ingest [file]`（8-15 wiki ページ自動生成）/ `ingest all of these`（batch）/ `what do you know about X?`（citation付き）/ `lint the wiki`
+  - ストレージ: `wiki/index.md`（master catalog）+ `wiki/hot.md`（recent cache）+ `concepts/` `entities/` `sources/` 階層
+  - **次ステップ（ユーザー実行待ち）**: Obsidian 起動 → vault 作成（推奨 `~/Desktop/vault` or 既存 `~/Desktop/ai-minimalist-shibu/knowledge`）→ Claude Code 再起動 → `/wiki` 初期化 → `ingest all of these` で既存ナレッジ取込
+
+- [x] **Computer Use ツール導入: Peekaboo + browser-echo**（@hata_AI_master 4/20 14:16 ポスト起点）
+  - 7ツールリスト resolve 結果: browser-harness / native-devtools-mcp / agent-browser（既導入）/ browser-echo / **Peekaboo** / mcp-server-tauri / playwright-mcp
+  - **Peekaboo v3.0.0-beta3** (⭐3,156、Swift)
+    - `brew install steipete/tap/peekaboo` → `/opt/homebrew/bin/peekaboo`（39.7MB）
+    - MCP user scope 登録成功（`claude mcp add -s user peekaboo -- peekaboo mcp` ✓ Connected）
+    - **要: 画面収録権限**（システム設定 → プライバシーとセキュリティ → 画面収録 → Terminal をオン）
+    - 使途: screenshot / click / type / menubar / dock / app list 等、Crown & Coin 戦闘検出 / Maestri / Claude Desktop 制御
+  - **browser-echo MCP v1.1.0** (⭐310、TS)
+    - `@browser-echo/mcp` を user scope に登録（`claude mcp add -s user browser-echo -- npx -y @browser-echo/mcp`）
+    - 現状 ✗ Failed to connect（フロントエンド側 Vite/Next/Nuxt の forwarder が port 5179 で送信していないため、想定内）
+    - 使途: Next/Vite プロジェクトの browser console log をエージェントに直接流す、ゼロ設定
+  - **未導入分の見送り**: browser-harness（重い）/ native-devtools-mcp（重い）/ mcp-server-tauri（Tauri 未使用）/ playwright-mcp（4/17 に一旦削除済、再導入は要件発生時）
+  - **MCP 反映タイミング**: 新セッションから `mcp__peekaboo__*` として ToolSearch 経由で呼び出し可能
+
+- [x] **しぶエコシステム: 4/20 23:09-23:10 りくと 3連投ストーリーの人物特定**
+  - 内容: AI研修の日 + 米ル（@gardencity.komeru）店構え + 懐石会食（黒漆椀・塩・米）
+  - キャプション: 「朝から晩まで AI の研修受けて 見る世界変わった、何をして働けばいいんだ...？😇」
+  - **BGM 正体訂正**: 「♫ Ryan Condrey · Photograph...」は **撮影者クレジットではなく viral トレンド音源**（3.9万 reel 使用中）— Ryan Condrey は海外クリエイターで**参加者ではない**
+  - **3人構成確定**: しぶ（左、黒服 + ピンクトート）/ りくと（中央、黒バックパック）/ **女性（右、サーモンピンク + 黒パンツ）**
+  - 女性候補の絞り込み: あい（@ikeai_minimalist） vs 元歯科衛生士（デザイン担当）
+  - **@ikeai_minimalist プロフィール詳細**（新情報、CLAUDE.md shibu-team.md 未記載）:
+    - **あい、33歳、福岡、1LDK 賃貸**、投稿 234 / フォロワー 3.7万 / フォロー 26人
+    - デジタルクリエイター、オールシーズン 17 着、YouTube + 楽天ROOM、**猫「わらびちゃん」**と同居
+    - プロフィール画像: **赤茶色の髪、オレンジトップス + 黒ベスト、暖色コーデ好み**
+  - **元歯科衛生士の視覚特徴**（tesla 納車動画 bQjAe4vMZVQ 2:16 frame 抽出）:
+    - **黒髪ストレート、肩下〜胸の長さ、前髪あり（ぱっつん気味）**
+    - 白〜オフホワイトのトップス、細身、20代後半〜30代前半
+    - しぶとレストラン/カフェで対話中のシーン
+  - **判定**: 髪色（あい=赤茶 vs ストーリー=濃い黒）+ 配色傾向（あい=暖色派 vs ストーリー=ミニマル配色）+ 表に出る vs 匿名的出し方 の3軸で判断
+    - **元歯科衛生士（デザイン担当）: 70〜75%**
+    - あい: 25〜30%
+  - 決定打は「あいの 4/20 当日ストーリー」で、あいが別の場所にいれば 100% 確定（Chrome @minimalistneko ログイン時に確認可能）
+
+- [x] **「何をして働けばいいんだ…？😇」への解釈**（セッション末尾）
+  - りくとの二重の皮肉: (1) 動画編集担当 = Claude Design 等に代替される職種、(2) その告白を**既にテンプレ化されたバイラル音源 + 明朝縦書き リール形式**で出している = 表現手段すら AI 量産可
+  - しぶエコ（ミニマリズム）は「所有を手放す」哲学 → AI 時代は**スキルを手放す**ステージ
+  - りくとの真の資産: スキルではなく**しぶとの信頼関係・同席権** = AI 研修に呼ばれる側 = 作業者ではなく判断者ポジションに既に移行済み
+  - ユーザー自身の当日行動（Claude Design / gws / Peekaboo / claude-obsidian / browser-echo の 5本立て導入）は作業者ではなく**アーキテクト側**の動き、同じ構造
+
+- [x] **セッション末週枠**: Weekly 40% (17:06) → 同 40%台 継続、5h は 5% から増加推定（実測未取得）
+
+## 完了（4/21 早朝〜昼、しぶ AI研修 2日目ストーリーで人物特定訂正＋MASU-p 共有 HP ProBook で GC313Pro セットアップ完了）
+
+- [x] **しぶ 4/21 0:04 頃 3連投ストーリーで 4/20 夜の人物特定を全面訂正**
+  - **#1 AI研修ストーリー**（しぶ @minimalist_sibu 投稿）:
+    - キャプション「AI研修 / 社内で 8時間 × 2日連続 **ClaudeCode叩き込み**」
+    - 研修室写真（会議室、モニターに IDE 画面、ノート PC 数台）
+    - **@ikeai_minimalist タグが作業中の女性に直接付与** → **女性 = あい で 100% 確定**
+    - @rikuto_takemoto タグ（左、金髪ブリーチ）= 前日と整合
+    - 右側 3 人: しぶ（くるくる髪）+ 顔隠し男（ロボット絵文字）+ 黒髪クセ毛男
+  - **#2 米ル集合写真**（しぶ投稿、位置情報タグ「米ル」確定）:
+    - キャプション「AI研修 1日目終了 🍚」
+    - **5 人集合写真**: しぶ / りくと / あい / ロボット絵文字男（顔出し NG）/ 黒髪クセ毛男
+    - 食卓: 和食コース（ご飯・味噌汁・焼き魚・漬物・お茶）
+    - **位置情報確定**: 米ル（@gardencity.komeru、Garden City 系商業施設内）
+  - **#3 Minimal Sign 電子署名 SaaS の発表**（しぶ投稿）:
+    - キャプション「**自社で電子署名のサービス開発できた。オリジナルで自分の好みの機能やデザインも実装できて、サブスク代削れる**」
+    - スクショ: 「Minimal Sign ｜ 契約管理」ダッシュボード
+    - テンプレート 1 件: **「モノ減らしコーチング撮影同意書」**（作成日 2026.04.20）
+    - 締結済み 3 件: 全て **澁谷直人 様（minimalist.sibu@gmail.com）**が 4/20 18:49 / 18:52 / もう1件で自己テスト署名
+    - 署名完了モーダル「MINIMALIST.SIBU@GMAIL.COM 宛に送信しました」
+    - **主目的**: モノ減らしコーチング受講生からの撮影同意書取得（肖像権・空間撮影許諾）
+    - **副目的**: DocuSign/CloudSign 等のサブスク代削減（¥9,000-50,000/月）
+    - **しぶエコ哲学との整合**: ミニマリズム = 外部サブスク（=モノ）を減らす = 自社開発で所有を手放す
+  - **りくと 4/21 0:06 リポスト**（@rikuto_takemoto）:
+    - しぶのAI研修ストーリーをリポスト、明朝体で**「目指せ！AIマスター」**
+    - 4/20 23:09 の「何をして働けばいいんだ…？😇」から **24 時間以内に「AIマスター目指す」へ昇華** = 方針転換完了
+
+- [x] **人物特定の訂正（前日 70-75% 元歯科衛生士判定は誤り）**
+  - **4/20 夜に「70-75% 元歯科衛生士」と判定**した女性 = **実際は あい で確定**
+  - 誤判定の原因:
+    1. プロフィール写真の赤茶色髪 vs 夜の暗色髪 → **照明/フィルタ依存**を過少評価
+    2. サーモンピンクトップス = あいの普段の色域内（プロフのオレンジより控えめだが同系統）
+    3. 匿名的な出し方 = 裏方キャラ推論 → りくとが単にタグを省略しただけ
+    4. 後ろ姿 + タグなしの根拠を過大評価
+  - **新しい仮説: 元歯科衛生士 = 全シーンの撮影役（65-75%）**:
+    - 4/20 23:09 歩行写真（3人）の 4 人目
+    - 米ル集合写真（5人）の 6 人目
+    - 4/21 AI研修室ワイド（5人）の 6 人目
+    - **一貫した不在パターン + CLAUDE.md shibu-team.md「名前不明・Instagram 未公開」記載と整合**
+    - デザイン担当 = Minimal Sign UI 設計者の可能性あり
+  - **AI研修参加者: 5 名 or 6 名**（元歯科衛生士が撮影役として同行なら 6 名）
+  - **顔隠し男**（ロボット絵文字）= 外部 AI 講師（SHIFT AI / Levela / Anthropic 関係者等）or ショウ（@minimalsho、裏方方針）の可能性
+
+- [x] **しぶ新規判明情報（CLAUDE.md `shibu-team.md` 追記候補）**
+  - **しぶの公式メールアドレス**: **minimalist.sibu@gmail.com**（Minimal Sign 署名完了モーダルから判明）
+  - **しぶの本名**: 澁谷直人（既知、shibu-team.md に記載あり、再確認）
+  - **あい (ikeai_minimalist) の詳細**:
+    - 33 歳、**福岡**、**1LDK 賃貸**、デジタルクリエイター
+    - 投稿 234 / フォロワー 3.7 万 / フォロー 26 人
+    - オールシーズン 17 着のミニマリスト、YouTube + 楽天ROOM
+    - **猫「わらびちゃん」と同居**、最近引越し（半年で再引越し）
+    - プロフィール画像: 赤茶色髪、オレンジトップス + 黒ベストの暖色コーデ好み
+    - 受講生の会 2025 登壇実績（既知、shibu-team.md）
+
+- [x] **AI研修の全貌判明**（しぶエコの戦略的含意）
+  - **研修時間**: 2 日間 × 各 8 時間 = 16 時間の **ClaudeCode 集中合宿**
+  - **参加者**: しぶ / りくと / あい / 顔隠し男 / 黒髪クセ毛男（+ 撮影役の元歯科衛生士？）
+  - **成果物**: Minimal Sign 電子署名 SaaS（DocuSign 代替）
+  - **戦略**: ミニマリズム哲学の IT 版実践 = 「外部サブスク = モノ（契約）を増やす」→「自社開発 = モノを減らす」
+  - **含意**:
+    - しぶエコは **ClaudeCode による SaaS 自社開発の実践段階**に入った
+    - あい（コンテンツクリエイター）も **コード書ける側に移行中** = 編集者→開発者の転身期
+    - りくとの「何をして働けばいいんだ」は 24 時間で「AIマスター目指す」に転換 = **迷いが短期間で解消**
+    - ユーザー自身の 4/20 行動（Claude Design / gws / Peekaboo / claude-obsidian / browser-echo の 5 本立て導入）と同じ構造 = **作業者ではなくアーキテクト側の動き**
+
+- [x] **Lunel (lunel-dev/lunel) モバイル IDE 調査**
+  - ⭐617、MIT、TypeScript、v0 release 2026-04-01（**約 3 週間前の新興**）
+  - AI-powered mobile IDE + クラウド開発プラットフォーム
+  - 「携帯でコード書いて、自宅 Mac or クラウドサンドボックスで走らせる」
+  - **アーキテクチャ**: Expo/React Native モバイル（iOS/Android/Web）+ Rust PTY（wezterm ベース、24fps 差分描画）+ WebSocket relay（gateway.lunel.dev、session TTL 10分、QR ペアリング）
+  - **インストール**: `npx lunel-cli`（母艦側で起動 → QR コード表示 → モバイルアプリでスキャン）
+  - **未実装・欠落情報**: AI モデル統合の実体不明（「AI-powered」と謳うが Claude Code / Codex 等の言及なし）、Lunel Cloud は "Coming soon"、価格未公開
+  - **ユーザー既存環境との比較**:
+    - iPhone → Mac SSH（Tailscale + 鍵管理）を QR ペアリングで代替できる可能性
+    - Claude Desktop Code mode と並列で使える
+    - **TODO #11（iPhone VNC）の代替候補**として検討価値あり
+  - **評価**: 現状は v0 + ドキュメント欠落多め、**v1 リリース + Claude Code 統合の明記**待ちが安全
+
+- [x] **MASU-P55（HP ProBook）で GC313Pro + OBS セットアップ完了**
+  - **重要訂正**: 本セッション中に「MASU-p 共有 PC」として扱っていた HP ProBook は、**既存 CLAUDE.md 記載の MASU-P55 と同一マシン**（当初「別 PC」と誤記載）:
+    - **MASU-P55 = HP ProBook**（Intel Core i5 搭載、コワーキング MASU-p の設置機）
+    - **既知情報（CLAUDE.md ユーザー情報と整合）**: user: gci_admin / IP: 192.168.2.248 (masu-p55.local) / Tailscale 100.125.21.47 / Claude Code v2.1.98 インストール済み
+    - **今回新判明**: ハードが HP ProBook、追加アカウント **masup**（PIN は紙メモ記載、コワーキング共用）が存在、Intel Core i5 CPU
+    - **Mac から SSH 経由で以前から操作したことあり**（ユーザー確認）
+  - **AVerMedia Assist Central Pro インストール**:
+    - Destination: `C:\AVerMedia\AssistCentralPro`（115.4 MB）
+    - Nullsoft Install System v3.10 経由の通常インストーラ
+    - GC313PRO (Elite GO GC313Pro) 自動検出成功
+    - **HDCP 検出機能**: 「無効（推奨）」選択（iPhone/iPad ソース用、著作権保護信号対応）
+  - **OBS 32.1.1 設定**:
+    - バージョン: OBS Studio 32.1.1（made in TOKYO）
+    - ソース: 映像キャプチャデバイス（GC313Pro 経由）
+    - **映像ソース解像度**: デバイス既定値 = **1080×1920**（GC313Pro が iPhone 縦画面を自動検出）
+    - FPS 60
+    - 音声: デスクトップ音声 / マイク / 映像キャプチャデバイス の 3 系統全アクティブ
+    - CPU 負荷 1.4%（軽い）
+  - **iPhone カメラアプリを HDMI 出力 → GC313Pro → OBS 取り込み**動作確認:
+    - iPhone カメラの縦画面（1x/2x/3x ズーム・写真モード UI）が OBS プレビューに表示
+    - **フルスクリーンプレビュー成功**（プレビュープロジェクター経由）
+  - **トラブルシュート記録**（次回再発時のため）:
+    - 「赤斜線エリア」= キャンバス解像度とソース解像度の不一致 → 設定変更で解消
+    - 1080×1920 → 1920×1080 への誤変更で映像が小さくなった → 1080×1920 に戻して解決
+    - 左右の pillarbox（黒帯）はフィルタ → クロップ/パッドで削除可能、または真の縦向け用途ならキャンバスを 1080×1920 に揃える
+    - **重要学び**: GC313Pro の「デバイス既定値」は入力信号に応じて自動検出するので、**カスタム指定は避けて既定値のまま**が安全
+  - **用途**: CLAUDE.md TODO #9 の Switch 2 キャプチャ予行演習 + iPhone 画面録画・配信環境の構築
+
+- [x] **セッション末週枠 (4/21 朝時点)**: 4/21 0:00 頃にセッション4 枠（日次スケジュール）、Weekly 40%台継続、5h は 0% リセット後の使用開始
+
+- [x] **Claude Code 2.1.116 自動更新（Mac & MASU-P55 両方）**
+  - Mac: `~/.local/bin/claude` → v2.1.116（4/21 08:37 自動更新）
+  - MASU-P55: `C:\Users\gci_admin\.local\bin\claude.exe` → v2.1.116（4/21 08:52 自動更新）
+  - 毎日 0:00 JST タスクスケジューラによる **自動更新仕組みが正常稼働確認**
+  - CLAUDE.md のユーザー情報セクション Claude Code v2.1.98 表記を v2.1.116 に更新
+
+- [x] **GitHub Copilot CLI v1.0.32 → v1.0.34 更新（Mac のみ）**
+  - 4/20 公開 v1.0.34、変更点は **「Rate limit error message: global → session」の文言変更のみ**
+  - Mac `copilot update` で 1.0.34 DL & 反映完了
+  - MASU-P55 は **未インストール**（Mac 専用運用のまま継続判断）
+
+- [x] **太閤立志伝V DX セール情報キャッチ**（Switch eShop 40% OFF）
+  - My Nintendo Store JP で **¥2,970 税込**（定価 ¥4,950 から 40% OFF）
+  - **期限: 2026/05/06 23:59** まで（GW セール）、**キャンセル不可**
+  - Crown & Coin デモの「太閤立志伝ライク」の直系インスピレーション源 = MUZINA GAMES 本人が明言
+  - しぶエコの ClaudeCode 合宿参加者と同じく「ミニマリスト + 戦国人生シミュレーター」の親和性
+  - **購入判断は保留**（4/22-5/11 の濃い期間と要調整、GW 中はセール継続のため数日判断猶予あり）
+
+- [x] **ツール調査（導入せず、情報記録のみ）**
+  - **Lunel (lunel-dev/lunel)** v0 モバイル IDE + クラウド開発プラットフォーム: v1 + Claude Code 統合明記までは待機
+  - **mac-mouse-fix (noah-nuebling)** v3.0.8: 3rd party マウスに macOS ジェスチャー付与、$2.99 買い切り、**要マウス所有**なので現状導入不要
+  - **Pyenb/macOS-ISOs**: macOS ISO torrent 集（Lion 〜 Sequoia）、**Apple TOS グレーゾーン**。合法用途は Mac M1 で UTM に古い macOS VM を作る場合のみ（自ハード + 自ライセンス）。Windows/Linux への Hackintosh 展開は TOS 違反で非推奨
+
+- [x] **Designated Survivor（サバイバー 宿命の大統領）未解決状態の分析**
+  - **打ち切り経緯**: ABC S1-2 → 2018/5 キャンセル → Netflix S3 引継（2019/6 配信、10話） → 2019/7 Netflix も S4 制作断念
+  - **打ち切り理由**: Entertainment One の 1 年単位キャスト契約、継続交渉困難（Netflix 側視聴率は非公開）
+  - **ハンナ・ウェルズ（マギー・Q）死亡は S3 E7 の劇中決定**（打ち切り決定前の脚本、構造整理目的）
+  - **黒幕構造（劇中で判明した 3 層）**:
+    1. 表層: トロント出身のネオナチ系科学者（人種差別バイオ兵器開発、ヒューストンで自殺し逮捕前に証拠隠滅）
+    2. 中間層: 共和党モス陣営の政治戦略家 Myles Lee + Lorraine（FBI 逮捕）
+    3. 制度内協力者: FDA 長官（逮捕）
+  - **未回収の謎**: ネオナチ組織の資金源 / S1-2 の Patrick Lloyd 系陰謀との地下接続 / ハンナが死ぬ直前に残した情報の継承者 / S1 から続くディープステート仮説の真相
+  - **結論**: 「ハンナは黒幕組織の罠に落ちて事故偽装で殺された。表層 3 層は暴かれたが、ネオナチ資金源・国際陰謀の真相は S4 で明かされる予定が制作打ち切りで永遠に闇の中」
+
+- [x] **課題全体像レビュー**（ユーザー要求「おさらい」）
+  - 今日/明日最優先: Y!mobile Netflixセット 自動解約発効（4/21 済）/ MacBookNEO セットアップ（4/22 16:30）
+  - 即時実行可能待機: gws OAuth / claude-obsidian `/wiki` 初期化 / Peekaboo 画面収録権限
+  - 商品到着待ち: 維新の嵐 CD (TODO #7) / Switch 2 本体 (TODO #9 GC313Pro は 4/21 OBS 動作確認済)
+  - ElevenLabs 5/11 失効: D→A→B→C タスク群（しぶ YouTube 20 本 Scribe → video-use 編集 → しぶライブ再開 → 小説朗読動画化）
+  - **Crown & Coin 用心棒 grinding 無限ループを課題に追加**（`/tmp/grind-loop.sh` でコマンド一発、戦闘発生までの半自動運用、所持金目標は未設定）
+  - 継続観察: しぶ AI研修 2日目ストーリー / Minimal Sign UI デザイナークレジット / ショウ @minimalsho 研修画像で顔隠し男の正体検証
+  - 判断待ち: 太閤立志伝V DX セール購入（5/6 期限）/ MASU-P55 への Copilot CLI 追加導入
+
+- [x] **4/22 GC313Pro User Guide v1.1 日本語訳を docs/ に公開**
+  - 原文: AVerMedia GC313Pro User Guide v1.1（2025-09-30、21 ページ、英語）
+  - Markdown 版: `docs/gc313pro-user-guide-ja.md`（373 行、commit `b72fb11`）
+  - HTML 版: `docs/gc313pro-user-guide-ja.html`（既存 docs/ スタイルに合わせた配色、目次・TOC 付き、ダーク/ライトモード対応）
+  - 公開 URL: https://wirelessml.github.io/test/docs/gc313pro-user-guide-ja.md / .html
+  - 内容: 主な機能 / システム要件 / 仕様 / 電源配分 / Assist Central Pro / ファームウェア更新ガイド / F.A.Q. 8 項目 / GC313 vs GC313Pro 比較 / 訳者注・関連ファイル保管場所
+  - **Switch 2 接続手順**（GC313Pro C1 ポート直結 + HDMI OUT パススルー + USB-C2 で PC キャプチャ）も完全翻訳
+  - ミニマリスト向けのナレッジ資産として残存、外出先から iPhone でも参照可能
+
+- [x] **4/22 Mac 版 AssistCentralPro v4.0.80 を Mac M1 に導入**
+  - DL: https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.80.zip（41.7MB）
+  - 展開 → DMG マウント → `/Applications/AssistCentralPro.app` コピー
+  - 検疫属性除去（`xattr -dr com.apple.quarantine`）
+  - バージョン: 4.0.80（Windows MASU-P55 側と同一、macOS 13+ 対応）
+  - 用途: Mac 側で GC313Pro 使用時の HDCP 切替・FW バージョン確認・デバイス診断
+  - 起動: `open -a AssistCentralPro`
+
+- [x] **4/22 GC313Pro 本体到着 + 公式仕様判明で前日設定の前提訂正**
+  - パッケージ内容: ELITE GO（GC313Pro 本体）+ **USB-C to C ケーブル 2m** + **交換用 AC プラグ** + クイックスタートガイド
+  - ポート構成: **USB-C1（映像入力、DP Alt Mode 専用）/ USB-C2（PC 接続）/ USB-A（周辺機器）/ HDMI OUT（4K60 パススルー）/ 折りたたみ式 AC プラグ（100W PD 電源内蔵）**
+  - **HDMI IN なし判明**（公式ページ https://www.avermedia.co.jp/product-detail/charging-dock-GC313Pro で確認）
+  - 訂正事項:
+    - 4/21 に「iPhone USB-C → HDMI アダプタ → GC313Pro」と助言したが、**USB-C 直結が正解**（¥2,000-10,800 のアダプタ不要）
+    - TODO #9 の接続フロー記述を DP Alt Mode 専用として更新
+  - 対応デバイス: USB-C DP Alt Mode 対応機のみ（iPhone 15/15 Pro、USB-C iPad、USB-C Android、USB-C ノート PC）
+  - 非対応: PS5 / Xbox Series X / Blu-ray プレーヤー / 旧世代ゲーム機（HDMI 出力のみは別キャプチャ機材必要）
+
+- [x] **Switch 2 動作確認済が AVerMedia 公式で確定**（4/22 公式 FAQ 確認）
+  - 公式ページに **「Nintendo Switch 2 動作確認済」バッジ**掲示
+  - 「※本製品は、任天堂との提携または認証を受けたものではありません」の但し書きあり
+  - **接続フロー確定**:
+    ```
+    Switch 2 本体下部 USB-C 映像出力ポート
+      ↓ 付属 USB-C to C ケーブル 2m
+    GC313Pro USB-C1（映像入力）
+      ├→ HDMI OUT → モニター（4K60 パススルー）
+      └→ USB-C2 → PC/Mac（1080p60 キャプチャ）
+    ```
+  - **純正ドック不要**（Switch 2 本体から直結可）
+  - **ファームウェア確認完了（4/22 MASU-P55 で実施）**:
+    - 現在 v24.8.30.16.1.19.30 = **既に最新**（購入時点で最新ファーム搭載済み）
+    - **更新作業不要**、Switch 2 互換性 + iPhone 17 Pro 充電断続問題**既に修正済**
+    - ファームウェア更新ツールは将来版リリース時のため `C:\Users\gci_admin\Downloads\GC313Pro_Firmware.exe` に保管
+  - 公式チュートリアル動画: 「(ちょまくん)Switch2 で高画質動画投稿する方法」（TikTok @choma_ch、38秒、#PR 2025-09-18）
+  - **Switch 2 購入の技術的前提 完全クリア** ✅ → あとは本体購入判断のみ（別途 ¥50,000 以上）
+  - **User Guide v1.1 判明事項**（PDF を Mac `/tmp/gc313pro/` + MASU-P55 `C:\Users\gci_admin\Downloads\` に保管）:
+    - **接続手順**: コンセント挿入 → HDMI でモニタ ON 確認 → 付属 USB-C で機器→C1 → Switch 2 は底面 Type-C → 画面が黒くなれば Dock モード正常
+    - **OBS 推奨設定**: 解像度 1920×1080 / 60fps / **色フォーマット YUY2**
+    - **⚠️ USB-A ポート制約**: USB-A と HDMI OUT は **C1 ソース機器専用**。USB-A マイクは C1 ソース（Switch 等）用のみで**C2 の PC 側からは使用不可**
+    - **電源配分**: C1+C2 同時使用時は **各 45W に分散**（ノート PC 100W 充電と Switch 2 キャプチャの併用で充電速度低下の可能性）
+    - **対応条件**: 信号ソースは **DisplayPort 1.2+（or Thunderbolt 3+）必須**。iPhone 15 Pro Max / Samsung S24U 対応確認例
+    - **HDCP**: iPhone/iPad/Android 接続時は Assist Central Pro で **HDCP OFF** 必須
+    - **認識条件**: **C2 に PC + AC プラグ挿入状態でのみ**キャプチャデバイスとして認識、Assist Central Pro は **C-to-C ケーブル接続時のみ**認識（C-to-A は不可）
+    - **システム要件**: Windows 10+（UVC）/ **macOS 13/14 以降** / **iPadOS 17 以降**（Type-C 端子）
+
+- [x] **WSL2 の 2 大用途を 2026-04-21 に完全把握**（MASU-P55 SSH 確認経由）
+
+- [x] **WSL2 の 2 大用途を 2026-04-21 に完全把握**（MASU-P55 SSH 確認経由）
+  - **背景**: 「WSL2 は Claude Desktop Code mode SSH 用途」とだけ CLAUDE.md に記録していたが、ユーザー指摘で別用途があることが判明 → SSH でマシン内部調査
+  - **発見した 2 大用途**:
+    1. **Claude Desktop Code mode SSH 接続先**（2222 ポートフォワード、keepalive スクリプト自動起動、アーカイブ状態）
+    2. **Openclaw 実行環境**（**CLAUDE.md 未記載の新情報**）
+  - **Openclaw 詳細**（`~/.openclaw/` ディレクトリ）:
+    - ディレクトリ構造: agents / canvas / completions / cron / devices / identity / logs / memory / workspace
+    - 設定: `openclaw.json`（バックアップ 5 世代保持）
+    - **プロバイダ**: OpenAI Codex（OAuth 認証）
+    - **モデル**: **openai-codex/gpt-5.3-codex**（GPT-5.3 Codex 派生モデル）
+    - メモリ DB: SQLite `main.sqlite`（69 KB の学習蓄積）
+    - cron ジョブ: `cron/jobs.json` 設定済
+    - ウィザード configure 実行: 2026-02-24（約 2 ヶ月前に初期設定）
+    - **今朝 4/21 09:02 に update-check.json が更新** = アクティブ運用中
+    - 依存: Node.js v24.13.1（nvm 管理）
+  - **CLAUDE.md 4/15 「AI駆動開発ツール時系列まとめ（Copilot→Cursor→Cline→Replit→Claude Code→Codex→OpenCode）」の OpenCode 系列に該当する可能性**
+  - **保存された Claude Code セッション**（WSL 内）:
+    - `/home/gci_admin/.claude/projects/-home-gci-admin-test/` (4/18 16:13 JST 最終更新)
+    - `/home/gci_admin/.claude/projects/-home-gci-admin/` (4/17 10:38 JST 最終更新)
+    - `claude --resume` で再開可能
+  - **CLAUDE.md 更新**: ユーザー情報セクションの MASU-P55 項目に WSL2 の 2 用途併存を明記
+
+- [x] **セッション終盤の MASU-P55 誤認訂正**（ユーザー指摘で発覚、本ファイル 2 箇所修正済）
+  - **誤認内容**: OBS/GC313Pro セットアップ中の HP ProBook を「MASU-p 共有 PC の新発見（CLAUDE.md 未記載）」と記録
+  - **実態**: それは **既存 CLAUDE.md 記載の MASU-P55 そのもの**（以前 SSH で操作実績あり、gci_admin ユーザー、Tailscale 100.125.21.47）
+  - **誤認の原因**:
+    1. OBS 画面下の紙メモ「MASU-p 内 共有PC 印刷・スキャン・ネット」に引きずられた
+    2. masup アカウント + 1101 PIN を「コワーキング共用」と解釈 → 別 PC と誤判定
+    3. PROBOOK ロゴと「masu-p55」の命名規則（masu-p + 55号機）を突合すべきだった
+    4. CLAUDE.md の MASU-P55 情報（Tailscale, gci_admin, Claude Code 2.1.98, 以前 SSH 実績）と照合しなかった
+  - **修正した 2 箇所**:
+    1. 4/21 セッション記録の「MASU-p 共有 PC 発見」箇所 → 「MASU-P55（HP ProBook）と同一マシン」に訂正
+    2. CLAUDE.md ユーザー情報セクションの Windows PC（MASU-P55）項目に **HP ProBook / Intel Core i5 / masup 追加アカウント / AVerMedia Assist Central Pro / OBS Studio 32.1.1** を追記
+  - **次回以降の確認ポイント**（同じミス防止）:
+    - MASU-P55 操作時は **masu-p（コワーキング名）+ 55 号機** の命名を前提に
+    - **gci_admin（個人）/ masup（共用）の 2 アカウント併存** を前提に
+    - Windows PC 関連情報は **必ず既存 CLAUDE.md セクションと突合**してから新記載判断
+    - 紙メモ・シール等の表層情報よりも、**ハード ID / IP / Tailscale 端末名** で同一性判定
 
 ## 完了（4/18 夜〜4/19 朝セッション、AI 自動ゲームプレイ研究 3段階実験＋VoiceBox 発見）
 
@@ -1042,12 +1453,21 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
   - Homebrew 5.1.5、Tailscale 1.96.5、Claudeデスクトップアプリ インストール済み
   - Claude Code CLI + agent-browser + dev-browser
 - Windows PC（MASU-P55）— コワーキングオフィス、サブ作業機
+  - **ハードウェア: HP ProBook（Intel Core i5）**（4/21 判明）
   - ユーザー: gci_admin / IP: 192.168.2.248 (masu-p55.local)
-  - SSH接続情報は ~/.claude/local-notes/wifi.txt（パスワードはgit管理外）
-  - Claude Code v2.1.98 インストール済み
+  - 追加アカウント: **masup**（PIN は紙メモ記載、コワーキング共用、印刷・スキャン・ネット検索用途）
+  - SSH接続情報は ~/.claude/local-notes/wifi.txt、Windows パスワードは ~/.claude/local-notes/winpass.txt（いずれも git 管理外）
+  - Claude Code v2.1.116 インストール済み（`C:\Users\gci_admin\.local\bin\claude.exe`、4/21 08:52 自動更新、毎日 0:00 タスクスケジューラで最新化）
   - Claudeデスクトップアプリ インストール済み（Microsoft Store版）
   - Computer Use対応（Windows版、2026/4/3〜）
+  - **AVerMedia Assist Central Pro** インストール済み（4/21、GC313Pro 用）
+  - **OBS Studio 32.1.1** インストール済み（4/21、iPhone 縦画面キャプチャ動作確認済み）
   - リポジトリ: C:\Users\gci_admin\test（同じナレッジベース共有）
+  - **WSL Ubuntu 24.04 稼働中**（2 用途併存）:
+    - ① **Claude Desktop Code mode SSH 接続先**（2222 ポート、keepalive タスク稼働、アーカイブ状態）
+    - ② **Openclaw（OpenAI Codex ベース AI エージェント CLI）実行環境**（4/21 09:02 に update-check 実行、**アクティブ運用中**）
+    - Node.js v24.13.1（nvm 管理、Openclaw 依存）
+    - WSL 側 Claude Code セッション保存: 2 件（4/17 / 4/18）
   - MacからSSH経由でリモート操作可能
 - iPhone 15 Pro（名前: 結花）— メインスマホ、Dispatch + Tailscale
 - 初代iPad Pro 9.7インチ（名前: 彩羽）— 楽天SIM挿入、テザリング用

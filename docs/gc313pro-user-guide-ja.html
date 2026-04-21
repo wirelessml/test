@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GC313Pro ユーザーガイド（日本語訳）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --fg: #1a1a1a;
+    --fg-dim: #555;
+    --fg-faint: #999;
+    --border: #e5e5e0;
+    --accent: #c8242c;
+    --accent-soft: #fdf4f5;
+    --code-bg: #f5f5f2;
+    --sans: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    --mono: "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141412;
+      --surface: #1c1c1a;
+      --fg: #eee;
+      --fg-dim: #aaa;
+      --fg-faint: #777;
+      --border: #333;
+      --accent: #ff6b72;
+      --accent-soft: #2a1a1c;
+      --code-bg: #222;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.8;
+    font-weight: 400;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+  a:hover { border-bottom-color: var(--accent); }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 48px 24px 96px; }
+  header {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    font-size: 13px;
+    color: var(--fg-dim);
+  }
+  .meta span::before { content: "•"; margin-right: 12px; color: var(--fg-faint); }
+  .meta span:first-child::before { display: none; }
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 56px 0 20px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    color: var(--fg);
+  }
+  p { margin: 16px 0; }
+  ul, ol {
+    margin: 16px 0;
+    padding-left: 28px;
+  }
+  li { margin: 8px 0; }
+  strong { font-weight: 700; color: var(--fg); }
+  em { font-style: italic; color: var(--fg-dim); }
+  code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 20px 0;
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    border: none;
+    font-size: 13px;
+  }
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 20px;
+    margin: 24px 0;
+    color: var(--fg-dim);
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+  }
+  blockquote p { margin: 8px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--code-bg);
+    font-weight: 600;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+  /* TOC */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    margin: 32px 0 48px;
+  }
+  .toc h3 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .toc ol {
+    padding-left: 20px;
+    margin: 0;
+  }
+  .toc li { margin: 4px 0; }
+  .toc a {
+    color: var(--fg);
+    border: none;
+  }
+  .toc a:hover { color: var(--accent); }
+  /* Callouts */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-left: 4px solid;
+  }
+  .callout.warn {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #78350f;
+  }
+  .callout.note {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  @media (prefers-color-scheme: dark) {
+    .callout.warn { background: #3a2a0c; color: #fde68a; }
+  }
+  /* Footer */
+  footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--fg-faint);
+    text-align: center;
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 24px 16px 64px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; margin-top: 40px; }
+    h3 { font-size: 16px; }
+    table { font-size: 12px; }
+    th, td { padding: 8px; }
+    pre { font-size: 11px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="eyebrow">AVerMedia 公式マニュアル 日本語訳</div>
+<h1>GC313Pro ユーザーガイド v1.1</h1>
+<div class="meta">
+  <span>原文: 2025-09-30 版</span>
+  <span>翻訳: 2026-04-22</span>
+  <span>21 ページ全訳</span>
+</div>
+</header>
+
+<nav class="toc">
+<h3>目次</h3>
+<ol>
+<li><a href="#intro">はじめに</a></li>
+<li><a href="#product">ELITE GO（GC313Pro）とは</a></li>
+<li><a href="#features">主な機能</a></li>
+<li><a href="#requirements">システム要件</a></li>
+<li><a href="#spec">仕様</a></li>
+<li><a href="#overview">製品概観</a></li>
+<li><a href="#connection">接続構成例</a></li>
+<li><a href="#power">電源配分</a></li>
+<li><a href="#assist">Assist Central Pro</a></li>
+<li><a href="#download">ダウンロード先</a></li>
+<li><a href="#firmware">ファームウェア更新ガイド</a></li>
+<li><a href="#company">AVerMedia について</a></li>
+<li><a href="#faq">F.A.Q.</a></li>
+<li><a href="#compare">GC313 vs GC313Pro</a></li>
+<li><a href="#notes">訳者注・関連ファイル</a></li>
+</ol>
+</nav>
+
+<h2 id="intro">はじめに</h2>
+<p>本書は <strong>ELITE GO（GC313Pro）</strong> の利用マニュアルです。AVerMedia 製品を素早くスムーズにお使いいただくための情報を記載しています。</p>
+<p>製品概要・主な機能・システム要件・技術仕様・セットアップとインストール手順を順に解説し、最後にテクニカルサポートへのリンクと当社の会社概要で締めくくります。</p>
+
+<h2 id="product">ELITE GO（GC313Pro）とは</h2>
+<p><strong>Premium Go シリーズ</strong> は、3 つの異なる機能レベルの製品ラインです。中でも <strong>ELITE GO GC313Pro</strong> は、<strong>100W 急速充電</strong> と <strong>1080p60 ビデオキャプチャ</strong> を両立させた製品で、デバイス充電と録画を同時に行えます。</p>
+<ul>
+<li><strong>充電・映像出力・接続機能</strong> を 1 台に統合した「Charging Capture」</li>
+<li>2 ポートの USB-C と 1 ポートの USB-A、HDMI を搭載</li>
+<li>AC コンセントに挿していない状態でも <strong>データ転送・映像出力ハブ</strong> として動作</li>
+<li>GC313（CORE GO）との違い: <strong>ビデオキャプチャ機能</strong> を搭載</li>
+</ul>
+
+<h2 id="features">主な機能</h2>
+
+<h3>PD3.0 急速充電</h3>
+<ul>
+<li><strong>高速で効率的</strong>: PD3.0 Quick Charge で素早く充電</li>
+<li><strong>幅広い互換性</strong>: 多くのデバイスに対応</li>
+<li><strong>先進技術</strong>: PD3.0 規格で安全・安定した充電</li>
+</ul>
+
+<h3>1080p60 ビデオキャプチャ</h3>
+<ul>
+<li><strong>高品質録画</strong>: Full HD 60fps の滑らかで詳細な映像</li>
+<li><strong>プロ仕様</strong>: コンテンツクリエイター、ストリーマー、ゲーマー向け</li>
+<li><strong>容易な統合</strong>: 既存環境にそのまま接続可能</li>
+</ul>
+
+<h3>3 台同時充電</h3>
+<ul>
+<li><strong>マルチデバイス対応</strong>: 3 台まで同時充電</li>
+<li><strong>コンパクト</strong>: 充電器複数台を置き換え可能</li>
+<li><strong>ユニバーサル互換</strong>: スマホ、タブレット、ノート PC 対応</li>
+</ul>
+
+<h3>100W GaN 充電器</h3>
+<ul>
+<li><strong>高出力</strong>: 最大 100W、ハイエンド機器も急速充電</li>
+<li><strong>GaN 技術</strong>: 窒化ガリウムで高効率・低発熱</li>
+<li><strong>コンパクト設計</strong>: 高出力のまま小型携帯性確保</li>
+</ul>
+
+<h3>過負荷保護</h3>
+<ul>
+<li><strong>安全強化</strong>: 電気的過負荷からデバイスを保護</li>
+<li><strong>スマート監視</strong>: 過電流・過電圧を自動検知・防止</li>
+<li><strong>安心感</strong>: 高価な機器を損傷から守る</li>
+</ul>
+
+<h3>HDMI 4K60 表示</h3>
+<ul>
+<li><strong>超高精細</strong>: 4K@60Hz の鮮明な映像</li>
+<li><strong>シームレス接続</strong>: 外部ディスプレイへ簡単接続</li>
+<li><strong>用途自由</strong>: プレゼン、ゲーミング、エンタメに最適</li>
+</ul>
+
+<h3>充電・表示・接続の統合</h3>
+<ul>
+<li><strong>オールインワン</strong>: 充電・映像出力・ハブを 1 台に</li>
+<li><strong>簡素化</strong>: ケーブル・アダプタの数を削減</li>
+<li><strong>生産性向上</strong>: マルチタスクに最適</li>
+</ul>
+
+<p><em>GaN 技術採用の壁面充電器は、電気部品が少なく放熱性に優れるため、充電速度と電力効率が向上します。</em></p>
+
+<h2 id="requirements">システム要件</h2>
+<p><strong>ストリーミング用 PC/NB 専用</strong></p>
+<p><strong>OS</strong>: Windows 10 以降（UVC プロトコル対応）</p>
+
+<h3>デスクトップ</h3>
+<ul>
+<li>Intel i5-3330 同等以上（i7 推奨）/ AMD A10-7890K（Quad-core）以上</li>
+<li>NVIDIA GTX 650 / AMD Radeon R7 250X 以上推奨</li>
+<li>4GB RAM</li>
+</ul>
+
+<h3>ノート PC</h3>
+<ul>
+<li>Intel Core i7-4810MQ</li>
+<li>NVIDIA GeForce GTX 870M</li>
+<li>4GB RAM（8GB 推奨）</li>
+</ul>
+
+<h3>Mac</h3>
+<ul>
+<li><strong>macOS 13 / 14 以降</strong></li>
+<li>iMac（Retina 4K、21.5″、2019）</li>
+<li>MacBook Pro/MacBook Air（2018）</li>
+</ul>
+
+<h3>iPad</h3>
+<ul>
+<li><strong>iPadOS 17 以降（Type-C ポート搭載機）</strong></li>
+</ul>
+
+<h2 id="spec">仕様</h2>
+
+<h3>電源</h3>
+<ul>
+<li>使用形態: 壁コンセント直挿し</li>
+<li>AC プラグ: 米国仕様（折りたたみ式、交換用プラグ付属）</li>
+<li>入力: AC 100-240V / 50-60Hz</li>
+<li>出力:
+<ul>
+<li>USB-C1/C2: 5V/3A、9V/3A、12V/3A、15V/3A、20V/3A、<strong>20V/5A（最大 100W）</strong></li>
+<li>USB-A: 5V/1A（最大 5W）</li>
+<li>USB-C1+USB-C2: 最大 90W</li>
+<li>USB-C1+USB-A: 最大 105W</li>
+<li>USB-C2+USB-A: 最大 105W</li>
+<li><strong>USB-C1+USB-C2+USB-A: 最大 95W</strong></li>
+</ul>
+</li>
+</ul>
+
+<h3>急速充電プロトコル</h3>
+<ul>
+<li><strong>PD3.0 のみ対応</strong></li>
+<li>対応していないプロトコル: Qualcomm Quick Charge (QC) / Huawei SuperCharge / Samsung Adaptive Fast Charging (AFC) / OnePlus Warp Charge / Mi TurboCharge (Xiaomi) / Super VOOC (OPPO) 等</li>
+</ul>
+
+<h3>過負荷保護</h3>
+<ul>
+<li>過電圧保護（OVP）</li>
+<li>過電流保護（OCP）</li>
+<li>過電力保護（OPP）</li>
+<li>過温度保護（OTP）</li>
+<li>ショート保護（SCP）</li>
+</ul>
+
+<h3>インターフェース</h3>
+<ul>
+<li><strong>HDMI 1.4 × 1</strong>（C1 が DisplayPort 1.4 のため <strong>4K60 パススルー対応</strong>）</li>
+<li><strong>USB-C 3.2 Gen 1 × 2</strong></li>
+<li><strong>USB-A 2.0 × 1</strong></li>
+<li>理論データ転送速度: USB 3.2 Gen 1 = 5Gbps / USB 2.0 = 480Mbps</li>
+</ul>
+
+<h3>ビデオ・オーディオ</h3>
+<ul>
+<li><strong>最大パススルー解像度: 4K60</strong></li>
+<li><strong>最大キャプチャ解像度: 1080p60</strong></li>
+<li>ビデオフォーマット: YUY2 / MJPEG</li>
+<li>音声出力: ステレオ</li>
+</ul>
+
+<h3>寸法・重量</h3>
+<ul>
+<li>W × D × H: 66 × 36.6 × 62 mm</li>
+<li>重量: 250g ± 10g</li>
+</ul>
+
+<h3>同梱物</h3>
+<ul>
+<li>ELITE GO（GC313Pro）本体</li>
+<li><strong>USB Type-C to Type-C 編組ケーブル 2m</strong></li>
+<li><strong>交換用 AC プラグ</strong></li>
+<li>クイックスタートガイド</li>
+</ul>
+
+<blockquote>
+<p>注意: ソースポートには必ず付属ケーブルを使用してください。<br>
+付属品は購入国により多少異なる場合があります。</p>
+</blockquote>
+
+<h2 id="overview">製品概観</h2>
+<table>
+<thead>
+<tr><th>ポート</th><th>役割</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>USB-C1</strong></td><td><strong>映像ソース接続用</strong>（ゲーム機、スマホ、ノート PC 等）</td></tr>
+<tr><td><strong>USB-A</strong></td><td>周辺機器接続用（キーボード、マウス、マイク等）</td></tr>
+<tr><td><strong>HDMI Out</strong></td><td>大画面ディスプレイ接続用</td></tr>
+<tr><td><strong>USB-C2</strong></td><td><strong>PC/NB 接続用（キャプチャ・ストリーミング）</strong></td></tr>
+<tr><td>Charm Holes</td><td>ストラップ用穴</td></tr>
+<tr><td>Foldable Pins</td><td>折りたたみ式 AC プラグ</td></tr>
+</tbody>
+</table>
+
+<p><em>GC313Pro は AC コンセント挿入時のみでなく、<strong>USB 給電でもデータ転送・映像出力ハブとして動作</strong> します。</em></p>
+
+<div class="callout note">
+<p><strong>重要</strong>: USB-A と HDMI Out は、<strong>USB-C1 に接続された機器</strong> とのみ連動します。USB-C2 ポートはキャプチャ・ストリーミング専用です。なお、USB-A・USB-C1・USB-C2 の 3 ポートとも充電供給に対応します。</p>
+</div>
+
+<h2 id="connection">接続構成例</h2>
+<pre><code>[ディスプレイ]               [キーボード・マウス]
+    ↑ HDMI                        ↑ USB-A
+    │                             │
+[GC313Pro 本体 ─ 折りたたみピンで AC コンセント]
+    │                             │
+    ↓ USB-C1                      ↓ USB-C2
+[Switch / iPhone / iPad]       [ノート PC / Mac]
+  (映像ソース)              (キャプチャ・ストリーミング用)</code></pre>
+
+<h2 id="power">電源配分</h2>
+<table>
+<thead>
+<tr><th>使用ポート</th><th>USB-C1</th><th>USB-C2</th><th>USB-A</th></tr>
+</thead>
+<tbody>
+<tr><td>単一ポート（C1）</td><td>100W</td><td>—</td><td>—</td></tr>
+<tr><td>単一ポート（C2）</td><td>—</td><td>100W</td><td>—</td></tr>
+<tr><td>単一ポート（A）</td><td>—</td><td>—</td><td>5W</td></tr>
+<tr><td>2 ポート（C1+C2）</td><td><strong>45W</strong></td><td><strong>45W</strong></td><td>—</td></tr>
+<tr><td>2 ポート（C1+A）</td><td><strong>100W</strong></td><td>—</td><td><strong>5W</strong></td></tr>
+<tr><td>2 ポート（C2+A）</td><td>—</td><td><strong>100W</strong></td><td><strong>5W</strong></td></tr>
+<tr><td><strong>3 ポート（C1+C2+A）</strong></td><td><strong>45W</strong></td><td><strong>45W</strong></td><td><strong>5W</strong></td></tr>
+</tbody>
+</table>
+
+<div class="callout note">
+<p><strong>ポイント</strong>: C1 と C2 を同時に使うと <strong>各 45W に分散</strong> します（Switch 2 キャプチャ中はノート PC も 45W で充電される計算）。</p>
+</div>
+
+<h2 id="assist">Assist Central Pro</h2>
+<p><strong>デバイス情報取得と設定調整ができる AVerMedia 純正ツール</strong>。</p>
+
+<h3>インストールとデバイス情報</h3>
+<p>公式サイトから Assist Central Pro をダウンロード→手順に従ってインストール。起動後の画面: 左上に GC313PRO アイコン、右側が機能パネル。</p>
+
+<h3>HDCP 設定</h3>
+<ul>
+<li><strong>映像・音声ソース機器</strong> を適切に選ぶ</li>
+<li>Xbox や Switch で使う著作権保護アプリ（Netflix、Hulu 等）は閉じてから再起動、HDCP 検出を有効化することを推奨</li>
+<li>それでも問題が解決しない場合は別途 HDCP 設定を参照</li>
+</ul>
+
+<p><em>HDCP 検出とは、デジタル機器（プレーヤー ⇔ モニタ等）間でコンテンツの不正コピー防止のため行われるセキュリティ検証プロセスです。</em></p>
+
+<h3>Settings（設定）</h3>
+<ul>
+<li>ソフトウェア: 言語切替、Assist Central Pro バージョン、アップデート確認</li>
+<li>ハードウェア情報: <strong>ファームウェアバージョン</strong>、アップデート確認</li>
+<li>ヘルプとアドバイス: FAQ、フィードバック</li>
+</ul>
+
+<h3>Help and Advice</h3>
+<p><strong>バグレポート録画機能</strong> あり:</p>
+<ol>
+<li>「Recording Bug Report」を有効化</li>
+<li>問題を再現</li>
+<li>「Feedback」をクリック、フォーム入力・送信</li>
+</ol>
+
+<h2 id="download">Assist Central Pro ダウンロード先</h2>
+<ul>
+<li><strong>Windows</strong>: <a href="https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.73-installer.exe">AssistCentralPro_v4.0.73-installer.exe</a></li>
+<li><strong>macOS</strong>: <a href="https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.73.zip">AssistCentralPro_v4.0.73.zip</a></li>
+</ul>
+
+<p><em>注: 本マニュアル時点は v4.0.73 掲載。2026-04 時点の最新は <strong>v4.0.80</strong>（<a href="https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.80-installer.exe">Windows</a> / <a href="https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.80.zip">macOS</a>）。</em></p>
+
+<h2 id="firmware">ファームウェア更新ガイド</h2>
+<p><strong>目的</strong>: <strong>Switch 2 互換性の確保</strong>。</p>
+
+<div class="callout warn">
+<p>⚠️ <strong>注意</strong>: GC313Pro ファームウェア更新前に <strong>AC 電源を外してください</strong>。これによりデバイスが効率的に更新でき、成功率が向上します。</p>
+</div>
+
+<h3>更新前準備</h3>
+<ul>
+<li><strong>GC313Pro をコンセントから抜く</strong></li>
+<li>付属 USB-C ケーブルで GC313Pro の <strong>C1 ポート</strong> を PC に接続</li>
+<li>標準 USB-C to C または USB-C to A ケーブルで <strong>C2 ポート</strong> を PC に接続</li>
+</ul>
+
+<h3>ファームウェア更新</h3>
+<ul>
+<li>更新ツール DL: <a href="https://www.avermedia.com/product-detail/charging-dock-GC313Pro#download">avermedia.com/product-detail/charging-dock-GC313Pro#download</a></li>
+<li>起動し、画面指示に従って完了</li>
+<li><strong>更新完了後、すべての Type-C 機器を外して</strong> アップグレードを有効化</li>
+</ul>
+
+<h3>更新後の接続</h3>
+<ol>
+<li>GC313Pro をコンセントに戻す</li>
+<li>HDMI ケーブルで TV/モニタ接続（モニタ電源 ON 確認）</li>
+<li>付属 USB-C ケーブルで映像出力機器を <strong>C1 ポート</strong> に接続
+<ul><li><strong>Switch 2 の場合、Switch 2 底面の Type-C ポートに接続</strong></li></ul>
+</li>
+<li>Switch / Switch 2 なら <strong>画面が黒くなる</strong>（Dock モード遷移の合図）</li>
+</ol>
+
+<h3>キャプチャ機能</h3>
+<ol>
+<li>OBS Studio を開き、映像キャプチャデバイスを追加、<strong>GC313Pro を選択</strong></li>
+<li><strong>解像度 1920×1080 / 60fps</strong>、推奨色フォーマット <strong>YUY2</strong></li>
+<li>設定完了後、使用開始</li>
+</ol>
+
+<h2 id="company">AVerMedia について</h2>
+<p>AVerMedia Technologies は、高品質なビデオ・オーディオ周辺機器、プロ用キャプチャ・配信ソリューション、エッジ AI 技術、映像コラボレーションソリューションを提供しています。教育、コンテンツ制作、映像コミュニケーション分野における豊かなユーザー体験と効果的なコミュニケーションをミッションとし、革新的でエコフレンドリーなソリューションを展開。</p>
+<p><strong>社会貢献の哲学</strong> のもと、製品を通じた顧客の生活向上と、社会的責任ある事業運営を行っています。</p>
+<ul>
+<li><strong>Website</strong>: <a href="https://www.avermedia.com/">avermedia.com</a></li>
+<li><strong>LinkedIn</strong>: <a href="https://www.linkedin.com/company/avermedia-technologies">linkedin.com/company/avermedia-technologies</a></li>
+</ul>
+
+<h2 id="faq">Appendix F.A.Q.</h2>
+
+<h3>Q: GC313Pro でノート PC を急速充電できますか？</h3>
+<p><strong>A</strong>: はい。<strong>C1 ポート単独使用時は最大 100W</strong>。ただし:</p>
+<ul>
+<li>ノート PC の電圧・電流要件を確認</li>
+<li>要件を満たさないと低速充電・性能低下・故障の可能性</li>
+<li>100W で足りるか事前確認、不足なら別充電器を</li>
+</ul>
+<p><strong>ポイント</strong>:</p>
+<ol>
+<li><strong>合計出力 100W</strong> が全接続機器を支えられるか確認（電源配分表参照）</li>
+<li><strong>5A 以上対応の充電ケーブル</strong> 使用（付属 C-to-C はこの要件を満たす）</li>
+<li><strong>PD3.0 対応のみ</strong></li>
+</ol>
+
+<h3>Q: ノート PC 接続時「低速充電」警告が出る理由は？</h3>
+<p><strong>A</strong>: 2 つの原因のいずれか:</p>
+<ol>
+<li><strong>他の Type-C 機器も接続されている</strong>（dual-port 45W 分散モードになる）→ ノート PC が 45W を超えて必要だと警告</li>
+<li><strong>ノート PC が 100W 超を要求</strong>（100W 単独でも不足）→ 別充電器が必要</li>
+</ol>
+
+<h3>Q: PC が GC313Pro を認識しないのはなぜ？</h3>
+<p><strong>A</strong>:</p>
+<ol>
+<li><strong>PC を GC313Pro の C2 ポートに接続</strong> + <strong>AC アダプタ挿入</strong> の状態でないとキャプチャ認識しない</li>
+<li>デバイスマネージャーの「サウンド、ビデオ、ゲームコントローラー」または「カメラ」欄に <strong>「Elite Go GC313Pro」</strong> が表示されるか確認</li>
+<li>認識しない場合、全 Type-C ケーブルを外し、再接続</li>
+<li>Assist Central Pro で検出されない場合、<strong>付属 C-to-C ケーブル使用確認</strong>（C-to-A ケーブルでは充電・HDMI 機能なし、認識されない）</li>
+<li>異なる名前が表示される場合、サポート連絡</li>
+</ol>
+
+<h3>Q: GC313Pro 接続後、表示がない理由は？</h3>
+<p><strong>A</strong>:</p>
+<ol>
+<li><strong>信号ソース機器の Type-C ポートが DP 1.2 以上（または Thunderbolt 3+）対応か確認</strong>。付属 C-to-C ケーブルで信号ソース → GC313Pro <strong>C1 ポート</strong> に接続（例: iPhone 15 Pro Max、Samsung S24U は対応）</li>
+<li><strong>HDCP 設定</strong>: iPad・iPhone・Android スマホ等でプレビューに HDCP 表示がある場合、公式動画で HDCP OFF 手順を参照</li>
+<li><strong>再セットアップ</strong>: 上記で解決しない場合、GC313Pro を一旦外し、再接続・再起動</li>
+</ol>
+
+<h3>Q: HDMI 出力の TV から音が出ないのはなぜ？</h3>
+<p><strong>A</strong>: C1 ポート接続の信号ソース機器の <strong>音声出力が有効</strong> か確認。GC313Pro を C1 ソースの <strong>音声出力デバイス</strong> として設定してください。</p>
+
+<h3>Q: USB-A ポートのヘッドホンから音が出ないのはなぜ？</h3>
+<p><strong>A</strong>:</p>
+<ol>
+<li>信号ソースは <strong>C1 ポート</strong> に接続、<strong>信号ソース側でヘッドホンデバイスを音声出力に設定</strong></li>
+<li><strong>ヘッドホンは C1 ソース機器用のみ</strong> 動作、C2 接続 PC のヘッドホンとしては <strong>使えません</strong></li>
+</ol>
+
+<h3>Q: GC313Pro をソフトウェアでどうセットアップすべき？</h3>
+<p><strong>A</strong>: Windows/macOS で OBS Studio 等使用時、<strong>信号ソースに合わせた解像度・FPS</strong> 設定が最適。詳細はチュートリアル動画参照。</p>
+
+<h3>Q: USB-A ポートにマイクを接続する方法（GC313/GC313Pro 共通）</h3>
+<p><strong>A</strong>: マイクは <strong>A ポート</strong> 接続、<strong>C1 ポート</strong> の信号ソースで機能。</p>
+<ul>
+<li>例: Windows 機を <strong>C1 ポート</strong> に接続 → マイクは当該 PC のサウンド入力デバイスとして認識</li>
+</ul>
+<div class="callout note">
+<p><strong>重要</strong>:</p>
+<ul>
+<li>マイクは <strong>C1 接続の信号ソース</strong> 用にのみ動作</li>
+<li><strong>C2 接続のコンピューター</strong> のマイクとしては使えません</li>
+</ul>
+</div>
+
+<h2 id="compare">GC313 vs GC313Pro 比較</h2>
+<table>
+<thead>
+<tr><th>項目</th><th>CORE GO GC313<br>（充電ドック）</th><th>ELITE GO GC313Pro<br>（充電キャプチャ）</th></tr>
+</thead>
+<tbody>
+<tr><td>主機能</td><td>充電ドック + 映像出力</td><td><strong>充電ドック + 映像出力 + キャプチャ</strong></td></tr>
+<tr><td>100W GaN 充電</td><td>✓</td><td>✓</td></tr>
+<tr><td>複数機器同時充電</td><td>3 台まで</td><td>3 台まで</td></tr>
+<tr><td>急速充電</td><td>✓</td><td>✓</td></tr>
+<tr><td>過負荷保護</td><td>✓</td><td>✓</td></tr>
+<tr><td>HDMI 4K60 表示</td><td>✓</td><td>✓</td></tr>
+<tr><td><strong>ビデオキャプチャ</strong></td><td>❌</td><td><strong>✓ 1080p60</strong></td></tr>
+<tr><td>USB ポート</td><td>USB-C 3.2 Gen 1 × 1 + USB-C 2.0 × 1 + USB-A × 1</td><td><strong>USB-C 3.2 Gen 1 × 2</strong> + USB-A × 1</td></tr>
+<tr><td>特徴</td><td>過負荷保護、PD 3.0 急速充電</td><td><strong>過負荷保護、PD 3.0 急速充電、Full HD ビデオキャプチャ</strong></td></tr>
+<tr><td><strong>用途</strong></td><td>充電と複数機器接続が主目的。ゲーム機用ドックより小型・スリムな代替品</td><td><strong>コンテンツクリエイター、ストリーマー、録画ユーザー向け。iOS/Android スマホ、タブレット、携帯ゲーム機、Display Alt Mode 対応 Type-C 機器からパススルー・キャプチャ</strong></td></tr>
+</tbody>
+</table>
+
+<h2 id="notes">訳者注・関連ファイル</h2>
+
+<h3>訳者注</h3>
+<ol>
+<li>本訳文は <strong>v1.1（2025-09-30 版）</strong> の User Guide を元にしています</li>
+<li>ダウンロードリンクの URL 等は原文そのまま記載</li>
+<li>仕様表の電源配分は PDF 内の図と合わせて確認してください</li>
+<li><strong>Switch 2 接続手順は FW 更新ガイドの「更新後の接続」セクション参照</strong></li>
+<li>最新版 Assist Central Pro は v4.0.80（マニュアル記載の v4.0.73 より新しい）</li>
+</ol>
+
+<h3>関連ファイル保管場所</h3>
+
+<h4>Mac</h4>
+<ul>
+<li>User Guide PDF: <code>/tmp/gc313pro/GC313Pro_UserGuide_v1.1.pdf</code></li>
+<li>Quick Start Guide: <code>/tmp/gc313pro/GC313Pro_QSG.pdf</code></li>
+<li>Datasheet: <code>/tmp/gc313pro/GC313Pro_Datasheet.pdf</code></li>
+<li>Firmware Updater (Windows): <code>/tmp/gc313pro/GC313Pro_Firmware.exe</code></li>
+<li>Assist Central Pro for macOS: <code>/Applications/AssistCentralPro.app</code>（v4.0.80 導入済）</li>
+</ul>
+
+<h4>MASU-P55（Windows）</h4>
+<ul>
+<li>User Guide / QSG / Datasheet / Firmware Updater: <code>C:\Users\gci_admin\Downloads\GC313Pro_*</code></li>
+<li>Assist Central Pro: <code>C:\AVerMedia\AssistCentralPro\</code>（v4.0.80 導入済）</li>
+</ul>
+
+<h3>公式リンク</h3>
+<ul>
+<li><a href="https://www.avermedia.co.jp/support/download?model_number=charging-dock-GC313Pro">ダウンロードページ</a></li>
+<li><a href="https://www.avermedia.co.jp/product-detail/charging-dock-GC313Pro">製品ページ</a></li>
+</ul>
+
+<footer>
+<p>GC313Pro ユーザーガイド v1.1 日本語訳 · 2026-04-22<br>
+原文: © AVerMedia Technologies · 翻訳は個人利用の参考のため。正確性は原文 PDF を正とする。</p>
+</footer>
+</div>
+</body>
+</html>
