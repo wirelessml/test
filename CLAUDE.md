@@ -580,6 +580,59 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - **Switch 2 接続手順**（GC313Pro C1 ポート直結 + HDMI OUT パススルー + USB-C2 で PC キャプチャ）も完全翻訳
   - ミニマリスト向けのナレッジ資産として残存、外出先から iPhone でも参照可能
 
+- [x] **4/22 午前〜午後セッション: AI エージェント環境強化ラッシュ**（GC313Pro 運用確立＋スタック全面刷新＋しぶエコ追跡継続）
+  - **Moshi iOS アプリ既利用確認**: iPhone 側の SSH/Mosh クライアント、保存接続 `yuika@100.99.41.2` + `gci_admin@100.125.21.47`、月 28 接続中（無料枠ほぼ上限）、**Pro 未購入で mosh プロトコル + dictation 未解放**、Blink Shell 等代替候補と比較検討余地
+  - **参考構成「AI 中心の仕事環境 6 層スタック」解析**:
+    1. インターフェース: MacBook Pro + **cmux**（Ghostty ベース macOS native terminal、2026/2 リリース、10k ⭐、Claude Code/Codex/Aider 並列実行特化）
+    2. 脳: **Codex (cc)**（OpenAI Codex CLI + Claude Code 互換エイリアス）
+    3. 情報ソース拡張: **Crawl4AI**（AI 向け Web クローラ OSS）+ **xurl**（X API curl ライク CLI）
+    4. 持ち運び: **Tailscale + Moshi**（mosh プロトコル + モバイル切断耐性）
+    5. ループ: **Mac Studio + Ralph Loop**（2026 バイラル手法、PRD 完了まで自律反復、Execute/Evaluate/Fix/Repeat の 4 段階、12k ⭐）
+    6. 管理: GitHub
+  - **ユーザー現環境との差分**: cmux / Ralph Loop 未導入、Mac Studio 未保有、mosh プロトコル未有効化。agent-reach（twitter CLI 含む）で xurl/Crawl4AI を代替中
+  - **導入優先度**: cmux（MacBookNEO セットアップと同時）> mosh 有効化（Moshi Pro or Blink Shell）> Ralph Loop（Claude Max 活用の極北）> Mac Studio（¥400k+ 投資判断、後期検討）
+
+- [x] **4/22 大川裕介 → 大川優介 誤記を全ファイル訂正**（commit `34c8db0`）
+  - しぶ × テスラ × Vision Pro × 車中泊ルームツアー動画（ukfCg8ZgMjA）の出演者氏名訂正
+  - ライブファイル 7 本、12 箇所を一括置換（sed）:
+    - CLAUDE.md / prompt.txt / docs/google-photos-shibu-inventory.md / ai-minimalist-shibu/knowledge/google-photos-analysis.md（6箇所）/ ai-minimalist-shibu/knowledge/novel-three-macs.md / ai-minimalist-shibu/knowledge/transcripts/yt-ukfCg8ZgMjA.ja.vtt / ai-minimalist-shibu/yt-ukfCg8ZgMjA.ja.vtt
+  - `.claude/worktrees/` 内 14 箇所は isolated state で放置（過去の並列エージェント作業のスナップショット）
+  - push 済、GitHub Pages 反映済
+
+- [x] **4/22 はりきゅう整体しゅん LP 再確認**: https://wirelessml.github.io/test/docs/hari-seitai-shun.html#info（兵庫県伊丹市、4/17 初回公開、HTTP 200 稼働確認、他の公開 docs との一覧表も整理）
+
+- [x] **4/22 Apple 偽装フィッシングメール警告**（pirosi80@yahoo.co.jp 宛、10:48 受信）
+  - 送信元: `no-reply@icloud-apple-server-bn3grd9h54h2hfdfhd9e37httns3ht4-a3.1i0cr9k.top`（`.top` ドメイン + ランダム文字列 + 偽装ブランド）
+  - 件名: 「決済エラーのお知らせ: iCloud+ ストレージプラン」
+  - 「要確認」ボタン + 「対応期限: 2026/04/21 23:59」（既に過去）+ 「2020 San-X Co., Ltd. All Right Reserved.」（無関係テンプレ）= **100% フィッシング**
+  - **リンク未クリック、削除推奨**を回答
+  - pirosi80@yahoo.co.jp はフィッシング標的化、金融・クラウド系サービスでは別メアド推奨
+
+- [x] **4/22 GC313Pro User Guide v1.1 日本語訳 公開**（commit `b72fb11` + `3112252`）
+  - Markdown 版: `docs/gc313pro-user-guide-ja.md`（373 行）
+  - HTML 版: `docs/gc313pro-user-guide-ja.html`（目次・ダーク/ライトモード・モバイル最適化）
+  - 公開 URL: https://wirelessml.github.io/test/docs/gc313pro-user-guide-ja.html
+  - 原文 PDF 保管: Mac `/tmp/gc313pro/` + MASU-P55 `C:\Users\gci_admin\Downloads\`
+  - 内容: 主な機能・システム要件・仕様・電源配分・Assist Central Pro・ファームウェア更新ガイド・F.A.Q. 8 項目・GC313 vs GC313Pro 比較・関連ファイル保管場所
+  - **Switch 2 接続手順**（GC313Pro C1 ポート直結 + HDMI OUT パススルー + USB-C2 で PC キャプチャ）完全翻訳
+
+- [x] **4/22 Mac 版 AssistCentralPro v4.0.80 を Mac M1 に導入**
+  - DL: https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.80.zip（41.7MB）
+  - 展開 → DMG マウント → `/Applications/AssistCentralPro.app` コピー
+  - 検疫属性除去（`xattr -dr com.apple.quarantine`）
+  - バージョン: 4.0.80（Windows MASU-P55 側と同一、macOS 13+ 対応）
+  - 用途: Mac 側で GC313Pro 使用時の HDCP 切替・FW バージョン確認・デバイス診断
+  - 起動: `open -a AssistCentralPro`
+
+- [x] **4/22 Substack 初心者向け AI 課金記事の強化（りくと事例引用）**
+  - 友人（名前・会社は抽象化）の 48 時間変化を**記事冒頭フック + クロージング**として引用
+  - 4/20「何をして働けばいいんだ…？😇」→ 4/22 深夜 AI RIKUTO 1 時間実装「素人なのにたった 1 時間で出来た（震える）」
+  - 「Claude Code を初日から使ったわけじゃない。まず無料で触って、何ができるかを体で覚えて、2 日目には自分のアプリを作っていた」= 記事のコアメッセージ
+  - イケハヤ系の煽りではなく**リアルな肉声で刺す**構成
+  - Manus 画像生成モデル調査: **Nano Banana Pro + GPT Image 1.5** 切替式（Pro プラン限定）と判明
+  - 初心者向け無料 Claude Code 代替候補: **Aider + Gemini Free API**（50 req/日、クレカ不要）/ GitHub Copilot CLI（月 50 無料、既導入）
+  - Claude Max 解約後の備え: API キー発行 + Aider 併用の二段構え、Phase 1-3 の段階的移行計画
+
 - [x] **4/22 23:00-24:00 りくと AI研修完了 4連投ストーリー解読**（しぶエコ 2 日間合宿の全成果物確定）
   - **成果物 2 つ**:
     1. **Minimal Sign**（4/20 公開、電子署名 SaaS、モノ減らしコーチング撮影同意書用）
