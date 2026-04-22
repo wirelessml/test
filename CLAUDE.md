@@ -92,6 +92,35 @@
 - プラン: Starter解約済み（2026/5/11まで有効、残約35,000クレジット）
 - 生成コマンド: MacからcurlでAPI直叩き（Python SDK不要）
 
+## 定期タスク（毎週/毎月の継続監視）
+
+### SSD 価格監視（しゅん先生 PC 用 NVMe SSD 買い替え待ち）
+
+**状況**: 2026 年 NAND 高騰で 1TB NVMe が ¥20,980 から。4/22 Plextor 死亡後、Seagate SMR HDD で延命運用中。
+
+**チェック頻度**: **毎週月曜 or 金曜**（セッション 1 / 9:00 枠で実施）
+
+**監視 URL 3 点セット**:
+1. **gazlog.jp SSD 価格グラフ**（毎日更新）: https://gazlog.jp/entry/nvmessd-price-daily-chart/ — 1TB/2TB/4TB/8TB の最安値が日次更新
+2. **価格.com Crucial P3 Plus 1TB**: https://kakaku.com/item/K0001595428/
+3. **Amazon.co.jp NVMe 1TB 価格順**: https://www.amazon.co.jp/s?k=NVMe+SSD+1TB+M.2+2280&s=price-asc-rank
+
+**購入発動トリガー**:
+- **1TB NVMe が ¥12,000 税込以下** → 発注検討
+- 500GB が ¥8,000 以下なら容量縮小で検討
+- または **Seagate HDD の体感速度に耐えられなくなったら**どの価格でも発注（緊急時）
+
+**監視すべき業界ニュース**:
+- NAND 減産終了 or 生産ライン稼働開始のプレスリリース
+- Micron / KIOXIA / Samsung / SanDisk / SK Hynix の四半期決算（供給計画）
+- TrendForce / TechInsights の NAND 価格予測レポート
+
+**候補モデル**（価格回復時の選択肢）:
+- Hanye MN50 1TB（現最安、Amazon 直販 B0B58JKLLW）
+- KIOXIA EXCERIA G2 1TB（SSD-CK1.0N3G2/N、Plextor と NAND 同系）
+- Crucial P3 Plus 1TB（在庫のみ、Micron 撤退で将来確保困難）
+- WD Black SN770 1TB（WDS100T3X0E、Gen4 高速）
+
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
 - ~~**2026/04/19**: YouTubeプレミアムを解約する~~ ✅ 4/18 10:45 解除済（Y!mobile バリュー特典 YouTube Premium、2026/4/20 まで利用可能）
@@ -456,12 +485,22 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
     4. **「寿命残 X%」は物理的な NAND セル書換残量であり、コントローラチップの寿命とは別軸**: SMART 健康指標が示せない故障モードがある
 
 - [x] **4/22 夜のアクションアイテム**
-  - [ ] 新 SSD を Amazon で注文（Crucial P3 Plus 1TB ¥8,500 推奨、翌日配送）
+  - [x] ~~新 SSD を Amazon で注文（Crucial P3 Plus 1TB ¥8,500 推奨、翌日配送）~~ **→ 2026 年 SSD 価格高騰により保留決定**
   - [ ] しゅん先生 PC を今夜はシャットダウン（Seagate SMR HDD に余計な負荷をかけない）
-  - [ ] 4/23 到着後: Seagate → 新 SSD へ Hasleo クローン → BIOS で新 SSD Boot 1st → 通常速度復活
+  - [ ] 4/23 以降: **SSD 価格が ¥12,000/1TB 以下まで下がるまで Seagate SMR HDD 起動で運用継続**（遅いが動く）
   - [ ] Plextor は物理的に取り外して保管 or 廃棄（フォーマットは不可能、単なる電子ゴミ化）
   - [ ] Ollama セットアップは新 SSD 稼働後にリトライ（Seagate 上で CPU 100% 負荷は避ける）
   - [ ] **Substack 記事化**: 「Plextor SSD が死ぬ 2 時間前にクローンを作った話 — 保険を今日作るか、明日作るかで人生が変わる」的な内容、りくと 48 時間ジャーニーと並ぶ 4 月の物語として
+  - [ ] **Substack 第 2 章候補**: 「SSD が壊れたけど買い替えない話 — 2026 年 NAND 高騰で見えた計算資源格差の真実」
+
+- [x] **2026 年 SSD 市場高騰調査（4/22 夜）と購入保留判断**
+  - 原因: 生成 AI 用 NAND 需要爆発 + メーカー協調減産 = ダブルショック
+  - TrendForce 予測: 2026 Q1 NAND +10〜15% QoQ、主要メーカー 2026 生産能力完売
+  - **2024〜2025 前半 ¥8,000 → 2026/04 ¥20,000〜30,000** = 2.5〜3.7 倍高騰
+  - 新生産ライン稼働は **2027 年後半以降**、2026 年は高止まり継続予想
+  - **Micron（Crucial 親会社）が 2026 年 2 月にコンシューマ市場撤退**、Crucial P510 既に販売終了、P3 Plus も在庫のみ
+  - 4/22 22:00 時点の 1TB NVMe 最安: **Hanye MN50-1000GA01 ¥20,980**（Amazon 直販、PCIe Gen4、R:4900/W:4600 MB/s、TBW 750）
+  - **ユーザー判断**: 「現時点での購入は得策ではない、遅さを受け入れ様子見」→ Seagate SMR HDD 継続運用、価格下がるまで購入保留
 
 - [x] **未完遂: Ollama + ローカル LLM 実験（4/23 以降に繰越）**
   - `OLLAMA_MODELS=D:\ollama\models` 環境変数は設定済（ただし今は D: が無くなって別意味になった）
