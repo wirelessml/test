@@ -415,6 +415,62 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - 長時間の画像ベース対話（iPhone 写真 15 枚以上）+ ツール呼び出し + 編集 + commit で約 2 時間継続セッション
   - しゅん先生 PC バックアップ設定を Claude Code ガイダンスで全工程完走、Tailscale / SSH 無しでもテキスト + スクショで十分高精度な遠隔支援可能と実証
 
+- [x] **🚨 4/22 18:20 しゅん先生 PC の Plextor SSD が NVMe コントローラ障害で完全死亡、クローンが PC を救った奇跡のタイムライン**
+  - **きっかけ**: ユーザーの「即実験: しゅん先生 PC で Ollama + Qwen2.5 7B / DeepSeek-Coder-V2-Lite 16B Q4 を走らせる」要求
+  - **ユーザー指示に従い実行した PowerShell コマンド**（18:13 頃）:
+    - `[Environment]::SetEnvironmentVariable("OLLAMA_MODELS", "D:\ollama\models", "Machine")`
+    - `New-Item -Path "D:\ollama\models" -ItemType Directory -Force`
+    - `winget install Ollama.Ollama --source winget`
+  - **18:19:48 stornvme Event 11 発生**（Windows 標準の NVMe ドライバが Plextor コントローラでハードウェアエラー検出）
+  - **18:19:51 volmgr Event 46, 161 連鎖エラー**（ボリュームマネージャ連鎖障害）
+  - **18:20:37 EventLog Event 6008**（異常シャットダウン検知）→ **Green Screen of Death（Windows Insider Preview ビルド由来、青ではなく緑）**
+  - **停止コード: WHEA_UNCORRECTABLE_ERROR (0x124)** — ハードウェアエラーによる OS 緊急停止
+  - **Plextor 沈黙の原因**: NVMe コントローラが完全応答停止、Windows から「デバイス不在」扱いに。サイレント死（物理的破損ではなく電子回路レベルの応答不能）
+  - **強制再起動時に起きた奇跡**: Boot Manager が Plextor からの起動に失敗 → 自動的に Seagate HDD（ちょうど 2 時間前に Hasleo でクローン完了していた）にフォールバック → Windows 11 が Seagate から正常起動 → **ユーザーデータ損失ゼロ**
+  - **Get-Disk / Get-PhysicalDisk 実行結果（18:40 頃）**: Seagate 1 台のみ検出、Plextor は完全消滅
+  - **bcdedit /enum 確認**: Boot device = `\Device\HarddiskVolume1` (Seagate)、osdevice = `C:` (Seagate) — Boot 構成も Seagate に完全移行済み
+  - **ACPI ThermalZone 温度**: TZ10_0=16.9°C, TZ00_0=27.9°C, TZ01_0=29.9°C（ケース温度は冷えてる、CPU コア温度は未取得だが過熱ではなかった可能性大）
+  - **体感**: Windows が Seagate SMR HDD から起動するため、ログイン・Brave 起動・ファイルエクスプローラー等すべて 50-100 倍遅い。Font Cache サービスが起動時タイムアウト、Intel RST サービスが落ちる等の副次症状
+  - **奇跡のタイムライン（2026/04/22）**:
+    ```
+    午前      ユーザー「C: 壊れた時のバックアップとして D: を」（哲学的判断）
+    17:15    Hasleo クローン開始（Plextor → Seagate）
+    17:34    クローン完了 ← Plextor の「最後の大仕事」（結果的に）
+    17:53    AOMEI システムイメージ backup 開始
+    18:05    イメージ完成（Weekly System Image.adi = 82.94GB）
+    18:13    Ollama 準備中（ユーザーが D:\ollama\models 作成）
+    18:15-18:19  Ollama winget インストール実行
+    18:19:48 Plextor NVMe コントローラ死亡通知（stornvme Event 11）
+    18:19:51 ボリュームマネージャ連鎖エラー
+    18:20:37 Green Screen WHEA 0x124、異常シャットダウン
+    (自動再起動)
+    18:21+   Boot Manager が Plextor 起動失敗 → Seagate クローンへ自動フォールバック
+    18:23    Seagate から Windows 起動（Font Cache 等がタイムアウトしつつも復帰）
+    18:40+   ユーザーと Claude Code で原因診断、Plextor 完全死亡確認
+    ```
+  - **タイミングの奇跡**: Plextor が死ぬ **約 2 時間前**にクローン完了。もし 2 時間遅かったらクローン中にコントローラが死んで**不完全クローン → 起動不能**で詰んでた。「念のため」「保険として」今朝ユーザーが決断したバックアップ運用が、当日中に実戦投入されて PC を救った
+  - **教訓**:
+    1. **バックアップは「いつか」ではなく「今日」やる** — 24 時間以内に壊れる機材は実在する
+    2. **クローン（ブート可能な複製）の威力**: 単なるファイルバックアップではなく、**Boot Manager が自動フォールバック**してくれる防衛線として機能
+    3. **Plextor のような撤退ブランド製品は寿命前でも突然死リスク**: 残 66% でも NVMe コントローラは前触れなく沈黙する
+    4. **「寿命残 X%」は物理的な NAND セル書換残量であり、コントローラチップの寿命とは別軸**: SMART 健康指標が示せない故障モードがある
+
+- [x] **4/22 夜のアクションアイテム**
+  - [ ] 新 SSD を Amazon で注文（Crucial P3 Plus 1TB ¥8,500 推奨、翌日配送）
+  - [ ] しゅん先生 PC を今夜はシャットダウン（Seagate SMR HDD に余計な負荷をかけない）
+  - [ ] 4/23 到着後: Seagate → 新 SSD へ Hasleo クローン → BIOS で新 SSD Boot 1st → 通常速度復活
+  - [ ] Plextor は物理的に取り外して保管 or 廃棄（フォーマットは不可能、単なる電子ゴミ化）
+  - [ ] Ollama セットアップは新 SSD 稼働後にリトライ（Seagate 上で CPU 100% 負荷は避ける）
+  - [ ] **Substack 記事化**: 「Plextor SSD が死ぬ 2 時間前にクローンを作った話 — 保険を今日作るか、明日作るかで人生が変わる」的な内容、りくと 48 時間ジャーニーと並ぶ 4 月の物語として
+
+- [x] **未完遂: Ollama + ローカル LLM 実験（4/23 以降に繰越）**
+  - `OLLAMA_MODELS=D:\ollama\models` 環境変数は設定済（ただし今は D: が無くなって別意味になった）
+  - `D:\ollama\models`（= Seagate の ollama フォルダ、今は `C:\ollama\models` として見える）フォルダ作成済
+  - `winget install Ollama.Ollama` はクラッシュのため完了確認できず、新 SSD 環境で再実行
+  - 目標モデル: `qwen2.5:7b`（4.7GB）+ `deepseek-coder-v2:16b-lite-instruct-q4_K_M`（~10GB）
+  - 期待速度（i7-8700K CPU only）: Qwen2.5 7B Q4 で 3-6 tok/s、DeepSeek-Coder-V2-Lite MoE で 8-15 tok/s
+  - **活用案**: 夜間バッチ処理、claude-mem 観察ログ要約、Substack 下書き生成、しぶトランスクリプト分析
+
 ## 完了（4/20 セッション、Claude Design 本番化＋Google Workspace CLI 導入）
 
 - [x] **Claude Design ハンドオフバンドル → 本番公開フロー確立**
@@ -1700,20 +1756,30 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
     - Node.js v24.13.1（nvm 管理、Openclaw 依存）
     - WSL 側 Claude Code セッション保存: 2 件（4/17 / 4/18）
   - MacからSSH経由でリモート操作可能
-- **しゅん先生 PC**（**4/22 16:34〜 コワーキング据え置き化**、旧: 伊丹市はりきゅう整体しゅん業務用）
+- **しゅん先生 PC**（**4/22 16:34〜 コワーキング据え置き化**、**4/22 18:20 Plextor SSD 死亡で Seagate クローン緊急起動**、旧: 伊丹市はりきゅう整体しゅん業務用）
   - **配置変更**: 伊丹市（しゅん先生業務用） → コワーキング（新メイン据え置き）、4/22 16:34 に配置転換
+  - **4/22 18:20 緊急事態**: **Plextor SSD が NVMe コントローラエラーで完全死亡**、Seagate クローンに自動フォールバック起動中（詳細は 4/22 午後セッション完了記録）
   - PC 名: DESKTOP-ATQ36KS / iiyama STYLE Infinity by iiyama（2018 年頃購入 BTO デスクトップ）
   - 製造元: 株式会社ユニットコム（0570-550-884）
   - CPU: Intel Core i7-8700K @ 3.70GHz（6C12T、第 8 世代 Coffee Lake、2017/10 リリース、95W TDP、OC 可）
   - RAM: 16GB DDR4-2666（15.8GB 使用可能）
   - GPU: Intel UHD Graphics 630（iGPU のみ、dGPU なし）
   - OS: Windows 11 Home **25H2**（build 26200.8037、2025/02/05 クリーンインスコ）
-  - ストレージ: 合計 2.05TB（使用 138GB）
-  - **C: Plextor PX-256M9PeGN 256GB NVMe（PCIe 3.0 x4）** — 使用 130GB / 237GB、健康状態「正常 66%」（寿命残 66% = 消費 34%）、総書込 69,178GB / TBW 公称 160TB（消費 43%）、使用時間 26,779h、温度 40°C、ファーム 1.03、**Plextor 事業撤退済（2024 年 KIOXIA 傘下で SSD 撤退、ファーム 1.03 が最終版）**
-  - **D: Seagate ST2000LM015-2E8174 2TB SMR HDD（SATA/600、5400rpm、2.5 インチ）** — 使用 8.29GB / 1.81TB（**ほぼ空**、Tenorshare フォルダのみ）、健康状態「正常」、代替処理済セクタ 0、使用時間 23,719h、電源投入 20,759 回、温度 24-25°C、G-sense エラー履歴あり（BF 現 25 / 最悪 39）、緊急ヘッド退避履歴あり（C0 最悪 40）
+  - ストレージ: 合計 2.05TB → **1.82TB**（Plextor 256GB 死亡により喪失、Seagate 2TB のみ稼働）
+  - ~~C: Plextor PX-256M9PeGN 256GB NVMe~~ **4/22 18:20 死亡、デバイス検出不可（Get-Disk から消滅）**。WHEA_UNCORRECTABLE_ERROR 0x124 + stornvme Event 11 → 完全応答停止。生前の状態: 使用 130GB、健康状態「正常 66%」、総書込 69TB、使用時間 26,779h、Plextor 事業撤退済でサポートなし、ファーム 1.03 最終版。**2024 年 KIOXIA 傘下で SSD 撤退済**ブランド
+  - **C:（現在） = 旧 D: の Seagate ST2000LM015-2E8174 2TB SMR HDD**（SATA/600、5400rpm、2.5 インチ）— Hasleo クローン（17:15-17:34）により起動可能な完全複製を保持していたため、Plextor 死亡後の強制再起動で自動的に Boot Manager が Seagate にフォールバック。現在 Windows 11 25H2 が Seagate から稼働中（遅いが動く、SMR HDD 特性で体感 50-100 倍遅）。健康状態 正常、使用時間 23,722h、電源投入 20,759 回、温度 27°C
+  - `D:\Backup\Weekly System Image\Weekly System Image.adi` = 82.94GB、4/22 18:05 作成の AOMEI システムイメージ（今は C:\Backup\ として見える）
   - モニター: LG 製（型番不明、デスクトップ設置）
-  - バックアップ運用提案中（4/22 午後）: AOMEI Backupper Standard で C: → D: クローン（月 1 差分）+ D:\Backup\ にシステムイメージ週次 + Windows 回復ドライブ USB 作成の 4 重防御
-  - 新用途: コワーキングでの据え置きメイン作業機（Core i7-8700K + 16GB で M1 8GB より馬力ある、OBS・画像処理等の重い作業向き）
+  - **次の最優先タスク（4/22 夜）: 新 SSD 注文**
+    - 推奨: Crucial P3 Plus 1TB ¥8,500（Amazon 翌日配送）
+    - 代替: WD Black SN770 1TB ¥11,000 / Samsung 990 EVO 500GB ¥9,500
+  - **4/23 以降の SSD 換装手順**:
+    1. 新 SSD 到着 → しゅん先生 PC シャットダウン → ケース開ける
+    2. 死亡 Plextor を M.2 スロットから抜く → 新 SSD を同スロットに挿入
+    3. Seagate HDD から起動（今と同じ）→ Hasleo で Seagate → 新 SSD にクローン（18 分）
+    4. BIOS で新 SSD を Boot 1st → 再起動
+    5. Seagate は今後のバックアップ用 D: として継続利用
+  - 新用途: コワーキングでの据え置きメイン作業機（Core i7-8700K + 16GB で M1 8GB より馬力あり、OBS・画像処理等の重い作業向き）— **ただし新 SSD 換装まで SMR HDD 起動のため重い作業は保留**
   - 旧用途: しゅん先生（はりきゅう整体・伊丹市）の業務用 PC（予約管理・領収書・患者関連フォルダあり）— 4/22 まで
 - iPhone 15 Pro（名前: 結花）— メインスマホ、Dispatch + Tailscale
 - 初代iPad Pro 9.7インチ（名前: 彩羽）— 楽天SIM挿入、テザリング用
