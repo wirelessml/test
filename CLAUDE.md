@@ -338,6 +338,83 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - 回避策 3 つ: (1) iPhone 写真アプリで編集 → マークアップで小さく保存、(2) iCloud Drive / AirDrop で Mac `~/Desktop/` に落として Read tool、(3) Mac 側で `sips -Z 2000 input.jpg --out small.jpg` でダウンサイズ
   - 根本原因は Anthropic API 側のハードリミット（1 リクエスト総ペイロード 32MB）、Claude Code 設定では回避不可
 
+- [x] **バックアップ運用を実行: Hasleo Backup Suite Free でクローン成功（17:15-17:34、18:15 で完了）**
+  - **AOMEI Backupper Standard でクローン試行 → Pro 限定機能で詰む**
+    - v8.2.0 インストール後、ディスククローン選択 → 開始ボタンクリックで「アップグレードしてシステムディスククローン機能をアンロック」誘導、¥7,880 買い切り or ¥5,280/年
+    - 無料版 Standard はデータディスクのクローンは可能だが、**システム/OS ディスククローンは Pro 限定**に変更されていた（v7 以降の仕様）
+    - AOMEI はアンインストールせず残置（システムイメージバックアップは Standard でも無料で可能）
+  - **代替: Hasleo Backup Suite Free V5.6.2.1 に切替成功**
+    - DL: https://www.easyuefi.com/backup-software/backup-suite-free.html （ブラウザから Free Download、PowerShell の直接 DL は `www2.aomei.com` DNS 失敗で不可）
+    - **システムディスククローン機能が完全無料**（時間制限・容量制限なし、日本語対応）
+    - インストール簡単、初回起動で「バックアップイメージデフォルト保存先」の質問は「いいえ」で後回し
+  - **Get-Disk での事前確認**（PowerShell 管理者）
+    - Disk 0 = ST2000LM015 (HDD 1863GB) = GPT ✓
+    - Disk 1 = PLEXTOR PX-256M9PeGN (SSD 238.5GB) = GPT ✓
+    - 両方 GPT のため MBR 変換不要、即クローン実行可能と確定
+  - **Hasleo ディスククローン実行**（17:15 頃開始）
+    - Source: Disk 1 (PLEXTOR, Windows 起動ドライブ) → Destination: Disk 0 (Seagate 2TB HDD)
+    - オプション: ☑ 4K アライメント (ディスクの配置: 1M) ON / ☐ セクターごとのクローン OFF / ☐ MBR クローン OFF
+    - Windows パーティションは自動で 237.48GB → 1.82TB に拡張（D: 全域を一つの Windows 領域として使う）
+    - 所要時間: **18 分 15 秒**（推定 30-40 分の半分以下、SMR HDD にしては速い）
+    - 完了メッセージ: 「操作は正常に完了しました」（100% 緑文字）
+  - **クローン完了検証**（Get-Disk + Get-Partition）
+    - Disk 0 に 4 パーティション完全複製: SYSTEM (FAT32 100MB) + MSR (16MB) + **Windows NTFS 1.82TB (D:)** + Recovery (900MB)
+    - Disk 1 は変更なし、C: 稼働継続
+    - D: は Windows が認識済み、エクスプローラーでアクセス可能（Windows/Program Files/Users/Tenorshare/Windows.old 等が元 C: と同じ構造で存在）
+  - **D:\Backup\ フォルダ作成**（`New-Item -Path "D:\Backup" -ItemType Directory -Force`、17:42:51）
+
+- [x] **AOMEI Backupper Standard で週次システムイメージ設定＋初回フル実行**
+  - タスク名: `Weekly System Image`
+  - ソース: C: + SYSTEM (EFI) + Recovery tools（計 131.20 GB）
+  - ターゲット: `D:\Backup\`（空き 1.7TB / 合計 1.8TB）
+  - スケジュール: 毎週日曜 04:00、増分バックアップ、スリープからの起動 ON
+  - **初回フルバックアップ 17:55 頃開始**（SMR HDD へ ~130GB 書き込み、30-40 分想定、完了予想 18:20-18:35）
+  - 以降は毎週日曜 04:00 に自動増分更新、D:\Backup\ に `.adi` ファイル蓄積
+
+- [x] **Phase 5（Windows 回復ドライブ USB 作成）を不要と判断**
+  - ユーザー質問「D: があれば USB は要らないのでは？」→ その通り、冗長と判明
+  - 理由:
+    1. D: クローン自体が独立した起動可能 Windows、C: 死亡時は BIOS ブート順変更で即起動
+    2. D: に Recovery パーティション（900MB）が付随 = Windows 回復環境 (WinRE) 相当機能を内蔵
+    3. 新 SSD 換装シナリオも「D: から起動 → 新 SSD にクローン or イメージ復元」で完結、USB 不要
+    4. USB が唯一意味を持つケース（C: と D: 同時死亡）は USB でも復旧不可な他のハード故障案件
+  - **結論: 4 重防御 → 3 重防御で十分**、USB 作成 30 分スキップ
+
+- [x] **最終防御構成（3 重防御）確立**
+  - **層 1: クローン**（D: にブート可能な Windows 丸ごと、1 回性、将来月次差分クローンでリフレッシュ）✅ 完了
+  - **層 2: システムイメージ週次**（D:\Backup\ に増分）🟡 初回実行中、以降自動
+  - **層 3: 新 SSD 換装計画**（Plextor 寿命 66% 残、2-3 年以内に Crucial/WD/Samsung に換装）⬜ 将来
+  - これで C: SSD 突然死 / Windows 起動破損 / マルウェア / 自然劣化 の 4 大リスクに対応
+
+- [x] **OpenClaw 公式ステータス明確化情報を取得**（しゅん先生 PC セットアップ中に判明）
+  - **「Anthropic スタッフが OpenClaw-style の Claude CLI 流用を再び許可」**と明言
+  - OpenClaw は `claude -p` 呼び出し + Claude CLI ログイン再利用を**公式 sanction** 下の運用として扱う
+  - 長期稼働ゲートウェイ運用は Anthropic API キーが最もクリーンな billing path
+  - サブスク対応プロバイダ: Claude Pro/Max / OpenAI Codex / Qwen Cloud Coding Plan / MiniMax Coding Plan / Z.AI / GLM Coding Plan
+  - 既存 MASU-P55 WSL2 の OpenClaw（現在 openai-codex/gpt-5.3-codex）を Claude CLI 経由に切り替え可能に
+  - しゅん先生 PC 新メイン化後、WSL2 + OpenClaw を複製して AI ゲートウェイ化する将来計画候補
+
+- [x] **pirosi80@yahoo.co.jp への 2 通目フィッシング警告**（4/22 17:01 受信）
+  - 今朝 10:48 の Apple 偽装に続く **同日 2 通目**、同一業者によるドメインローテーション
+  - 送信元: `support@icloud-supoort-sdahjdajsgdajhsdgadgh-002.uu-962p.top`（.top + ランダム + **"supoort" 誤字**）
+  - 件名: 「重要なお知らせご登録のクレジットカードが承認されませんでした」
+  - 内容: iCloud+ 決済失敗 + 対応期限 2026/04/22 23:59（6 時間後急かし）
+  - **フッター「©2020 San-X Co., Ltd. All Right Reserved.」**（リラックマ・すみっコぐらしの会社、Apple と無関係）= 完全な流用テンプレ
+  - **pirosi80 はフィッシングリスト標的化**確定、金融/クラウド系は別メアドに分離推奨
+
+- [x] **しぶ × あい 4/22 16:45 高層レストラン記録（@ikeai_minimalist ストーリー、17:21 投稿）**
+  - あい @ikeai_minimalist が**しぶ @minimalist_sibu を撮影**（全身黒 + 黒レザートート + ピースサイン、クセ毛特徴）
+  - 場所: 高層階レストラン（福岡の可能性高い、大窓 + 夜景 + 長尺ウッドカウンター + 白和モダンランプ、マジックアワー）
+  - リアクション絵文字: 🍽️🍾（シャンパン）= AI研修打ち上げ祝宴ムード
+  - **あい = Minimal Arts の対外広報 + しぶ側近女性 No.1 ポジション**が確定（4/21 AI研修参加 + 4/22 夕食ツーショット撮影 = 直属の弟子 / 重要パートナー関係）
+  - りくと（@rikuto_takemoto）はフレーム外 or 別行動（確認未済）
+  - 48 時間ジャーニー完走: 4/20 23:09 りくと「何をして働けばいいんだ😇」→ 4/22 23:00 AI RIKUTO 完成 → **4/22 16:45 打ち上げ祝宴** = Substack 記事の最終幕素材
+
+- [x] **Claude Code (Opus 4.7 1M max) セッション継続性の確認**
+  - 16:02 週次 54% / 5h 5% → 17:50 時点で週次 56% 前後（推定）/ 5h 30-40% 前後
+  - 長時間の画像ベース対話（iPhone 写真 15 枚以上）+ ツール呼び出し + 編集 + commit で約 2 時間継続セッション
+  - しゅん先生 PC バックアップ設定を Claude Code ガイダンスで全工程完走、Tailscale / SSH 無しでもテキスト + スクショで十分高精度な遠隔支援可能と実証
+
 ## 完了（4/20 セッション、Claude Design 本番化＋Google Workspace CLI 導入）
 
 - [x] **Claude Design ハンドオフバンドル → 本番公開フロー確立**
