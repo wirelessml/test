@@ -273,6 +273,64 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   2. 要約をチャットで報告（注目ポスト・トレンド・インフルエンサー反応）
 - **twitterコマンド主要**: `feed`/`search`/`likes`/`followers`/`article`/`post`/`show`（全て `-c` でLLM向けJSON）
 
+## 完了（4/22 午後セッション、しゅん先生 PC の SSD/HDD 健康診断＋バックアップ運用設計）
+
+- [x] **新規 PC「しゅん先生 PC」を CLAUDE.md ユーザー情報セクションに追加**
+  - 伊丹市・はりきゅう整体しゅん（4/17 LP 公開 https://wirelessml.github.io/test/docs/hari-seitai-shun.html）の業務用 PC
+  - iPhone Claude Desktop から写真アップロード → **32MB 制限に 3 回失敗**（Anthropic API 側のハードリミット、iPhone 側は正常）
+  - 回避策: 縮小版を改めて送信 → CrystalDiskInfo 写真 3 枚（C:/D:/バージョン情報）で確認完了
+  - **PC 正体**: 当初 MASU-P55 と混同 → iiyama STYLE Infinity by iiyama（2018 年頃 BTO デスクトップ、Core i7-8700K、16GB RAM、Windows 11 25H2）と判明
+  - しゅん先生の仕事部屋に設置（予約管理・カルテ・領収書・患者票関連フォルダあり）
+
+- [x] **C: ドライブ診断: Plextor PX-256M9PeGN 256GB NVMe**
+  - 健康状態 正常 **66%**（寿命残 66%、消費 34%）
+  - 総書込 69,178 GB（≈ 67.6 TB）vs TBW 公称 160TB = **42% 消費**
+  - 使用時間 26,779h（約 3 年 24/7 相当 or 8h/日で約 9 年）
+  - 温度 40°C、ファーム 1.03（最終版）、コントローラ Marvell 88SS1093 + Toshiba BiCS3 64-layer 3D TLC NAND（2018 年発売モデル）
+  - **重要**: Plextor は 2024 年 KIOXIA 傘下で SSD 事業撤退、サポート終了、ファーム更新なし
+  - 判定: 緊急ではないが計画的に交換すべき段階（3 年以内）
+
+- [x] **D: ドライブ診断: Seagate ST2000LM015-2E8174 2TB SMR HDD**
+  - 健康状態 正常、代替処理済セクタ 0（物理的には健全）
+  - 使用時間 23,719h（約 2.7 年 24/7 相当）
+  - 電源投入 20,759 回（平均 1.14 時間/起動 = 頻繁スリープ復帰 or 再起動パターン）
+  - G-sense エラー（BF 現 25 / 最悪 39）・緊急ヘッド退避（C0 最悪 40）の履歴あり = 過去に持ち運び or 電源断歴
+  - SMR（Shingled Magnetic Recording）= OS ドライブに最も不向き（書き込み性能劣悪、SMR 特有のガベージコレクション地獄）
+  - 使用領域 8.29GB / 1.81TB = **ほぼ空**（Tenorshare フォルダのみ残存 = 過去にデータ復元作業か iPhone 管理ソフト利用の痕跡）
+
+- [x] **ユーザー要望の確認プロセス**
+  - 初回提案「D: から OS 起動」→ SMR 不向きを説明で却下
+  - 再提案「C: 壊れた時のバックアップとして D: を使う」→ 方針転換、**D: = 非常用スペアタイヤ**に確定
+  - 「システムイメージ」と「クローン」の違いを解説: イメージ単体は起動不可、クローンなら BIOS ブート順変更で直接起動可
+  - 最終的に「あくまで C: が壊れた時のバックアップ」と明確化
+
+- [x] **バックアップ運用設計: 4 重防御構成を提案**
+  1. **クローン（月 1 差分更新）**: C: → D: 先頭 130-150GB に、AOMEI Backupper Standard のスケジュールクローン機能
+  2. **システムイメージ（週 1 自動）**: D:\Backup\ に 3-4 世代保持、日曜 04:00 実行、圧縮後 70-90GB × 4 世代 = 約 300-360GB
+  3. **Windows 回復ドライブ USB**: 8GB USB メモリ（¥500）で作成、約 30 分所要
+  4. **新 SSD 換装計画**（将来）: Crucial P3 Plus 1TB ¥8,000 / WD Black SN770 1TB ¥11,000 / Samsung 990 EVO 500GB ¥9,000 のいずれか
+  - 容量試算: D: 1.81TB のうち約 500GB 消費、残り 1.3TB は従来通り空き領域
+  - C: 死亡時の流れ: BIOS で D: Boot 1st → 遅いが即起動して当日作業継続 → 新 SSD 注文 → 届いたら回復 USB から最新イメージで復元 → 元速度に戻る
+
+- [x] **Macrium Reflect Free 終了（2024 年）情報更新**
+  - 無料版は個人使用も不可、代替案:
+    - **AOMEI Backupper Standard**（推奨、日本語 GUI、スケジュールクローン対応）
+    - MiniTool ShadowMaker Free
+    - EaseUS Todo Backup Free（条件付き）
+    - Clonezilla（完全無料、CUI 寄り）
+
+- [x] **技術知見の記録（外付け HDD / SMR / Plextor / UEFI ブート）**
+  - SMR HDD を OS ドライブにする体感悪化: 体感 50-100 倍遅、Windows Update 時カリカリ数時間、ブラウザ起動 2 秒→20-40 秒、Windows ログイン 30 秒→3 分
+  - システムイメージ ≠ クローン の違い（単独起動可否、復元所要時間、容量）
+  - UEFI + GPT 起動要件（D: が MBR なら GPT 変換必要、PowerShell `Get-Disk` で `PartitionStyle` 確認）
+  - クローン後のドライブレター混乱回避手順: C: を物理的に一時切り離し → D: 単独起動確認 → C: 戻す
+  - ¥500 の USB メモリ + 無料ソフト（AOMEI）で物理故障リスクヘッジが成立
+
+- [x] **Claude Desktop iPhone アプリの 32MB アップロード制限を記録**
+  - iPhone で撮影した画面写真（CrystalDiskInfo の液晶撮影）はデコード後 32MB 超えやすい
+  - 回避策 3 つ: (1) iPhone 写真アプリで編集 → マークアップで小さく保存、(2) iCloud Drive / AirDrop で Mac `~/Desktop/` に落として Read tool、(3) Mac 側で `sips -Z 2000 input.jpg --out small.jpg` でダウンサイズ
+  - 根本原因は Anthropic API 側のハードリミット（1 リクエスト総ペイロード 32MB）、Claude Code 設定では回避不可
+
 ## 完了（4/20 セッション、Claude Design 本番化＋Google Workspace CLI 導入）
 
 - [x] **Claude Design ハンドオフバンドル → 本番公開フロー確立**
@@ -1557,6 +1615,19 @@ Claude活用のナレッジベース。AI関連の知見・ガイド・テンプ
     - Node.js v24.13.1（nvm 管理、Openclaw 依存）
     - WSL 側 Claude Code セッション保存: 2 件（4/17 / 4/18）
   - MacからSSH経由でリモート操作可能
+- **しゅん先生 PC**（伊丹市、はりきゅう整体しゅん、4/22 初回診断）
+  - PC 名: DESKTOP-ATQ36KS / iiyama STYLE Infinity by iiyama（2018 年頃購入 BTO デスクトップ）
+  - 製造元: 株式会社ユニットコム（0570-550-884）
+  - CPU: Intel Core i7-8700K @ 3.70GHz（6C12T、第 8 世代 Coffee Lake、2017/10 リリース、95W TDP、OC 可）
+  - RAM: 16GB DDR4-2666（15.8GB 使用可能）
+  - GPU: Intel UHD Graphics 630（iGPU のみ、dGPU なし）
+  - OS: Windows 11 Home **25H2**（build 26200.8037、2025/02/05 クリーンインスコ）
+  - ストレージ: 合計 2.05TB（使用 138GB）
+  - **C: Plextor PX-256M9PeGN 256GB NVMe（PCIe 3.0 x4）** — 使用 130GB / 237GB、健康状態「正常 66%」（寿命残 66% = 消費 34%）、総書込 69,178GB / TBW 公称 160TB（消費 43%）、使用時間 26,779h、温度 40°C、ファーム 1.03、**Plextor 事業撤退済（2024 年 KIOXIA 傘下で SSD 撤退、ファーム 1.03 が最終版）**
+  - **D: Seagate ST2000LM015-2E8174 2TB SMR HDD（SATA/600、5400rpm、2.5 インチ）** — 使用 8.29GB / 1.81TB（**ほぼ空**、Tenorshare フォルダのみ）、健康状態「正常」、代替処理済セクタ 0、使用時間 23,719h、電源投入 20,759 回、温度 24-25°C、G-sense エラー履歴あり（BF 現 25 / 最悪 39）、緊急ヘッド退避履歴あり（C0 最悪 40）
+  - モニター: LG 製（型番不明、デスクトップ設置）
+  - バックアップ運用提案中（4/22 午後）: AOMEI Backupper Standard で C: → D: クローン（月 1 差分）+ D:\Backup\ にシステムイメージ週次 + Windows 回復ドライブ USB 作成の 4 重防御
+  - 用途: しゅん先生（はりきゅう整体・伊丹市）の業務用 PC（予約管理・領収書・患者関連フォルダあり）
 - iPhone 15 Pro（名前: 結花）— メインスマホ、Dispatch + Tailscale
 - 初代iPad Pro 9.7インチ（名前: 彩羽）— 楽天SIM挿入、テザリング用
 - パナソニック VIERA TH-40CX700 — 自宅テレビ（2015年モデル）
