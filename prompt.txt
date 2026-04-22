@@ -3,7 +3,7 @@ ai-minimalist-shibu/photos/ folder contains 219 shibu-related images (JPEG/PNG).
 For each image write in Japanese:
 - Filename
 - Category: Tesla車上生活/アメリカ旅行/AI活用/著書/メディア掲載/弟子/コーチング/日常/チャットボット/YouTube/Apple/その他
-- People: しぶ本人/りくと/sho/jun/あい/GEN/大川裕介/その他
+- People: しぶ本人/りくと/sho/jun/あい/GEN/大川優介/その他
 - Detailed description of what is visible in the image
 
 After every 50 images, run: git add ai-minimalist-shibu/knowledge/google-photos-analysis.md && git commit -m "しぶ画像分析 進捗"

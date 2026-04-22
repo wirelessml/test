@@ -580,6 +580,25 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
   - **Switch 2 接続手順**（GC313Pro C1 ポート直結 + HDMI OUT パススルー + USB-C2 で PC キャプチャ）も完全翻訳
   - ミニマリスト向けのナレッジ資産として残存、外出先から iPhone でも参照可能
 
+- [x] **4/22 23:00-24:00 りくと AI研修完了 4連投ストーリー解読**（しぶエコ 2 日間合宿の全成果物確定）
+  - **成果物 2 つ**:
+    1. **Minimal Sign**（4/20 公開、電子署名 SaaS、モノ減らしコーチング撮影同意書用）
+    2. **AI RIKUTO**（4/22 深夜完成、**片付け＋インテリアコーディネート AI**、写真＋音声入力対応、診断型UI、**1 時間で作成**）
+  - りくとの意志変遷 **4 段階追跡完了**:
+    - 4/20 23:09「何をして働けばいいんだ…？😇」（不安）
+    - 4/21 00:06「目指せ！AIマスター」（目標）
+    - 4/21 11:30「AIマスターになる 🧑‍💼」（宣言）
+    - **4/22 23:00「AI沢山使いこなして這い上がりたい🔥」（実装フェーズ）**
+  - **Minimal Arts 組織構造**（新判明）: **BOSS = しぶ（@minimalist_sibu）/ シタッパ = りくと**（本人自称）、動画編集担当以上の階層感、「這い上がりたい」= 昇格意欲
+  - 「毎日AIは進化する」「個人の仕事も会社の仕事もツール色々作れた」「自分が人雇ってる経営者になった気分」= **個人スケール→会社スケールの仕事を 1 人で回せる実感**
+  - AI RIKUTO の技術特徴:
+    - マルチモーダル（写真＋音声＋テキスト）
+    - 診断型 UI（「診断をはじめる」ボタン、セラピー的対話設計）
+    - 出力品質高（「北欧の機能性と和の安らぎ」等、高級インテリア誌風コピー）
+    - **1 時間で生成**（Claude Code or Gemini 推定）
+    - しぶ系片付けコーチングの**AI代替**として機能しうる
+  - **ユーザー Substack 記事への事例価値**: 「無料で始めて、触り込めば 1 時間で SaaS が作れる時代」の生々しい証拠、初心者→実装者への 48 時間ジャーニー
+
 - [x] **4/22 Mac 版 AssistCentralPro v4.0.80 を Mac M1 に導入**
   - DL: https://storage.avermedia.com/web_release_www/AssistCentralPro/AssistCentralPro_v4.0.80.zip（41.7MB）
   - 展開 → DMG マウント → `/Applications/AssistCentralPro.app` コピー
@@ -1258,7 +1277,7 @@ Googleカレンダー登録済み（RRULE:FREQ=DAILY、colorId:7 Peacock）。4/
 - [x] Tailscale Mac接続成功（macbook-air/iphone-15-pro/masu-p55 3台tailnet接続）
 - [x] Google Photos MCPセットアップ完了（OAuth認証・Claude Code登録）
 - [x] Whisperインストール済み
-- [x] YouTube字幕取得: QzMDrHjAhpI（しぶライブ）、ukfCg8ZgMjA（大川裕介×しぶルームツアー）
+- [x] YouTube字幕取得: QzMDrHjAhpI（しぶライブ）、ukfCg8ZgMjA（大川優介×しぶルームツアー）
 - [x] ナレッジ57→99ファイル（Windows Claude Codeで42ファイル新規作成、バンドル再生成済み）
 - [x] セルフ開発ループ完了（Issue 100件完了、ナレッジ99ファイル、server.py 668行で完成）
 - [x] Instagram監視設定（Chrome DevTools MCPでログイン、定期チェックcron）
