@@ -1,0 +1,31 @@
+## 操作上の注意
+
+- **記事の削除や一括更新をする前は、必ず件数を教えて確認を取ること。それ以外は確認不要**
+- computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
+- Dispatchは使わない、CLIで完結させる
+- **Manus デスクトップアプリを Computer Use の最有力候補に採用**（4/18 朝決定）
+  - `/Applications/Manus.app` v1.5.3（署名: Team 5V8XDGQQB6、arm64、Meta 傘下）
+  - iPhone Manus (pirosi80@yahoo.co.jp) と Mac でアカウント自動連携、**7964 クレジット + 毎日更新 300**（00:00 リフレッシュ）
+  - 過去利用履歴: SwitchBotリサーチ -213 / AI塾テキスト -36 / Claude Code分析 -56 等、1タスク 30〜210 クレジット消費の目安
+  - イベント報酬 +6,000 + リデンプション +1,000 の蓄積あり
+  - 左メニュー「My Computer」が OS 操作本体、クラウドブラウザ・スキル・コネクタ・スケジュール化タスク等の自律エージェント機能一式を無料枠で使える
+  - Claude Desktop / Codex と比べて: (1) 無料で Computer Use 可、(2) 自律タスク実行時間が長い、(3) クラウド実行とローカル実行を選べる
+  - 競合候補も残すが、日常使い筆頭は Manus。Claude Desktop Code mode (Opus 4.7 1M Max) は SSH 遠隔コーディング用、Codex は補助
+- **Claudeデスクトップアプリは Code mode / メイン会話のみ使える**（4/18再評価）
+  - **使える**: メイン会話・**Code mode**（Opus 4.7 1M Max で Tailscale 経由 Windows WSL Ubuntu に SSH 接続、iPhone からも同設定で外出先作業可）
+  - **使えない（不変）**: **Dispatch** と **Cowork** は app.asar 側で `--model claude-sonnet-4-6` がハードコードされており、UI でモデル選択しても反映されない（4/15 Mac/Windows 両方で確認、Opus 4.7 GA 後の 4/17 再確認でも未解消）
+  - リソースコストは依然重い（M1 8GB で Electron ×10プロセス、~786MB）ので他重処理と同時稼働は避ける
+  - 4/14旧判断の背景: 当時は Opus 4.6 で Code mode の SSH も未検証、Dispatch/Cowork が Sonnet 固定で実用性に乏しかった
+- ブラウザはcomputer-useでtier "read"（クリック不可）、URLを開くことはできるが再生・停止などの操作は不可
+- **X PWAアプリ（Chrome PWA）はcomputer-useでfull tier操作可能**
+  - バンドルID: `com.google.Chrome.app.lodlkdfmihgonocnmddehnfgiljnadcf`
+  - ブラウザ扱いではないのでクリック・入力・投稿が全てできる
+  - @minimalistnekoでログイン済み
+  - X投稿はこのPWA経由で操作する（Safari/Edge/Brave/Chromeは全てtier read）
+- Web情報取得はWebFetch/curl優先
+- ブラウザ自動化は**agent-browser優先**（Rust高速CLI、トークン93%削減、snapshotベース）
+- dev-browserも利用可能（Playwright API直接、1スクリプト完結型のタスク向け）
+- 画面の読み取りだけならChrome DevTools MCPでも可
+- `open`コマンドでBraveを開かない
+- 音量制御はosascriptで可能
+
