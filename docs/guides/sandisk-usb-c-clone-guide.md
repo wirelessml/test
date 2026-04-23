@@ -1,23 +1,48 @@
 # SanDisk Extreme Portable SSD (USB-C) でしゅん先生 PC をクローン起動する手順書
 
-> 作成: 2026-04-23
+> 作成: 2026-04-23、**2026-04-24 実機確認により 1TB → 2TB に訂正**
 > 対象 PC: しゅん先生 PC（DESKTOP-ATQ36KS / iiyama STYLE Infinity、Windows 11 25H2）
 > 現状: Plextor NVMe SSD 死亡 → Seagate SMR HDD で緊急起動中（激遅）
-> 目的: 手持ちの SanDisk Extreme Portable SSD 1TB (USB-C) を活用し、体感 10 倍速の起動環境に移行
+> 目的: 手持ちの **SanDisk Extreme Portable SSD 2TB (SDSSDE61-2T00, USB-C)** を活用し、体感 10 倍速の起動環境に移行
 > 投資: ¥0（既存機材のみ、新規購入不要）
-> 所要時間: **40-60 分**（Phase 1-4 計）
+> 所要時間: **40-60 分**（Phase 1-4 計） + ファームウェア確認 **15 分**
 
 ## 前提条件チェックリスト
 
 作業開始前に確認:
 
 - [ ] **しゅん先生 PC が Windows 11 で起動できている**（現状 Seagate HDD から起動中）
-- [ ] **SanDisk Extreme Portable SSD 1TB** が手元にある（型番 SDSSDE61 系）
+- [ ] **SanDisk Extreme Portable SSD 2TB**（**型番 SDSSDE61-2T00**、S/N 25219B405582）が手元にある
 - [ ] **付属の USB-C to USB-C ケーブル**、または USB-C to USB-A ケーブルが手元にある
 - [ ] **しゅん先生 PC の USB-C ポート**または **USB 3.0 (青色) ポート**が空いている
 - [ ] **SanDisk 内の重要データは退避済み**（クローンで全削除される）
 - [ ] **Hasleo Backup Suite Free** インストール済み（4/22 導入済み、C:\Program Files\Hasleo Backup Suite\）
+- [ ] **⚠ SanDisk Dashboard でファームウェアが最新版**（SDSSDE61 2TB はデータ消失リコール対象モデル、下記 Phase 0-0 参照）
 - [ ] **30-60 分の作業時間**を確保
+
+## Phase 0-0: ファームウェア確認（⚠ 必須、15 分）
+
+**理由**: 本機（SDSSDE61-2T00、2TB）は 2023 年の SanDisk Extreme Portable SSD データ消失リコールの **主要対象モデル**。S/N から 2025 年 8 月頃製造と推定（25219 = 2025 年 219 日目）されるため修正済み FW が初期搭載されている可能性が高いが、**クローン先として数百 GB の重要データを載せる前に必ず検証**。
+
+### 0-0-1. SanDisk Dashboard インストール & FW チェック
+
+1. SanDisk 公式サイトから SanDisk Dashboard をダウンロード
+   - `https://www.westerndigital.com/support/downloads/sandisk-dashboard` （実 URL は作業当日に公式検索）
+2. インストール後起動、SanDisk SSD を USB-C 接続
+3. **Tools** → **Firmware Update** を確認
+4. 推奨: **ファームウェアが 2023/08 以降リリース版**であること
+   - 旧 FW の場合は「Update」をクリック（5-10 分、完了まで未通電切断厳禁）
+   - 更新前にバックアップが望ましいが、この SSD はクローン先なので現状データ退避のみで可
+
+### 0-0-2. SMART 値確認
+
+```powershell
+# CrystalDiskInfo or smartctl で健康状態確認
+# USB 3.2 Gen 2 経由で SMART が読める機種（SDSSDE61）であることを確認
+```
+
+**期待**: 新品同様（Reallocated Sectors = 0、Power-On Hours 低、Percentage Used 低）
+**NG サイン**: Reallocated Sectors > 0 → 返品・別 SSD 使用推奨
 
 ## Phase 0: 事前準備（10 分）
 
@@ -85,8 +110,10 @@ Get-Disk | Where BusType -eq "USB" | Format-Table
 Number FriendlyName              BusType  Size             PartitionStyle
 ------ ------------              -------  ----             --------------
      0 ST2000LM015-2E8174        SATA     2000398934016    GPT
-     1 SanDisk Extreme Portable  USB      1000204886016    GPT or MBR
+     1 SanDisk Extreme Portable  USB      2000398934016    GPT or MBR
 ```
+
+注: Seagate と SanDisk がほぼ**同容量（2TB）**なので、クローン後のパーティション縮小は不要。
 
 認識されない場合:
 - ケーブルを抜き差し
@@ -122,21 +149,21 @@ Start-Process "C:\Program Files\Hasleo Backup Suite\HaBackupSuite.exe"
    - 注意: しゅん先生 PC の Windows が入っているディスクを選ぶ
 4. **次へ**
 5. **ターゲットディスク選択**:
-   - **Disk 1: SanDisk Extreme Portable**（1TB、USB）を選択
+   - **Disk 1: SanDisk Extreme Portable**（**2TB**、USB）を選択
    - 警告: 「ターゲットディスクのデータは削除されます」→ **はい**
 6. **次へ**
 7. **操作概要**:
    - ☑ **4K アライメント**（SSD 最適化）→ **ON**
-   - ☐ **セクター単位のクローン** → **OFF**（必須、Seagate 2TB > SanDisk 1TB のため）
+   - ☑ **セクター単位のクローン** → **OFF 推奨**（同容量だが OFF で十分。ON にすると 2TB 全域を読み書きするため所要時間大幅増）
    - ☐ **MBR としてクローン** → **OFF**（GPT 維持）
 8. **「続行」**
 
-### 2-3. 容量自動調整
+### 2-3. 容量について
 
-**重要**: Seagate 2TB → SanDisk 1TB = **容量縮小**。Hasleo が自動で Windows パーティションを縮小する。
+**本機は同容量クローン**: Seagate 2TB → SanDisk **2TB** = 容量調整不要。
 - Seagate 現使用: ~130GB（C: 実データ）
-- SanDisk 1TB 目標: Windows パーティション 990GB に縮小
-- 可能（使用データ 130GB << 1TB）
+- SanDisk 2TB: Windows パーティションはほぼそのままのサイズ（空き容量 ~1.87TB を後で活用可能）
+- クローン後パーティション拡張/縮小は任意（デフォルト配置で問題なし）
 
 ### 2-4. クローン開始
 
@@ -361,13 +388,18 @@ SanDisk USB-C クローン運用が成立すれば:
 
 ## 注意: SanDisk Extreme 特有のリスク
 
-**2022-2023 年の SanDisk Extreme Portable SSD データ消失リコール問題**:
-- 主に 4TB / 2TB モデルで発生（1TB は影響少ない）
-- ファームウェア不具合で突然データ消失事例
-- SanDisk / WD が一部対応策を発表、リコール範囲限定
-- **1TB モデルは比較的安全**とされているが、**重要データの単独保存は避ける**
+**⚠ 本機 SDSSDE61-2T00 (2TB) はリコール主要対象モデル** — 以下を必ず理解してから進める
 
-対策:
+**2022-2023 年の SanDisk Extreme Portable SSD データ消失リコール問題**:
+- **主に 4TB / 2TB モデルで発生（本機はこれに該当）**
+- ファームウェア不具合で突然データ消失事例
+- SanDisk / WD が修正ファームウェアを公開、集団訴訟に発展
+- 本機 S/N 25219B405582 は 2025 年 8 月製造推定 → **修正 FW 出荷済みの可能性高**だが、**Phase 0-0 で必ず FW バージョン確認**
+
+対策（必須）:
+- **Phase 0-0 のファームウェア確認を省略しない**
 - **Seagate HDD を即時取り外さない**（D: として常時マウント、緊急フォールバック維持）
 - AOMEI 週次イメージを Seagate に継続保存（二重防御）
 - 万一 SanDisk 死亡しても Seagate からの起動に戻せる体制を維持
+- **重要データの単独保存は避ける**（DropBox / Google Drive / NAS 等との多重化）
+- **定期的に SMART 値を監視**（月 1 回推奨、Reallocated / Pending Sectors をチェック）
