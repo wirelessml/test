@@ -96,9 +96,15 @@
 - **ケース**: Cooler Master 製（iiyama ブランディング貼付、Mini-Tower 級）
   - 全面メッシュパネル（エアフロー良好）
   - 天面に 5.25" 光学ドライブベイ
-- **光学ドライブ**: **Pioneer Ultra HD Blu-ray BDXL**（型番未確認、BDR-212 系の可能性）
-  - 4K UHD Blu-ray 再生・書込対応
-  - 2026 年現在中古市場で ¥20,000 前後の資産
+- **光学ドライブ**: **Pioneer BDR-211JBK**（2017 年 9 月製造、Made in China、日本市場上位モデル）
+  - Pioneer Digital Design Corporation（越谷市）設計
+  - 4K UHD Blu-ray 再生対応
+  - BDXL 書込（最大 128GB クアッド層）
+  - M-DISC 対応（1000 年保存ディスク）
+  - BD 16x / DVD 24x 書込速度
+  - 電源: 12V 2.2A + 5V 1.4A
+  - 当時定価 ¥25,000-30,000、2026 年現在中古 ¥15,000-20,000 相当
+  - **現時点で代替入手困難な希少機材**
 - **CPU クーラー**: Intel 純正相当（LGA1151 stock cooler、small heatsink + 小口径ファン）
 - **PCIe x16 スロット**: 空（dGPU 非搭載、iGPU のみ）
 - **RAM スロット**: 2 本装着（E0035E2F5A6A / E0035E2F5A6B、同ロット）
