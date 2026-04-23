@@ -18,7 +18,7 @@
 - **モデル**: iiyama STYLE Infinity by iiyama（2018 年頃購入 BTO デスクトップ）
 - **製造元**: 株式会社ユニットコム（0570-550-884）
 - **CPU**: Intel Core i7-8700K @ 3.70GHz（6C12T、第 8 世代 Coffee Lake、2017/10 リリース、95W TDP、OC 可）
-- **RAM**: 16GB DDR4-2666（15.8GB 使用可能）
+- **RAM**: **2x8GB = 16GB DDR4-2666**（デュアルチャンネル動作、15.8GB 使用可能、同ロット）
 - **GPU**: Intel UHD Graphics 630（iGPU のみ、dGPU なし）
 - **モニター**: LG 製（型番不明、デスクトップ設置）
 
