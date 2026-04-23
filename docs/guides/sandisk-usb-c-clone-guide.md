@@ -3,7 +3,7 @@
 > 作成: 2026-04-23、**2026-04-24 実機確認により 1TB → 2TB に訂正**
 > 対象 PC: しゅん先生 PC（DESKTOP-ATQ36KS / iiyama STYLE Infinity、Windows 11 25H2）
 > 現状: Plextor NVMe SSD 死亡 → Seagate SMR HDD で緊急起動中（激遅）
-> 目的: 手持ちの **SanDisk Extreme Portable SSD 2TB (SDSSDE61-2T00, USB-C)** を活用し、体感 10 倍速の起動環境に移行
+> 目的: 手持ちの **SanDisk Extreme Portable SSD 2TB (SDSSDE61-2T00, USB-C)** を活用し、体感 **3-5 倍速**の起動環境に移行（しゅん先生 PC の USB-C は USB 3.0 Gen 1 = 5 Gbps 上限のため）
 > 投資: ¥0（既存機材のみ、新規購入不要）
 > 所要時間: **40-60 分**（Phase 1-4 計） + ファームウェア確認 **15 分**
 
@@ -127,7 +127,10 @@ Number FriendlyName              BusType  Size             PartitionStyle
 winsat disk -drive E
 ```
 
-**期待**: Sequential Read 800-1000 MB/s（USB 3.2 Gen 2 接続時）
+**期待**（本機しゅん先生 PC は **USB 3.0 Type-C = 5 Gbps 制限**、i7-8700K + Z370 世代の PCH ネイティブ制約のため）:
+- **Sequential Read 400-500 MB/s**（実効）
+- SanDisk 公称 1,050 MB/s は 10 Gbps ポート経由必要、本機では出ない
+- それでも Seagate SMR HDD (100-150 MB/s) 比で **3-5 倍速**。体感メリット十分
 
 ## Phase 2: Hasleo Backup Suite でクローン実行（15-25 分）
 

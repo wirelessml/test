@@ -61,8 +61,24 @@
 
 ## ネットワーク
 
+- **デュアル LAN 構成**（4/24 背面写真で確認、2x RJ45 ポート）
 - Tailscale: 未導入（今後設定予定）
 - リモート操作: SSH 未設定
+
+## I/O ポート（背面、2026-04-24 写真確認）
+
+- DisplayPort × 1
+- HDMI × 1
+- RJ45 Ethernet × **2**（デュアル LAN、ワークステーション仕様）
+- **USB 3.0 Type-C × 1**（**5 Gbps 上限**、i7-8700K + Z370 PCH ネイティブが USB 3.1 Gen 1 止まりのため）
+- USB 3.0 Type-A × 2（青色、5 Gbps）
+- 前面ポート: 未確認（後日追記）
+
+### USB 外付け SSD 速度の天井
+- USB-C 接続でも **実効 ~400-500 MB/s** が上限（プロトコル制約）
+- SanDisk Extreme Portable SSD（公称 1,050 MB/s）を繋いでも 10 Gbps 性能は出ない
+- 将来 10 Gbps 欲しければ PCIe 増設カード（ASMedia ASM3142 系）または Z390 以降のマザボ換装が必要
+- ただし Seagate HDD (100-150 MB/s) 比では **3-5 倍速**あるので SanDisk クローン作戦は有効
 
 ## 変更履歴
 
