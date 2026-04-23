@@ -110,9 +110,13 @@
   - **トップマウント**（旧型レイアウト、2017-2018 年の廉価〜中級 mATX ケースでは標準）
   - RTX 4060 クラス（115W 前後）までの dGPU 追加が PSU 交換なしで可能
   - RTX 4070 Ti 以上や dGPU + CPU OC 併用時は 650-750W クラスへ換装必要
+- **マザーボード**: **BIOSTAR 製**（EzpReady マーキング確認、2026-04-24）
+  - 有力候補: **BIOSTAR RACING Z370GT3**（mATX、デュアル LAN、EzpReady 搭載モデル）
+  - 正確な型番は `wmic baseboard get product,manufacturer` で確認要（明日の実機で実行）
+  - CLRTC（Clear CMOS）ジャンパ確認済、BIOS 異常時のリセット手段あり
 - **CPU クーラー**: Intel 純正相当（LGA1151 stock cooler、small heatsink + 小口径ファン）
 - **PCIe x16 スロット**: 空（dGPU 非搭載、iGPU のみ）
-- **RAM スロット**: 2 本装着（E0035E2F5A6A / E0035E2F5A6B、同ロット）
+- **RAM スロット**: 2 本装着（E0D55E2F5A68 / E0D55E2F5A6A、同ロット、4/24 再読で訂正）
 - **M.2 スロット**: 1 つ確認、**現在空**（旧 Plextor PX-256M8PeGN が 4/24 除去済）
 - ~~mSATA or M.2 モジュール 緑 PCB 2 枚重ね~~ → 4/24 朝の別角度写真で判明、正体は **RAM DIMM を斜めから見たもの**（mSATA ではない）
 - **内部清浄度**: 埃堆積あり、物理作業前に清掃推奨
