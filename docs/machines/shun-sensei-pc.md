@@ -65,14 +65,34 @@
 - Tailscale: 未導入（今後設定予定）
 - リモート操作: SSH 未設定
 
-## I/O ポート（背面、2026-04-24 写真確認）
+## ケース・光学ドライブ（2026-04-24 写真確認）
 
+- **ケース**: Cooler Master 製（iiyama ブランディング貼付、Mini-Tower 級）
+  - 全面メッシュパネル（エアフロー良好）
+  - 天面に 5.25" 光学ドライブベイ
+- **光学ドライブ**: **Pioneer Ultra HD Blu-ray BDXL**（型番未確認、BDR-212 系の可能性）
+  - 4K UHD Blu-ray 再生・書込対応
+  - 2026 年現在中古市場で ¥20,000 前後の資産
+- **CPU クーラー**: Intel 純正相当（LGA1151 stock cooler、small heatsink + 小口径ファン）
+- **PCIe x16 スロット**: 空（dGPU 非搭載、iGPU のみ）
+- **RAM スロット**: 2 本装着（E0035E2F5A6A / E0035E2F5A6B、同ロット）
+- **mSATA or M.2 モジュール**: 画像で緑 PCB 2 枚重ねを確認、**正体は後日調査**（BIOS or `wmic diskdrive` で判定）
+- **内部清浄度**: 埃堆積あり、物理作業前に清掃推奨
+
+## I/O ポート（2026-04-24 写真確認）
+
+### 背面
 - DisplayPort × 1
 - HDMI × 1
 - RJ45 Ethernet × **2**（デュアル LAN、ワークステーション仕様）
 - **USB 3.0 Type-C × 1**（**5 Gbps 上限**、i7-8700K + Z370 PCH ネイティブが USB 3.1 Gen 1 止まりのため）
 - USB 3.0 Type-A × 2（青色、5 Gbps）
-- 前面ポート: 未確認（後日追記）
+
+### 前面
+- USB 3.0 Type-A × 2（青色、5 Gbps）
+- 3.5mm ヘッドホンジャック × 1
+- 3.5mm マイクジャック × 1
+- 電源 LED / HDD アクセス LED
 
 ### USB 外付け SSD 速度の天井
 - USB-C 接続でも **実効 ~400-500 MB/s** が上限（プロトコル制約）
