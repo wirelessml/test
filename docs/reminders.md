@@ -1,5 +1,8 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
+- **2026/04/25（土）**: **しゅん先生 PC で SanDisk USB-C SSD クローン作業実行予定**（手順書: @docs/guides/sandisk-usb-c-clone-guide.md、所要 50-60 分、Seagate SMR HDD → SanDisk USB-C SSD へ、¥0 投資、体感 5-10 倍速化目標）
+
+
 - ~~**2026/04/19**: YouTubeプレミアムを解約する~~ ✅ 4/18 10:45 解除済（Y!mobile バリュー特典 YouTube Premium、2026/4/20 まで利用可能）
 - **2026/04/21**: Y!mobile Netflixセット 自動解約発効日（3/21 加入 + 翌月同日ルール、以降 Netflix 視聴不可、追加対応不要）
 - **2026/04/30**: Microsoft 365 Copilot Business 解約予定日（admin.cloud.microsoft で「有効期限切れ時にキャンセル」選択済、SUMA-p アカウント、MCA）— 当日以降にサブスクリプション一覧から消失していることを確認
