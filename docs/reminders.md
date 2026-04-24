@@ -1,6 +1,12 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
-- **2026/04/25（土）**: **しゅん先生 PC で SanDisk USB-C SSD クローン作業実行予定**（手順書: @docs/guides/sandisk-usb-c-clone-guide.md、所要 50-60 分、Seagate SMR HDD → SanDisk USB-C SSD へ、¥0 投資、体感 5-10 倍速化目標）
+- **2026/04/25（土）**: **2 本立てスケジュール**
+  - **午前**: しゅん先生 PC で SanDisk USB-C SSD クローン作業（手順書 @docs/guides/sandisk-usb-c-clone-guide.md、所要 60-90 分、Seagate HDD → SanDisk SSD、¥0 投資、体感 3-5 倍速化）
+  - **14:00-17:00**: **Claude for Word 定款整形 Saved Prompt 作成 + Substack 記事ドラフト**
+    - Anthropic 公式 Word アドイン（2026-04-10 リリース、4/22 Pro/Max 対応拡大、Pro $20 で利用可）
+    - 定款整形が秒で完了の「衝撃体験」を Saved Prompt 化
+    - Substack 記事「Claude for Word リリース 2 週間、定款整形が秒で終わった日」 3,000-4,000 字
+    - 投稿は 4/26-28 の週末〜週明けで（SEO ピーク 4/24-5/5 の前半狙い）
 
 
 - ~~**2026/04/19**: YouTubeプレミアムを解約する~~ ✅ 4/18 10:45 解除済（Y!mobile バリュー特典 YouTube Premium、2026/4/20 まで利用可能）
