@@ -6,7 +6,12 @@
 - ~~**2026/04/19**: YouTubeプレミアムを解約する~~ ✅ 4/18 10:45 解除済（Y!mobile バリュー特典 YouTube Premium、2026/4/20 まで利用可能）
 - **2026/04/21**: Y!mobile Netflixセット 自動解約発効日（3/21 加入 + 翌月同日ルール、以降 Netflix 視聴不可、追加対応不要）
 - **2026/04/30**: Microsoft 365 Copilot Business 解約予定日（admin.cloud.microsoft で「有効期限切れ時にキャンセル」選択済、SUMA-p アカウント、MCA）— 当日以降にサブスクリプション一覧から消失していることを確認
-- **2026/04/30（木）10:00-15:00**: **SSD 購入 @三宮**（しゅん先生 PC 用 1TB NVMe、候補 KIOXIA/Hanye/Crucial/WD、¥12,000 以下で即発注、Google Calendar 登録済、詳細 @docs/routines/ssd-price-monitor.md）
+- **2026/04/30（木）09:00-18:00**: **駒ヶ林 BOOKOFF → 三宮 SSD → 新長田 大西ジム**（全ルート徒歩、総距離 約 14km）
+  - 朝イチ: BOOKOFF SUPER BAZAAR アグロガーデン神戸駒ヶ林店（古着・中古）
+  - 昼: 三宮 PC 店ラウンド（ソフマップ / パソコン工房 / ドスパラ / じゃんぱら）
+  - 帰: 大西ジム 新長田店（JR 新長田駅西口 徒歩 1 分、地元店で最終購入）
+  - 目標: しゅん先生 PC 用 1TB NVMe、¥12,000 以下で即発注
+  - Google Calendar 登録済、詳細 @docs/routines/ssd-price-monitor.md
 - **2026/05/11**: ElevenLabs Starter プラン失効（声クローン・Scribe 使用不可に）— それまでに使い倒す
 - **2026/05/20 前後**: Y!mobile 151 に電話で最終確認（5月中 MNP 転出で 6月請求なし、を確認）
 - **2026/05/29（木）〜5/30（金）**: **povo 2.0 へ MNP ワンストップ転出**（080-3108-7536 番号維持、Y!mobile 自動解約）
