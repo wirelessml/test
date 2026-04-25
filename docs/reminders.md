@@ -1,5 +1,16 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
+- **2026/04/26（日）**: **しゅん先生 PC の Seagate ST2000LM015 (D:) を物理的に切断**
+  - 静音化目的（HDD スピン音をゼロに、SSD ブート単独運用へ）
+  - 作業内容: シャットダウン → ケース開ける → SATA データケーブル + 電源ケーブル抜く → ケース閉じる → SanDisk SSD 単独起動確認
+  - **重要**: D:\Backup\Weekly System Image.adi (84.9GB、4/22 AOMEI 作成) の扱い決定が事前必要
+    - A) HDD 完全切断 → .adi 失う
+    - **B) 外付け USB-SATA ケースに移植 → .adi 救出可、推奨**
+    - C) 内蔵のまま BIOS で SATA 無効化 → .adi 残る、物理静音は不完全
+  - 必要な道具: プラスドライバー、(B 案なら) 外付け USB-SATA ケース
+  - 4/25 までに 1 分スピンダウン設定済み (powercfg /change disk-timeout-ac 1)
+  - Plextor 死亡時の予備として残す方針 → 完全廃棄ではなく外付け化が筋
+
 - **2026/04/25（土）**: **2 本立てスケジュール**
   - **午前**: しゅん先生 PC で SanDisk USB-C SSD クローン作業（手順書 @docs/guides/sandisk-usb-c-clone-guide.md、所要 60-90 分、Seagate HDD → SanDisk SSD、¥0 投資、体感 3-5 倍速化）
   - **14:00-17:00**: **Claude for Word 定款整形 Saved Prompt 作成 + Substack 記事ドラフト**
