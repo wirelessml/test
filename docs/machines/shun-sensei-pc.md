@@ -65,19 +65,47 @@
 - 新 NVMe SSD 購入後、即装着可能な状態
 - 将来の換装作業: スロット挿入 → ネジ固定 → Hasleo で Seagate → 新 SSD クローン（18 分） → BIOS Boot 順変更 → 起動、の経路が確定
 
-### C:（現在） = 旧 D: の Seagate ST2000LM015-2E8174 2TB SMR HDD
+### Seagate ST2000LM015-2E8174 2TB SMR HDD（旧 C: 緊急稼働 → 旧 D: バックアップ → 2026-04-26 取り外し）
 
 - インターフェース: SATA/600
 - 回転数: 5400rpm、2.5 インチ
 - Hasleo クローン（4/22 17:15-17:34）により起動可能な完全複製を保持していたため、Plextor 死亡後の強制再起動で自動的に Boot Manager が Seagate にフォールバック
-- 現在の状態:
-  - Windows 11 25H2 が Seagate から稼働中
-  - 体感 50-100 倍遅い（SMR HDD 特性）
+- 役割の変遷:
+  - 〜4/22 18:20: D: バックアップドライブ
+  - 4/22 18:20〜4/25: C: として緊急稼働（Plextor 死亡後の自動フォールバック、Windows 11 25H2 起動、体感 50-100 倍遅い SMR HDD ハング）
+  - 4/25〜4/26: D: バックアップに復帰（SanDisk Extreme V2 USB-C SSD への OS 移行完了で C: を譲渡）
+  - 4/26: 静音化のため物理取り外し
+- 4/24 時点の SMART:
   - 健康状態 正常
   - 使用時間 23,722h
   - 電源投入 20,759 回
   - 温度 27°C
-- バックアップイメージ: `C:\Backup\Weekly System Image\Weekly System Image.adi` = 82.94GB（4/22 18:05 作成の AOMEI システムイメージ）
+- バックアップイメージ: `D:\Backup\Weekly System Image\Weekly System Image.adi` = 84.9GB（4/22 18:05 作成の AOMEI システムイメージ、4/26 取り外し時に B 案: 外付け USB-SATA ケース移植 で .adi 救出）
+
+#### 現物ラベル確認（2026-04-26）
+
+| 項目 | 値 |
+|---|---|
+| 正式モデル | **ST2000LM015** |
+| シリーズ | Seagate BarraCuda Compute |
+| P/N | 2E8174-500 |
+| S/N | WDZCZBLY |
+| WWN | 5000C500B93C80A3 |
+| FW | SDM1 |
+| 容量 | 2TB |
+| 製造日 | **2018-02-28**（製造から 8 年経過、保証切れ済み） |
+| 製造拠点 | WU（中国 無錫） |
+| 電源 | +5V 1.0A（2.5 インチなので +12V 不要） |
+| Reg. Model | SDC003 |
+| フォームファクタ | 2.5 インチ SATA、SMR |
+| **PSID** | `Z6GM4PGW 0RYZMQFY AFYNZG3R 77D72Z6U` |
+| 認証元 | Seagate Singapore Int'l HQ Pte. Ltd. |
+| 原産国 | China |
+| 認証マーク | UL E190397 / TÜV SÜD / KC MSIP-REM-STX-SDC003 / CE / RoHS |
+
+> **PSID（Physical Secure ID）の重要性**: OPAL 自己暗号化ドライブの工場リセット用物理シリアル。紛失すると暗号消去（PSID Revert）ができなくなる。ケース封印を剥がすと保証無効化扱いになるので、**現物ラベルが手元にあるうちに記録**（4/26 撮影、本ドキュメントに永続化）。
+
+> **2026-04-26 取り扱い決定**: B 案（外付け USB-SATA ケースに移植）を採用。Plextor 死亡時の予備復元手段として残す方針 — .adi 84.9GB の救出 + 外付け化で物理静音 + 内蔵スロット解放の 3 目的を同時達成。
 
 ## OS / ソフトウェア
 
@@ -144,6 +172,8 @@
 
 ## 変更履歴
 
+- **2026-04-26 朝**: Seagate D: 物理取り外し（B 案: 外付け USB-SATA ケース移植）、ラベル現物撮影で全スペック記録（PSID 含む、@docs/machines/shun-sensei-pc.md の現物ラベル確認セクション参照）
+- **2026-04-25**: SanDisk Extreme V2 USB-C SSD 2TB へ OS 移行完了、Windows 11 起動成功（13:18、CSM 無効 + XHCI Hand-off 有効）、SanDisk Dashboard 5.2.2.3 でヘルスモニタリング体制確立（詳細: @docs/journal/2026-04-25.md）
 - **2026-04-24 朝**: 死亡 Plextor を物理除去、ラベル確認で正式モデル **PX-256M8PeGN**（旧記録 M9PeGN は誤り）、製造 2018/09/06 判明、M.2 スロット空き状態に
 - **2026-04-22 18:20**: Plextor SSD 死亡、Seagate クローンで緊急起動（詳細: @docs/journal/2026-04-22.md）
 - 2026-04-22 17:34: Hasleo でクローン完成（命綱）
