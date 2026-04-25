@@ -1,23 +1,40 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
-- **2026/04/26（日）**: **しゅん先生 PC の Seagate ST2000LM015 (D:) を物理的に切断**
-  - 静音化目的（HDD スピン音をゼロに、SSD ブート単独運用へ）
-  - 作業内容: シャットダウン → ケース開ける → SATA データケーブル + 電源ケーブル抜く → ケース閉じる → SanDisk SSD 単独起動確認
-  - **重要**: D:\Backup\Weekly System Image.adi (84.9GB、4/22 AOMEI 作成) の扱い決定が事前必要
-    - A) HDD 完全切断 → .adi 失う
-    - **B) 外付け USB-SATA ケースに移植 → .adi 救出可、推奨**
-    - C) 内蔵のまま BIOS で SATA 無効化 → .adi 残る、物理静音は不完全
-  - 必要な道具: プラスドライバー、(B 案なら) 外付け USB-SATA ケース
-  - 4/25 までに 1 分スピンダウン設定済み (powercfg /change disk-timeout-ac 1)
-  - Plextor 死亡時の予備として残す方針 → 完全廃棄ではなく外付け化が筋
+- **2026/04/26（日）**: **Claude for Word 集中日（最優先・4/25 から順延）**
+  - 9:00 セッション: Claude for Word アドインの状況確認 + 定款整形 Saved Prompt 設計・実機テスト
+  - 14:00 セッション: Substack 記事「Claude for Word リリース 2 週間、定款整形が秒で終わった日」3,000-4,000 字を書き上げ
+  - 19:00 セッション: 推敲 → **投稿**（SEO ピーク 4/24-5/5 前半に滑り込み）
+  - Anthropic 公式 Word アドイン（2026-04-10 リリース、4/22 Pro/Max 対応拡大、Pro $20 で利用可）
+  - 投稿先: Substack（仲啓輔名義）
+  - 物理作業（HDD 切断・GC313Pro）は 4/27 に移動
 
-- **2026/04/25（土）**: **2 本立てスケジュール**
-  - **午前**: しゅん先生 PC で SanDisk USB-C SSD クローン作業（手順書 @docs/guides/sandisk-usb-c-clone-guide.md、所要 60-90 分、Seagate HDD → SanDisk SSD、¥0 投資、体感 3-5 倍速化）
-  - **14:00-17:00**: **Claude for Word 定款整形 Saved Prompt 作成 + Substack 記事ドラフト**
-    - Anthropic 公式 Word アドイン（2026-04-10 リリース、4/22 Pro/Max 対応拡大、Pro $20 で利用可）
-    - 定款整形が秒で完了の「衝撃体験」を Saved Prompt 化
-    - Substack 記事「Claude for Word リリース 2 週間、定款整形が秒で終わった日」 3,000-4,000 字
-    - 投稿は 4/26-28 の週末〜週明けで（SEO ピーク 4/24-5/5 の前半狙い）
+- **2026/04/27（月）**: **物理作業 2 本立て + SSD 価格監視ルーチン**
+  - **① しゅん先生 PC の Seagate ST2000LM015 (D:) を物理的に切断**
+    - 静音化目的（HDD スピン音をゼロに、SSD ブート単独運用へ）
+    - 作業内容: シャットダウン → ケース開ける → SATA データケーブル + 電源ケーブル抜く → ケース閉じる → SanDisk SSD 単独起動確認
+    - **重要**: D:\Backup\Weekly System Image.adi (84.9GB、4/22 AOMEI 作成) の扱い決定が事前必要
+      - A) HDD 完全切断 → .adi 失う
+      - **B) 外付け USB-SATA ケースに移植 → .adi 救出可、推奨**
+      - C) 内蔵のまま BIOS で SATA 無効化 → .adi 残る、物理静音は不完全
+    - 必要な道具: プラスドライバー、(B 案なら) 外付け USB-SATA ケース
+    - 4/25 までに 1 分スピンダウン設定済み (powercfg /change disk-timeout-ac 1)
+    - Plextor 死亡時の予備として残す方針 → 完全廃棄ではなく外付け化が筋
+  - **② GC313Pro 作業**（AVerMedia ELITE GO、100W 急速充電 + 1080p60 キャプチャ）
+    - 内容未確定（A: FW 更新 / B: Switch 2 キャプチャ実機 / C: MASU-p 配信ルート確立 / D: しぶ配信システム組み込み）
+    - 詳細手順: @docs/gc313pro-user-guide-ja.html
+  - **③ SSD 価格監視ルーチン**（毎週月曜、@docs/routines/ssd-price-monitor.md）
+
+- **2026/04/28（火）**: **Substack 第 2 弾投稿 — SSD ブートバトル記事**
+  - タイトル「Plextor が死んでから 72 時間、USB-C SSD で Windows を蘇らせるために BIOS と 6 時間半殴り合った話」
+  - ドラフト: @docs/substack/2026-04-25-sandisk-usb-c-boot-battle-substack-ready.md
+  - 4/26 Word 記事から中 1 日空けて連投感を出す
+  - SEO ピーク 4/24-5/5 の中盤狙い
+
+- **2026/04/25（土）**: **2 本立てスケジュール（実績）**
+  - ✅ **午前〜午後**: SanDisk USB-C SSD クローン完了、BIOS 地獄突破（CSM 無効 + XHCI Hand-off 有効）→ 13:18 Windows 11 起動成功 + SanDisk Dashboard 5.2.2.3 でヘルスモニタリング体制確立
+  - ⏸️ **14:00-17:00 予定の Claude for Word 作業 → 4/26 に順延**
+  - ✅ **18:35〜**: SSD ブートバトル Substack 記事ドラフト + ready 版完成（@docs/substack/2026-04-25-sandisk-usb-c-boot-battle-substack-ready.md）→ 4/28 投稿予定
+  - その他達成: 維新の嵐 1998 復活 / Mac↔Windows Claude 協働 / HDD 騒音 3 要素対策完了
 
 
 - ~~**2026/04/19**: YouTubeプレミアムを解約する~~ ✅ 4/18 10:45 解除済（Y!mobile バリュー特典 YouTube Premium、2026/4/20 まで利用可能）
