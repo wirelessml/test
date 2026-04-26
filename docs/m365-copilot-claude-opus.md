@@ -77,3 +77,4 @@
 ## 関連ドキュメント
 
 - @docs/m365-copilot-researcher-gpt-vs-claude.md — Researcher の Frontier プレビュー（Critique / Model Council）と GPT × Claude 比較（2026-04-26 取得）
+- @docs/m365-copilot-cowork-opus47-autonomous-replan.md — Cowork × Opus 4.7 の自律再計画挙動観察（2026-04-26 実機）

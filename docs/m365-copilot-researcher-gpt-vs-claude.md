@@ -101,6 +101,7 @@
 ## 関連ドキュメント
 
 - @docs/m365-copilot-claude-opus.md — 4/14 時点の M365 Copilot **Chat** + Opus 4.6 一次情報（Chat と Researcher は別機能）
+- @docs/m365-copilot-cowork-opus47-autonomous-replan.md — **Cowork** × Opus 4.7 の自律再計画挙動（Researcher = 深い調査 / Cowork = 長時間自律実装、対比対象）
 - @docs/journal/2026-04-26.md — 本記事を取り込んだセッションログ
 - @docs/x-daily-briefing.md — Anthropic / OpenAI の動きを並べて追っているデイリーログ
 - @docs/reminders.md — 2026-04-30 M365 Copilot Business 解約予定
