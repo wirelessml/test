@@ -78,6 +78,7 @@
 ## 個別プロジェクト
 
 - **AIミニマリストしぶ チャットサーバー**: Claude CLI 経由の Web チャットボット（@docs/projects/shibu-chatbot.md）
+- **shibu-video-editor**: しぶ受講生インタビュー動画 Claude API 半自動編集 OSS（4/26 公開、`/Users/yuika/Desktop/shibu-video-editor/`、https://github.com/wirelessml/shibu-video-editor、MIT、Python 1,451 行 + 12 unit tests）
 - **しぶエコ観察**: @docs/journal/ に日次で記録、関連ナレッジは `ai-minimalist-shibu/knowledge/`
 - **Substack 連載**: 仲啓輔名義、4/22 時点で「SSD 突然死」ネタ投稿済み
 
