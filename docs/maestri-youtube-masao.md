@@ -4,6 +4,8 @@
 - **チャンネル**: まさおAIじっくり解説ch（@ai_masaou）
 - **投稿日**: 2026/04/13
 - **タイトル**: 【斬新】無限キャンバス上でAIオーケストレーション『Maestri』を解説！思考整理にも良さそう
+- **全文書き起こし**: @docs/transcripts/maestri-youtube-masao-transcript.md
+- **関連スキル**: `maestri`（Maestri アプリの自動操作スキル、本リポジトリの skills 一覧で利用可能）
 
 ## 動画の要点
 

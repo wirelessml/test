@@ -1,8 +1,9 @@
 # DaVinci Resolve 21 写真編集ページ
 
 動画: https://youtu.be/yYamCccG0DY
-チャンネル: け介（映像クリエイター）
+チャンネル: け介（映像クリエイター、自動字幕では「けすけ／啓介」とも表記）
 取得日: 2026-04-15
+全文書き起こし: @docs/transcripts/davinci-resolve-photo-editing-transcript.md
 
 ## 概要
 
