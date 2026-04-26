@@ -73,3 +73,7 @@
 - 双方向統合: M365→Claude（Cowork）+ Claude→M365（コネクタ、近日）
 - 同一UI内でGPTとClaudeを切り替え比較可能
 - Copilot StudioでエージェントのプライマリモデルとしてClaude Opus選択可能
+
+## 関連ドキュメント
+
+- @docs/m365-copilot-researcher-gpt-vs-claude.md — Researcher の Frontier プレビュー（Critique / Model Council）と GPT × Claude 比較（2026-04-26 取得）
