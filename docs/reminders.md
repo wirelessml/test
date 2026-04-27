@@ -8,6 +8,8 @@
   - 投稿先: Substack（仲啓輔名義）
   - 物理作業（HDD 切断・GC313Pro）は 4/27 に移動
 
+- **2026/04/27（月）追記**: 4/26 夜〜4/27 早朝のピボット — pdf-reader を **GitHub 公開（wirelessml/pdf-reader）+ Tailscale Funnel で世界公開（https://macbook-air.tail70852b.ts.net）**。`/asmr` `/ssd` `/typing` 3 ページ稼働中、`/api/chat` は環境変数未設定で 500 安全死亡。詳細 @docs/journal/2026-04-27.md。下記の物理作業は 4/27 残り時間 or 4/28 以降にスライド。
+
 - **2026/04/27（月）**: **物理作業 2 本立て + SSD 価格監視ルーチン**
   - **① しゅん先生 PC の Seagate ST2000LM015 (D:) を物理的に切断**
     - 静音化目的（HDD スピン音をゼロに、SSD ブート単独運用へ）
