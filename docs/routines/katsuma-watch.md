@@ -183,9 +183,43 @@ YouTube `wX6vePiwEGw`、20 万再生。25:49〜32:37 が音声入力章。
 
 - **10:10-10:25 J-Wave STEPONE 生出演**（4/26 23:52 告知、17 likes）
 
+### 2026-04-28 08:30 JST Python 環境への転換 — voice stack の次フェーズ
+
+**出典**: 勝間和代オフィシャルメルマガ（`mailmagazine@katsumaweb.com`、件名「最近すっかりPythonに夢中です。AIの細かな使い勝手を自分仕様にカスタマイズしています」）
+**配信時刻**: 2026-04-27T23:30:00Z = **2026-04-28 08:30 JST**
+**仲さん受信**: wirelessml@gmail.com で受信確認済（Gmail thread `19dd148163db4fe6`）
+
+**要旨**: voice stack を確立した後、関心が **Python によるローカル自動化** に移行。Gemini をコーディングアシスタントに使い、AI ワークフローの細かい不便を Python で都度解消する運用へ。
+
+**論旨の流れ**:
+1. AI 利用の細かい使い勝手の悪さを Python で解決（汎用ツール化）
+2. **Groq** を呼び出したり、AI 出力を後処理する場面で Python が便利
+3. やりたいことを **Gemini に相談 → コード生成 → 自分でカスタマイズ**するワークフロー
+4. 具体例: **Superwhisper の文頭半角スペース問題**を「クリップボード監視 + リアルタイム除去」する Python スクリプトで解決（プロンプト調整では不可だった）
+5. スマホでは細かいカスタマイズ不可 → PC 環境（ローカル AI + Python）の優位を再認識
+6. 課題提起: **高性能ノート PC が 2kg 超え**、もっと軽い高性能機が欲しい
+
+**核心**:
+- voice stack（入力レイヤー、4/27 完成）→ **Python（処理レイヤー、4/28〜）** へ関心が移行
+- 「**AI と Python のペアリング**」が次のマニフェスト候補
+- Gemini を Cursor/Claude Code 的に使う non-engineer の典型ワークフロー（LLM が書いて人間がカスタマイズ）
+- **Superwhisper の半角スペース問題**は仲さんの voice stack でも同じ症状が出る可能性 → 確認価値あり
+
+**ハードウェア論点**:
+- 高性能 + 軽量ノート PC への期待表明 → ROG Flow Z13 / Surface Laptop Studio / M3 MacBook Pro 14 等が候補議論になる可能性
+
+**Substack 記事候補**:
+- 「勝間和代の Python 転向 — voice stack の次に来た自動化レイヤー」
+- 「LLM がコードを書く時代の non-engineer ワークフロー（Gemini × Python × Superwhisper）」
+- 仲さん視点で「Superwhisper 半角スペース問題を自分でも追検証してみた」記事化可能
+
 ## TODO
 
+- [x] ~~4/28 Python 投稿の出典確認~~ → **公式メルマガ（mailmagazine@katsumaweb.com、4/28 08:30 配信）と確定**
+- [ ] **Superwhisper 半角スペース問題の追検証**（Mac で症状再現確認 → 仲さん環境にも該当するか）
+- [ ] **勝間メルマガ購読の自動取り込み運用検討**（毎朝 08:30 配信、検索クエリ `from:mailmagazine@katsumaweb.com newer_than:1d` でセッション開始時にチェック → katsuma-watch.md への要点抽出を半自動化、**ラベル/フィルタは作らない**）
 - [ ] J-Wave STEPONE（4/27 10:10-10:25）を radiko で確認、voice stack 発言があるか
 - [ ] 30 分後（〜10:00 JST）に再 fetch、03:27 続編がないか確認
 - [ ] cron / LaunchAgent でセッション開始時自動 fetch する仕組み化（後日）
 - [ ] Substack 記事「勝間 voice stack の 100 時間進化」候補（4/19 → 4/27 の変化）
+- [ ] **Substack 記事候補追加**: 「勝間 Python 転向」シリーズ（voice stack の次フェーズ観察）
