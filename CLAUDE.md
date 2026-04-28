@@ -50,6 +50,7 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
+- **2026-04-29**: 勝間 voice stack 物理セットアップ完了 — SSH+着席で MASU-P55 に Python 12 ファイル配置 + ElevenLabs キー Mac→Win 流用 + SuperWhisper v1.3.9 設定 + Scribe が SW Free 不可と判明 → Python 自前路線 (`keybind_scribe.py` 無変換キー = Scribe 直叩き) で $0/月 V4 確定 + 漢数字補正をローカル正規表現化（@docs/journal/2026-04-29.md）
 - **2026-04-23**: Kioxia 整備品自動監視実装（LaunchAgent 毎日 08:17 JST）+ Intel X25-M G1 80GB 発掘 + しぶ 4/22 動画分析 → りくと編集チーム統括ディレクター昇格判明（72 時間ジャーニー更新）+ pirosi80 フィッシング 3 通目（@docs/journal/2026-04-23.md）
 - **2026-04-22**: しゅん先生 PC バックアップ実装 + Plextor SSD 死亡 + Seagate クローン救出劇 + SSD 市場高騰調査 + claude-md-diet スキル作成 + CLAUDE.md リファクタ（@docs/journal/2026-04-22.md）
 - **2026-04-21**: しぶ AI研修 2 日目ストーリーで人物特定訂正 + MASU-p 共有 HP ProBook で GC313Pro セットアップ完了（@docs/journal/2026-04-21.md）
