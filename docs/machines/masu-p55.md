@@ -16,7 +16,7 @@
 ## OS / ソフトウェア
 
 - OS: Windows（バージョン詳細未記録）
-- Claude Code v2.1.116（`C:\Users\gci_admin\.local\bin\claude.exe`、4/21 08:52 自動更新、毎日 0:00 タスクスケジューラで最新化）
+- Claude Code v2.1.122（`C:\Users\gci_admin\.local\bin\claude.exe`、4/29 自動更新確認、毎日 0:00 タスクスケジューラで最新化）
 - Claudeデスクトップアプリ（Microsoft Store 版）
 - Computer Use 対応（Windows 版、2026/4/3〜）
 - AVerMedia Assist Central Pro（4/21 インストール、GC313Pro 用）
@@ -50,6 +50,7 @@
 
 ## 変更履歴
 
+- 2026-04-29: voice-stack 物理セットアップ完了（SuperWhisper v1.3.9 + Python 12 ファイル + ELEVENLABS_API_KEY 永続化、starter tier）、Claude Code v2.1.122 確認、ELEVENLABS_API_KEY を HKCU\Environment に永続化
 - 2026-04-21: ハードウェア型番判明（HP ProBook、Intel Core i5）
 - 2026-04-21: AVerMedia Assist Central Pro + OBS Studio 32.1.1 導入
 - 2026-04-11: Tailscale 導入、Mac からの SSH 接続確立
