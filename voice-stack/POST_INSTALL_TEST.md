@@ -12,9 +12,26 @@
 | ElevenLabs API 接続検証 | ✅ |
 | `scribe_kanjisuji_local.py` ユニットテスト | ✅ 8/8 PASS |
 | クリップボード経由 漢数字変換 | ✅ 27c → 25c |
-| SuperWhisper Windows インストール | ✅ |
-| SuperWhisper 設定 | ✅ S1-Voice / Japanese / Voice / Push to Talk: Alt / Auto paste: Off |
+| SuperWhisper Windows v1.3.9 インストール | ✅ |
+| SuperWhisper Onboarding 完了 | ✅ |
+| SuperWhisper モード設定 (default.json) | ✅ voiceModelID=sv-1, language=ja, autoPaste=false |
+| SuperWhisper Push to Talk | ✅ Alt |
 | SuperWhisper プロセス稼働 | ✅ Console session 1 |
+
+## 重要発見: Scribe = sv-1 (S1-Voice) リブランド仮説
+
+SuperWhisper Windows v1.3.9 のモデル一覧に「Scribe」「ElevenLabs」表示は**存在しない**（`showExperimentalModels=true` 試行も結果同じ）。
+
+利用可能モデル:
+- ☁ クラウド: **S1-Voice (NEW)**, Ultra, Nova 3, Nova 2, Nova Medical, Parakeet Multilanguage NEW
+- ⬇ ローカル: Ultra V3 Turbo, Ultra, Pro
+
+勝間さん 4/28 06:47「スーパーウィスパーのモデルの中に入ってるやつです」発言と整合する候補は **S1-Voice (NEW)** が最有力（NEW バッジ + クラウド経由 + リブランドの可能性）。
+
+**退館後検証ポイント**:
+- S1-Voice が Scribe 同等の特性（ノイズ強耐性、ハルシネーションゼロ、相槌維持）を示すか
+- Scribe の特徴である**漢数字過剰正規化**を起こすか（起こす = ElevenLabs Scribe バックエンド確定）
+- 起こさなければ S1-Voice は SuperWhisper 独自モデルの可能性
 
 ## マイクテスト手順（人がいない環境で）
 
