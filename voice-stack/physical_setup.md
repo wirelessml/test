@@ -4,21 +4,36 @@
 
 ## チェックリスト（推奨実施順）
 
-### 0. 事前確認（SSH 構築済み事項、4/28 09:48 〜 4/29 06:24 完了）
+### 0. 事前確認（SSH 構築済み事項、4/28 09:48 〜 4/29 06:50 完了）
 
 | 項目 | 状態 |
 |---|---|
 | Python 3.12.10 | ✅ インストール済 (4/28) |
 | pip 主要 SDK | ✅ groq 1.0.0 / elevenlabs 2.42.0 / anthropic 0.76.0 / google-genai 1.65.0 / openai 2.16.0 / browser-use 0.12.2 |
 | pyperclip 1.11.0 / keyboard 0.13.5 / sounddevice 0.5.5 / numpy 2.4.4 | ✅ 4/28 セッションで追加 |
-| `~/voice-stack/scripts/` **8 スクリプト** | ✅ 配置済（4/29 06:23 `scribe_kanjisuji_fix.py` 追加） |
-| `~/voice-stack/downloads/GoogleJapaneseInputSetup.exe` (11.5MB) | ✅ 4/29 06:22 SSH 経由 DL 完了 |
+| `~/voice-stack/scripts/` **10 スクリプト** | ✅ 配置済（4/29 06:50 `scribe_kanjisuji_local.py` 追加） |
+| `~/voice-stack/downloads/GoogleJapaneseInputSetup.exe` (11.5MB) | ✅ 4/29 06:22 SSH 経由 DL 完了（**運用上は使わない判断**） |
 | マイクデバイス | ✅ 20 個検出、デフォルト = `マイク配列 (Intel SST)` ch=2 sr=44100 |
 | `chcp 65001` (UTF-8) 設定 | ⚠️ ターミナルごとに必要、永続化推奨 |
+| **ELEVENLABS_API_KEY 永続化** | ✅ 4/29 06:48 SSH 経由設定完了（Mac から流用、starter tier、7,528/40,000 chars 利用中） |
+| **API 接続検証** | ✅ 4/29 06:48 `client.user.get()` 成功 |
+| `scribe_kanjisuji_local.py` ユニットテスト | ✅ 4/29 06:50 Windows で 8/8 PASS |
 
-#### 🎯 V4 確定構成（4/28 13:21〜20:30 勝間結論）
+#### 🎯 V4 確定構成（4/29 06:50 ローカル版採用）
 
-「Scribe pure stack + 漢数字補正のみ Groq Llama 8B」が現時点の正解。`scribe_kanjisuji_fix.py` がその専用スクリプト。詳細は @README.md V4 セクション。
+「Scribe pure stack + Python トリム + ローカル正規表現で漢数字補正」が現時点の運用形。
+- `scribe_kanjisuji_local.py` (LLM 不要、ネットワーク不要、レイテンシゼロ)
+- Groq 新規アカウント作成 / API キー取得は **不要**
+- 精度に不満出たら `scribe_kanjisuji_fix.py` (Groq Llama 8B 版) にフォールバック可
+
+#### 🚫 着席当日スキップ判断（4/29 06:45）
+
+| 項目 | スキップ理由 |
+|---|---|
+| YamabukiR (親指シフト) | 習得に数週間〜数ヶ月、voice stack 本体は不要 |
+| Google IME インストール | YamabukiR スキップなら不要、MS-IME のままで動作 |
+| Groq API キー作成 | ローカル版で代替済 |
+| Gemini API キー作成 | 任意、コーディング支援用途のみ |
 
 ### 1. SuperWhisper Windows 版インストール（v1.3.9 確認、x64 / ARM64）
 
