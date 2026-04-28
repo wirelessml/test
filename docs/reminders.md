@@ -1,5 +1,19 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
+- **2026/04/29（水）コワーキング着席日**: **勝間 voice stack 物理セットアップ続き**
+  - 前日 SSH で完了済（4/28、`voice-stack/` 参照）: Python 環境 + 7 スクリプト + マイク確認
+  - 当日やる作業:
+    1. ElevenLabs 無料枠サインアップ → API キー取得 → `setx ELEVENLABS_API_KEY`
+    2. Groq 無料枠サインアップ → API キー取得 → `setx GROQ_API_KEY`
+    3. SuperWhisper Windows v1.3.9 インストール（superwhisper.com → Download for Windows x64）
+    4. SuperWhisper 設定: Scribe 実験モデル ON、左 Alt ホットキー、自動ペースト OFF、日本語固定
+    5. Google 日本語入力 + YamabukiR インストール（親指シフト）
+    6. テキスト後処理 V3 比較実行（API キーがあれば音声不要、Mac 側からも可）
+  - 詳細手順: @voice-stack/physical_setup.md
+  - **コワーキング有人時のマイクテストは禁止**（背景音録音 = 法的リスク、勝間 4/27 19:11「静かすぎ/うるさすぎ」論点と同じ）
+  - 編集方針: @docs/routines/katsuma-watch.md「観察哲学」セクション参照
+
+
 - **2026/04/26（日）**: **Claude for Word 集中日（最優先・4/25 から順延）**
   - 9:00 セッション: Claude for Word アドインの状況確認 + 定款整形 Saved Prompt 設計・実機テスト
   - 14:00 セッション: Substack 記事「Claude for Word リリース 2 週間、定款整形が秒で終わった日」3,000-4,000 字を書き上げ
