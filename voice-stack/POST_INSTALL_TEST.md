@@ -33,6 +33,34 @@ SuperWhisper Windows v1.3.9 のモデル一覧に「Scribe」「ElevenLabs」表
 - Scribe の特徴である**漢数字過剰正規化**を起こすか（起こす = ElevenLabs Scribe バックエンド確定）
 - 起こさなければ S1-Voice は SuperWhisper 独自モデルの可能性
 
+## 🎯 V4 最終構成（無料 Scribe 路線、4/29 07:43 確定）
+
+**SuperWhisper Free 枠では Scribe 不可**と判明したため、Python 自前路線で Scribe 直叩き運用。
+
+| 構成要素 | 役割 |
+|---|---|
+| **無変換キー** | Push-to-talk、Python `keybind_scribe.py` がフック |
+| **ElevenLabs Scribe API** | 直接呼び出し（`scribe_v1`、Mac から流用キー） |
+| **Python トリム** | 先頭/末尾空白除去（勝間 4/15 再現） |
+| **ローカル正規表現** | 漢数字 → 算用数字補正（`scribe_kanjisuji_local`） |
+| **クリップボード + 自動ペースト** | Ctrl+V 自動送出 |
+
+SuperWhisper は併用可（Ctrl+Space で S1-Voice、無変換で Python Scribe）。比較観察に有用。
+
+### keybind_scribe.py 単発起動
+
+```powershell
+$env:ELEVENLABS_API_KEY = [Environment]::GetEnvironmentVariable("ELEVENLABS_API_KEY", "User")
+python C:\Users\gci_admin\voice-stack\scripts\keybind_scribe.py
+```
+
+### 自動起動設定（ログイン時に常駐）
+
+1. Win+R → `shell:startup` でスタートアップフォルダを開く
+2. `C:\Users\gci_admin\voice-stack\scripts\start_voice_stack.bat` のショートカットを作成して配置
+3. 次回ログインから自動で常駐（pythonw で非表示）
+4. 停止したいときは Task Manager から `pythonw.exe` を終了
+
 ## マイクテスト手順（人がいない環境で）
 
 ### 1. 環境変数を新セッションに反映
