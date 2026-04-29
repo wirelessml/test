@@ -33,9 +33,42 @@ SuperWhisper Windows v1.3.9 のモデル一覧に「Scribe」「ElevenLabs」表
 - Scribe の特徴である**漢数字過剰正規化**を起こすか（起こす = ElevenLabs Scribe バックエンド確定）
 - 起こさなければ S1-Voice は SuperWhisper 独自モデルの可能性
 
-## 🎯 V4 最終構成（無料 Scribe 路線、4/29 07:43 確定）
+## 🎯 V5 最終構成（SuperWhisper Pro + Scribe、4/29 09:00 確定）
 
-**SuperWhisper Free 枠では Scribe 不可**と判明したため、Python 自前路線で Scribe 直叩き運用。
+**SuperWhisper Pro Lifetime 課金 + Show experimental models ON で Scribe 解禁**。Windows v1.3.9 でも Pro + 実験モデルで `sw-elevenlabs-scribe` モデル選択可能と判明。
+
+| 構成要素 | 役割 |
+|---|---|
+| **Push to Talk Alt** | SuperWhisper 標準ホットキー |
+| **SuperWhisper Scribe** | ElevenLabs Scribe を SW UI 経由で利用（勝間方式） |
+| **trim_clipboard.py** | 半角空白除去 + 自動ペースト（Auto paste Off の運用に必要） |
+| **scribe_kanjisuji_local.py** | 漢数字 → 算用数字（ローカル正規表現） |
+
+勝間 4/27 18:17 ツイ「SuperWhisper 買い切り、Scribe 課金なし」の正体:
+- **Pro Lifetime 購入済**（仲さん同様）
+- **BYOK（Bring Your Own Key）で ElevenLabs API キー設定** → SW 経由で Scribe 呼び出し時の追加課金なし
+
+### 重要発見
+
+1. SuperWhisper Windows v1.3.9 にも Scribe **存在する**
+2. ただし条件: **Pro license + Show experimental models = ON**
+3. modeID = `sw-elevenlabs-scribe`
+4. dropdown には ‖ アイコン + NEW バッジで表示
+5. Free tier では Scribe 非表示（実験モデル ON でも出ない）
+
+### 旧 V4 路線（Python 自前版）の位置づけ
+
+`keybind_scribe.py` も配置済（無変換キー = ElevenLabs API 直叩き）。SW Pro が動かない状況での **バックアップ運用**として保持。
+
+## V5 旧 V4 並行運用
+
+| ホットキー | アプリ | モデル |
+|---|---|---|
+| **左 Alt** | SuperWhisper | Scribe（V5 メイン） |
+| **無変換** | Python keybind_scribe.py | ElevenLabs Scribe API 直叩き（V4 バックアップ） |
+| Ctrl+Space | SuperWhisper | Toggle 録音 |
+
+## マイクテスト手順（人がいない環境で）
 
 | 構成要素 | 役割 |
 |---|---|
