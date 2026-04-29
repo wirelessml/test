@@ -1,6 +1,6 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
-- **2026/04/29（水）コワーキング着席日**: ✅ **勝間 voice stack 物理セットアップ完了（06:30〜07:45）** — 詳細 @docs/journal/2026-04-29.md
+- **2026/04/29（水）コワーキング着席日**: ✅ **勝間 voice stack 物理セットアップ完了（06:30〜07:45）** **+ 🎉 午後しゅん先生 PC を Acer FA100 NVMe に移行成功（13:45〜16:50、3 時間死闘の真犯人 `stornvme\StartOverride\0=0x3`、CDM 3,374 MB/s で公称超え）** — 詳細 @docs/journal/2026-04-29.md
   - SSH で Python 12 ファイル配置 + ElevenLabs キー Mac→Win 流用永続化（starter tier、7,528/40,000 chars）
   - SuperWhisper Windows v1.3.9 インストール + 設定（S1-Voice / Japanese / Push to Talk Alt / Auto paste Off）
   - **重要発見**: Scribe は SW Free 枠で不可（Pro 限定）、勝間 4/27 18:17 の「SW 買い切り、Scribe 課金なし」は Lifetime + BYO key の意

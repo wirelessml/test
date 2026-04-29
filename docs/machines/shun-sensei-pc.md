@@ -2,7 +2,9 @@
 
 > Last updated: 2026-04-22
 >
-> 🚨 **4/22 18:20 緊急事態発生**: Plextor SSD が NVMe コントローラエラーで完全死亡、Seagate クローンに自動フォールバック起動中（詳細は @docs/journal/2026-04-22.md）
+> 🎉 **4/29 16:30 完全復活**: Acer FA100 512GB NVMe Gen3 x4 へのクローン移行成功（実質 ¥10,267 はばタンPay+ 50% プレミアム適用）。CDM 3,374 MB/s で公称超え、Plextor 時代の速度に復帰。3 時間のクローン死闘の真犯人は `stornvme\StartOverride\0=0x3` だった。詳細 @docs/journal/2026-04-29.md
+>
+> 旧履歴: 4/22 18:20 Plextor SSD NVMe コントローラ死亡 → Seagate クローン延命 7 日 → 4/29 Acer FA100 移行
 
 ## 役割
 
@@ -24,9 +26,35 @@
 
 ## ストレージ
 
-- 合計: 2.05TB → **1.82TB**（Plextor 256GB 死亡により喪失、Seagate 2TB のみ稼働）
+- 合計: 2.34TB（**新 C: Acer FA100 512GB NVMe + D: Seagate 2TB SMR HDD**、4/29 移行後構成）
+  - Plextor 256GB は 4/22 死亡 → 4/24 物理除去
+  - 4/27 Acer FA100 購入 → 4/29 クローン移行で C: 復帰、Seagate は D: バックアップへ降格
 
-### ~~C: Plextor PX-256M8PeGN 256GB NVMe~~（🪦 死亡 → 4/24 物理除去）
+### C: Acer SSD FA100 512GB NVMe（🎉 2026-04-29 移行成功、現用ブートドライブ）
+
+- **モデル**: Acer FA100 512GB（M.2 2280、PCIe Gen3 x4 NVMe）
+- **コントローラ**: NVM Express 1.4 対応
+- **ファームウェア**: GTdf62a6
+- **シリアル**: ASAD35340100405
+- **健康状態**: 100%（CDM 4/29 計測時）
+- **温度**: 42°C（負荷時）
+- **使用容量**: 213 GB / 477 GB（クローン後）
+- **TRIM**: 有効（NTFS DisableDeleteNotify=0）
+- **実測速度（CrystalDiskMark 9.0.2、4/29 16:35）**:
+  - SEQ1M Q8T1 R/W: **3,374.22 / 2,826.92 MB/s**（公称 3,300/2,700 を超過）
+  - SEQ128K Q32T1: 3,365.46 / 2,795.35 MB/s
+  - RND4K Q32T16: 1,857.87 / 1,288.90 MB/s
+  - RND4K Q1T1: 57.67 / 124.36 MB/s
+- **PCIe レーン**: 3.0 x4 接続確認（理論値 3,940 MB/s に対して 85% efficiency）
+- **購入経緯**: 2026-04-27 18:20 大西ジム新長田で店頭価格 ¥15,400、はばタンPay+ 第 5 弾 50% プレミアム適用で**実質 ¥10,267**
+- **クローン経緯**: 2026-04-29 13:45-14:30 Hasleo Backup Suite Free で Seagate HDD → Acer SSD クローン
+- **起動失敗 → 復活**:
+  - 14:35 0xc0000001 で起動失敗
+  - 15:15 chkdsk bitmap 修復後 0x7B INACCESSIBLE_BOOT_DEVICE
+  - 15:45 真犯人 `stornvme\StartOverride\0 = 0x3` 発見（Windows 隠し最適化）
+  - 15:48 `reg delete` 一行で起動成功
+
+### ~~旧 C: Plextor PX-256M8PeGN 256GB NVMe~~（🪦 4/22 死亡 → 4/24 物理除去 → 4/29 後継 Acer FA100 移行で完全交代）
 
 **4/22 18:20 死亡、デバイス検出不可（Get-Disk から消滅）**
 **4/24 朝 物理除去完了**、現物はユーザー手元で保管中
@@ -145,7 +173,7 @@
 - **CPU クーラー**: Intel 純正相当（LGA1151 stock cooler、small heatsink + 小口径ファン）
 - **PCIe x16 スロット**: 空（dGPU 非搭載、iGPU のみ）
 - **RAM スロット**: 2 本装着（E0D55E2F5A68 / E0D55E2F5A6A、同ロット、4/24 再読で訂正）
-- **M.2 スロット**: 1 つ確認、**現在空**（旧 Plextor PX-256M8PeGN が 4/24 除去済）
+- **M.2 スロット**: 1 つ確認、**Acer FA100 512GB NVMe 装着中**（4/29 設置）
 - ~~mSATA or M.2 モジュール 緑 PCB 2 枚重ね~~ → 4/24 朝の別角度写真で判明、正体は **RAM DIMM を斜めから見たもの**（mSATA ではない）
 - **内部清浄度**: 埃堆積あり、物理作業前に清掃推奨
 
@@ -174,6 +202,8 @@
 
 - **2026-04-26 朝**: Seagate D: 物理取り外し（B 案: 外付け USB-SATA ケース移植）、ラベル現物撮影で全スペック記録（PSID 含む、@docs/machines/shun-sensei-pc.md の現物ラベル確認セクション参照）
 - **2026-04-25**: SanDisk Extreme V2 USB-C SSD 2TB へ OS 移行完了、Windows 11 起動成功（13:18、CSM 無効 + XHCI Hand-off 有効）、SanDisk Dashboard 5.2.2.3 でヘルスモニタリング体制確立（詳細: @docs/journal/2026-04-25.md）
+- **2026-04-29 16:30**: 🎉 **Acer FA100 NVMe 移行完了** — Hasleo クローン → 0xc0000001 → bcdboot 確認 → chkdsk bitmap 修復 → 0x7B → `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s で公称超え（詳細: @docs/journal/2026-04-29.md）
+- **2026-04-27 18:20**: 大西ジム新長田で Acer FA100 512GB NVMe 購入、はばタンPay+ 50% プレミアムで実質 ¥10,267
 - **2026-04-24 朝**: 死亡 Plextor を物理除去、ラベル確認で正式モデル **PX-256M8PeGN**（旧記録 M9PeGN は誤り）、製造 2018/09/06 判明、M.2 スロット空き状態に
 - **2026-04-22 18:20**: Plextor SSD 死亡、Seagate クローンで緊急起動（詳細: @docs/journal/2026-04-22.md）
 - 2026-04-22 17:34: Hasleo でクローン完成（命綱）
@@ -181,7 +211,18 @@
 - 2025-02-05: Windows 11 Home 25H2 クリーンインストール
 - 2018 年頃: ユニットコム STYLE Infinity として購入
 
-## 新 SSD 購入計画
+## ~~新 SSD 購入計画~~（2026-04-27 完了、2026-04-29 移行成功）
+
+> **以下は履歴として保存**。Acer FA100 購入と移行で計画完遂。
+
+### 購入完了記録
+
+- **2026-04-27 18:20**: 大西ジム新長田で Acer FA100 512GB を購入
+- **店頭価格**: ¥15,400（NAND 高騰下、4/22 比 9.4% 値上げ目撃）
+- **実質支払**: **¥10,267**（はばタンPay+ 第 5 弾 50% プレミアム適用）
+- **目標 ¥12,000 以下達成**
+
+### 当時の購入計画
 
 **現在は購入保留**（2026 年 NAND 高騰、1TB NVMe が ¥20,980 から）
 

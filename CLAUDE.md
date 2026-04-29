@@ -8,20 +8,24 @@
 
 - **メイン作業機配置**（4/22 16:34〜 大規模再編）:
   - M1 MacBook Air = **持ち運び用**（外出先・自宅・コワーキング移動）
-  - しゅん先生 PC = **コワーキング据え置き新メイン**（ただし 4/22 18:20 Plextor SSD 死亡で Seagate HDD 起動、遅い）
+  - しゅん先生 PC = **コワーキング据え置き新メイン**（4/29 16:30 Acer FA100 NVMe 移行成功、Plextor 時代の速度復帰）
   - MASU-P55 (HP ProBook) = コワーキングサブ、WSL2 で OpenClaw 稼働
 - **直近の重要イベント**:
   - 🚨 **4/22 18:20**: しゅん先生 PC の Plextor SSD が NVMe コントローラ障害で完全死亡、2 時間前に作ったクローンが命綱に（詳細: @docs/journal/2026-04-22.md）
   - 4/22 19:40: Substack ノートに「SSD 突然死 → クローン復活 → NAND 高騰で買い替え不可」投稿
+  - 4/27 18:20: Acer FA100 512GB を はばタンPay+ 50% プレミアムで実質 ¥10,267 購入
+  - 🎉 **4/29 16:30**: しゅん先生 PC が Acer FA100 NVMe SSD で完全復活、3 時間のクローン死闘後 `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s（Plextor 時代に復帰）
 - **今週の優先 TODO**:
-  - [ ] SSD 価格監視（毎週月曜、1TB が ¥12,000 以下なら発注）
-  - [ ] しゅん先生 PC を SMR HDD で延命運用、重い作業回避
-  - [ ] Substack 本編記事化（反応あれば）「Plextor が死ぬ 2 時間前にクローンを作った話」
+  - [x] ~~SSD 価格監視~~ 完了（4/27 Acer FA100 購入で危機脱出、ルーチン継続は不要）
+  - [x] ~~しゅん先生 PC を SMR HDD で延命運用~~ 完了（4/29 NVMe 移行で延命終了）
+  - [ ] 4/29 NVMe クローン死闘記事の Substack 本編 publish（4/30 朝 or 夕方、Notes 反応見て）
+  - [ ] 旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）
+  - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
 
 ## 機材（詳細は @docs/machines/）
 
 - **M1 MacBook Air 8GB**: 持ち運び用、モバイル作業機（@docs/machines/m1-macbook-air.md）
-- **しゅん先生 PC**: コワーキング据え置き、Windows 11 25H2、4/22 Plextor 死亡 → Seagate 起動中（@docs/machines/shun-sensei-pc.md）
+- **しゅん先生 PC**: コワーキング据え置き、Windows 11 25H2、4/29 Acer FA100 NVMe 移行完了で Plextor 時代の速度復帰（@docs/machines/shun-sensei-pc.md）
 - **MASU-P55 (HP ProBook)**: コワーキングサブ、Windows + WSL2 Ubuntu で OpenClaw 稼働（@docs/machines/masu-p55.md）
 - **モバイル・周辺機器**: iPhone 15 Pro (結花)、iPad Pro 9.7 (彩羽)、テレビ・モニター（@docs/machines/mobile-devices.md）
 
@@ -50,7 +54,7 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
-- **2026-04-29**: 勝間 voice stack 物理セットアップ完了 — SSH+着席で MASU-P55 に Python 12 ファイル配置 + ElevenLabs キー Mac→Win 流用 + SuperWhisper v1.3.9 設定 + 当初 Scribe 出ない問題 → V4 Python 自前路線 (`keybind_scribe.py`) → **SuperWhisper Pro Lifetime $249.99 (約¥40k) 課金 + 実験モデル ON で Scribe 解禁** → V5 で勝間和代と Windows で完全同一構成を実現 + 漢数字補正ローカル正規表現化（@docs/journal/2026-04-29.md）
+- **2026-04-29**: 勝間 voice stack 物理セットアップ完了 (V4→V5、SuperWhisper Pro Lifetime + Scribe) **+ 午後しゅん先生 PC を Acer FA100 NVMe に移行 → クローン後 0xc0000001/0x7B で 3 時間死闘 → `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s** + Substack 記事ドラフト作成 + Notes 投稿（@docs/journal/2026-04-29.md）
 - **2026-04-23**: Kioxia 整備品自動監視実装（LaunchAgent 毎日 08:17 JST）+ Intel X25-M G1 80GB 発掘 + しぶ 4/22 動画分析 → りくと編集チーム統括ディレクター昇格判明（72 時間ジャーニー更新）+ pirosi80 フィッシング 3 通目（@docs/journal/2026-04-23.md）
 - **2026-04-22**: しゅん先生 PC バックアップ実装 + Plextor SSD 死亡 + Seagate クローン救出劇 + SSD 市場高騰調査 + claude-md-diet スキル作成 + CLAUDE.md リファクタ（@docs/journal/2026-04-22.md）
 - **2026-04-21**: しぶ AI研修 2 日目ストーリーで人物特定訂正 + MASU-p 共有 HP ProBook で GC313Pro セットアップ完了（@docs/journal/2026-04-21.md）
