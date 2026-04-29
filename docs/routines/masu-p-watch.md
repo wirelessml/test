@@ -93,9 +93,50 @@ rm -rf /Users/yuika/Desktop/docs/routines/masu-p-snapshots/
 3. **新規投稿時の挙動**: Instagram トップ画像 key が変わる → IG hash 変化 → 🚨 CHANGED でスナップショット保存。HTML を後から見て新規投稿を確認できる。
 4. **メンテナンス**: Instagram の HTML 構造変更で正規表現が壊れる可能性。月次でスクリプト動作確認が必要。
 
+## 変化検出時のメール通知
+
+変化検出 (🚨 CHANGED) のとき自動でメール送信。
+
+### セットアップ (1 回だけ)
+
+1. **Gmail アプリパスワードを発行**
+   - https://myaccount.google.com/apppasswords にアクセス (2 段階認証必須)
+   - 名前: `MASU-p Watch` (任意)
+   - 16 文字のパスワードをコピー
+2. **設定ファイル作成**
+   ```bash
+   mkdir -p ~/.config/masu-p-watch
+   cat > ~/.config/masu-p-watch/email.json <<'EOF'
+   {
+     "from_addr": "wirelessml@gmail.com",
+     "to_addr": "wirelessml@gmail.com",
+     "app_password": "xxxx xxxx xxxx xxxx"
+   }
+   EOF
+   chmod 600 ~/.config/masu-p-watch/email.json
+   ```
+3. **テスト送信**
+   ```bash
+   echo "test body" | /Users/yuika/Desktop/scripts/lib/send-email.py --subject "MASU-p test"
+   ```
+
+### 仕組み
+
+- 送信スクリプト: `scripts/lib/send-email.py` (Python smtplib + Gmail SMTP_SSL)
+- 設定読込: `~/.config/masu-p-watch/email.json` (アプリパスワード)
+- 配信先: `wirelessml@gmail.com` (自分宛)
+- 件名: `🚨 MASU-p 変化検出 YYYY-MM-DD`
+- 本文: 検出時刻、Web/Instagram の状態、見出し抜粋、og:description、スナップショット保存パス
+- **設定ファイルが無いか権限不足の場合**: メール送信せず `/tmp/masu-p-watch-launchd.log` に "email skipped" を記録するだけ (監視自体は継続)
+
+### 注意
+
+- アプリパスワードは平文で `~/.config/masu-p-watch/email.json` に保存されるため、必ず `chmod 600` を適用すること
+- パスワードを失効させたい場合は myaccount.google.com → セキュリティ → アプリパスワード で revoke
+- メール送信は **変化検出時のみ**、unchanged の日は送信しない (受信箱を汚さない)
+
 ## 改善 TODO
 
-- [ ] 変化検出時の Gmail 下書き自動作成 (Kioxia と同じパターン)
 - [ ] スナップショット古い分の自動掃除 (90 日以上)
 - [ ] Instagram cookie ベース取得 (chromium + 保存セッション) で投稿本文まで取れるようにする
 - [ ] ログサイズが膨らんだら年月別ローテーション

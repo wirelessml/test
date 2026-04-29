@@ -120,6 +120,44 @@ fi
   fi
 } >> "${LOG_FILE}"
 
+# --- 変化検出時のメール送信 ---
+EMAIL_CONFIG="${HOME}/.config/masu-p-watch/email.json"
+SEND_EMAIL_PY="${ROOT}/scripts/lib/send-email.py"
+
+if [ "${ANY_CHANGE}" -eq 1 ] && [ "${PREV_WEB_HASH}" != "INITIAL" ]; then
+  if [ -f "${EMAIL_CONFIG}" ] && [ -x "${SEND_EMAIL_PY}" ]; then
+    SUBJECT="🚨 MASU-p 変化検出 ${TIMESTAMP%% *}"
+    BODY_TMP="/tmp/masu-p-watch-mail-${DATE_TAG}.txt"
+    {
+      echo "MASU-p 監視で変化を検出しました (${TIMESTAMP})"
+      echo ""
+      echo "Web (https://masu-p.com/): ${WEB_STATUS}"
+      echo "  size: ${WEB_SIZE}, hash: ${WEB_HASH:0:16}…"
+      if [ -n "${WEB_HEADLINES}" ] && [ "${WEB_STATUS}" != "unchanged" ]; then
+        echo "  見出し抜粋:"
+        echo "${WEB_HEADLINES}" | head -10 | sed 's/^/    - /'
+      fi
+      echo ""
+      echo "Instagram (@masup_official): ${IG_STATUS}"
+      echo "  size: ${IG_SIZE}, hash: ${IG_HASH:0:16}…"
+      if [ -n "${IG_DESC}" ] && [ "${IG_STATUS}" != "unchanged" ]; then
+        echo "  og:description: ${IG_DESC}"
+        [ -n "${IG_IMG_KEY}" ] && echo "  最新投稿画像 key: ${IG_IMG_KEY}"
+      fi
+      echo ""
+      echo "スナップショット保存先:"
+      echo "  ${SNAP_DIR}/web-${DATE_TAG}.html"
+      echo "  ${SNAP_DIR}/ig-${DATE_TAG}.html"
+      echo ""
+      echo "ログ全体: ${LOG_FILE}"
+    } > "${BODY_TMP}"
+    "${SEND_EMAIL_PY}" --subject "${SUBJECT}" --body-file "${BODY_TMP}" >> /tmp/masu-p-watch-launchd.log 2>&1
+    rm -f "${BODY_TMP}"
+  else
+    echo "[masu-p-watch] email skipped: config or sender missing" >> /tmp/masu-p-watch-launchd.log
+  fi
+fi
+
 # tmp 掃除
 rm -f "${WEB_TMP}" "${IG_TMP}"
 
