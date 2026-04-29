@@ -27,3 +27,15 @@
 
 - Web: unchanged (size: 121168, hash: ab227cd001b6…)
 - Instagram: unchanged (size: 935594, hash: 5d3a6e5b31e3…)
+
+## 2026-04-29 18:25:35 JST [TEST RUN — 偽ハッシュ注入によるメール送信動作確認]
+
+- Web: 🚨 CHANGED (size: 121168, hash: ab227cd001b6…) ← 偽ハッシュ → 真のハッシュ復帰
+- Instagram: unchanged (size: 935565, hash: 5d3a6e5b31e3…)
+- メール: 「🚨 MASU-p 変化検出 2026-04-29」を wirelessml@gmail.com に送信成功
+- テスト時の偽スナップショット (web-20260429-1825.html / ig-20260429-1825.html) は削除済
+
+## 2026-04-29 18:25:56 JST
+
+- Web: unchanged (size: 121168, hash: ab227cd001b6…)
+- Instagram: unchanged (size: 935580, hash: 5d3a6e5b31e3…)
