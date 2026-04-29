@@ -21,6 +21,7 @@
   - [ ] 4/29 NVMe クローン死闘記事の Substack 本編 publish（4/30 朝 or 夕方、Notes 反応見て）
   - [ ] 旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）
   - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
+  - [ ] **4/30 GC313Pro 物理セットアップ + UVC ビューワ実装** (Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ、Python + OpenCV 30-50 行想定、設計ドラフト @docs/superpowers/specs/2026-04-29-uvc-viewer-design-draft.md)
 
 ## 機材（詳細は @docs/machines/）
 
