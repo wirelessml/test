@@ -93,7 +93,7 @@
 - **Claude Code セッションスケジュール**（9/14/19/0/5 時 JST、毎日）: @docs/routines/session-schedule.md
 - **X 情報収集ルーチン**（各セッション毎）: @docs/x-daily-briefing.md
 - **しぶ Instagram 監視**（毎時 17 分）: @docs/routines/instagram-watch.md
-- **MASU-p 監視**（毎日 08:23 JST、LaunchAgent）: @docs/routines/masu-p-watch.md
+- **MASU-p 監視**（毎日 18:12 JST、LaunchAgent）: @docs/routines/masu-p-watch.md
 - **リモートコントロール状態報告**（毎時 33 分）: @docs/routines/remote-control-report.md
 - **運用ルーチン（CLAUDE.md とタスク管理の二層構造）**: @docs/routines/task-management.md
 

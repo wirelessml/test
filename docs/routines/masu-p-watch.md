@@ -29,7 +29,7 @@
 
 ### LaunchAgent
 - plist: `~/Library/LaunchAgents/com.yuika.masu-p-watch.plist`
-- 実行時刻: 毎日 **08:23 JST** (Kioxia 08:17 と被らない)
+- 実行時刻: 毎日 **18:12 JST** (ユーザー指定時刻、夕方の MASU-p 滞在時間と重なる)
 - 出力ログ: `/tmp/masu-p-watch-launchd.log`
 - エラーログ: `/tmp/masu-p-watch-launchd-error.log`
 - Mac 起動中なら常時動作、Claude Code 不要

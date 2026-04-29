@@ -2,7 +2,7 @@
 
 > 対象 1: https://masu-p.com/ (神戸市須磨区板宿コワーキング公式サイト)
 > 対象 2: https://www.instagram.com/masup_official/ (Instagram 公式)
-> 実行: LaunchAgent `com.yuika.masu-p-watch` (毎日 08:23 JST)
+> 実行: LaunchAgent `com.yuika.masu-p-watch` (毎日 18:12 JST)
 > スクリプト: `/Users/yuika/Desktop/scripts/masu-p-watch.sh`
 > スナップショット: `docs/routines/masu-p-snapshots/`
 
