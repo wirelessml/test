@@ -166,8 +166,8 @@
     - CPU: i7-8700K (第 8 世代 Coffee Lake、**Intel SGX 対応**) ✓
     - iGPU: UHD Graphics 630 (HDCP 2.2 + UHD BD ハードウェアデコード対応) ✓
     - 光学ドライブ: Pioneer BDR-211JBK (UHD Friendly Drive) ✓
-    - 再生ソフト: PowerDVD Ultra 系 (要確認、未確認なら CyberLink から要入手)
-    - モニタ: LG 4K (HDCP 2.2 対応想定、要型番確認)
+    - 再生ソフト: **PowerDVD 14.0.1.7320 UHDBD-OEM 版** (DD 6ch + DTS 6ch、ライセンス先 **UNITCOM PC User**、SR: MES161202-01、TR: TR170120-035) ✓ — **iiyama STYLE Infinity 2018 BTO の標準バンドル**として最初から入っていた (購入不要、再買い直し不要)。対応: Ultra HD 4K / Blu-ray / BD3D / BDXL / AVCHD / AVCREC / CPRM / Dolby TrueHD / DTS-HD / Direct 24/96 / TrueTheater / Java。アップグレード案内 (PowerDVD 24) が出るが UHD BD 再生は v14 で十分、UHDBD-OEM ライセンスのアップグレード可否は別途要確認 (一般に OEM 版から上位版への引継は不可、買い直しになる)
+    - モニタ: **LG 40WP95C-W** (39.7 インチ 5K2K ウルトラワイド、Thunderbolt 4 + DP 1.4 + HDMI 2.0 ×2、全入力 **HDCP 2.2 対応** ✓) — 元 Mac 接続用、4/30 から GC313Pro 経由で Windows しゅん先生 PC へ切替
   - **CPU 換装の天井制約**: 4K UHD BD 機能を維持できる CPU は **i9-9900K まで** (第 10 世代 Comet Lake はマザボ LGA1151 v2 非対応、**第 11 世代 Rocket Lake 以降は Intel が SGX を削除したため 4K UHD BD 再生不可**)。**Ryzen への乗り換えは AMD が SGX 非対応のため永久にこの機能を失う** ← Ryzen 移行検討時の決定的な NG 根拠
 - **PSU**: **FSP 500W**（型番 FSP500-50 EKEN 系列、80 PLUS 認証、Active PFC、Whisper Killer 静音設計）
   - +12V 38A (456W) 、+3.3V 24A、+5V 38A
@@ -208,6 +208,7 @@
 
 ## 変更履歴
 
+- **2026-04-30 12:30**: 4K UHD BD 再生スタックを完全確定 — PowerDVD 14.0.1.7320 UHDBD-OEM (UNITCOM ライセンス、iiyama BTO 標準バンドル、SR: MES161202-01) と LG 40WP95C-W モニタ (HDCP 2.2 対応) を実機スクショで確認、shun-sensei-pc.md の「要確認」記述を確定値に置換 (ユーザー提供写真ベース)
 - **2026-04-30 12:20**: 4K UHD BD 再生機能を「代替不可能な専用機能」として役割セクションに昇格、CPU 換装天井 (i9-9900K まで) と Ryzen 移行不可の根拠を光学ドライブ項目に追記 (将来の機材判断ミス防止 memo、ユーザー指摘ベース)
 - **2026-04-26 朝**: Seagate D: 物理取り外し（B 案: 外付け USB-SATA ケース移植）、ラベル現物撮影で全スペック記録（PSID 含む、@docs/machines/shun-sensei-pc.md の現物ラベル確認セクション参照）
 - **2026-04-25**: SanDisk Extreme V2 USB-C SSD 2TB へ OS 移行完了、Windows 11 起動成功（13:18、CSM 無効 + XHCI Hand-off 有効）、SanDisk Dashboard 5.2.2.3 でヘルスモニタリング体制確立（詳細: @docs/journal/2026-04-25.md）
