@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<!--
+  出典 / Attribution:
+    オリジナル artifact: IT navi (@itnavi2022)
+    https://claude.ai/public/artifacts/162593fe-a53a-4650-a0ec-6b8af4b788df
+    元ツイート: https://x.com/itnavi2022/status/2049642458515230720 (2026-04-30)
+
+  Remix 配置: 仲啓輔 (@minimalistneko) が GitHub Pages で動的版を hosting
+    Remix 元: https://claude.ai/chat/ea0967b4-91dd-41cf-9dae-d43e4b0c81d3?artifactId=remixed-162593fe
+    Hosting: https://wirelessml.github.io/test/remixed-artifacts/2026-04-30-itnavi-parabola-line-intersection.html
+    Date: 2026-04-30
+
+  問題: 点 (−1/2, 0) を通る直線 y = a(2x+1) を回転させ、
+        放物線 y = x²+1 (0 ≤ x < 1) との交点が 1 つになる a の範囲を求める。
+  結論: a = (√5−1)/2 または 2/3 < a ≤ 1
+-->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>放物線と直線の交点 — 解説図</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F6F2E9;
+  --bg-alt: #FBF8F1;
+  --card: #FFFFFF;
+  --text: #1F1E1B;
+  --text-muted: #6E6B65;
+  --border: #E0DACC;
+  --border-strong: #C8C0AE;
+  --coral: #C75230;
+  --coral-bg: #FAECE7;
+  --teal: #1A6B4F;
+  --teal-bg: #E1F5EE;
+  --teal-soft: #9FE1CB;
+  --purple: #3C3489;
+  --purple-bg: #EEEDFE;
+  --amber: #B07012;
+  --shadow-sm: 0 1px 2px rgba(40, 35, 25, 0.04);
+  --shadow-md: 0 2px 10px rgba(40, 35, 25, 0.06);
+}
+
+body {
+  font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 32px 18px 60px;
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+main {
+  max-width: 740px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 8px 0 4px;
+}
+
+header .eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+header h1 {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+  font-size: clamp(20px, 4.5vw, 26px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+header .subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-card {
+  padding: 14px 14px 10px;
+}
+
+#chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 8px 4px;
+  border-top: 1px dashed var(--border);
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-mark {
+  width: 22px;
+  height: 2px;
+  flex-shrink: 0;
+}
+
+.legend-mark.dashed {
+  background-image: repeating-linear-gradient(to right, currentColor 0, currentColor 4px, transparent 4px, transparent 7px);
+  height: 2px;
+}
+
+/* Control card */
+.control-card {
+  padding: 18px 20px 16px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.slider-label {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--text);
+}
+
+.slider-label strong {
+  font-weight: 600;
+  color: var(--purple);
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 64px;
+}
+
+#slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  background: linear-gradient(to right,
+    var(--border-strong) 0%, var(--border-strong) 51.28%,
+    var(--teal-soft) 51.28%, var(--teal-soft) 76.92%,
+    var(--border-strong) 76.92%, var(--border-strong) 100%);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+#slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--purple);
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(40, 35, 25, 0.3);
+  cursor: pointer;
+}
+
+#slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--purple);
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(40, 35, 25, 0.3);
+  cursor: pointer;
+}
+
+.play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--purple);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(40, 35, 25, 0.2);
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  padding: 0;
+  position: relative;
+}
+
+.play-btn:hover {
+  background: #2D2675;
+  transform: scale(1.04);
+  box-shadow: 0 3px 8px rgba(40, 35, 25, 0.25);
+}
+
+.play-btn:active {
+  transform: scale(0.96);
+}
+
+.play-btn .icon-play,
+.play-btn .icon-pause {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  display: block;
+  transition: opacity 0.12s ease;
+}
+
+.play-btn[data-state="playing"] .icon-play { opacity: 0; }
+.play-btn[data-state="paused"] .icon-pause { opacity: 0; }
+
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.preset-row .label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: 6px;
+}
+
+.preset-btn {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 13px;
+  padding: 5px 11px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-btn:hover {
+  background: white;
+  border-color: var(--text-muted);
+  transform: translateY(-1px);
+}
+
+.preset-btn.tangent {
+  color: var(--coral);
+  border-color: #ECB89C;
+  background: var(--coral-bg);
+}
+.preset-btn.tangent:hover {
+  border-color: var(--coral);
+}
+
+.preset-btn.included {
+  color: var(--teal);
+  border-color: var(--teal-soft);
+  background: var(--teal-bg);
+}
+.preset-btn.included:hover {
+  border-color: var(--teal);
+}
+
+/* Status grid */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 580px) {
+  .status-grid { grid-template-columns: 1fr; }
+}
+
+.status-card {
+  padding: 13px 16px;
+}
+
+.status-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.status-value {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  transition: color 0.18s ease;
+  line-height: 1.3;
+}
+
+.status-value.included { color: var(--teal); }
+.status-value.excluded { color: var(--text-muted); }
+.status-value.tangent { color: var(--coral); }
+
+/* Conclusion */
+.conclusion-card {
+  background: linear-gradient(135deg, #F2EBD8 0%, #EDE5CD 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  padding: 22px 24px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.conclusion-card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.conclusion-card .label {
+  display: block;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.conclusion-card .answer {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(17px, 4vw, 21px);
+  font-weight: 500;
+  color: #2A2418;
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+}
+
+.conclusion-card .or {
+  display: inline-block;
+  margin: 0 8px;
+  color: var(--text-muted);
+  font-size: 0.78em;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* SVG element styling */
+.svg-text-sm {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 12px;
+  fill: var(--text-muted);
+}
+
+.svg-text-md {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.leader {
+  stroke: #C0BCB0;
+  stroke-width: 0.6;
+  stroke-dasharray: 3 2;
+  fill: none;
+}
+
+#dynamic-line {
+  transition: stroke 0.18s ease;
+}
+
+/* Attribution footer */
+.attribution {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  padding: 12px 8px;
+  line-height: 1.7;
+}
+
+.attribution a {
+  color: var(--purple);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border-strong);
+}
+
+.attribution a:hover {
+  border-bottom-color: var(--purple);
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Interactive Diagram</span>
+    <h1>放物線と直線の交点が1つになる a の範囲</h1>
+    <p class="subtitle">点 (−1/2, 0) を通る直線 y = a(2x+1) を回転させ、放物線 y = x²+1 (0 ≤ x &lt; 1) との交点が1つになる a を探る</p>
+  </header>
+
+  <section class="card chart-card">
+    <svg id="chart" viewBox="0 0 600 540" role="img" aria-label="放物線と直線の交点を示すインタラクティブ図">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <clipPath id="plot-clip">
+          <rect x="50" y="14" width="300" height="476"/>
+        </clipPath>
+      </defs>
+
+      <!-- 1. 答えに含まれる扇形領域 (2/3 < a ≤ 1) -->
+      <polygon points="96,467 343,138 343,14 317,14" fill="#1A6B4F" fill-opacity="0.12"/>
+
+      <!-- 2. Axes -->
+      <line x1="50" y1="467" x2="362" y2="467" stroke="#6E6B65" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <line x1="161" y1="500" x2="161" y2="8" stroke="#6E6B65" stroke-width="0.8" marker-end="url(#arrow)"/>
+      <text x="370" y="471" class="svg-text-sm">x</text>
+      <text x="155" y="14" class="svg-text-sm" text-anchor="end">y</text>
+      <text x="155" y="483" class="svg-text-sm" text-anchor="end">O</text>
+
+      <!-- 3. Y ticks -->
+      <line x1="161" y1="337" x2="157" y2="337" stroke="#6E6B65" stroke-width="0.8"/>
+      <text x="153" y="341" class="svg-text-sm" text-anchor="end">1</text>
+      <line x1="161" y1="207" x2="157" y2="207" stroke="#6E6B65" stroke-width="0.8"/>
+      <text x="153" y="211" class="svg-text-sm" text-anchor="end">2</text>
+      <line x1="161" y1="77" x2="157" y2="77" stroke="#6E6B65" stroke-width="0.8"/>
+      <text x="153" y="81" class="svg-text-sm" text-anchor="end">3</text>
+
+      <!-- 4. X ticks -->
+      <line x1="291" y1="467" x2="291" y2="471" stroke="#6E6B65" stroke-width="0.8"/>
+      <text x="291" y="483" class="svg-text-sm" text-anchor="middle">1</text>
+      <line x1="96" y1="467" x2="96" y2="471" stroke="#6E6B65" stroke-width="0.8"/>
+      <text x="96" y="483" class="svg-text-sm" text-anchor="middle">−1/2</text>
+
+      <!-- 5. Reference boundary lines (faded) -->
+      <g clip-path="url(#plot-clip)">
+        <!-- a = 1 (solid teal) -->
+        <line x1="96" y1="467" x2="317" y2="14" stroke="#1A6B4F" stroke-width="1.2" opacity="0.4"/>
+        <!-- a = 2/3 (dashed teal) -->
+        <line x1="96" y1="467" x2="343" y2="138" stroke="#1A6B4F" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.4"/>
+        <!-- Tangent (faded coral) -->
+        <line x1="96" y1="467" x2="343" y2="161" stroke="#C75230" stroke-width="1.2" opacity="0.4"/>
+      </g>
+
+      <!-- 6. Parabola y = x² + 1 -->
+      <path d="M 161 337 Q 226 337 291 207" fill="none" stroke="#3C3489" stroke-width="2.5"/>
+
+      <!-- 7. Endpoint dots -->
+      <circle cx="161" cy="337" r="4.2" fill="#3C3489"/>
+      <circle cx="291" cy="207" r="4.5" fill="white" stroke="#3C3489" stroke-width="2"/>
+
+      <!-- 8. DYNAMIC line for current a -->
+      <g clip-path="url(#plot-clip)">
+        <line id="dynamic-line" x1="96" y1="467" x2="291" y2="207" stroke="#3C3489" stroke-width="2.8" stroke-linecap="round"/>
+      </g>
+
+      <!-- 9. DYNAMIC intersection points -->
+      <g id="intersections"></g>
+
+      <!-- 10. Pivot -->
+      <circle cx="96" cy="467" r="4.2" fill="#1F1E1B"/>
+      <text x="92" y="488" class="svg-text-sm" text-anchor="end">(−1/2, 0)</text>
+
+      <!-- 11. Static labels with leaders -->
+      <line x1="293" y1="207" x2="378" y2="218" class="leader"/>
+      <text x="384" y="215" class="svg-text-md" fill="#3C3489">y = x² + 1</text>
+      <text x="384" y="231" class="svg-text-sm" fill="#3C3489">(0 ≤ x &lt; 1)</text>
+
+      <line x1="318" y1="20" x2="378" y2="42" class="leader"/>
+      <text x="384" y="42" class="svg-text-md" fill="#1A6B4F">a = 1</text>
+      <text x="384" y="58" class="svg-text-sm" fill="#1A6B4F">含む(実線)</text>
+
+      <line x1="345" y1="138" x2="378" y2="100" class="leader"/>
+      <text x="384" y="100" class="svg-text-md" fill="#1A6B4F">a = 2/3</text>
+      <text x="384" y="116" class="svg-text-sm" fill="#1A6B4F">含まない(破線)</text>
+
+      <line x1="345" y1="161" x2="378" y2="155" class="leader"/>
+      <text x="384" y="155" class="svg-text-md" fill="#C75230">a = (√5−1)/2</text>
+      <text x="384" y="171" class="svg-text-sm" fill="#C75230">接する場合</text>
+
+      <text x="384" y="290" class="svg-text-md" fill="#1A6B4F">緑の領域</text>
+      <text x="384" y="306" class="svg-text-sm" fill="#1A6B4F">2/3 &lt; a ≤ 1</text>
+      <text x="384" y="322" class="svg-text-sm" fill="#1A6B4F">で1点交差</text>
+    </svg>
+
+    <div class="legend">
+      <div class="legend-item" style="color:#3C3489"><span class="legend-mark" style="background:#3C3489"></span>放物線</div>
+      <div class="legend-item" style="color:#C75230"><span class="legend-mark" style="background:#C75230"></span>接する直線</div>
+      <div class="legend-item" style="color:#1A6B4F"><span class="legend-mark" style="background:#1A6B4F"></span>境界 (a=1)</div>
+      <div class="legend-item" style="color:#1A6B4F"><span class="legend-mark dashed"></span>境界 (a=2/3)</div>
+    </div>
+  </section>
+
+  <section class="card control-card">
+    <div class="slider-row">
+      <button id="play-btn" class="play-btn" data-state="playing" aria-label="一時停止">
+        <svg class="icon-pause" viewBox="0 0 14 14"><path d="M3 2h3v10H3zM8 2h3v10H8z" fill="white"/></svg>
+        <svg class="icon-play" viewBox="0 0 14 14"><path d="M3.5 2v10l8-5z" fill="white"/></svg>
+      </button>
+      <div class="slider-label">a = <strong id="a-display">0.850</strong></div>
+      <input type="range" id="slider" min="0" max="1.3" step="0.001" value="0.85" aria-label="aの値">
+    </div>
+
+    <div class="preset-row">
+      <span class="label">主な値:</span>
+      <button class="preset-btn" data-a="0.4">0.4</button>
+      <button class="preset-btn tangent" data-a="0.6180339887498949">(√5−1)/2</button>
+      <button class="preset-btn" data-a="0.65">0.65</button>
+      <button class="preset-btn" data-a="0.6666666666666667">2/3</button>
+      <button class="preset-btn included" data-a="0.85">0.85</button>
+      <button class="preset-btn included" data-a="1">1</button>
+      <button class="preset-btn" data-a="1.2">1.2</button>
+    </div>
+  </section>
+
+  <section class="status-grid">
+    <div class="card status-card">
+      <div class="status-label">交点の数</div>
+      <div class="status-value" id="count-display">1 個</div>
+    </div>
+    <div class="card status-card">
+      <div class="status-label">直線の状態</div>
+      <div class="status-value" id="case-display">範囲内</div>
+    </div>
+    <div class="card status-card">
+      <div class="status-label">答えへの該当</div>
+      <div class="status-value" id="answer-display">含まれる</div>
+    </div>
+  </section>
+
+  <section class="conclusion-card">
+    <span class="label">結論</span>
+    <div class="answer">
+      ∴&nbsp; a = (√5−1)/2 <span class="or">または</span> 2/3 &lt; a ≤ 1
+    </div>
+  </section>
+
+  <footer class="attribution">
+    オリジナル artifact: <a href="https://claude.ai/public/artifacts/162593fe-a53a-4650-a0ec-6b8af4b788df" target="_blank" rel="noopener">IT navi (@itnavi2022)</a> ／
+    <a href="https://x.com/itnavi2022/status/2049642458515230720" target="_blank" rel="noopener">元ツイート</a><br>
+    Remix 配置: 仲啓輔 (<a href="https://x.com/minimalistneko" target="_blank" rel="noopener">@minimalistneko</a>) ・ 2026-04-30
+  </footer>
+</main>
+
+<script>
+const slider = document.getElementById('slider');
+const aDisplay = document.getElementById('a-display');
+const dynamicLine = document.getElementById('dynamic-line');
+const intersectionsGroup = document.getElementById('intersections');
+const countDisplay = document.getElementById('count-display');
+const caseDisplay = document.getElementById('case-display');
+const answerDisplay = document.getElementById('answer-display');
+
+// Math/screen mapping (1:1 aspect ratio)
+const X_MIN = -0.7, X_MAX = 1.4;
+const Y_MIN = -0.3, Y_MAX = 3.4;
+const PLOT_LEFT = 70, PLOT_TOP = 25;
+const SCALE = 130;
+
+const toScreenX = x => PLOT_LEFT + (x - X_MIN) * SCALE;
+const toScreenY = y => PLOT_TOP + (Y_MAX - y) * SCALE;
+
+const PIVOT_SX = toScreenX(-0.5);
+const PIVOT_SY = toScreenY(0);
+
+// Compute line endpoint going right from pivot, clipped to plot area
+function getLineEnd(a) {
+  if (a === 0) return { x: X_MAX, y: 0 };
+
+  const yAtRight = a * (2 * X_MAX + 1);
+
+  if (a > 0) {
+    if (yAtRight <= Y_MAX) return { x: X_MAX, y: yAtRight };
+    return { x: (Y_MAX / a - 1) / 2, y: Y_MAX };
+  } else {
+    if (yAtRight >= Y_MIN) return { x: X_MAX, y: yAtRight };
+    return { x: (Y_MIN / a - 1) / 2, y: Y_MIN };
+  }
+}
+
+function getIntersections(a) {
+  // x² + 1 = a(2x + 1) → x² - 2ax + (1 - a) = 0
+  const B = -2 * a;
+  const C = 1 - a;
+  const disc = B*B - 4*C;
+
+  if (disc < -1e-12) return [];
+
+  const sq = Math.sqrt(Math.max(0, disc));
+  const x1 = (-B - sq) / 2;
+  const x2 = (-B + sq) / 2;
+  const isTangent = Math.abs(disc) < 1e-6;
+
+  const result = [];
+  if (x1 >= -1e-9 && x1 < 1 - 1e-9) {
+    const xc = Math.max(0, x1);
+    result.push({ x: xc, y: xc*xc + 1, isTangent });
+  }
+  if (!isTangent && x2 >= -1e-9 && x2 < 1 - 1e-9) {
+    result.push({ x: x2, y: x2*x2 + 1, isTangent: false });
+  }
+  return result;
+}
+
+const A_TANGENT = (Math.sqrt(5) - 1) / 2;
+const TWO_THIRDS = 2/3;
+
+function classify(a) {
+  const eps = 5e-3;
+  const intersections = getIntersections(a);
+  const count = intersections.length;
+
+  // Tangent (single special value)
+  if (Math.abs(a - A_TANGENT) < eps) {
+    return { caseText: '接線(放物線に接する)', answer: '含まれる', cls: 'tangent', count };
+  }
+
+  // Boundary a = 2/3 (excluded)
+  if (Math.abs(a - TWO_THIRDS) < eps) {
+    return { caseText: '境界 a = 2/3', answer: '含まない', cls: 'excluded', count };
+  }
+
+  // Boundary a = 1 (included)
+  if (Math.abs(a - 1) < eps) {
+    return { caseText: '境界 a = 1', answer: '含まれる', cls: 'included', count };
+  }
+
+  // 2/3 < a < 1 (included)
+  if (a > TWO_THIRDS + eps && a < 1 - eps) {
+    return { caseText: '範囲内 (1点交差)', answer: '含まれる', cls: 'included', count };
+  }
+
+  // Other cases
+  if (count === 0) {
+    return { caseText: '交点なし', answer: '含まない', cls: 'excluded', count };
+  }
+  if (count === 2) {
+    return { caseText: '2点で交差', answer: '含まない', cls: 'excluded', count };
+  }
+  return { caseText: '範囲外', answer: '含まない', cls: 'excluded', count };
+}
+
+function update(a) {
+  aDisplay.textContent = a.toFixed(3);
+
+  // Dynamic line
+  const end = getLineEnd(a);
+  dynamicLine.setAttribute('x1', PIVOT_SX);
+  dynamicLine.setAttribute('y1', PIVOT_SY);
+  dynamicLine.setAttribute('x2', toScreenX(end.x));
+  dynamicLine.setAttribute('y2', toScreenY(end.y));
+
+  // Classification
+  const c = classify(a);
+
+  // Line color
+  let lineColor = '#888780';
+  if (c.cls === 'tangent') lineColor = '#C75230';
+  else if (c.cls === 'included') lineColor = '#1A6B4F';
+
+  dynamicLine.setAttribute('stroke', lineColor);
+
+  // Intersection dots
+  intersectionsGroup.innerHTML = '';
+  for (const pt of getIntersections(a)) {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', toScreenX(pt.x));
+    circle.setAttribute('cy', toScreenY(pt.y));
+    circle.setAttribute('r', pt.isTangent ? 6.5 : 5.5);
+    circle.setAttribute('fill', pt.isTangent ? '#C75230' : '#B07012');
+    circle.setAttribute('stroke', 'white');
+    circle.setAttribute('stroke-width', 1.8);
+    intersectionsGroup.appendChild(circle);
+  }
+
+  // Status
+  countDisplay.textContent = c.count + ' 個';
+  countDisplay.className = 'status-value ' + c.cls;
+  caseDisplay.textContent = c.caseText;
+  caseDisplay.className = 'status-value ' + c.cls;
+  answerDisplay.textContent = c.answer;
+  answerDisplay.className = 'status-value ' + c.cls;
+}
+
+// Animation state
+const playBtn = document.getElementById('play-btn');
+let animationId = null;
+let direction = 1;
+const STEP = 0.0045;
+const A_MIN = 0;
+const A_MAX = 1.3;
+
+function tick() {
+  let a = parseFloat(slider.value);
+  a += STEP * direction;
+  if (a >= A_MAX) { a = A_MAX; direction = -1; }
+  else if (a <= A_MIN) { a = A_MIN; direction = 1; }
+  slider.value = a;
+  update(a);
+  animationId = requestAnimationFrame(tick);
+}
+
+function play() {
+  if (animationId) return;
+  playBtn.dataset.state = 'playing';
+  playBtn.setAttribute('aria-label', '一時停止');
+  animationId = requestAnimationFrame(tick);
+}
+
+function pause() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+  playBtn.dataset.state = 'paused';
+  playBtn.setAttribute('aria-label', '再生');
+}
+
+playBtn.addEventListener('click', () => {
+  animationId ? pause() : play();
+});
+
+slider.addEventListener('input', e => {
+  pause();
+  update(parseFloat(e.target.value));
+});
+
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    pause();
+    const a = parseFloat(btn.dataset.a);
+    slider.value = a;
+    update(a);
+  });
+});
+
+// Initial render and auto-start animation
+update(parseFloat(slider.value));
+play();
+</script>
+</body>
+</html>
