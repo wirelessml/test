@@ -145,8 +145,32 @@
 ## ネットワーク
 
 - **デュアル LAN 構成**（4/24 背面写真で確認、2x RJ45 ポート）
-- Tailscale: 未導入（今後設定予定）
-- リモート操作: SSH 未設定
+- ローカル IP (DHCP): **192.168.2.187** (2026-05-01 時点、過去 192.168.2.174 → 187 と変動あり、DHCP リース更新で変わる)
+- MAC アドレス: `D4:25:8B:30:F5:D4` (Intel Wireless-AC 8265、Wi-Fi 5 5GHz、約 60/60 Mbps)
+- インターフェース名: `irukasensei` (= いるか先生、ローマ字命名のカスタム alias)
+- Wi-Fi: YKSmas318 (コワーキング MASU-p)
+- ホスト名 (Windows): **DESKTOP-ATQ36KS** (デフォルト命名、変更未実施)
+- Windows ユーザー名: **wirel** (Administrators グループ所属)
+- Tailscale: 未導入（今後設定予定、IP 固定化と LAN 外からのアクセスのため）
+- リモート操作: **SSH 設定完了 (2026-05-01 06:35 JST)**
+
+### SSH 接続情報
+
+- **接続コマンド (M1 Mac から)**: `ssh shun-sensei` (~/.ssh/config に alias 設定済)
+- **直接コマンド**: `ssh wirel@192.168.2.187`
+- 認証: 公開鍵 (ed25519、M1 の `~/.ssh/id_ed25519` を使用、公開鍵 `yuika@macbook-air-claude-desktop`)
+- パスワード認証: 有効 (フォールバック、パスワードは別管理)
+- sshd: Running / Automatic、OpenSSH for Windows 9.5
+- ファイアウォール: OpenSSH-Server-In-TCP / Profile=Any (重要: 初期設定では Private only で外部から到達不可だったため Any に変更済)
+- 公開鍵保管場所: `C:\ProgramData\ssh\administrators_authorized_keys` (Windows OpenSSH の Match Group administrators 仕様により、~/.ssh/authorized_keys ではなくこちら)
+- 注意: DHCP で IP が変動するため、固定 IP 化 or Tailscale 導入 or mDNS (`shun-sensei.local`) 設定が将来必要
+
+### SSH 経由でのデフォルトシェル
+
+- デフォルト: `cmd.exe` (セミコロン `;` でコマンド連結不可、`&` を使う)
+- 推奨実行方式: `ssh shun-sensei 'powershell -NoProfile -Command "..."'`
+- 文字化け対策: `chcp 65001` で UTF-8 化 or PowerShell 経由
+- デフォルトシェルを PowerShell に変更したい場合は `C:\ProgramData\ssh\sshd_config` の `Subsystem` セクション or レジストリ `HKLM:\SOFTWARE\OpenSSH\DefaultShell` を設定
 
 ## ケース・光学ドライブ（2026-04-24 写真確認）
 
