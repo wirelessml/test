@@ -55,7 +55,7 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
-- **2026-04-30**: GC313Pro 物理セットアップ完了 (USB-C 2 本のみで Mac→GC313Pro→Windows しゅん先生 PC、HDMI 不要) + UVC ビューワ自作不要が判明 (Windows 標準カメラアプリで完結) + YouTube Live 配信停止しローカル表示へ切替（@docs/journal/2026-04-30.md）
+- **2026-04-30**: GC313Pro 物理セットアップ完了 (USB-C 2 本のみで Mac→GC313Pro→Windows しゅん先生 PC、HDMI 不要) + UVC ビューワ自作不要が判明 (Windows 標準カメラアプリで完結) + YouTube Live 配信停止しローカル表示へ切替 + 午前に Remote Control 失敗の RCA → claude-obsidian v1.4.3 の SessionStart prompt hook 削除 (Claude Code 2.1.123 の `ToolUseContext is required for prompt hooks` 内部バグ回避、機能損失ゼロ)（@docs/journal/2026-04-30.md）
 - **2026-04-29**: 勝間 voice stack 物理セットアップ完了 (V4→V5、SuperWhisper Pro Lifetime + Scribe) **+ 午後しゅん先生 PC を Acer FA100 NVMe に移行 → クローン後 0xc0000001/0x7B で 3 時間死闘 → `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s** + Substack 記事ドラフト作成 + Notes 投稿（@docs/journal/2026-04-29.md）
 - **2026-04-23**: Kioxia 整備品自動監視実装（LaunchAgent 毎日 08:17 JST）+ Intel X25-M G1 80GB 発掘 + しぶ 4/22 動画分析 → りくと編集チーム統括ディレクター昇格判明（72 時間ジャーニー更新）+ pirosi80 フィッシング 3 通目（@docs/journal/2026-04-23.md）
 - **2026-04-22**: しゅん先生 PC バックアップ実装 + Plextor SSD 死亡 + Seagate クローン救出劇 + SSD 市場高騰調査 + claude-md-diet スキル作成 + CLAUDE.md リファクタ（@docs/journal/2026-04-22.md）
