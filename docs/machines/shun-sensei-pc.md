@@ -10,7 +10,8 @@
 
 **コワーキング据え置き新メイン作業機**（4/22 16:34〜）
 - 配置: コワーキングスペース据え置き
-- 主用途: Windows メイン作業機、OBS・画像処理等の重い作業向き（※ ただし新 SSD 換装まで SMR HDD 起動のため重い作業は保留）
+- 主用途: Windows メイン作業機、OBS・画像処理等の重い作業向き（4/29 NVMe 移行完了で重作業も解禁、SMR HDD 制約は解消）
+- **代替不可能な専用機能**: **4K UHD Blu-ray 再生** — 家庭内 (M1 MacBook Air / iPhone 15 Pro / iPad Pro 9.7 / MASU-P55) で唯一対応。Intel SGX (第 7-10 世代 Core 限定) + UHD Friendly Drive (Pioneer BDR-211JBK) + UHD 対応 iGPU + HDCP 2.2 のスタックが揃った最後の機。**Ryzen / Intel 第 11 世代以降では SGX 削除のため永久に不可**、Apple Silicon は macOS 自体が UHD BD 未対応で構造的に不可 (詳細はケース・光学ドライブセクション参照)
 - 所属: 個人所有（旧: 伊丹市はりきゅう整体しゅん業務用）
 - 旧名/由来: はりきゅう整体しゅん（伊丹市）の業務用 PC だったものを譲渡
 
@@ -161,6 +162,13 @@
   - 電源: 12V 2.2A + 5V 1.4A
   - 当時定価 ¥25,000-30,000、2026 年現在中古 ¥15,000-20,000 相当
   - **現時点で代替入手困難な希少機材**
+  - **4K UHD BD 再生の動作要件 (このマシンで全要件が揃った希少構成)**:
+    - CPU: i7-8700K (第 8 世代 Coffee Lake、**Intel SGX 対応**) ✓
+    - iGPU: UHD Graphics 630 (HDCP 2.2 + UHD BD ハードウェアデコード対応) ✓
+    - 光学ドライブ: Pioneer BDR-211JBK (UHD Friendly Drive) ✓
+    - 再生ソフト: PowerDVD Ultra 系 (要確認、未確認なら CyberLink から要入手)
+    - モニタ: LG 4K (HDCP 2.2 対応想定、要型番確認)
+  - **CPU 換装の天井制約**: 4K UHD BD 機能を維持できる CPU は **i9-9900K まで** (第 10 世代 Comet Lake はマザボ LGA1151 v2 非対応、**第 11 世代 Rocket Lake 以降は Intel が SGX を削除したため 4K UHD BD 再生不可**)。**Ryzen への乗り換えは AMD が SGX 非対応のため永久にこの機能を失う** ← Ryzen 移行検討時の決定的な NG 根拠
 - **PSU**: **FSP 500W**（型番 FSP500-50 EKEN 系列、80 PLUS 認証、Active PFC、Whisper Killer 静音設計）
   - +12V 38A (456W) 、+3.3V 24A、+5V 38A
   - **トップマウント**（旧型レイアウト、2017-2018 年の廉価〜中級 mATX ケースでは標準）
@@ -200,6 +208,7 @@
 
 ## 変更履歴
 
+- **2026-04-30 12:20**: 4K UHD BD 再生機能を「代替不可能な専用機能」として役割セクションに昇格、CPU 換装天井 (i9-9900K まで) と Ryzen 移行不可の根拠を光学ドライブ項目に追記 (将来の機材判断ミス防止 memo、ユーザー指摘ベース)
 - **2026-04-26 朝**: Seagate D: 物理取り外し（B 案: 外付け USB-SATA ケース移植）、ラベル現物撮影で全スペック記録（PSID 含む、@docs/machines/shun-sensei-pc.md の現物ラベル確認セクション参照）
 - **2026-04-25**: SanDisk Extreme V2 USB-C SSD 2TB へ OS 移行完了、Windows 11 起動成功（13:18、CSM 無効 + XHCI Hand-off 有効）、SanDisk Dashboard 5.2.2.3 でヘルスモニタリング体制確立（詳細: @docs/journal/2026-04-25.md）
 - **2026-04-29 16:30**: 🎉 **Acer FA100 NVMe 移行完了** — Hasleo クローン → 0xc0000001 → bcdboot 確認 → chkdsk bitmap 修復 → 0x7B → `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s で公称超え（詳細: @docs/journal/2026-04-29.md）
