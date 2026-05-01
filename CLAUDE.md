@@ -23,7 +23,7 @@
   - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
   - [x] ~~4/30 GC313Pro 物理セットアップ + UVC ビューワ実装~~ 完了（USB-C 2 本のみで Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ確立、HDMI 不要。Python + OpenCV 自作ビューワは Windows 標準カメラアプリで代替可能と判明し不要に。詳細 @docs/journal/2026-04-30.md）
   - [ ] **Joy-Con 2 Windows マウス化ドライバ開発**（しゅん先生 PC 上、C# / .NET 8 / WinRT BLE、maruta/joycon2-usb-presenter の C コードを参考に dongle 不要の software-only 実装。Switch 2 Joy-Con BLE プロトコルがまだ pure software で対応されていない領域、コミュニティ初の Windows software 化を狙う。Substack 連載「Switch 2 Joy-Con を Windows でマウス化する 1 週間」素材化候補。詳細 @docs/projects/joycon2-windows-driver.md）
-  - [ ] **sniffnet 1.5.0 (Rust + iced GUI ネットワークモニター) を実機検証**（M1 Mac に brew で導入済 `/opt/homebrew/bin/sniffnet`、38.9MB。初回起動は管理者パスワード要、libpcap 経由で `en0` の raw packet capture。やりたいこと: (1) コワーキング Wi-Fi YKSmas318 のトラフィック観察、(2) Tailscale Funnel の通信パターン可視化、(3) しぶ系チャットボット稼働中のコネクション量計測、(4) Substack 「Mac で軽量ネットワーク監視を 1 分でセットアップ」記事化候補、(5) Joy-Con 2 開発時の BLE 補助としては不適なので PacketLogger に切替）
+  - [x] ~~sniffnet 1.5.0 実機検証~~ 環境構築完了（5/2 朝、Wireshark 4.6.5 cask 同時導入で ChmodBPF helper / access_bpf グループ / `/dev/bpf*` 権限解放、sudo なしで sniffnet・tshark・Wireshark.app・dumpcap 全部動く。tshark でテストキャプチャ成功、Anthropic API 通信見えた。実観察ネタ (YKSmas318 / Tailscale Funnel / しぶチャット / Substack 軽量監視記事) は今後随時）
 
 ## 機材（詳細は @docs/machines/）
 
