@@ -22,7 +22,6 @@
   - [ ] 旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）
   - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
   - [x] ~~4/30 GC313Pro 物理セットアップ + UVC ビューワ実装~~ 完了（USB-C 2 本のみで Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ確立、HDMI 不要。Python + OpenCV 自作ビューワは Windows 標準カメラアプリで代替可能と判明し不要に。詳細 @docs/journal/2026-04-30.md）
-  - [ ] **5/1 リセット後 Substack 本記事 publish**（Anthropic 4/28 Fusion connector 検証、ドラフト完成済 `docs/substack/2026-04-30-anthropic-fusion-connector-day2-validation.md` 3,700 字、SEO ピーク 4/28-5/10 中盤狙い）
   - [ ] **Joy-Con 2 Windows マウス化ドライバ開発**（しゅん先生 PC 上、C# / .NET 8 / WinRT BLE、maruta/joycon2-usb-presenter の C コードを参考に dongle 不要の software-only 実装。Switch 2 Joy-Con BLE プロトコルがまだ pure software で対応されていない領域、コミュニティ初の Windows software 化を狙う。Substack 連載「Switch 2 Joy-Con を Windows でマウス化する 1 週間」素材化候補。詳細 @docs/projects/joycon2-windows-driver.md）
   - [ ] **sniffnet 1.5.0 (Rust + iced GUI ネットワークモニター) を実機検証**（M1 Mac に brew で導入済 `/opt/homebrew/bin/sniffnet`、38.9MB。初回起動は管理者パスワード要、libpcap 経由で `en0` の raw packet capture。やりたいこと: (1) コワーキング Wi-Fi YKSmas318 のトラフィック観察、(2) Tailscale Funnel の通信パターン可視化、(3) しぶ系チャットボット稼働中のコネクション量計測、(4) Substack 「Mac で軽量ネットワーク監視を 1 分でセットアップ」記事化候補、(5) Joy-Con 2 開発時の BLE 補助としては不適なので PacketLogger に切替）
 
