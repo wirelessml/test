@@ -18,7 +18,7 @@
 - **今週の優先 TODO**:
   - [x] ~~SSD 価格監視~~ 完了（4/27 Acer FA100 購入で危機脱出、ルーチン継続は不要）
   - [x] ~~しゅん先生 PC を SMR HDD で延命運用~~ 完了（4/29 NVMe 移行で延命終了）
-  - [ ] 4/29 NVMe クローン死闘記事の Substack 本編 publish（4/30 朝 or 夕方、Notes 反応見て）
+  - [x] ~~4/29 NVMe クローン死闘記事の Substack 本編 publish~~ ボツ（5/1 夜決定、Notes だけで完結、本編は書かない）
   - [ ] 旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）
   - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
   - [x] ~~4/30 GC313Pro 物理セットアップ + UVC ビューワ実装~~ 完了（USB-C 2 本のみで Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ確立、HDMI 不要。Python + OpenCV 自作ビューワは Windows 標準カメラアプリで代替可能と判明し不要に。詳細 @docs/journal/2026-04-30.md）
