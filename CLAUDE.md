@@ -19,10 +19,10 @@
   - [x] ~~SSD 価格監視~~ 完了（4/27 Acer FA100 購入で危機脱出、ルーチン継続は不要）
   - [x] ~~しゅん先生 PC を SMR HDD で延命運用~~ 完了（4/29 NVMe 移行で延命終了）
   - [x] ~~4/29 NVMe クローン死闘記事の Substack 本編 publish~~ ボツ（5/1 夜決定、Notes だけで完結、本編は書かない）
-  - [ ] 旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）
+  - [x] ~~旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）~~ ボツ（5/2 朝決定、しばらく現状維持）
   - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
   - [x] ~~4/30 GC313Pro 物理セットアップ + UVC ビューワ実装~~ 完了（USB-C 2 本のみで Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ確立、HDMI 不要。Python + OpenCV 自作ビューワは Windows 標準カメラアプリで代替可能と判明し不要に。詳細 @docs/journal/2026-04-30.md）
-  - [ ] **Joy-Con 2 Windows マウス化ドライバ開発**（しゅん先生 PC 上、C# / .NET 8 / WinRT BLE、maruta/joycon2-usb-presenter の C コードを参考に dongle 不要の software-only 実装。Switch 2 Joy-Con BLE プロトコルがまだ pure software で対応されていない領域、コミュニティ初の Windows software 化を狙う。Substack 連載「Switch 2 Joy-Con を Windows でマウス化する 1 週間」素材化候補。詳細 @docs/projects/joycon2-windows-driver.md）
+  - [x] ~~**Joy-Con 2 Windows マウス化ドライバ開発**~~ ボツ（5/2 朝決定、優先度低下、計画詳細は @docs/projects/joycon2-windows-driver.md に保管）
   - [x] ~~sniffnet 1.5.0 実機検証~~ 環境構築完了（5/2 朝、Wireshark 4.6.5 cask 同時導入で ChmodBPF helper / access_bpf グループ / `/dev/bpf*` 権限解放、sudo なしで sniffnet・tshark・Wireshark.app・dumpcap 全部動く。tshark でテストキャプチャ成功、Anthropic API 通信見えた。実観察ネタ (YKSmas318 / Tailscale Funnel / しぶチャット / Substack 軽量監視記事) は今後随時）
 
 ## 機材（詳細は @docs/machines/）
