@@ -14,10 +14,13 @@
 **合計 ≒ 2.0–2.4 GB**（AI ツール関連）、 残り ≒ 5.5–6.0 GB をシステム・その他用途へ割当
 
 **必要時のみ起動（常駐させない）:**
-- Codex（Free 週枠制限タイト、Claude で代替）
+- Codex（Free 週枠制限タイト、Claude で代替、しゅん先生 PC で並走推奨）
 - Manus（タスク実行時のみ起動、普段は閉じる）
 - OBS / ブラウザ多タブ / 動画系プロセス
 - QEMU Windows XP VM
+- **agent-browser / Playwright** （ブラウザ自動化、~1 GB の chrome helper 群、終了時に supervisor まで完全停止: `pkill -9 -f "agent-browser-darwin"; pkill -9 -f "Chrome for Testing"`、詳細 @docs/rules/mac-process-lessons.md）
+- **sniffnet / Wireshark GUI** （pcap キャプチャ計測時のみ、観察セッション終わったら即 kill）
+- **VSCode / Cursor** （800 MB-1.5 GB、M1 8GB では現状 swap 確実、しゅん先生 PC で動かす）
 
 **メモリ圧迫時の対処順:**
 1. Chrome など重いブラウザを閉じる
