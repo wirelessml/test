@@ -151,7 +151,7 @@
 - Wi-Fi: YKSmas318 (コワーキング MASU-p)
 - ホスト名 (Windows): **DESKTOP-ATQ36KS** (デフォルト命名、変更未実施)
 - Windows ユーザー名: **wirel** (Administrators グループ所属)
-- Tailscale: 未導入（今後設定予定、IP 固定化と LAN 外からのアクセスのため）
+- **Tailscale: 不採用（5/2 朝確定）**。LAN 経由 SSH のみで運用。LAN 外（自宅・別コワーキング等）から接続したい場合は M1 を中継して Mac→Tailscale→（必要なら）別経路、しゅん先生 PC は MASU-p の同 Wi-Fi 内でのみ到達可能。masu-p55 (HP ProBook) は Tailscale 100.125.21.47 で参加してるので、必要なら masu-p55 経由 SSH ホップで間接到達は可能
 - リモート操作: **SSH 設定完了 (2026-05-01 06:35 JST)**
 
 ### SSH 接続情報
@@ -163,7 +163,7 @@
 - sshd: Running / Automatic、OpenSSH for Windows 9.5
 - ファイアウォール: OpenSSH-Server-In-TCP / Profile=Any (重要: 初期設定では Private only で外部から到達不可だったため Any に変更済)
 - 公開鍵保管場所: `C:\ProgramData\ssh\administrators_authorized_keys` (Windows OpenSSH の Match Group administrators 仕様により、~/.ssh/authorized_keys ではなくこちら)
-- 注意: DHCP で IP が変動するため、固定 IP 化 or Tailscale 導入 or mDNS (`shun-sensei.local`) 設定が将来必要
+- 注意: DHCP で IP 変動あり（5/1 → 5/2 朝で変わった実績）、**Tailscale 不採用方針なので mDNS 解決一本**。mDNS hostname: `DESKTOP-ATQ36KS.local`（`dscacheutil -q host -a name DESKTOP-ATQ36KS.local` で IP 取得）。固定 IP 化はルーター側 DHCP reservation で別途対応可
 
 ### SSH 経由でのデフォルトシェル
 

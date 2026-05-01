@@ -95,7 +95,7 @@
 
 - **SSD 価格監視**（毎週月曜、しゅん先生 PC 用 NVMe 買い替え待ち）: @docs/routines/ssd-price-monitor.md
 - **Claude Code セッションスケジュール**（9/14/19/0/5 時 JST、毎日）: @docs/routines/session-schedule.md
-- **X 情報収集ルーチン**（各セッション毎）: @docs/x-daily-briefing.md
+- ~~**X 情報収集ルーチン**（各セッション毎）: @docs/x-daily-briefing.md~~ **廃止（5/2 朝決定）**。各セッションで X 巡回するルーチンは終了、必要時に都度判断して `twitter -c feed` 実行
 - **しぶ Instagram 監視**（毎時 17 分）: @docs/routines/instagram-watch.md
 - **MASU-p 監視**（毎日 18:12 JST、LaunchAgent）: @docs/routines/masu-p-watch.md
 - **リモートコントロール状態報告**（毎時 33 分）: @docs/routines/remote-control-report.md
