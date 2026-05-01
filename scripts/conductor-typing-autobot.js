@@ -38,6 +38,7 @@
     "ぱ": "pa", "ぴ": "pi", "ぷ": "pu", "ぺ": "pe", "ぽ": "po",
   };
   const YOON = {
+    // standard yo-on with small ya/yu/yo
     "きゃ": "kya", "きゅ": "kyu", "きょ": "kyo",
     "しゃ": "sha", "しゅ": "shu", "しょ": "sho",
     "ちゃ": "cha", "ちゅ": "chu", "ちょ": "cho",
@@ -47,24 +48,83 @@
     "りゃ": "rya", "りゅ": "ryu", "りょ": "ryo",
     "ぎゃ": "gya", "ぎゅ": "gyu", "ぎょ": "gyo",
     "じゃ": "ja", "じゅ": "ju", "じょ": "jo",
+    "ぢゃ": "dya", "ぢゅ": "dyu", "ぢょ": "dyo",
     "びゃ": "bya", "びゅ": "byu", "びょ": "byo",
     "ぴゃ": "pya", "ぴゅ": "pyu", "ぴょ": "pyo",
+    // foreign/katakana-style yo-on with small a/i/e/o (crucial for 中級 gadget terms)
+    "じぇ": "je", "しぇ": "she", "ちぇ": "che",
+    "つぁ": "tsa", "つぃ": "tsi", "つぇ": "tse", "つぉ": "tso",
+    "てぃ": "thi", "でぃ": "dhi",
+    "てゅ": "thu", "でゅ": "dhu",
+    "とぅ": "twu", "どぅ": "dwu",
+    "ふぁ": "fa", "ふぃ": "fi", "ふぇ": "fe", "ふぉ": "fo", "ふゅ": "fyu",
+    "ゔぁ": "va", "ゔぃ": "vi", "ゔぇ": "ve", "ゔぉ": "vo",
+    "うぃ": "wi", "うぇ": "we", "うぉ": "who",
+    "いぇ": "ye",
+    "くぁ": "qa", "くぃ": "qi", "くぇ": "qe", "くぉ": "qo",
+    "ぐぁ": "gwa",
+    "すぃ": "swi", "ずぃ": "zwi",
+    // small kana (when standalone, use x-prefix wapuro convention)
+  };
+  const SMALL_FALLBACK = {
+    "ぁ": "xa", "ぃ": "xi", "ぅ": "xu", "ぇ": "xe", "ぉ": "xo",
+    "ゃ": "xya", "ゅ": "xyu", "ょ": "xyo", "っ": "xtu", "ゎ": "xwa",
+  };
+  const KATA = {
+    // Katakana fallback (mirror of HIRA + YOON, in case prompts use カタカナ)
+    "ア": "a", "イ": "i", "ウ": "u", "エ": "e", "オ": "o",
+    "カ": "ka", "キ": "ki", "ク": "ku", "ケ": "ke", "コ": "ko",
+    "サ": "sa", "シ": "shi", "ス": "su", "セ": "se", "ソ": "so",
+    "タ": "ta", "チ": "chi", "ツ": "tsu", "テ": "te", "ト": "to",
+    "ナ": "na", "ニ": "ni", "ヌ": "nu", "ネ": "ne", "ノ": "no",
+    "ハ": "ha", "ヒ": "hi", "フ": "fu", "ヘ": "he", "ホ": "ho",
+    "マ": "ma", "ミ": "mi", "ム": "mu", "メ": "me", "モ": "mo",
+    "ヤ": "ya", "ユ": "yu", "ヨ": "yo",
+    "ラ": "ra", "リ": "ri", "ル": "ru", "レ": "re", "ロ": "ro",
+    "ワ": "wa", "ヲ": "wo", "ン": "nn",
+    "ガ": "ga", "ギ": "gi", "グ": "gu", "ゲ": "ge", "ゴ": "go",
+    "ザ": "za", "ジ": "ji", "ズ": "zu", "ゼ": "ze", "ゾ": "zo",
+    "ダ": "da", "ヂ": "di", "ヅ": "du", "デ": "de", "ド": "do",
+    "バ": "ba", "ビ": "bi", "ブ": "bu", "ベ": "be", "ボ": "bo",
+    "パ": "pa", "ピ": "pi", "プ": "pu", "ペ": "pe", "ポ": "po",
+    "ヴ": "vu",
   };
 
   function toRomaji(s) {
     let out = "", i = 0;
     while (i < s.length) {
-      // sokuon: small tsu doubles next consonant
+      // sokuon: small tsu doubles next consonant (handles both hira ya-row and 2-char yo-on)
       if (s[i] === "っ" && i + 1 < s.length) {
-        const r = YOON[s.substr(i + 1, 2)] || HIRA[s[i + 1]];
+        const r = YOON[s.substr(i + 1, 2)] || HIRA[s[i + 1]] || KATA[s[i + 1]];
         if (r) { out += r[0]; i++; continue; }
       }
-      // yo-on: digraph with small ya/yu/yo
+      if (s[i] === "ッ" && i + 1 < s.length) {
+        const r = YOON[s.substr(i + 1, 2)] || KATA[s[i + 1]] || HIRA[s[i + 1]];
+        if (r) { out += r[0]; i++; continue; }
+      }
+      // yo-on: digraph (small ya/yu/yo or small a/i/e/o)
       if (i + 1 < s.length && YOON[s.substr(i, 2)]) {
         out += YOON[s.substr(i, 2)]; i += 2; continue;
       }
       if (HIRA[s[i]]) { out += HIRA[s[i]]; i++; continue; }
+      if (KATA[s[i]]) { out += KATA[s[i]]; i++; continue; }
       if (s[i] === "ー") { out += "-"; i++; continue; }
+      // Japanese punctuation → ASCII keys
+      if (s[i] === "、") { out += ","; i++; continue; }
+      if (s[i] === "。") { out += "."; i++; continue; }
+      if (s[i] === "「") { out += "["; i++; continue; }
+      if (s[i] === "」") { out += "]"; i++; continue; }
+      if (s[i] === "！") { out += "!"; i++; continue; }
+      if (s[i] === "？") { out += "?"; i++; continue; }
+      if (s[i] === "・") { out += "/"; i++; continue; }
+      if (s[i] === "　") { out += " "; i++; continue; }
+      // Standalone small kana: x-prefix wapuro fallback (rarely needed but safe)
+      if (SMALL_FALLBACK[s[i]]) { out += SMALL_FALLBACK[s[i]]; i++; continue; }
+      // Pass through digits, ASCII letters, punctuation directly
+      const cc = s.charCodeAt(i);
+      if ((cc >= 0x30 && cc <= 0x39) || (cc >= 0x41 && cc <= 0x5A) || (cc >= 0x61 && cc <= 0x7A)) {
+        out += s[i]; i++; continue;
+      }
       i++;
     }
     return out;
@@ -92,14 +152,54 @@
 
   let lastTyped = "";
   window.__autoTyperLog = [];
+  window.__autoTyperEnded = null;
+  const startTime = Date.now();
+  // Cap criteria (whichever fires first):
+  //   - bestStreak >= 300 (max +50% bonus locked) AND completed >= 50
+  //   - elapsed wall-clock >= 90 seconds
+  // Then: clearInterval + click 中断 → 中断する (skip result screen for time efficiency)
+  const STREAK_CAP = 300;
+  const DONE_CAP = 30;
+  const TIMEOUT_SEC = 90;
+
   window.__autoTyper = setInterval(() => {
+    // Type the next prompt if changed
     const p = readPrompt();
-    if (!p || p === lastTyped) return;
-    lastTyped = p;
-    const r = toRomaji(p);
-    window.__autoTyperLog.push({ p, r });
-    for (const ch of r) fireKey(ch);
+    if (p && p !== lastTyped) {
+      lastTyped = p;
+      const r = toRomaji(p);
+      window.__autoTyperLog.push({ p, r });
+      for (const ch of r) fireKey(ch);
+    }
+
+    // Self-cap check
+    const txt = document.body.innerText;
+    const streakMatch = txt.match(/連続\s*\d+\s*\/\s*最高(\d+)/);
+    const doneMatch = txt.match(/(\d+)\s*問\s*完了/);
+    const bestStreak = streakMatch ? parseInt(streakMatch[1]) : 0;
+    const done = doneMatch ? parseInt(doneMatch[1]) : 0;
+    const elapsed = (Date.now() - startTime) / 1000;
+
+    const reachedBonus = bestStreak >= STREAK_CAP && done >= DONE_CAP;
+    const timedOut = elapsed >= TIMEOUT_SEC;
+    if (reachedBonus || timedOut) {
+      clearInterval(window.__autoTyper);
+      window.__autoTyper = null;
+      window.__autoTyperEnded = {
+        reason: reachedBonus ? "max-bonus-locked" : "timeout",
+        bestStreak, done, elapsedSec: Math.round(elapsed),
+      };
+      // Click 中断 then confirm
+      const cancelBtn = [...document.querySelectorAll("button")].find(b => b.textContent === "中断");
+      if (cancelBtn) {
+        cancelBtn.click();
+        setTimeout(() => {
+          const confirmBtn = [...document.querySelectorAll("button")].find(b => b.textContent === "中断する");
+          if (confirmBtn) confirmBtn.click();
+        }, 600);
+      }
+    }
   }, 100);
 
-  return "auto-typer started";
+  return "auto-typer started (will self-cap at streak>=300+done>=50 OR 90sec)";
 })();
