@@ -4,3 +4,12 @@
 ai-minimalist-shibu/logs/access_*.log
 ai-minimalist-shibu/photos/
 google-photos-mcp/
+
+# ローカル専用・私的観察用（第三者動画字幕の整形テキスト）
+shibu-*-transcript.txt
+
+# ローカル専用の Web アプリ（API キー含む、公開しない）
+pdf-reader/
+
+# 個人情報含む書類 (履歴書・職務経歴書)
+docs/job-search/
