@@ -1,9 +1,0 @@
-# .NET build artifacts
-bin/
-obj/
-
-# VS Code
-.vs/
-
-# user-specific
-*.user

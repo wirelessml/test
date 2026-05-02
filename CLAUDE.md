@@ -22,7 +22,7 @@
   - [x] ~~旧 Seagate ST2000LM015 の処遇決定（外付け USB-SATA ケース化 or 内蔵 D: 維持 or 廃棄）~~ ボツ（5/2 朝決定、しばらく現状維持）
   - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
   - [x] ~~4/30 GC313Pro 物理セットアップ + UVC ビューワ実装~~ 完了（USB-C 2 本のみで Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ確立、HDMI 不要。Python + OpenCV 自作ビューワは Windows 標準カメラアプリで代替可能と判明し不要に。詳細 @docs/journal/2026-04-30.md）
-  - [ ] **Joy-Con 2 Windows マウス化ドライバ開発**（5/2 11:22 復活 — 5/2 朝にボツしたが、doda 提出完了 + しゅん先生 PC 環境整備済 + ブラウザ自動化基盤確立で着手余裕できた。Phase 1（maruta/joycon2-usb-presenter ソース解析 + プロトコル文書化）開始。詳細 @docs/projects/joycon2-windows-driver.md）
+  - [x] ~~**Joy-Con 2 Windows マウス化ドライバ開発**~~ **完全ボツ**（5/3 朝決定、Phase 1+2 完了 + Phase 3 scaffold 完成済も、実機検証で Joy-Con 2 (R) が BLE advertisement 出さず接続不能。Mac でも Windows でも検出不可 = Joy-Con 2 ハードウェア / バッテリー問題と切り分け、これ以上の調査コスト見合わず断念。Mac 側コード・ドキュメント・Substack ドラフトは削除、しゅん先生 PC 側ファイルは保持。詳細経緯 @docs/journal/2026-05-03.md 追補 1）
   - [x] ~~sniffnet 1.5.0 実機検証~~ 環境構築完了（5/2 朝、Wireshark 4.6.5 cask 同時導入で ChmodBPF helper / access_bpf グループ / `/dev/bpf*` 権限解放、sudo なしで sniffnet・tshark・Wireshark.app・dumpcap 全部動く。tshark でテストキャプチャ成功、Anthropic API 通信見えた。実観察ネタ (YKSmas318 / Tailscale Funnel / しぶチャット / Substack 軽量監視記事) は今後随時）
 
 ## 機材（詳細は @docs/machines/）
