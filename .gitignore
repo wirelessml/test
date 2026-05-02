@@ -13,3 +13,6 @@ pdf-reader/
 
 # 個人情報含む書類 (履歴書・職務経歴書)
 docs/job-search/
+
+# 個人情報・アイデンティティマップ (絶対公開しない)
+docs/private/
