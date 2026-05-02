@@ -142,6 +142,24 @@
 - Hasleo Backup Suite Free V5.6.2.1（クローン用）
 - AOMEI Backupper Standard（週次システムイメージ用、毎週日曜 04:00 自動実行）
 
+### 開発・メディアツール（winget で導入、PATH 設定済）
+
+| ツール | バージョン | 用途 | 導入日 |
+|---|---|---|---|
+| .NET 8 SDK | 8.0.420 | Joy-Con 2 Phase 3 などの C# プロジェクト | 2026-05-01 |
+| VS Code | 1.118.1 | エディタ | 2026-05-01 |
+| C# Dev Kit | 3.10.14 | C# 拡張 | 2026-05-01 |
+| GitLens | 17.12.2 | git 拡張 | 2026-05-01 |
+| gh CLI | 2.92.0 | GitHub CLI | 2026-05-01 |
+| **yt-dlp** | 2026.03.17 | YouTube 字幕・動画 DL | **2026-05-03** |
+| **ffmpeg** | 8.1-full_build | 動画マージ・変換 | **2026-05-03** |
+| **deno** | 2.7.14 | yt-dlp の JS challenge 解決 | **2026-05-03** |
+
+SSH 経由でも素直に呼べる:
+```bash
+ssh shun-sensei 'powershell -Command "yt-dlp --write-auto-sub --sub-lang ja --skip-download -o yt-VIDEO_ID URL"'
+```
+
 ## ネットワーク
 
 - **デュアル LAN 構成**（4/24 背面写真で確認、2x RJ45 ポート）
