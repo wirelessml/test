@@ -1,0 +1,18 @@
+joycon2-mouse-windows
+Copyright 2026 wirelessml
+
+This product includes software developed by reverse-engineering the Switch 2
+Joy-Con BLE protocol, building on prior work by:
+
+- maruta/joycon2-usb-presenter (Apache License 2.0)
+  https://github.com/maruta/joycon2-usb-presenter
+- Nohzockt/Switch2-Controllers
+  https://github.com/Nohzockt/Switch2-Controllers
+- seitanmen/Joycon2forMac
+  https://github.com/seitanmen/Joycon2forMac
+- Misaka10571/joycon2-connector
+  https://github.com/Misaka10571/joycon2-connector
+
+Nintendo, Switch, and Joy-Con are trademarks of Nintendo Co., Ltd. This is an
+independent, unofficial work and is not affiliated with, sponsored by, or
+endorsed by Nintendo Co., Ltd.

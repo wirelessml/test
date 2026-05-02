@@ -1,14 +1,16 @@
-// Joy-Con 2 Windows マウス化ドライバ - Phase 2 minimum sample
+// Joy-Con 2 Windows マウス化ドライバ - Phase 3 entry point
 //
-// このサンプルは:
-// 1. BLE 広告を Nintendo service UUID でフィルタしてスキャン
-// 2. 最初に見つかった Joy-Con 2 に接続
-// 3. service / characteristic を解決
-// 4. input notify を subscribe
-// 5. enable_std / enable_ext を交互送信
-// 6. 受信したパケットを InputPacket でパースしてコンソール出力
+// 起動フロー:
+// 1. ペア済み Joy-Con 2 を Windows レジストリから探す
+// 2. BluetoothLEDevice 取得 → service / characteristic 解決
+// 3. input notify subscribe + enable_std / enable_ext 交互送信
+// 4. パケット受信 → InputPacket でパース → DeltaMapper で mouse delta 化
+// 5. --mouse 指定時のみ MouseInjector で SendInput 注入 (デフォルト OFF = dump のみ)
+// 6. ランタイム HOME ボタンでマウス注入 ON/OFF をトグル可能 (緊急停止)
 //
-// マウス注入は Phase 3 で実装。今は dump のみ。
+// CLI:
+//   dotnet run                # dump only (Phase 2 互換)
+//   dotnet run -- --mouse     # マウス注入 ON で起動
 
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Bluetooth;
@@ -23,6 +25,11 @@ internal class Program
     private static int _frameCount;
     private static uint _prevButtons;
     private static readonly OpticalDeltaTracker _opticalTracker = new();
+    private static readonly DeltaMapper _mapper = new();
+
+    /// <summary>SendInput 注入を有効化するかどうか。--mouse で起動時 ON、HOME ボタンで toggle。</summary>
+    private static volatile bool _mouseEnabled;
+
     private static readonly string LogPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "joycon2-run.log");
     private static readonly object _logLock = new();
@@ -43,11 +50,15 @@ internal class Program
         // 旧ログクリア
         try { File.Delete(LogPath); } catch { }
 
-        Log("Joy-Con 2 BLE smoke test (Phase 2 scaffold)");
-        Log($"  Log file: {LogPath}");
-        Log($"  Service:  {Protocol.ServiceUuid}");
-        Log($"  Input:    {Protocol.InputNotifyUuid}");
-        Log($"  Write:    {Protocol.WriteCharUuid}");
+        _mouseEnabled = args.Contains("--mouse", StringComparer.OrdinalIgnoreCase);
+
+        Log("Joy-Con 2 mouse driver (Phase 3 scaffold)");
+        Log($"  Log file:        {LogPath}");
+        Log($"  Service:         {Protocol.ServiceUuid}");
+        Log($"  Input:           {Protocol.InputNotifyUuid}");
+        Log($"  Write:           {Protocol.WriteCharUuid}");
+        Log($"  Mouse injection: {(_mouseEnabled ? "ON" : "OFF (dump only)")}");
+        Log("  Runtime toggle:  HOME button (緊急停止)");
         Log();
 
         // ----- 1. ペア済デバイス探索 + 直接接続 -----
@@ -177,12 +188,42 @@ internal class Program
 
         var (optDx, optDy) = _opticalTracker.Update(p.OpticalX, p.OpticalY);
 
-        // ボタン変化時 or 10 フレームごとに表示
+        // HOME ボタン押下 edge で mouse 注入 ON/OFF をトグル (緊急停止用)
+        bool homeNow  = (p.Buttons     & (1u << Protocol.JC_HOME)) != 0;
+        bool homePrev = (_prevButtons  & (1u << Protocol.JC_HOME)) != 0;
+        if (homeNow && !homePrev)
+        {
+            _mouseEnabled = !_mouseEnabled;
+            Log($"  *** Mouse injection toggled: {(_mouseEnabled ? "ON" : "OFF")} ***");
+        }
+
+        StepResult step;
+        if (_mouseEnabled)
+        {
+            step = _mapper.Step(p, optDx, optDy);
+
+            if (step.Dx != 0 || step.Dy != 0) MouseInjector.MoveRelative(step.Dx, step.Dy);
+            if (step.WheelV != 0) MouseInjector.WheelV(step.WheelV);
+            if (step.WheelH != 0) MouseInjector.WheelH(step.WheelH);
+            foreach (var (btn, pressed) in step.Clicks)
+                MouseInjector.Click(btn, pressed);
+        }
+        else
+        {
+            // 状態だけ進めて delta は捨てる (再 ON 時に edge detection が暴発しないように)
+            _mapper.StepIdle(p);
+            step = default;
+        }
+
+        // ボタン変化時 or 30 フレームごとに表示 (Phase 3 はノイズ抑制で 30)
         bool changed = p.Buttons != _prevButtons;
-        if (changed || _frameCount % 10 == 0)
+        if (changed || _frameCount % 30 == 0)
         {
             string buttonNames = NamesFromButtons(p.Buttons);
-            Log($"  [{_frameCount,5}] {p.ToShortString()} optD=({optDx,4},{optDy,4}) {buttonNames}");
+            string mvInfo = _mouseEnabled
+                ? $" -> mv=({step.Dx,3},{step.Dy,3}) wh=({step.WheelV,2},{step.WheelH,2})"
+                : "";
+            Log($"  [{_frameCount,5}] {p.ToShortString()} optD=({optDx,4},{optDy,4}){mvInfo} {buttonNames}");
         }
         _prevButtons = p.Buttons;
     }
