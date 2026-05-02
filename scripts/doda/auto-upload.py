@@ -26,7 +26,7 @@ def get_chrome_safe_storage_key() -> str:
 
 CHROME_SAFE_STORAGE = get_chrome_safe_storage_key()
 DODA_LOGIN_DB = '/tmp/chrome-login-data.db'
-UPLOAD_FILE = '/tmp/doda-docs/shokumu-2026-0502.docx'
+UPLOAD_FILE = '/tmp/doda-docs/shokumu-2026-0502-v2.docx'
 SCREENSHOT_DIR = Path('/Users/yuika/Desktop/screenshots/doda')
 SUBMIT_SIGNAL = Path('/tmp/doda-submit.signal')
 ABORT_SIGNAL = Path('/tmp/doda-abort.signal')
@@ -175,16 +175,31 @@ async def main():
         log("Looking for アップロードする button...")
         upload_btn = page.locator('button:has-text("アップロードする"), a:has-text("アップロードする")').first
         try:
-            await upload_btn.click(timeout=10000)
+            await upload_btn.click(timeout=8000)
             await asyncio.sleep(3)
             await page.screenshot(path=SCREENSHOT_DIR / 'auto-04-upload-form.png')
             log(f"Upload form URL: {page.url}")
         except Exception as e:
-            log(f"アップロードする click failed: {e}")
-            await page.screenshot(path=SCREENSHOT_DIR / 'auto-04-fail.png')
-            log("Stopping. Please inspect screenshot.")
-            await asyncio.sleep(600)
-            sys.exit(2)
+            log(f"アップロードする click failed (probably v1 already uploaded), fallback: direct navigate")
+            # v2 差し替え用 fallback: 直接 mypageResumeUpload へ
+            await page.goto('https://doda.jp/dcfront/mypage/mypageResumeUpload/', wait_until='load')
+            await asyncio.sleep(3)
+            await page.screenshot(path=SCREENSHOT_DIR / 'auto-04-direct.png')
+            log(f"Direct URL: {page.url}")
+
+        # 既存ファイルあるなら「新規ファイルをアップロード」ボタンが必要
+        # 既存なし状態なら何もしないで input[type=file] が見える
+        try:
+            new_file_btn = page.locator(
+                'a:has-text("新規ファイルをアップロード"), button:has-text("新規ファイルをアップロード")'
+            ).first
+            if await new_file_btn.is_visible(timeout=3000):
+                await new_file_btn.click()
+                await asyncio.sleep(2)
+                log("'新規ファイルをアップロード' clicked (replacing existing file)")
+                await page.screenshot(path=SCREENSHOT_DIR / 'auto-04b-new-file.png')
+        except Exception:
+            log("'新規ファイルをアップロード' not visible (probably no existing file)")
 
         # ----- Phase 1.4: ファイル添付 -----
         log(f"Attaching file: {UPLOAD_FILE}")

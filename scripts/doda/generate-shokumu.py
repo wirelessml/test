@@ -4,7 +4,7 @@ from docx.shared import Pt, Cm, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
 
-OUTPUT = '/tmp/doda-docs/shokumu-2026-0502.docx'
+OUTPUT = '/tmp/doda-docs/shokumu-2026-0502-v2.docx'
 
 doc = Document()
 
@@ -35,6 +35,7 @@ summary_lines = [
     'その後、自身にスキルをつけるため、HAL大阪に入学し学び直しをいたしました。',
     '在学中にトランスコスモス株式会社に中途採用いただいたため中退し、約12年間データセンターのオペレーター業務（システム運用・ヘルプデスク・テクニカルサポート）に従事しておりました。',
     '2020年9月にトランスコスモスを退職後、個人事業主として配送業務（ワタミの宅食）等に従事し、2023年7月以降は家庭の事情により主夫として家事を担いながら、AIエージェント運用・OSS開発・技術コミュニティ活動（Microsoft 365 勉強会主催等）を継続しております。',
+    '2024年4月以降は、株式会社グロース・コンティニュー様より業務委託契約にて月次でPCキッティング業務（Windows10/11、複数台/月）を継続的に受託しており、トランスコスモス時代のキッティング経験を活かして稼働中です。',
 ]
 for line in summary_lines:
     doc.add_paragraph(line)
@@ -56,7 +57,8 @@ companies = [
     ('2004年10月〜2005年03月', '株式会社フルタイムシステム（契約社員にて勤務）'),
     ('2007年10月〜2020年09月', 'トランスコスモス株式会社(正社員にて勤務）'),
     ('2022年03月〜2022年12月', '個人事業主'),
-    ('2023年07月〜現在', '個人事業主・主夫（AI/OSS活動）'),
+    ('2023年07月〜現在', '個人事業主・主夫'),
+    ('2024年04月〜現在', '株式会社グロース・コンティニュー（業務委託・PCキッティング）'),
 ]
 for period, name in companies:
     row = table.add_row().cells
@@ -189,6 +191,39 @@ body[2].text = (
     'Git / GitHub\n\n'
     '【取得資格】\n'
     '・LPIC1（保有継続）'
+)
+doc.add_paragraph('')
+
+# === NEW v2: 株式会社グロース・コンティニュー（業務委託） ===
+p = doc.add_paragraph()
+p.add_run('株式会社グロース・コンティニュー（業務委託）   2024年04月〜現在').bold = True
+
+t2 = doc.add_table(rows=2, cols=3)
+t2.style = 'Table Grid'
+hdr = t2.rows[0].cells
+hdr[0].text = '期間'
+hdr[1].text = '業務内容'
+hdr[2].text = '特記事項・実績'
+body = t2.rows[1].cells
+body[0].text = '2024年04月\n～現在'
+body[1].text = (
+    '【職務】\n'
+    'PCキッティング業務委託\n'
+    '【職務詳細】\n'
+    '株式会社グロース・コンティニュー様より業務委託契約にて、\n'
+    '同社入社者向けPCキッティングを月次で受託。\n'
+    '・Windows10 / Windows11 のクリーンセットアップ\n'
+    '・業務アプリケーションのインストール・設定\n'
+    '・Active Directory 参加・GPO 適用\n'
+    '・初期設定確認・引渡し前検証\n'
+    '・複数台/月（最大2-数台）を継続的に対応'
+)
+body[2].text = (
+    '・月次継続契約（源泉徴収対象）\n'
+    '・在宅で対応可能な体制を構築\n'
+    '・トランスコスモス時代の住友電工配属で\n'
+    '  全社員分Windows10セットアップ経験を活用\n'
+    '・1年以上の継続実績'
 )
 doc.add_paragraph('')
 
