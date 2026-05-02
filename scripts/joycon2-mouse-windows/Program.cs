@@ -98,26 +98,55 @@ internal class Program
         Log($"Device obtained: addr={device.BluetoothAddress:X12} name={device.Name} status={device.ConnectionStatus}");
         ulong addr = device.BluetoothAddress;
 
-        // ----- 2. service / characteristic 解決 -----
-        // BluetoothCacheMode.Uncached で fresh discovery を強制。
-        // Cached のままだと OS のキャッシュにヒットしてしまい、実際の接続が
-        // 確立していなくても false-positive で成功する → 後続の write descriptor が
-        // OperationCanceledException で死ぬ。
-        Log($"\nQuerying GATT services for {addr:X12} (uncached, forces connection)...");
+        // ConnectionStatusChanged を監視 (debugging visibility)
+        device.ConnectionStatusChanged += (s, _) =>
+            Log($"  >>> ConnectionStatusChanged: {s.ConnectionStatus}");
 
-        var serviceResult = await device.GetGattServicesForUuidAsync(
-            Protocol.ServiceUuid, BluetoothCacheMode.Uncached);
-        if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0)
+        // 接続が安定するまで 2 秒待つ
+        Log("Waiting 2s for BLE link to stabilize...");
+        await Task.Delay(2000);
+
+        // ----- 2. service / characteristic 解決 -----
+        // Cached モード優先。5/2 Phase 2 成功は Cached 経路。Uncached は WinRT が
+        // 内部でディスカバリ用 ATT request を再送するが、Joy-Con 2 firmware が
+        // それを切断トリガーとして扱ってしまうケースが今回確認された。
+        // Cached が空なら Uncached にフォールバック。
+        Log($"\nQuerying GATT services for {addr:X12}...");
+
+        GattDeviceServicesResult? serviceResult = null;
+        for (int retry = 1; retry <= 6; retry++)
         {
-            Log($"Nintendo service not found: {serviceResult.Status}");
+            // Cached を試す
+            serviceResult = await device.GetGattServicesForUuidAsync(
+                Protocol.ServiceUuid, BluetoothCacheMode.Cached);
+            if (serviceResult.Status == GattCommunicationStatus.Success && serviceResult.Services.Count > 0)
+            {
+                Log($"  service via Cached on retry {retry}: {serviceResult.Services[0].Uuid} ✅");
+                break;
+            }
+            // Cached 空なら Uncached
+            serviceResult = await device.GetGattServicesForUuidAsync(
+                Protocol.ServiceUuid, BluetoothCacheMode.Uncached);
+            if (serviceResult.Status == GattCommunicationStatus.Success && serviceResult.Services.Count > 0)
+            {
+                Log($"  service via Uncached on retry {retry}: {serviceResult.Services[0].Uuid} ✅");
+                break;
+            }
+            Log($"  retry {retry}/6: status={serviceResult.Status} link={device.ConnectionStatus} — press button");
+            await Task.Delay(2000);
+        }
+        if (serviceResult is null
+            || serviceResult.Status != GattCommunicationStatus.Success
+            || serviceResult.Services.Count == 0)
+        {
+            Log($"Nintendo service unreachable after 6 retries.");
             return 3;
         }
         var nintendoService = serviceResult.Services[0];
-        Log($"  service: {nintendoService.Uuid} ✅");
         Log($"  ConnectionStatus now: {device.ConnectionStatus}");
 
         var inputCharResult = await nintendoService.GetCharacteristicsForUuidAsync(
-            Protocol.InputNotifyUuid, BluetoothCacheMode.Uncached);
+            Protocol.InputNotifyUuid, BluetoothCacheMode.Cached);
         if (inputCharResult.Status != GattCommunicationStatus.Success || inputCharResult.Characteristics.Count == 0)
         {
             Log($"Input notify char not found: {inputCharResult.Status}");
@@ -126,13 +155,13 @@ internal class Program
         var inputChar = inputCharResult.Characteristics[0];
         Log($"  input notify: {inputChar.Uuid} ✅");
 
-        // Write char は別 service の可能性もあるので、全 service を走査 (uncached)
-        var allServices = await device.GetGattServicesAsync(BluetoothCacheMode.Uncached);
+        // Write char は別 service の可能性もあるので、全 service を走査 (cached)
+        var allServices = await device.GetGattServicesAsync(BluetoothCacheMode.Cached);
         GattCharacteristic? writeChar = null;
         foreach (var svc in allServices.Services)
         {
             var chResult = await svc.GetCharacteristicsForUuidAsync(
-                Protocol.WriteCharUuid, BluetoothCacheMode.Uncached);
+                Protocol.WriteCharUuid, BluetoothCacheMode.Cached);
             if (chResult.Status == GattCommunicationStatus.Success && chResult.Characteristics.Count > 0)
             {
                 writeChar = chResult.Characteristics[0];
