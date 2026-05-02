@@ -23,73 +23,90 @@ internal class Program
     private static int _frameCount;
     private static uint _prevButtons;
     private static readonly OpticalDeltaTracker _opticalTracker = new();
+    private static readonly string LogPath =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "joycon2-run.log");
+    private static readonly object _logLock = new();
+
+    /// <summary>Console.WriteLine + ファイル追記。SSH Services session でも見えるようにする。</summary>
+    private static void Log(string line = "")
+    {
+        var timestamped = $"{DateTime.Now:HH:mm:ss.fff} {line}";
+        Console.WriteLine(timestamped);
+        lock (_logLock)
+        {
+            File.AppendAllText(LogPath, timestamped + Environment.NewLine);
+        }
+    }
 
     public static async Task<int> Main(string[] args)
     {
-        Console.WriteLine("Joy-Con 2 BLE smoke test (Phase 2 scaffold)");
-        Console.WriteLine($"  Service:  {Protocol.ServiceUuid}");
-        Console.WriteLine($"  Input:    {Protocol.InputNotifyUuid}");
-        Console.WriteLine($"  Write:    {Protocol.WriteCharUuid}");
-        Console.WriteLine();
+        // 旧ログクリア
+        try { File.Delete(LogPath); } catch { }
 
-        // ----- 1. BLE スキャン -----
-        var watcher = new BluetoothLEAdvertisementWatcher
+        Log("Joy-Con 2 BLE smoke test (Phase 2 scaffold)");
+        Log($"  Log file: {LogPath}");
+        Log($"  Service:  {Protocol.ServiceUuid}");
+        Log($"  Input:    {Protocol.InputNotifyUuid}");
+        Log($"  Write:    {Protocol.WriteCharUuid}");
+        Log();
+
+        // ----- 1. ペア済デバイス探索 + 直接接続 -----
+        // Joy-Con 2 が Windows BT 設定で paired 済ならアドバタイズしない。
+        // 既ペア済リストから Joy-Con 2 を name で見つけて接続する。
+        Log("Looking up paired Joy-Con 2 in Windows registry...");
+
+        var selector = Windows.Devices.Bluetooth.BluetoothLEDevice.GetDeviceSelectorFromPairingState(true);
+        var pairedDevices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(selector);
+        Log($"Paired BLE devices: {pairedDevices.Count}");
+
+        Windows.Devices.Enumeration.DeviceInformation? joyConDevInfo = null;
+        foreach (var di in pairedDevices)
         {
-            ScanningMode = BluetoothLEScanningMode.Active,
-        };
-        watcher.AdvertisementFilter.Advertisement.ServiceUuids.Add(Protocol.ServiceUuid);
+            Log($"  - {di.Name} (id={di.Id})");
+            if (di.Name.Contains("Joy-Con", StringComparison.OrdinalIgnoreCase) ||
+                di.Name.Contains("JoyCon", StringComparison.OrdinalIgnoreCase))
+            {
+                joyConDevInfo = di;
+            }
+        }
 
-        var deviceFound = new TaskCompletionSource<ulong>();
-        watcher.Received += (sender, evt) =>
+        if (joyConDevInfo == null)
         {
-            Console.WriteLine($"  found: addr={evt.BluetoothAddress:X12} " +
-                              $"rssi={evt.RawSignalStrengthInDBm} dBm " +
-                              $"name={evt.Advertisement.LocalName}");
-            deviceFound.TrySetResult(evt.BluetoothAddress);
-        };
-        watcher.Start();
-        Console.WriteLine("Scanning for Joy-Con 2... (timeout 30s, hold SYNC ~5s on Joy-Con 2)");
-
-        var winnerTask = await Task.WhenAny(deviceFound.Task, Task.Delay(TimeSpan.FromSeconds(30)));
-        watcher.Stop();
-
-        if (winnerTask != deviceFound.Task)
-        {
-            Console.WriteLine("\nNo Joy-Con 2 found within 30 seconds.");
-            Console.WriteLine("Make sure: (a) Joy-Con 2 is in pairing mode (LED scrolling)");
-            Console.WriteLine("           (b) it is disconnected from Switch 2");
-            Console.WriteLine("Phase 2 scaffold compile-test mode: BLE flow not verified.");
+            Log("Joy-Con 2 not found in paired devices. Pair via Windows Settings → Bluetooth first.");
             return 1;
         }
+        Log($"Found Joy-Con 2: {joyConDevInfo.Name} (id={joyConDevInfo.Id})");
 
-        ulong addr = deviceFound.Task.Result;
-
-        // ----- 2. 接続 + service / characteristic 解決 -----
-        Console.WriteLine($"\nConnecting to {addr:X12}...");
-        var device = await BluetoothLEDevice.FromBluetoothAddressAsync(addr);
-        if (device is null)
+        // DeviceInformation.Id から BluetoothLEDevice 取得
+        var device = await Windows.Devices.Bluetooth.BluetoothLEDevice.FromIdAsync(joyConDevInfo.Id);
+        if (device == null)
         {
-            Console.WriteLine("Failed to obtain BluetoothLEDevice (was it unpaired?).");
+            Log("FromIdAsync returned null");
             return 2;
         }
+        Log($"Device obtained: addr={device.BluetoothAddress:X12} name={device.Name} status={device.ConnectionStatus}");
+        ulong addr = device.BluetoothAddress;
+
+        // ----- 2. service / characteristic 解決 (device は既に Phase 1 で取得済) -----
+        Log($"\nQuerying GATT services for {addr:X12}...");
 
         var serviceResult = await device.GetGattServicesForUuidAsync(Protocol.ServiceUuid);
         if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0)
         {
-            Console.WriteLine($"Nintendo service not found: {serviceResult.Status}");
+            Log($"Nintendo service not found: {serviceResult.Status}");
             return 3;
         }
         var nintendoService = serviceResult.Services[0];
-        Console.WriteLine($"  service: {nintendoService.Uuid} ✅");
+        Log($"  service: {nintendoService.Uuid} ✅");
 
         var inputCharResult = await nintendoService.GetCharacteristicsForUuidAsync(Protocol.InputNotifyUuid);
         if (inputCharResult.Status != GattCommunicationStatus.Success || inputCharResult.Characteristics.Count == 0)
         {
-            Console.WriteLine($"Input notify char not found: {inputCharResult.Status}");
+            Log($"Input notify char not found: {inputCharResult.Status}");
             return 4;
         }
         var inputChar = inputCharResult.Characteristics[0];
-        Console.WriteLine($"  input notify: {inputChar.Uuid} ✅");
+        Log($"  input notify: {inputChar.Uuid} ✅");
 
         // Write char は別 service にあるので、全 service を走査
         var allServices = await device.GetGattServicesAsync();
@@ -100,13 +117,13 @@ internal class Program
             if (chResult.Status == GattCommunicationStatus.Success && chResult.Characteristics.Count > 0)
             {
                 writeChar = chResult.Characteristics[0];
-                Console.WriteLine($"  write char: {writeChar.Uuid} (in service {svc.Uuid}) ✅");
+                Log($"  write char: {writeChar.Uuid} (in service {svc.Uuid}) ✅");
                 break;
             }
         }
         if (writeChar is null)
         {
-            Console.WriteLine("Write characteristic not found in any service.");
+            Log("Write characteristic not found in any service.");
             return 5;
         }
 
@@ -114,20 +131,20 @@ internal class Program
         inputChar.ValueChanged += OnInputNotify;
         var ccResult = await inputChar.WriteClientCharacteristicConfigurationDescriptorAsync(
             GattClientCharacteristicConfigurationDescriptorValue.Notify);
-        Console.WriteLine($"  notify subscribe: {ccResult}");
+        Log($"  notify subscribe: {ccResult}");
 
         // ----- 4. enable_std / enable_ext を交互送信 -----
-        Console.WriteLine("\nSending enable commands (std/ext alternating, 300ms apart)...");
+        Log("\nSending enable commands (std/ext alternating, 300ms apart)...");
         for (int i = 0; i < 6; i++)
         {
             byte[] cmd = (i % 2 == 0) ? Protocol.EnableStd : Protocol.EnableExt;
             var buf = cmd.AsBuffer();
             var w = await writeChar.WriteValueWithResultAsync(buf, GattWriteOption.WriteWithoutResponse);
-            Console.WriteLine($"  step {i} ({(i % 2 == 0 ? "std" : "ext")}): {w.Status}");
+            Log($"  step {i} ({(i % 2 == 0 ? "std" : "ext")}): {w.Status}");
             await Task.Delay(300);
         }
 
-        Console.WriteLine("\n--- Receiving input data (Ctrl+C to stop) ---");
+        Log("\n--- Receiving input data (Ctrl+C to stop) ---");
 
         // 永続待機 (Ctrl+C で抜ける)
         var cts = new CancellationTokenSource();
@@ -141,7 +158,7 @@ internal class Program
             // 正常終了
         }
 
-        Console.WriteLine("\nDisconnecting...");
+        Log("\nDisconnecting...");
         device.Dispose();
         return 0;
     }
@@ -165,7 +182,7 @@ internal class Program
         if (changed || _frameCount % 10 == 0)
         {
             string buttonNames = NamesFromButtons(p.Buttons);
-            Console.WriteLine($"  [{_frameCount,5}] {p.ToShortString()} optD=({optDx,4},{optDy,4}) {buttonNames}");
+            Log($"  [{_frameCount,5}] {p.ToShortString()} optD=({optDx,4},{optDy,4}) {buttonNames}");
         }
         _prevButtons = p.Buttons;
     }
