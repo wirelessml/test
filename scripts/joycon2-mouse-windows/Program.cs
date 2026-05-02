@@ -98,10 +98,15 @@ internal class Program
         Log($"Device obtained: addr={device.BluetoothAddress:X12} name={device.Name} status={device.ConnectionStatus}");
         ulong addr = device.BluetoothAddress;
 
-        // ----- 2. service / characteristic 解決 (device は既に Phase 1 で取得済) -----
-        Log($"\nQuerying GATT services for {addr:X12}...");
+        // ----- 2. service / characteristic 解決 -----
+        // BluetoothCacheMode.Uncached で fresh discovery を強制。
+        // Cached のままだと OS のキャッシュにヒットしてしまい、実際の接続が
+        // 確立していなくても false-positive で成功する → 後続の write descriptor が
+        // OperationCanceledException で死ぬ。
+        Log($"\nQuerying GATT services for {addr:X12} (uncached, forces connection)...");
 
-        var serviceResult = await device.GetGattServicesForUuidAsync(Protocol.ServiceUuid);
+        var serviceResult = await device.GetGattServicesForUuidAsync(
+            Protocol.ServiceUuid, BluetoothCacheMode.Uncached);
         if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0)
         {
             Log($"Nintendo service not found: {serviceResult.Status}");
@@ -109,8 +114,10 @@ internal class Program
         }
         var nintendoService = serviceResult.Services[0];
         Log($"  service: {nintendoService.Uuid} ✅");
+        Log($"  ConnectionStatus now: {device.ConnectionStatus}");
 
-        var inputCharResult = await nintendoService.GetCharacteristicsForUuidAsync(Protocol.InputNotifyUuid);
+        var inputCharResult = await nintendoService.GetCharacteristicsForUuidAsync(
+            Protocol.InputNotifyUuid, BluetoothCacheMode.Uncached);
         if (inputCharResult.Status != GattCommunicationStatus.Success || inputCharResult.Characteristics.Count == 0)
         {
             Log($"Input notify char not found: {inputCharResult.Status}");
@@ -119,12 +126,13 @@ internal class Program
         var inputChar = inputCharResult.Characteristics[0];
         Log($"  input notify: {inputChar.Uuid} ✅");
 
-        // Write char は別 service にあるので、全 service を走査
-        var allServices = await device.GetGattServicesAsync();
+        // Write char は別 service の可能性もあるので、全 service を走査 (uncached)
+        var allServices = await device.GetGattServicesAsync(BluetoothCacheMode.Uncached);
         GattCharacteristic? writeChar = null;
         foreach (var svc in allServices.Services)
         {
-            var chResult = await svc.GetCharacteristicsForUuidAsync(Protocol.WriteCharUuid);
+            var chResult = await svc.GetCharacteristicsForUuidAsync(
+                Protocol.WriteCharUuid, BluetoothCacheMode.Uncached);
             if (chResult.Status == GattCommunicationStatus.Success && chResult.Characteristics.Count > 0)
             {
                 writeChar = chResult.Characteristics[0];

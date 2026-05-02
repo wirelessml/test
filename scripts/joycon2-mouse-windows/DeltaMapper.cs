@@ -114,11 +114,12 @@ internal class DeltaMapper
 
     // ----- private -----
 
+    // Right Joy-Con のみ実装中。Left Joy-Con の L/ZL ボタンは Protocol.cs に
+    // 定数がない (JC_L_SL/JC_L_SR は bit 20/21 に存在するが、左単体接続時のみ発火)
     private static bool IsGyroGated(in InputPacket p) =>
         p.IsPressed(Protocol.JC_R_SL) || p.IsPressed(Protocol.JC_R_SR) ||
         p.IsPressed(Protocol.JC_L_SL) || p.IsPressed(Protocol.JC_L_SR) ||
-        p.IsPressed(Protocol.JC_ZR)   || p.IsPressed(Protocol.JC_R)    ||
-        p.IsPressed(Protocol.JC_L);
+        p.IsPressed(Protocol.JC_ZR)   || p.IsPressed(Protocol.JC_R);
 
     private static (MouseButton, bool)[] DetectClickEdges(uint cur, uint prev)
     {
