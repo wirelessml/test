@@ -154,11 +154,38 @@
 | **yt-dlp** | 2026.03.17 | YouTube 字幕・動画 DL | **2026-05-03** |
 | **ffmpeg** | 8.1-full_build | 動画マージ・変換 | **2026-05-03** |
 | **deno** | 2.7.14 | yt-dlp の JS challenge 解決 | **2026-05-03** |
+| **VLC media player** | 3.0.23 | 汎用動画プレーヤー (mp4/mkv/webm 等) | **2026-05-03 17:00** |
+| **Gopher360** | 0.989 | コントローラー → マウス常駐ツール (XInput) | **2026-05-03 16:30** |
 
 SSH 経由でも素直に呼べる:
 ```bash
 ssh shun-sensei 'powershell -Command "yt-dlp --write-auto-sub --sub-lang ja --skip-download -o yt-VIDEO_ID URL"'
 ```
+
+### Gopher360 自動起動 (タスクスケジューラ、2026-05-03)
+
+XInput 互換のサードパーティ Switch Pro 風コントローラ (Model `2322/3C2M638`、TELEC 219-239441、有線 USB-C、ゴールド色)
+を Windows 起動時に常時マウス化する設定を実装。
+
+- インストール: `C:\Users\wirel\Tools\Gopher.exe` (65 KB single exe、設定 0)
+- タスク名: `Gopher360 AutoStart`
+- トリガー: ログオン時
+- 権限: 管理者 (`-RunLevel Highest`)、UAC プロンプト無視
+- 動作: 左スティック=カーソル / 右スティック=スクロール / A=左クリック / B=右クリック / X=Enter / Y=Backspace / Start=Esc / Back+Start=終了
+- メモリ消費: ~5 MB
+
+管理者権限起動なので**タスクマネージャ等の admin アプリも操作可能**。これがスタートアップフォルダ
+方式との大きな差分。
+
+### 動画再生スタックの整理（2026-05-03 時点）
+
+| 用途 | アプリ | 備考 |
+|---|---|---|
+| 4K UHD Blu-ray (HDCP 2.2 必須) | PowerDVD 14.0.1.7320 UHDBD-OEM | iiyama BTO 同梱、商用 BD 専用 |
+| 通常の Blu-ray / DVD | PowerDVD 14 (兼用) | - |
+| 汎用動画 (mp4/mkv/webm 等) | **VLC 3.0.23** | yt-dlp で落とした動画再生に最適 |
+| YouTube DL | yt-dlp 2026.03.17 | 5/3 朝導入 |
+| 動画エンコード | ffmpeg 8.1 | 5/3 朝導入 |
 
 ## ネットワーク
 
@@ -268,6 +295,9 @@ ssh shun-sensei 'powershell -Command "yt-dlp --write-auto-sub --sub-lang ja --sk
 
 ## 変更履歴
 
+- **2026-05-03 17:00**: VLC media player 3.0.23 を winget で導入（汎用動画再生用、PowerDVD と用途分離）。動画再生スタックの整理表を追加
+- **2026-05-03 16:30**: Gopher360 v0.989 を導入（XInput サードパーティコントローラ → マウス常駐ツール）。タスクスケジューラで管理者権限自動起動、`Gopher360 AutoStart` タスク登録。コントローラ Model `2322/3C2M638`、TELEC 219-239441、有線 USB-C、ゴールド色
+- **2026-05-03 朝**: yt-dlp / ffmpeg / deno を winget で導入（Mac と同等の動画 DL ワークフロー確立）
 - **2026-04-30 12:40**: 周辺機器セクション新設、付属キーボードを **LITEON UCL111UBK1** と特定（写真ラベル + Web 検索）。PowerDVD と同じく iiyama BTO バンドル品、ユニットコム/パソコン工房ルートの 2018 年出荷時セットの一部であることが確定
 - **2026-04-30 12:30**: 4K UHD BD 再生スタックを完全確定 — PowerDVD 14.0.1.7320 UHDBD-OEM (UNITCOM ライセンス、iiyama BTO 標準バンドル、SR: MES161202-01) と LG 40WP95C-W モニタ (HDCP 2.2 対応) を実機スクショで確認、shun-sensei-pc.md の「要確認」記述を確定値に置換 (ユーザー提供写真ベース)
 - **2026-04-30 12:20**: 4K UHD BD 再生機能を「代替不可能な専用機能」として役割セクションに昇格、CPU 換装天井 (i9-9900K まで) と Ryzen 移行不可の根拠を光学ドライブ項目に追記 (将来の機材判断ミス防止 memo、ユーザー指摘ベース)
