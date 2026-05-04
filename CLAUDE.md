@@ -24,6 +24,12 @@
   - [x] ~~4/30 GC313Pro 物理セットアップ + UVC ビューワ実装~~ 完了（USB-C 2 本のみで Mac → GC313Pro → Windows しゅん先生 PC → LG モニタ確立、HDMI 不要。Python + OpenCV 自作ビューワは Windows 標準カメラアプリで代替可能と判明し不要に。詳細 @docs/journal/2026-04-30.md）
   - [x] ~~**Joy-Con 2 Windows マウス化ドライバ開発**~~ **完全ボツ**（5/3 朝決定、Phase 1+2 完了 + Phase 3 scaffold 完成済も、実機検証で Joy-Con 2 (R) が BLE advertisement 出さず接続不能。Mac でも Windows でも検出不可 = Joy-Con 2 ハードウェア / バッテリー問題と切り分け、これ以上の調査コスト見合わず断念。Mac 側コード・ドキュメント・Substack ドラフトは削除、しゅん先生 PC 側ファイルは保持。詳細経緯 @docs/journal/2026-05-03.md 追補 1）
   - [x] ~~sniffnet 1.5.0 実機検証~~ 環境構築完了（5/2 朝、Wireshark 4.6.5 cask 同時導入で ChmodBPF helper / access_bpf グループ / `/dev/bpf*` 権限解放、sudo なしで sniffnet・tshark・Wireshark.app・dumpcap 全部動く。tshark でテストキャプチャ成功、Anthropic API 通信見えた。実観察ネタ (YKSmas318 / Tailscale Funnel / しぶチャット / Substack 軽量監視記事) は今後随時）
+  - [x] ~~**国民年金 令和 7 年度免除申請**~~ 完了（5/4 03:53 マイナポータル経由、5 種類全チェック、結果通知 7-8 月、4-6 月分の納付書は審査中ストップ）
+  - [x] ~~**整理収納アドバイザー 1 級 体験報告書 Artifact 図表 10 個**~~ 完了（5/4 09:30-10:32 で全完成、A 評価 90 点+、`~/Desktop/*.html`、@docs/projects/seiri-shu-nou-advisor-1.md）
+  - [ ] **しぶコーチング応募フォーム 送信**（写真 10 枚撮影完了済、アップロード + 送信ボタン待ち、**締切 5/6 23:59**）
+  - [ ] **整理収納アドバイザー 1 級 2 次試験申込**（協会 HP で受付確認、5/7 以降 + CBT 受験/2021-06-10/受験地域 入力）
+  - [ ] **体験報告書 本文 10 ページ執筆**（Word + Claude for Word、Saved Prompt 適用、3 週間想定）
+  - [ ] BIOS 整理（CSM 無効化 + 旧 HDD の Boot Manager エントリ削除）
 
 ## 機材（詳細は @docs/machines/）
 
@@ -57,6 +63,7 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
+- **2026-05-04** (月、みどりの日): **国民年金 令和 7 年度免除申請完了** (03:53 マイナポータル、5 種類全チェック、結果 7-8 月) + **整理収納アドバイザー 1 級 2 次審査体験報告書 Artifact 図表 10 個全完成** (Mobile Dispatch Sonnet 4.6 経由、A 評価 90 点+、`~/Desktop/*.html`) + 構成案 docs 新規作成 (`docs/projects/seiri-shu-nou-advisor-1.md`) + 戦略確定 (タイトル C「次世代整理収納サポート」/ 提案編 / AI 概念のみ実装ナシ / ブランド名完全伏せ / Word + Claude for Word + Artifacts ハイブリッド) + しぶ動画 TRr6gtjHECM のコア発言「物・お金・デジタル」を 3 軸モデル化 + しぶ応募 写真 10 枚撮影完了 (フォーム送信は 5/6 23:59 締切) + AI 系 X 投稿 7+ 件ファクトチェック (ごくう / すみか / Claude Code Studio / ほしの / 遠藤太一 / 木内翔大 / kumara) + 認識訂正 2 点 (Codex Mac Desktop App = 真の Computer Use、Claude for Word = Word 執筆相性最強) + Dispatch モデル制約 app.asar 直接調査 (Sonnet 4.6 + Opus 4.6 の 2 択、Opus 4.7 はアプリ未対応) + フィッシングメール識別 (年金機構騙り pirosi80 4 通目) + Voice-Pro 発見 (ElevenLabs 5/11 失効対策候補) + 家族構成 context 修正 (結花 12 = 長女 / 彩羽 10 = 次女、両方公立進学予定)（@docs/journal/2026-05-04.md、@docs/projects/seiri-shu-nou-advisor-1.md）
 - **2026-04-30**: GC313Pro 物理セットアップ完了 (USB-C 2 本のみで Mac→GC313Pro→Windows しゅん先生 PC、HDMI 不要) + UVC ビューワ自作不要が判明 (Windows 標準カメラアプリで完結) + YouTube Live 配信停止しローカル表示へ切替 + 午前に Remote Control 失敗の RCA → claude-obsidian v1.4.3 の SessionStart prompt hook 削除 (Claude Code 2.1.123 の `ToolUseContext is required for prompt hooks` 内部バグ回避、機能損失ゼロ) + 上流 2 リポにバグ報告コメント追加 (anthropics/claude-code#48508 + AgriciDaniel/claude-obsidian#7) + 2 週間後の自動フォローアップ agent (trig_011Z6wQomq29fguPfP6nAeKr) 仕込み + しゅん先生 PC の 4K UHD BD 再生スタックを完全確定 (PowerDVD 14.0.1.7320 UHDBD-OEM + LG 40WP95C-W、iiyama BTO 標準バンドル判明、Ryzen / Intel 第 11 世代以降への CPU 換装 NG 根拠完成) + 午後に Karabiner-Elements v15.9.0 導入で写真の片手キーパッド HCT (Hengchangtong VID49396/PID9) に Conductor Studio 風 3 ルール (Caps+WASD→矢印 / 左Alt+1-6→F1-F6 / F+G→Cmd+Tab) 実装 + Anthropic 4/28 リリースの Autodesk Fusion connector 経由で Fusion 360 Personal Use (¥0) セットアップ着手 (ハブ作成画面で再起動中断) + IT navi の Pro Opus 4.7 制限オーバー不満ツイートに @minimalistneko 名義でリプライ投稿（@docs/journal/2026-04-30.md、@docs/machines/shun-sensei-pc.md）
 - **2026-04-29**: 勝間 voice stack 物理セットアップ完了 (V4→V5、SuperWhisper Pro Lifetime + Scribe) **+ 午後しゅん先生 PC を Acer FA100 NVMe に移行 → クローン後 0xc0000001/0x7B で 3 時間死闘 → `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s** + Substack 記事ドラフト作成 + Notes 投稿（@docs/journal/2026-04-29.md）
 - **2026-04-23**: Kioxia 整備品自動監視実装（LaunchAgent 毎日 08:17 JST）+ Intel X25-M G1 80GB 発掘 + しぶ 4/22 動画分析 → りくと編集チーム統括ディレクター昇格判明（72 時間ジャーニー更新）+ pirosi80 フィッシング 3 通目（@docs/journal/2026-04-23.md）
@@ -88,6 +95,8 @@
 
 - **AIミニマリストしぶ チャットサーバー**: Claude CLI 経由の Web チャットボット（@docs/projects/shibu-chatbot.md）
 - **shibu-video-editor**: しぶ受講生インタビュー動画 Claude API 半自動編集 OSS（4/26 公開、`/Users/yuika/Desktop/shibu-video-editor/`、https://github.com/wirelessml/shibu-video-editor、MIT、Python 1,451 行 + 12 unit tests）
+- **整理収納アドバイザー 1 級 2 次審査** (2021/06/10 1 次合格、5/4 構成案策定 + Artifact 図表 10 個完成): @docs/projects/seiri-shu-nou-advisor-1.md
+- **しぶコーチング応募** (5/4 写真撮影完了、フォーム送信は 5/6 23:59 締切): @docs/journal/2026-05-04.md 参照
 - **しぶエコ観察**: @docs/journal/ に日次で記録、関連ナレッジは `ai-minimalist-shibu/knowledge/`
 - **Substack 連載**: 仲啓輔名義、4/22 時点で「SSD 突然死」ネタ投稿済み
 
