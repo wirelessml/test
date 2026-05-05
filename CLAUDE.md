@@ -15,6 +15,12 @@
   - 4/22 19:40: Substack ノートに「SSD 突然死 → クローン復活 → NAND 高騰で買い替え不可」投稿
   - 4/27 18:20: Acer FA100 512GB を はばタンPay+ 50% プレミアムで実質 ¥10,267 購入
   - 🎉 **4/29 16:30**: しゅん先生 PC が Acer FA100 NVMe SSD で完全復活、3 時間のクローン死闘後 `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s（Plextor 時代に復帰）
+- **🔄 セッション再起動直後の即実行タスク (2026-05-06 設定)**:
+  1. `/plugin` で **chrome-devtools-mcp を install / enable**
+  2. Chrome を remote-debug 起動: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --remote-debugging-port=9222 --user-data-dir="$HOME/Library/Application Support/Google/Chrome/Default" &`
+  3. Instagram ログイン状態確認 (@minimalist_sibu)
+  4. **持ち越し**: <https://www.instagram.com/p/DX9FnIfCRFi/?img_index=9> の 9 枚目分析
+  5. 詳細は @docs/journal/2026-05-06.md 冒頭セクション参照
 - **今週の優先 TODO**:
   - [x] ~~SSD 価格監視~~ 完了（4/27 Acer FA100 購入で危機脱出、ルーチン継続は不要）
   - [x] ~~しゅん先生 PC を SMR HDD で延命運用~~ 完了（4/29 NVMe 移行で延命終了）
@@ -63,6 +69,7 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
+- **2026-05-06** (水、振替休日): **Word 体験報告書 4 件修正完了** (P3 ペルソナ削減 / P4 軸書き換え / P5 士業除去 / P9 数値統一) + **Claude Code 全 3 台 v2.1.128 統一** + **microsoft/edit v2.0.0 全 3 台インストール** (Windows 25H2 が System32 に v1.2.1 をバンドル発見) + **Windows 11 26H1 = ARM Snapdragon X2 専用判明** (しゅん先生 PC は永続的に 25H2 ライン Experimental Channel Build 26300.8346) + **masu-p55 LAN SSH 経路確立** (Tailscale offline 中も `ssh masu-p55` で到達可、 ssh config 追記済) + **🐬 CopilotKeyboard / イルカのカイル発見** (Office 97 の 23 年ぶり AI 化復活、しゅん先生 PC 表示中、masu-p55 もレジストリ Kyle.imeskin に切替済) + **黒田蒲鉾の真相**（店頭販売 ◯ / くろかま家 居酒屋 ✗ の事業所単位加盟構造）+ **X 投稿 5/5 21:45** (@minimalistneko、 ID 2051578751096672581、斎藤知事+増山県議への「教えてくれなかった」ツイート) + Algrow / OpenReel / OpenScreen / Recordly / @hoshino_aisales 等の動画 OSS / AI トレンド観察 + チョン・サラ漢字調査（嵐のような結婚生活 DramaBox）+ **次セッション持ち越し**: IG 投稿 9 枚目分析 + Chrome DevTools MCP 復活（@docs/journal/2026-05-06.md）
 - **2026-05-04** (月、みどりの日): **国民年金 令和 7 年度免除申請完了** (03:53 マイナポータル、5 種類全チェック、結果 7-8 月) + **整理収納アドバイザー 1 級 2 次審査体験報告書 Artifact 図表 10 個全完成** (Mobile Dispatch Sonnet 4.6 経由、A 評価 90 点+、`~/Desktop/*.html`) + 構成案 docs 新規作成 (`docs/projects/seiri-shu-nou-advisor-1.md`) + 戦略確定 (タイトル C「次世代整理収納サポート」/ 提案編 / AI 概念のみ実装ナシ / ブランド名完全伏せ / Word + Claude for Word + Artifacts ハイブリッド) + しぶ動画 TRr6gtjHECM のコア発言「物・お金・デジタル」を 3 軸モデル化 + しぶ応募 写真 10 枚撮影完了 (フォーム送信は 5/6 23:59 締切) + AI 系 X 投稿 7+ 件ファクトチェック (ごくう / すみか / Claude Code Studio / ほしの / 遠藤太一 / 木内翔大 / kumara) + 認識訂正 2 点 (Codex Mac Desktop App = 真の Computer Use、Claude for Word = Word 執筆相性最強) + Dispatch モデル制約 app.asar 直接調査 (Sonnet 4.6 + Opus 4.6 の 2 択、Opus 4.7 はアプリ未対応) + フィッシングメール識別 (年金機構騙り pirosi80 4 通目) + Voice-Pro 発見 (ElevenLabs 5/11 失効対策候補) + 家族構成 context 修正 (結花 12 = 長女 / 彩羽 10 = 次女、両方公立進学予定)（@docs/journal/2026-05-04.md、@docs/projects/seiri-shu-nou-advisor-1.md）
 - **2026-04-30**: GC313Pro 物理セットアップ完了 (USB-C 2 本のみで Mac→GC313Pro→Windows しゅん先生 PC、HDMI 不要) + UVC ビューワ自作不要が判明 (Windows 標準カメラアプリで完結) + YouTube Live 配信停止しローカル表示へ切替 + 午前に Remote Control 失敗の RCA → claude-obsidian v1.4.3 の SessionStart prompt hook 削除 (Claude Code 2.1.123 の `ToolUseContext is required for prompt hooks` 内部バグ回避、機能損失ゼロ) + 上流 2 リポにバグ報告コメント追加 (anthropics/claude-code#48508 + AgriciDaniel/claude-obsidian#7) + 2 週間後の自動フォローアップ agent (trig_011Z6wQomq29fguPfP6nAeKr) 仕込み + しゅん先生 PC の 4K UHD BD 再生スタックを完全確定 (PowerDVD 14.0.1.7320 UHDBD-OEM + LG 40WP95C-W、iiyama BTO 標準バンドル判明、Ryzen / Intel 第 11 世代以降への CPU 換装 NG 根拠完成) + 午後に Karabiner-Elements v15.9.0 導入で写真の片手キーパッド HCT (Hengchangtong VID49396/PID9) に Conductor Studio 風 3 ルール (Caps+WASD→矢印 / 左Alt+1-6→F1-F6 / F+G→Cmd+Tab) 実装 + Anthropic 4/28 リリースの Autodesk Fusion connector 経由で Fusion 360 Personal Use (¥0) セットアップ着手 (ハブ作成画面で再起動中断) + IT navi の Pro Opus 4.7 制限オーバー不満ツイートに @minimalistneko 名義でリプライ投稿（@docs/journal/2026-04-30.md、@docs/machines/shun-sensei-pc.md）
 - **2026-04-29**: 勝間 voice stack 物理セットアップ完了 (V4→V5、SuperWhisper Pro Lifetime + Scribe) **+ 午後しゅん先生 PC を Acer FA100 NVMe に移行 → クローン後 0xc0000001/0x7B で 3 時間死闘 → `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s** + Substack 記事ドラフト作成 + Notes 投稿（@docs/journal/2026-04-29.md）
