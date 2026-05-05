@@ -15,12 +15,29 @@
   - 4/22 19:40: Substack ノートに「SSD 突然死 → クローン復活 → NAND 高騰で買い替え不可」投稿
   - 4/27 18:20: Acer FA100 512GB を はばタンPay+ 50% プレミアムで実質 ¥10,267 購入
   - 🎉 **4/29 16:30**: しゅん先生 PC が Acer FA100 NVMe SSD で完全復活、3 時間のクローン死闘後 `stornvme\StartOverride\0=0x3` 削除で起動成功、CDM 3,374 MB/s（Plextor 時代に復帰）
-- **🔄 セッション再起動直後の即実行タスク (2026-05-06 設定)**:
-  1. `/plugin` で **chrome-devtools-mcp を install / enable**
-  2. Chrome を remote-debug 起動: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --remote-debugging-port=9222 --user-data-dir="$HOME/Library/Application Support/Google/Chrome/Default" &`
-  3. Instagram ログイン状態確認 (@minimalist_sibu)
-  4. **持ち越し**: <https://www.instagram.com/p/DX9FnIfCRFi/?img_index=9> の 9 枚目分析
-  5. 詳細は @docs/journal/2026-05-06.md 冒頭セクション参照
+- **🔄 ユーザーが「続きお願いいたします」と言ったら、以下を順番に実行する (2026-05-06 設定)**:
+  1. **このセクションの「現在の状態」+ @docs/journal/2026-05-06.md 冒頭を Read**して文脈を再構築
+  2. ユーザーに対して「Chrome DevTools MCP 復活ルートを進めますね」と一言告げる
+  3. **`/plugin`** を案内して **chrome-devtools-mcp を install / enable** してもらう
+  4. **Chrome を remote-debug 起動**:
+     ```bash
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+       --remote-debugging-port=9222 \
+       --user-data-dir="$HOME/Library/Application Support/Google/Chrome/Default" &
+     ```
+  5. `mcp__chrome-devtools__list_pages` で Chrome タブ確認 → Instagram (@minimalist_sibu) ログイン状態確認
+  6. **持ち越しタスク**: <https://www.instagram.com/p/DX9FnIfCRFi/?img_index=9> へ navigate → **9 枚目を取得して分析**（しぶ Instagram 投稿の可能性大、文脈は ai-minimalist-shibu/knowledge/ 参照）
+  7. 分析結果をユーザーに提示 → ナレッジ更新 / Substack ネタ判定
+  - **直前の主要成果**（再起動前セッション 2026-05-05〜06）:
+    - Word 体験報告書 4 件修正完了（P3/P4/P5/P9）
+    - Claude Code 全 3 台 v2.1.128 統一
+    - microsoft/edit v2.0.0 全 3 台 + Windows 25H2 System32 バンドル発見
+    - Windows 11 26H1 = ARM Snapdragon X2 専用
+    - masu-p55 LAN SSH 経路確立（`ssh masu-p55` で gci_admin 接続可）
+    - 🐬 CopilotKeyboard / イルカのカイル発見・masu-p55 Kyle.imeskin 切替済
+    - 黒田蒲鉾: 店頭 ◯ / くろかま家 ✗ の構造判明
+    - X 投稿 5/5 21:45 ID 2051578751096672581
+  - **詳細とフルログは @docs/journal/2026-05-06.md**
 - **今週の優先 TODO**:
   - [x] ~~SSD 価格監視~~ 完了（4/27 Acer FA100 購入で危機脱出、ルーチン継続は不要）
   - [x] ~~しゅん先生 PC を SMR HDD で延命運用~~ 完了（4/29 NVMe 移行で延命終了）
