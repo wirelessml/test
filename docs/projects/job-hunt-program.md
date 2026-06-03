@@ -247,8 +247,15 @@ job-hunt/
 - **独立検証（Claude が自分で実行）**: `py_compile` OK / `pytest` = **4 passed**（document_loader 2 ＋ profile_parser 2）/ `llm`+`profile_parser` import で `openai` が読み込まれない＝**オフライン動作確認**
 - **全文ログ**: masup `~/job-hunt-parser.log`
 
+### #5 profile_validator 完了（2026-06-03）
+- **生成物**: `src/job_hunt/profile_validator.py` / `tests/test_profile_validator.py`
+  - `validate_profile(profile) -> ValidationReport`: **profile を変更しない**最終ゲート。① schema 再検証 ② 既存 `review_flags` を severity で blocking/warning/notes に振り分け ③ 応募可能性ゲート（person.name / 連絡先[email|phone] / summary.headline / skills か work_history ≥1、不足は blocking）④ YYYY-MM 日付妥当性（不正・start>end は warning）⑤ work_history 重複/矛盾（同 company+role で日付違い→conflict）。`is_application_ready = blocking 0 件`。`validate_or_raise` も提供。
+  - `ValidationReport`(pydantic): `is_application_ready` / `blocking` / `warnings` / `conflicts` / `notes`。
+- **独立検証（Claude が自分で実行）**: `py_compile` OK / `pytest` = **9 passed**（document_loader 2 ＋ profile_parser 2 ＋ profile_validator 5、test は非変更も assert）
+- **全文ログ**: masup `~/job-hunt-validator.log`
+
 ### 未実装（次の増分）
-`profile_validator`(#5) → `job_ingest`(#6) → `job_filter`(#7、勤務地フィルタ) → `matcher`(#8) → `draft_generator`(#9) → `queue`(#10) → `cli`(#11、最小E2E) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。**
+`job_ingest`(#6) → `job_filter`(#7、勤務地フィルタ) → `matcher`(#8) → `draft_generator`(#9) → `queue`(#10) → `cli`(#11、最小E2E) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。**
 
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
