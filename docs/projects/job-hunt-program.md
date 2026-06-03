@@ -226,5 +226,20 @@ job-hunt/
 - → Codex 残確認（形式/配置パス）**解消**。`docs/job-search/` の shokumu/rireki 各版（v1/v2/2023）は予備（参政党提出物を正とする）。
 - ⚠️ **PII**: 履歴書・写真は個人情報（氏名・住所等）。**masup は共用機**なので、開発・テストは redacted fixtures で行い、実書類は実行時のみ・配置先限定。実装時に厳守。
 
+---
+
+## 実装ステータス（2026-06-03）
+
+### v1 実装入口を masup で scaffold 済み（作る順 1〜3 ＋ 足場）
+- **場所**: masup WSL2 `/home/gci_admin/job-hunt/`（Linux ext4、独立 git リポジトリ。Mac の知識ベース repo とは別）。`sanseito-application/` 等の PII は未参照・未コミット、`input/*` は `.gitignore` 済み。
+- **生成**: masup Codex（gpt-5.5、`codex exec --sandbox workspace-write`）
+- **生成物**: `pyproject.toml`（hatchling/uv、`pythonpath=["src"]`）/ `.env.example` / `config/config.yaml` / `src/job_hunt/{__init__,schemas,config,document_loader}.py` / `tests/fixtures/{sample_resume.md,sample_resume.txt,sample_jobs.md}`（**架空・redacted**）/ `tests/test_document_loader.py`
+  - `schemas.py`: pydantic v2、`CanonicalProfile` ほか全モデル。`OnsiteLocationRule(allowed_area="神戸市須磨区戎町近辺", excluded_places=["MASU-p"])`、`ApplicationStatus` に `blocked_scam` 無し（詐欺フィルタ除外を反映）
+  - `document_loader.py`: MD/TXT 直読、PDF=pymupdf / DOCX=python-docx / XLSX=openpyxl は**遅延 import**（未導入時は `needs_review` フォールバック）、画像は OCR 未対応(v1.1)で review 行き。`extract_document` は pydantic 非依存の純関数
+  - `config.py`: YAML＋env オーバーライド、`LLMConfig.api_key` は env 参照（秘密値を埋めない）
+- **独立検証（Claude が自分で実行）**: `py_compile` 全 OK / `uv run --no-project --with pytest pytest` = **2 passed** / pydantic 下で `schemas`＋`config` import OK・`CanonicalProfile` 構築可・`onsite excluded=['MASU-p']` 確認
+- **未実装（次の増分）**: `profile_parser`（`SourceDocument[]`→`CanonicalProfile`、golden test）→ `profile_validator` → `job_ingest` → `job_filter`（勤務地フィルタ）→ `matcher` → `draft_generator` → `queue` → `cli`（最小E2E）→ `ui`(Streamlit)。詐欺フィルタは作らない。
+- **全文ログ**: masup `~/job-hunt-scaffold.log`
+
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
