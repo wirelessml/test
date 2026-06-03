@@ -218,5 +218,13 @@ job-hunt/
 
 最小E2E ゴール: `job-hunt ingest-profile` → `ingest-jobs input/jobs/sample_jobs.md` → `match` → `draft --top 3` → `queue`
 
+### 一次情報源 確定（2026-06-03、仲氏指示）
+- **参政党スタッフ応募で提出した書類が最新＝v1 の唯一の源**（`~/Desktop/sanseito-application/`）:
+  - `スタッフ 仲啓輔 履歴書.pdf`（履歴書 / PDF。中身は `docs/job-search/rireki-2023-0720.pdf` と同一バイト）
+  - `sanseito_staff_resume_template.xlsx`（参政党フォーマット、最新 5/21。**Excel ＝ `document_loader` に xlsx パーサ `openpyxl` を追加**。記入済みかは PII 保護のため未 open）
+  - `スタッフ 仲啓輔 証明写真.jpg`（証明写真 ＝ application asset。プロフィール本文の抽出対象ではない）
+- → Codex 残確認（形式/配置パス）**解消**。`docs/job-search/` の shokumu/rireki 各版（v1/v2/2023）は予備（参政党提出物を正とする）。
+- ⚠️ **PII**: 履歴書・写真は個人情報（氏名・住所等）。**masup は共用機**なので、開発・テストは redacted fixtures で行い、実書類は実行時のみ・配置先限定。実装時に厳守。
+
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
