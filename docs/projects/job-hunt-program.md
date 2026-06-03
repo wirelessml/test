@@ -254,8 +254,16 @@ job-hunt/
 - **独立検証（Claude が自分で実行）**: `py_compile` OK / `pytest` = **9 passed**（document_loader 2 ＋ profile_parser 2 ＋ profile_validator 5、test は非変更も assert）
 - **全文ログ**: masup `~/job-hunt-validator.log`
 
+### #6 job_ingest / #7 job_filter / #8 matcher 完了（2026-06-03）
+> 注: #6 を依頼した `codex exec`（151k tokens）で Codex がスコープを超えて #7/#8 も生成。Claude が事後に #6/#7/#8 を精読＋独立検証して取り込み。masup commit でまとめてチェックポイント化。
+- **#6 `job_ingest.py`**（done）: `load_jobs(path)` が MD/JSON/CSV/dir を**決定的**にパース → `IngestResult(jobs, skipped)`。別名マッピング、`job_id` 安定生成（source_url 正規化 or company+title の sha256[:16]）、必須欠落（title/company/description）は `skipped` 退避。fixtures: sample_jobs.{md,json,csv}（架空）。
+- **#7 `job_filter.py`**（done）: `filter_jobs(jobs, config)` が v1 scope で絞り込み → ① 勤務地（onsite は `須磨区戎町近辺` のみ・`MASU-p` 除外、remote/hybrid/unknown は非拘束）② 技術職シグナル（TECH_KEYWORDS、語境界照合）③ 応募経路（contact_email/application_url/source_url のいずれか）。`JobFilterResult(jobs, skipped, decisions)`。**既知の緩さ: 応募経路は source_url 単独でも可**（メール直応募方針より緩い）。
+- **#8 `matcher.py`**（⚠️ 部分的）: `match_jobs(profile, jobs)` が決定的スコア（スキル50＋役割20＋雇用15＋勤務地15、上限100、location NG で≤70、応募経路なしで −10）＋ reasons/concerns/appeal_points/missing_requirements、MASU-p 除外も反映、`(-score, job_id)` で安定ソート。**未実装: 報酬(salary)スコア**。
+- **独立検証（Claude 実行）**: `py_compile` OK / **pytest 20 passed**（document_loader 2 ＋ profile_parser 2 ＋ profile_validator 5 ＋ job_ingest ＋ job_filter 4 ＋ matcher 3）
+- **全文ログ**: masup `~/job-hunt-ingest.log` / `~/job-hunt-progress.log`
+
 ### 未実装（次の増分）
-`job_ingest`(#6) → `job_filter`(#7、勤務地フィルタ) → `matcher`(#8) → `draft_generator`(#9) → `queue`(#10) → `cli`(#11、最小E2E) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。**
+`draft_generator`(#9) → `queue`(#10) → `cli`(#11、最小E2E) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。** 補完候補: matcher の報酬スコア、document_loader の PDF/DOCX/XLSX テスト、最小E2E回帰テスト。
 
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
