@@ -262,8 +262,16 @@ job-hunt/
 - **独立検証（Claude 実行）**: `py_compile` OK / **pytest 20 passed**（document_loader 2 ＋ profile_parser 2 ＋ profile_validator 5 ＋ job_ingest ＋ job_filter 4 ＋ matcher 3）
 - **全文ログ**: masup `~/job-hunt-ingest.log` / `~/job-hunt-progress.log`
 
+### #9 draft_generator 完了（2026-06-03）
+- **生成物**: `src/job_hunt/draft_generator.py` / `tests/test_draft_generator.py`（スコープ厳守＝#9 のみ）
+  - `generate_draft(profile, job, match=None) -> ApplicationDraft`: **LLM なしの決定的テンプレ**。subject/body（応募メール）/cover_letter を profile の事実（name/summary/skills/関連 work_history・projects）と job（title/company）から構築。
+  - **捏造防止が要**: body に出すのは profile 由来の事実のみ。job.required_skills でも profile に無いものは本文に出さず `review_flag(warning)` に（テストが `"Kubernetes" not in body` ＋ flag 出現を検証）。`_safe_match_points` で match 由来の訴求も profile 裏付けのある語のみ通す。
+  - 決定的（`draft_id = sha256(name+job_id+v1)[:16]`、`created_at` 固定）。contact_email 有→メール体裁／無→フォーム体裁。応募経路（email/url）無しは blocking。`source_refs` に profile 出所＋skill evidence source_id。
+- **独立検証（Claude 実行）**: `py_compile` OK / **pytest 24 passed**（既存 20 ＋ draft 4）。Codex 側で `ruff`/`mypy` も pass。
+- **全文ログ**: masup `~/job-hunt-draft.log`
+
 ### 未実装（次の増分）
-`draft_generator`(#9) → `queue`(#10) → `cli`(#11、最小E2E) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。** 補完候補: matcher の報酬スコア、document_loader の PDF/DOCX/XLSX テスト、最小E2E回帰テスト。
+`queue`(#10、SQLite 永続化＋状態管理) → `cli`(#11、最小E2E: ingest-profile→ingest-jobs→match→draft→queue) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。** 補完候補: matcher の報酬スコア、document_loader の PDF/DOCX/XLSX テスト、`test_e2e_minimal`。
 
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
