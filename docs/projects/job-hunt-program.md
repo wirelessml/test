@@ -270,8 +270,23 @@ job-hunt/
 - **独立検証（Claude 実行）**: `py_compile` OK / **pytest 24 passed**（既存 20 ＋ draft 4）。Codex 側で `ruff`/`mypy` も pass。
 - **全文ログ**: masup `~/job-hunt-draft.log`
 
-### 未実装（次の増分）
-`queue`(#10、SQLite 永続化＋状態管理) → `cli`(#11、最小E2E: ingest-profile→ingest-jobs→match→draft→queue) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。** 補完候補: matcher の報酬スコア、document_loader の PDF/DOCX/XLSX テスト、`test_e2e_minimal`。
+### #10 queue / #11 cli 完了 — 🎉 最小E2E到達（2026-06-03）
+- **#10 `queue.py`**: SQLite 永続（`application_items` テーブル、`item_id` PK で upsert＝冪等、`created_at` 保持、`sent` で `sent_at` 自動）。`ApplicationQueue(db_path)` に add/get/list_items(status)/update_status/upsert。状態 `draft/needs_edit/ready_to_send/sent/rejected`。
+- **#11 `cli.py`**（typer、`[project.scripts] job-hunt = "job_hunt.cli:app"`）: `ingest-profile`（config 書類→LLM、または **`--profile-json` でLLM回避のオフライン経路**）/ `ingest-jobs` / `match` / `draft --top N` / `queue`。出力は `output/*.json`、DB は `data/job_hunt.sqlite`。
+- **独立検証（Claude 実行）**: `py_compile` OK / **pytest 29 passed**（既存24＋queue＋e2e）/ **実 CLI をオフラインで端から端まで実行成功**:
+  - `ingest-profile --profile-json fixtures/expected_profile.json` → readiness=needs_review(blocking 1＝連絡先未。fixture仕様、実履歴書なら解消)
+  - `ingest-jobs sample_jobs.md` → 2 kept / 1 skipped → `match` → 2 → `draft --top 3` → 2 enqueued → `queue` → 2件（87.50 / 56.67）、`data/job_hunt.sqlite` に 2 行
+- **全文ログ**: masup `~/job-hunt-e2e.log`
+
+### 残り
+- **#12 `ui`（Streamlit レビュー画面）のみ**（最小E2E は既に到達＝CLI で動く）。
+- 補完候補（任意）: matcher の報酬スコア / document_loader の PDF/DOCX/XLSX テスト / 実運用（OpenAI キー＋実 履歴書 を実行時に投入、PII は commit しない）。
+- **詐欺フィルタは作らない。**
+
+### 実運用メモ（実 履歴書を使うとき）
+1. 実書類を `input/`（gitignore 済）に置く or `config/config.yaml` の `documents.resume_path`/`career_history_path` を設定。
+2. `OPENAI_API_KEY` を環境に設定（`ingest-profile` が profile_parser→OpenAI structured outputs で `canonical_profile.json` 生成）。
+3. 以降 `ingest-jobs`→`match`→`draft`→`queue`。**送信は人間が最終クリック**（mailer/送信は未実装、ドラフトまで）。
 
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
