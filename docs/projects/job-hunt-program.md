@@ -304,3 +304,13 @@ job-hunt/
 
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
+
+## v1.1 就活方針の一般化（2026-06-03、masup 本体に反映）
+- **動機（実運用検証で判明）**: ①「戎町」ピンポイントでは実 IT 求人ゼロ（住宅地）②仲氏の実プロフィール（IT支援/インフラ/キッティング/介護福祉士）と当初の「AI/技術特化」スコープのズレ ③リモートにすると母集団が須磨区数件→全国数万件に拡大（在宅AI評価 約1万件、データ入力2.3万件+、テクサポ/CS/ヘルプデスク 数百〜千件、キッティング在宅1,400件+）。
+- **masup 本体の変更（v1.1）**:
+  - `FilterConfig.require_technical_signal: bool = False` を追加。`job_filter` は True のときだけ技術シグナル無しを skip、**既定 False＝非IT職も対象**（IT 限定に戻すには True）。
+  - `location_rules.onsite_allowed_area`: 須磨区戎町近辺 → **須磨区**（public「神戸市須磨区（板宿・戎町近辺）」）。`MASU-p` 除外維持。
+  - test_job_filter 更新（非IT通過 / フラグ ON で skip / 須磨区 onsite 通過）。**独立検証 streamlit 込み pytest 42 passed**。SPEC.md v1.1 追記。
+- **PII の扱い**: プロフィールの「AI寄せ」（LLM/生成AIアプリ開発・プロンプト設計・日本語ライティングを skill 追加）は**個人データ(PII)なので Mac ローカル `~/job-hunt-run/` のみ**。masup/Git には未反映。
+- **実運用デモ（Mac・OpenAIキーなし・オフライン）**: 実履歴書＋職務経歴書 → `canonical_profile`(readiness ready) → リモート求人7件で再走 → 本命2本＝**ヘルプデスク/テクニカルサポート完全在宅**（DC運用13年、月22〜54万）と **AI/LLM評価・プロンプト**（AI実務が武器、月60〜90万）。
+- **既知の改善余地（次候補 e）**: matcher のスコア上限張り付き（上位が90同点・データ入力も過大評価）→ 重み調整。draft 本文に matcher 内部 reason（英語）混入＝清書要。
