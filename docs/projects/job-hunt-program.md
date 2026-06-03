@@ -288,7 +288,14 @@ job-hunt/
 - **場所**: masup `/home/gci_admin/job-hunt/`（独立 git、commit `29fe8d6→…→#12`）。Mac 知識ベース repo とは別。**GitHub 未 push**（OSS 公開は別途 GO で）。
 - **使い方（オフライン demo）**: `ingest-profile --profile-json fixtures/expected_profile.json → ingest-jobs → match → draft --top N → queue`、レビューは `streamlit run src/job_hunt/ui.py`。
 - **実運用**: `OPENAI_API_KEY` ＋ 実 履歴書（`input/`、gitignore）→ `ingest-profile`（OpenAI で canonical_profile 生成）。**送信は未実装＝ドラフトまで、最終送信は人間**。
-- **既知の積み残し（任意）**: matcher の報酬スコア未実装 / document_loader の PDF/DOCX/XLSX 未テスト / mailer（実送信）未実装。**詐欺フィルタは方針通り無し。**
+- **補完済み（2026-06-03）**: ✅ matcher 報酬スコア（salary）/ ✅ document_loader の PDF/DOCX/XLSX テスト（`test_document_loader_binary.py`、tmp 生成）/ ✅ mailer（`.eml` 生成、`build_eml`/`write_eml`、SMTP 送信なし）。**pytest 40 passed**（Claude 独立検証）。**実 SMTP 送信は方針通り未実装＝ドラフト/.eml まで、最終送信は人間。詐欺フィルタも方針通り無し。**
+
+## v1 補完（2026-06-03）
+- **matcher salary**: `job.salary_or_rate_text`（年収/月給/時給/¥/「M JPY」等）を決定的パースし `job_preferences.salary_or_rate` の min と比較（充足+5＋reason / 下回り concern / 不明・未指定は info の review_flag で中立）。既存スコア assert 維持。
+- **binary 抽出テスト**: `tests/test_document_loader_binary.py` が PDF(pymupdf)/DOCX(python-docx)/XLSX(openpyxl) を **tmp にその場生成**して抽出検証（バイナリ fixture は非コミット、PII 無し）。
+- **mailer**: `src/job_hunt/mailer.py`。`EmailMessage` で RFC822 `.eml` を生成（`build_eml` / `write_eml`→`output/drafts/<draft_id>.eml`）。To=`job.contact_email`（無→blocking flag＋書き出さず）、From=`JOB_HUNT_MAIL_FROM` 任意。**SMTP 送信は一切しない**。
+- **付随スキーマ変更（正当な最小配線）**: `ApplicationItem` に `job: JobPosting | None`（default None＝後方互換）を追加し、`cli draft` で同梱 → mailer が queue 項目だけから `.eml` を作れる。
+- **独立検証**: `py_compile` OK / streamlit 込み **pytest 40 passed** / Codex 側 ruff・mypy green。コミット masup `<補完>` ← `7d2de45`(#12)。
 
 ### 実運用メモ（実 履歴書を使うとき）
 1. 実書類を `input/`（gitignore 済）に置く or `config/config.yaml` の `documents.resume_path`/`career_history_path` を設定。
