@@ -157,3 +157,66 @@ v1 は既存の職務経歴書/履歴書を**唯一の一次情報**として扱
 - **既存書類あり → A中心成立。既存の職務経歴書/履歴書の「フル活用」が唯一のプロファイル源**（GitHub/Substack/X の自動補完は v1 では不要＝「それが全て」）。
 - **闇バイト/詐欺フィルタは v1 から除外**（仲氏指示）。→ 上記設計の「5. 詐欺フィルタ判定項目」、データフローの安全フィルタ段・`blocked_scam` 状態、詐欺フィルタ系テストは v1 で実装しない。マッチングは「適合スコア＋応募理由/懸念/訴求軸」に集中。
 - **残（実 ingest に必要）**: 既存書類の形式（PDF/DOCX/MD 等）と配置パス。
+
+---
+
+## Codex の v1 実装入口設計（masup / `codex exec` / 2026-06-03、read-only、gpt-5.5）
+
+> 全文 capture: masup `~/job-hunt-impl.txt`（554行）。
+
+### 仲氏への残確認（実 ingest 用・これだけ）
+1. 職務経歴書の形式（PDF / DOCX / Markdown / TXT / その他）
+2. 職務経歴書の配置パス（例 `~/job-hunt/input/cv.pdf`）
+3. 履歴書の形式
+4. 履歴書の配置パス（例 `~/job-hunt/input/resume.pdf`）
+
+### v1 確定（再掲）
+既存の職務経歴書/履歴書が**唯一のプロファイル源**。公開情報の自動補完なし（書類内 URL は保持可）。**詐欺フィルタ完全除外**（安全フィルタ段・`blocked_scam`・詐欺スコア・詐欺テスト無し）。評価軸＝適合度・応募理由・懸念・訴求軸。
+
+### モジュール分割
+| モジュール | 責務 | 入力 | 出力 |
+|---|---|---|---|
+| `config` | パス/LLM/DB/v1固定ルール読込 | `config.yaml`,env | `AppConfig` |
+| `document_loader` | 書類の存在確認・ハッシュ・テキスト抽出 | 書類パス | `SourceDocument[]` |
+| `profile_parser` | 抽出テキスト→構造化 | `SourceDocument[]` | `CanonicalProfile`,`review_flags` |
+| `profile_validator` | スキーマ検証・必須欠落・矛盾検出（推測で埋めない） | `CanonicalProfile` | validated / errors |
+| `job_ingest` | 求人を手動/CSV/JSON/MDから取込 | 求人ファイル/URLメモ | `JobPosting[]` |
+| `job_filter` | v1範囲フィルタのみ（AI/技術系・メール直応募・勤務地） | `JobPosting[]`,config | filtered |
+| `matcher` | 照合・順位付け | profile,`JobPosting[]` | `MatchResult[]` |
+| `draft_generator` | 応募メール/カバーレター生成（書類由来の事実だけ） | profile,job,match | `ApplicationDraft` |
+| `queue` | レビューキュー永続化 | draft,match,job | `ApplicationItem` |
+| `ui` | レビュー/編集/状態変更/送信前確認 | queue DB | dashboard |
+| `mailer` | メール直応募のみ・レビュー後送信 | approved item | send log |
+
+キュー状態（v1）: `draft` / `needs_edit` / `ready_to_send` / `sent` / `rejected`
+
+### 最小ディレクトリ構成
+```text
+job-hunt/
+  pyproject.toml  README.md  .env.example
+  config/config.yaml
+  input/{resume.*, cv.*, jobs/sample_jobs.md}
+  output/{canonical_profile.json, drafts/}
+  data/job_hunt.sqlite
+  src/job_hunt/{__init__,config,document_loader,profile_parser,profile_validator,job_ingest,job_filter,matcher,draft_generator,queue,mailer,cli,ui,schemas}.py
+  tests/{fixtures/, test_document_loader.py, test_profile_parser.py, test_matcher.py, test_draft_generator.py, test_e2e_minimal.py}
+```
+
+### 最初に作る順番（最小E2E最短）
+1. `schemas.py`（`SourceDocument`/`CanonicalProfile`/`JobPosting`/`MatchResult`/`ApplicationDraft`/`ApplicationItem`）
+2. `config.py`（書類パス/DB/LLM/勤務地ルール）
+3. `document_loader.py`（PDF/DOCX/MD/TXT 抽出、まず MD/TXT を確実に）
+4. `profile_parser.py`（抽出→`canonical_profile.json`、初手 LLM structured output）
+5. `profile_validator.py`（欠落/矛盾を `review_flags`、補完しない）
+6. `job_ingest.py`（`input/jobs/sample_jobs.md` から投入）
+7. `job_filter.py`（onsite=須磨区戎町近辺、MASU-p 除外）
+8. `matcher.py`（スキル/職種/契約/勤務地/リモート/報酬で単純スコア）
+9. `draft_generator.py`（1求人→応募メール1通）
+10. `queue.py`（SQLite に `draft` 保存）
+11. `cli.py`（`ingest-profile → ingest-jobs → match → draft → list-queue` の最小E2E）
+12. `ui.py`（CLI E2E 後に Streamlit）
+
+最小E2E ゴール: `job-hunt ingest-profile` → `ingest-jobs input/jobs/sample_jobs.md` → `match` → `draft --top 3` → `queue`
+
+### 技術スタック
+Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
