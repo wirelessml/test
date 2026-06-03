@@ -29,12 +29,12 @@
 探索 → マッチング（合致理由付きランキング）→ 応募物の自動ドラフト（職務経歴書 / 応募文 / カバーレター / メール）→ レビューキュー（編集＋ワンクリック送信）
 
 ## 未確定 / Codex が次に詰めるべき点
-1. **Q5（最優先）: プロファイルの元データ** — どれを基にマッチング＆書類生成するか
-   - A) 既存の職務経歴書/履歴書を使う（最速）
+1. ~~**Q5（最優先）: プロファイルの元データ**~~ → **確定: A（既存の職務経歴書/履歴書ベース）**（2026-06-03 仲氏回答）
+   - A) 既存の職務経歴書/履歴書を使う（最速） ← **採用**
    - B) オンラインの自分から自動生成（GitHub: wirelessml ＋ Substack: 仲啓輔 ＋ X: @minimalistneko）
    - C) 対話で一から作る
-   - D) 併用（例: B で叩き台 → C で補正）
-   → **まず仲氏に確認**。
+   - D) 併用（Codex 推奨だったが不採用）
+   → 仲氏判断: **最速・品質安定・事実誤認少**を優先して A。
 2. v1 のアプローチを 2-3 案（トレードオフ付き）→ 設計（アーキ / 構成要素 / データフロー / エラー処理 / テスト）
 3. 技術スタック: 既存資産（Codex/Claude/Gemini、masup=Codex 専用 WSL2）を活かす方針
 
@@ -77,5 +77,76 @@
 ### 最小 v1 の順番
 ①Q5 確認 → ②canonical profile スキーマ作成 → ③各ソースからプロフィール生成 → ④AI/技術特化求人＋メール直応募先の収集 → ⑤闇バイト/詐欺フィルタ → ⑥マッチング理由付きランキング → ⑦応募文・メール文ドラフト → ⑧人間レビュー後のワンクリック送信キュー
 
-### 次のブロッカー
-**Q5（A/B/C/D）の確定待ち。** Codex の推奨は D。仲氏の回答後、canonical profile スキーマ設計へ進む。
+### 次のブロッカー（解消）
+**Q5 = A（既存書類ベース）に確定（2026-06-03）。** 次手＝A中心 v1 の設計（既存書類の取り込み形式 → canonical_profile スキーマ → マッチング → ドラフト → レビューキュー）。設計時点では現物書類は不要、ランタイムで必要。**残確認: 職務経歴書/履歴書の有無・鮮度・配置パス。**
+
+---
+
+## Codex の A中心 v1 設計（masup WSL2 / `codex exec` / 2026-06-03、read-only、gpt-5.5）
+
+> 全文 capture: masup `~/job-hunt-design-a.txt`（673行、preamble込み）。以下は設計本体。
+
+### 仲氏への残確認（A中心の前提・**次のブロッカー**）
+1. **職務経歴書は存在するか**。最終更新日、形式（PDF/DOCX/Markdown/Google Docs export 等）、配置パス、最新版か。
+2. **履歴書は存在するか**。最終更新日、形式、配置パス、写真・住所・電話番号・メールの扱い。
+3. **既存書類はそのまま応募に使える品質か**。古い職歴、未反映プロジェクト、削除したい記載、盛りすぎ表現の有無。
+4. 職務経歴書と履歴書で矛盾時、どちらを正とするか（原則: 履歴書=個人情報/学歴/職歴年月、職務経歴書=スキル/実績/職務内容）。
+5. 希望条件の最新値（正社員/業務委託/フリーランス優先度、年収/単価、稼働開始時期、週稼働日数、リモート可否、onsite は須磨区戎町近辺限定）。
+6. 応募文に自動挿入してよい個人情報（本名、メール、電話、住所粒度、GitHub/Substack/X URL）。
+7. v1 の生成物形式（`canonical_profile.json` / 職務経歴書 MD・PDF / 企業別応募メール / カバーレター / レビューキューDB のどこまで必須か）。
+8. 書類配置ルール（例: `~/job-hunt/input/resume.*` `~/job-hunt/input/cv.*`、生成物は `~/job-hunt/output/`）。
+
+### 1. 基本方針
+v1 は既存の職務経歴書/履歴書を**唯一の一次情報**として扱う。GitHub/Substack/X は v1 では自動補完に使わず、書類内に URL がある場合のみリンク保持。狙いは「速く・事実誤認少なく・応募可能なドラフトまで到達」。
+
+### 2. パース方針
+入力を `source_documents`（原本パス・ハッシュ・抽出テキスト・抽出日時）として保存。PDF/DOCX/MD/TXT 優先、画像PDF/スキャンは v1.1（OCR 失敗はレビューキュー）。2段階: ①deterministic extraction（見出し/表/箇条書き/年月/URL/メール/電話を構造化）→ ②LLM structured parsing（スキーマへマッピング、各フィールドに `source_ref`）。衝突解決優先順位: 個人情報/学歴/職歴年月=履歴書、職務内容/技術/実績/自己PR=職務経歴書、希望条件=書類より仲氏の最新回答、不明/矛盾=自動推測せず `needs_review`。
+
+### 3. canonical_profile JSON スキーマ案
+```json
+{
+  "schema_version": "1.0",
+  "updated_at": "ISO-8601",
+  "person": {
+    "name": "string", "email": "string|null", "phone": "string|null",
+    "location_public": "string", "location_private": "string|null",
+    "links": {"github":"string|null","substack":"string|null","x":"string|null","portfolio":"string|null"}
+  },
+  "job_preferences": {
+    "employment_types": ["full_time","contract","freelance"],
+    "target_roles": ["string"], "industries": ["string"],
+    "remote": "remote_only|hybrid_ok|onsite_ok",
+    "onsite_location_rule": {"enabled": true, "allowed_area": "神戸市須磨区戎町近辺", "excluded_places": ["MASU-p"]},
+    "salary_or_rate": {"annual_jpy_min":"number|null","monthly_jpy_min":"number|null","hourly_jpy_min":"number|null"},
+    "availability": {"start_date":"string|null","weekly_days":"number|null","notes":"string|null"},
+    "ng_conditions": ["string"]
+  },
+  "summary": {"headline":"string","short_bio":"string","strengths":["string"]},
+  "skills": [{"name":"string","category":"language|framework|cloud|ml_ai|tool|domain|other","level":"beginner|intermediate|advanced|expert|null","years":"number|null","evidence":[{"source_id":"string","quote":"string"}]}],
+  "work_history": [{"company":"string","role":"string","employment_type":"string|null","start":"YYYY-MM|null","end":"YYYY-MM|null","description":"string","achievements":["string"],"technologies":["string"],"source_refs":["string"]}],
+  "projects": [{"name":"string","type":"work|oss|personal|writing|other","url":"string|null","description":"string","impact":"string|null","technologies":["string"],"source_refs":["string"]}],
+  "education": [{"school":"string","degree_or_department":"string|null","start":"YYYY-MM|null","end":"YYYY-MM|null"}],
+  "certifications": [{"name":"string","issued_by":"string|null","issued_at":"YYYY-MM|null"}],
+  "application_assets": {"base_resume_path":"string|null","base_cv_path":"string|null","default_cover_letter_tone":"concise_professional"},
+  "review_flags": [{"field":"string","severity":"info|warning|blocking","message":"string"}]
+}
+```
+
+### 4. データフロー
+- **探索**: 求人ソースは AI/技術特化＋メール直応募に限定。Findy/LAPRAS 等は規約に合わせ手動エクスポート or 許可 API/通知メール起点。URL・本文・会社名・職種・勤務地・報酬・連絡先・応募方法を `job_posting` に保存。
+- **マッチング**: `canonical_profile` × `job_posting` でスキル/役割/契約形態/勤務地/報酬/リモート/NG/詐欺リスクをスコア化。順位＋「応募すべき理由/懸念/訴求軸」を必ず持たせる。
+- **ドラフト**: 求人ごとに応募メール/カバーレター/（必要なら）職務経歴書強調版。書類の事実を超える主張は禁止、`source_refs` 付き項目からのみ。
+- **レビューキュー**: 状態 `draft|needs_edit|ready_to_send|sent|rejected|blocked_scam`。画面に求人本文/マッチ理由/リスク判定/ドラフト/編集欄/送信先/添付を表示。送信は手動クリック or メール直応募のみワンクリック。
+
+### 5. 闇バイト/詐欺フィルタ判定項目
+即時ブロック候補: 業務曖昧×高報酬/日払い/即日現金 ・面接なし/履歴書不要/誰でも/スマホだけ/短時間高収入 ・Telegram/Signal/個人LINE/匿名SNS誘導 ・身分証/口座/クレカ/暗号資産ウォレット/ログイン情報の先出し要求 ・荷物受取/口座貸与/名義貸し/決済・送金・レビュー代行 ・会社名/所在地/法人番号/採用ページ/固定メールドメイン不明 ・相場乖離報酬 ・契約書前の個人情報/金銭要求 ・コピペ風本文/外部誘導のみ/仕事内容が頻繁変化。判定は `risk_score 0-100` ＋ `risk_level: low|medium|high|blocked`。`high` 以上はキュー表示するが送信不可、`blocked` は自動除外。
+
+### 6. エラー処理
+書類未配置=`blocking` で停止しパス提示 / パース失敗=原本・抽出テキスト・理由保存し別形式変換促す / スキーマ検証失敗=`review_flags` 行き・ドラフトに使わない / 矛盾=`needs_review`（自動で丸めない）/ 求人取得失敗=ソース単位リトライ・他は継続 / ドラフト失敗=スナップショット保存し再生成可 / 送信失敗=メール直応募のみ送信ログ・再送可否保存。
+
+### 7. テスト方針
+- ユニット: PDF/DOCX/MD/TXT 抽出 / スキーマ検証 / 履歴書×職務経歴書の衝突解決 / **勤務地フィルタ（onsite は須磨区戎町近辺のみ・MASU-p は候補にしない）** / 詐欺フィルタ赤フラグ / スコアリング基本ケース
+- ゴールデン: サンプル職務経歴書→期待JSON / サンプル求人→期待するマッチ理由・懸念・訴求軸 / ドラフトが書類にない実績を捏造しない
+- E2E: 書類配置→パース→profile生成→求人投入→フィルタ→マッチング→ドラフト→キュー登録 / 詐欺疑いは送信可能状態にならない / メール直応募は送信前プレビュー必須
+
+**v1 完成条件**: 既存書類から正規プロフィールを作り、求人を安全にふるい分け、応募文を生成し、人間レビュー付きで送信直前まで持っていけること。
