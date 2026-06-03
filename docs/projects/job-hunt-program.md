@@ -238,8 +238,17 @@ job-hunt/
   - `document_loader.py`: MD/TXT 直読、PDF=pymupdf / DOCX=python-docx / XLSX=openpyxl は**遅延 import**（未導入時は `needs_review` フォールバック）、画像は OCR 未対応(v1.1)で review 行き。`extract_document` は pydantic 非依存の純関数
   - `config.py`: YAML＋env オーバーライド、`LLMConfig.api_key` は env 参照（秘密値を埋めない）
 - **独立検証（Claude が自分で実行）**: `py_compile` 全 OK / `uv run --no-project --with pytest pytest` = **2 passed** / pydantic 下で `schemas`＋`config` import OK・`CanonicalProfile` 構築可・`onsite excluded=['MASU-p']` 確認
-- **未実装（次の増分）**: `profile_parser`（`SourceDocument[]`→`CanonicalProfile`、golden test）→ `profile_validator` → `job_ingest` → `job_filter`（勤務地フィルタ）→ `matcher` → `draft_generator` → `queue` → `cli`（最小E2E）→ `ui`(Streamlit)。詐欺フィルタは作らない。
 - **全文ログ**: masup `~/job-hunt-scaffold.log`
+
+### #4 profile_parser 完了（2026-06-03）
+- **生成物**: `src/job_hunt/llm.py` / `src/job_hunt/profile_parser.py` / `tests/fixtures/expected_profile.json`（架空・PII無し）/ `tests/test_profile_parser.py`
+  - `profile_parser.build_canonical_profile(sources, llm)`: LLM 構造化出力を `CanonicalProfile` に pydantic 検証。**捏造禁止・欠損/矛盾→`review_flag`・MASU-p 除外をコード側で強制**（LLM 任せにしない）。person.name/summary.headline 等の必須欠落は blocking フラグ＋空文字。skills の evidence・work_history/projects の source_refs 欠落は warning。
+  - `llm.py`: `StructuredProfileLLM`(Protocol) / `OpenAIStructuredLLM`(実行時用、`openai` を遅延 import、responses.parse と beta.chat.completions.parse の両対応、API キーは config/env) / `StubProfileLLM`(テスト注入用)。
+- **独立検証（Claude が自分で実行）**: `py_compile` OK / `pytest` = **4 passed**（document_loader 2 ＋ profile_parser 2）/ `llm`+`profile_parser` import で `openai` が読み込まれない＝**オフライン動作確認**
+- **全文ログ**: masup `~/job-hunt-parser.log`
+
+### 未実装（次の増分）
+`profile_validator`(#5) → `job_ingest`(#6) → `job_filter`(#7、勤務地フィルタ) → `matcher`(#8) → `draft_generator`(#9) → `queue`(#10) → `cli`(#11、最小E2E) → `ui`(#12、Streamlit)。**詐欺フィルタは作らない。**
 
 ### 技術スタック
 Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB=SQLite+`sqlmodel`(or `sqlite-utils`) ・ PDF=`pymupdf` ・ DOCX=`python-docx` ・ LLM=OpenAI structured outputs（masup WSL2 に集約） ・ UI=CLI→`streamlit` ・ test=`pytest` ・ `ruff`+`mypy` 早め ・ メールは後半 SMTP/Gmail API（初手は `.eml` 生成まで）。**実装入口＝`schemas.py` + `document_loader.py`**。
