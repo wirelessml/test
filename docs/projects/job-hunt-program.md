@@ -278,10 +278,17 @@ job-hunt/
   - `ingest-jobs sample_jobs.md` → 2 kept / 1 skipped → `match` → 2 → `draft --top 3` → 2 enqueued → `queue` → 2件（87.50 / 56.67）、`data/job_hunt.sqlite` に 2 行
 - **全文ログ**: masup `~/job-hunt-e2e.log`
 
-### 残り
-- **#12 `ui`（Streamlit レビュー画面）のみ**（最小E2E は既に到達＝CLI で動く）。
-- 補完候補（任意）: matcher の報酬スコア / document_loader の PDF/DOCX/XLSX テスト / 実運用（OpenAI キー＋実 履歴書 を実行時に投入、PII は commit しない）。
-- **詐欺フィルタは作らない。**
+### #12 ui 完了 — 🎉 v1 全12モジュール完成（2026-06-03）
+- **#12 `ui.py`**: Streamlit レビューキュー画面。status フィルタ、draft body/cover_letter/subject/reviewer_notes 編集、review_flags 色分け（blocking=error/warning/info）、match の reasons/concerns/appeal_points/missing_requirements 表示、`ready_to_send` の**送信前確認**（宛先・件名・本文プレビュー＋「送信は人間が手動。このアプリは送信しない」明示）、status 変更（needs_edit/ready_to_send/sent/rejected、編集は `queue.upsert_item` 保存）。`streamlit run src/job_hunt/ui.py`（別DBは `JOB_HUNT_DB_PATH`）。
+- **独立検証（Claude 実行）**: `py_compile` OK / **streamlit を導入して pytest 30 passed**（`test_ui.py` の `streamlit.testing.v1.AppTest` を実走。Codex 環境では DNS 制限で skip だった UI テストを Claude が実際に走らせて green 確認）。
+- **全文ログ**: masup `~/job-hunt-ui.log`
+
+## ✅ v1 完成サマリー（2026-06-03）
+- **全12モジュール done**（schemas / config / document_loader / profile_parser / profile_validator / job_ingest / job_filter / matcher / draft_generator / queue / cli / ui）。**pytest 30 passed**（Claude が各増分を独立検証）。最小E2E は CLI で実走確認済み。
+- **場所**: masup `/home/gci_admin/job-hunt/`（独立 git、commit `29fe8d6→…→#12`）。Mac 知識ベース repo とは別。**GitHub 未 push**（OSS 公開は別途 GO で）。
+- **使い方（オフライン demo）**: `ingest-profile --profile-json fixtures/expected_profile.json → ingest-jobs → match → draft --top N → queue`、レビューは `streamlit run src/job_hunt/ui.py`。
+- **実運用**: `OPENAI_API_KEY` ＋ 実 履歴書（`input/`、gitignore）→ `ingest-profile`（OpenAI で canonical_profile 生成）。**送信は未実装＝ドラフトまで、最終送信は人間**。
+- **既知の積み残し（任意）**: matcher の報酬スコア未実装 / document_loader の PDF/DOCX/XLSX 未テスト / mailer（実送信）未実装。**詐欺フィルタは方針通り無し。**
 
 ### 実運用メモ（実 履歴書を使うとき）
 1. 実書類を `input/`（gitignore 済）に置く or `config/config.yaml` の `documents.resume_path`/`career_history_path` を設定。
