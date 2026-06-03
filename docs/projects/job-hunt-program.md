@@ -314,3 +314,9 @@ Python 3.11/3.12 ・ `uv` ・ CLI=`typer` ・ 型/スキーマ=`pydantic` ・ DB
 - **PII の扱い**: プロフィールの「AI寄せ」（LLM/生成AIアプリ開発・プロンプト設計・日本語ライティングを skill 追加）は**個人データ(PII)なので Mac ローカル `~/job-hunt-run/` のみ**。masup/Git には未反映。
 - **実運用デモ（Mac・OpenAIキーなし・オフライン）**: 実履歴書＋職務経歴書 → `canonical_profile`(readiness ready) → リモート求人7件で再走 → 本命2本＝**ヘルプデスク/テクニカルサポート完全在宅**（DC運用13年、月22〜54万）と **AI/LLM評価・プロンプト**（AI実務が武器、月60〜90万）。
 - **既知の改善余地（次候補 e）**: matcher のスコア上限張り付き（上位が90同点・データ入力も過大評価）→ 重み調整。draft 本文に matcher 内部 reason（英語）混入＝清書要。
+
+## v1.2 勤務地は戎町近辺に固定（2026-06-03、仲氏指示）
+- 仲氏「戎町近辺は変えない」→ **v1.1 で広げた勤務地（須磨区）を元の「須磨区戎町近辺 / 神戸市須磨区戎町近辺」へ巻き戻し**（config.yaml ＋ LocationRulesConfig 既定）。`MASU-p` 除外維持。
+- **IT/技術職フィルタの設定化（`FilterConfig.require_technical_signal`、既定 False＝非IT も対象）は維持**（v1.1 のこの部分は残す）。
+- test_job_filter は戎町近辺基準に整合（戎町=KEEP / 板宿=SKIP「戎町近辺の外」）。**独立検証 streamlit 込み pytest 42 passed**。masup commit `1716e04`。Mac 実行コピー `~/job-hunt-run/config/config.yaml` も戎町近辺に整合。
+- **確定した方針**: **onsite は戎町近辺に厳格（自宅近接のみ）／求人の量は地理制約のないリモートで取る**。非IT も対象（介護・事務・CS 等）。
