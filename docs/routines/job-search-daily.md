@@ -41,6 +41,17 @@
 - Claude に「**就活レポート**」と言う → 最新を SSH で読んで要約報告（朝の cron `7a830b54` でも自動報告するが、これは **Claude セッション限定＝セッションが落ちると消える**点に注意）
 - 手動: `ssh masu-p55 'wsl bash -lc "ls -1t ~/job-search-daily/reports/job-report-*.md | head -1 | xargs cat"'`
 
+## メール自動報告（毎朝・確定）
+
+毎朝レポートが**メールで届く**（masupに秘密情報を置かない設計）:
+- **Mac LaunchAgent `com.yuika.job-report-email`**（`~/Library/LaunchAgents/com.yuika.job-report-email.plist`、**毎朝 04:35 JST**）が `~/Desktop/scripts/email-job-report.sh` を実行。
+- 流れ: masup が 04:00 に生成→GitHub push 済みなので、Mac は **公開リポジトリの raw を curl 取得**（ssh不要・公開repoなので無認証）→ Mac 既存の `scripts/lib/send-email.py`（`~/.config/masu-p-watch/email.json` の Gmail app password 再利用）で **wirelessml@gmail.com に送信**。
+- 件名例: `【就活求人レポート】2026-06-04 計50件（戎町500m＋本社=兵庫/大阪/京都リモート, 同志社/将棋優先）`、本文=レポート全文。
+- 一発ジョブ（数秒で終了・常駐しない）＝ Mac=Claude Code 専用/軽量方針と矛盾しない。Gmail app password は**私物Macのみ**（共用masupには置かない）。
+- ログ: `~/Desktop/scripts/job-report-email.log` ＋ `/tmp/job-report-email-launchd.log`。
+- 停止: `launchctl bootout gui/$(id -u)/com.yuika.job-report-email`。手動送信: `bash ~/Desktop/scripts/email-job-report.sh`。
+- 注意: Mac が04:35に起動していれば送信、スリープ/オフなら**次回起動時**に送る（StartCalendarInterval）。
+
 ## 設定を変えるとき
 
 `daily-job-search.sh` の `PROMPT` を編集して再配置（base64 で送る）:
