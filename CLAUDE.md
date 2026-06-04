@@ -136,6 +136,7 @@
 - **しぶ Instagram 監視**（毎時 17 分）: @docs/routines/instagram-watch.md
 - **MASU-p 監視**（毎日 18:12 JST、LaunchAgent）: @docs/routines/masu-p-watch.md
 - **リモートコントロール状態報告**（毎時 33 分）: @docs/routines/remote-control-report.md
+- **就活 求人サーチ**（毎朝 04:00 JST、masup WSL2 Codex CLI。戎町500m全件＋本社=兵庫/大阪/京都リモートで計50件→GitHub `wirelessml/job-hunt-reports` に自動公開。「就活レポート」で最新報告）: @docs/routines/job-search-daily.md
 - **運用ルーチン（CLAUDE.md とタスク管理の二層構造）**: @docs/routines/task-management.md
 
 ## TODO リスト
