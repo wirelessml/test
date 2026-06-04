@@ -1,5 +1,6 @@
 ## リマインダー（セッション開始時に日付を確認し、該当日に通知すること）
 
+- **2026/06/08（月）夕方**: **ふゆ×くら！お金部（DMMオンラインサロン、オーナー ふゆこ／オフ会担当 くらま）を退会** — 月額自動更新で次回課金 ≒**7/2**。残日数（スクショ時点で28日）をフル活用してから退会すれば追加課金ゼロ。**この日からユーザーが Mac の Chrome で DMM（Amazonログイン経由）にログイン → Claude が `lounge.dmm.com/mylounge/` に直接アクセス可能**になるので、参加中サロン一覧を取得し**他の課金サロンも棚卸し（無職期間の固定費カット）**。退会・解約の**最終クリックはユーザー本人**（金銭・契約は代行しない）。サロン分析の詳細 @docs/journal/2026-06-05.md
 - **2026/04/29（水）コワーキング着席日**: ✅ **勝間 voice stack 物理セットアップ完了（06:30〜07:45）** **+ 🎉 午後しゅん先生 PC を Acer FA100 NVMe に移行成功（13:45〜16:50、3 時間死闘の真犯人 `stornvme\StartOverride\0=0x3`、CDM 3,374 MB/s で公称超え）** — 詳細 @docs/journal/2026-04-29.md
   - SSH で Python 12 ファイル配置 + ElevenLabs キー Mac→Win 流用永続化（starter tier、7,528/40,000 chars）
   - SuperWhisper Windows v1.3.9 インストール + 設定（S1-Voice / Japanese / Push to Talk Alt / Auto paste Off）
