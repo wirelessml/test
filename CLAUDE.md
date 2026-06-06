@@ -128,6 +128,8 @@
 - **しぶコーチング応募** (5/4 写真撮影完了、フォーム送信は 5/6 23:59 締切): @docs/journal/2026-05-04.md 参照
 - **しぶエコ観察**: @docs/journal/ に日次で記録、関連ナレッジは `ai-minimalist-shibu/knowledge/`
 - **Substack 連載**: 仲啓輔名義、4/22 時点で「SSD 突然死」ネタ投稿済み
+- **動画スキル向上**: 採算度外視。撮影とGUI手編集を主軸に、2週間でルームツアー1本を完走する（@docs/projects/video-skills.md）
+- **ミニマリスト宅訪問動画制作**: 参考動画2本をもとに、ルームツアー＋持ち物/価値観インタビューの実制作手順を管理する（@docs/projects/minimalist-visit-production.md）
 
 ## 定期ルーチン（詳細は @docs/routines/）
 
