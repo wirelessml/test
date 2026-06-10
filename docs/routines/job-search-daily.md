@@ -60,6 +60,7 @@
 - 停止: `launchctl bootout gui/$(id -u)/com.yuika.job-report-email`。手動送信: `bash "$HOME/Library/Application Support/job-report/email-job-report.sh"`。
 - ⚠️ 教訓: **launchd から起動するスクリプト/ログは `~/Desktop` に置かない**（TCCで `Operation not permitted`）。`~/Library/Application Support/` 配下に置く。`~/.config/` と `/tmp/` はlaunchdから読み書き可。
 - 注意: 05:00 に Mac が起動していれば即送信、スリープ/オフなら**朝 Mac を開いた瞬間（次回起床時）**に送る（StartCalendarInterval の取りこぼし起床実行）。※08:02→05:00 に変更（2026-06-05。レポートは04:10頃完成済で待つ意味がなく、起床時に即届くよう前倒し）。
+- ⚠️ **masup Codex のクォータ切れに注意**（2026-06-10 発覚）: 同日中にレポート再生成を繰り返す＋Codex に別作業をさせると使用量上限に当たり、`codex exit=1`（ERROR: usage limit）で**当日/翌朝の生成が失敗**する。失敗時は古いレポートが残るだけで気づきにくい → Mac メール側はフォールバック時に件名へ「⚠️YYYY-MM-DD分の再送(当日分未生成)」と明記するよう改修済（2026-06-10）。復旧はクォータリセット後に `schtasks /Create /SC ONCE` の一回限りタスク等で再実行（例: `JobHuntRerun-20260611` 10:00）。
 
 ## 設定を変えるとき
 
