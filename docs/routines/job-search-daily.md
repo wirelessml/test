@@ -1,6 +1,14 @@
-# 毎朝の求人サーチ（全職種: 戎町500m全件 + 関西本社リモート在宅、計~50件）
+# 毎朝の求人サーチ（板宿駅1km・資格不要 + 声を出さない在宅事務）
 
-> 確定: 2026-06-04。masup WSL2 の Codex CLI で毎朝実行し、GitHub に自動公開。
+> 確定: 2026-06-04（masup Codex 版）→ **2026-06-10 夜に Mac/Claude 製スクリプトへ完全移管（Codex 不使用）**。
+
+> 🔄 **2026-06-10 改訂5（実行主体を Mac に移管＋条件の恒久化）**: ユーザー指示「恒久対応。この仕事は全て、あなただけで」により、**masup Codex への依存を廃止**。
+> - **実行主体**: Mac の自作 Python スクリプト `~/Library/Application Support/job-report/job-search-daily.py`（リポジトリ控え: `scripts/job-search-daily-mac.py`）。求人ボックスを直接走査・パース・検証する決定論的スクリプトで、LLM/Codex を使わない＝**クォータ切れと水増しが構造的に消滅**
+> - **トリガー**: Mac LaunchAgent `com.yuika.job-search-mac`（**毎朝 04:30 JST**、スリープ中なら次回起床時）→ 生成・GitHub push 後にメールスクリプトを直接起動（05:00 の既存メールジョブは二重送信防止マーカー付きのバックアップに降格）
+> - **恒久条件**: ①範囲=板宿駅 約1km（徒歩約12分、検索カードの町名/徒歩分数で判定）②資格・免許必須職を全除外（看護・薬剤・歯科衛生・保育士・美容師・施術系・心理・重機等）③福祉・飲食・50代不可明記・新卒限定を除外 ④在宅可は「声を出さない」事務系のみ（コール/CS/受付/電話/テレオペ除外、神戸市優先→兵庫県内、最大40件）⑤/jb/ 詳細ページで実在・勤務地検証（矛盾は除外しレポート末尾に記録）
+> - **masup 側**: タスク `JobHuntDailySearch` は**無効化**（削除はしていない。`schtasks /Change /TN JobHuntDailySearch /ENABLE` で復元可）。一回限りタスク `JobHuntRerun-20260611` は削除済
+> - テスト実行: `cd ~/Library/Application\ Support/job-report && JS_NO_PUSH=1 JS_NO_EMAIL=1 JS_DATE=test python3 job-search-daily.py`（ログ: 同ディレクトリ `job-search-daily.log`）
+> - ⚠️ 以下の「スケジュール/実行経路」「GitHub自動push」「設定を変えるとき」の各節は **masup Codex 時代の記述（履歴として保持）**。現行は本注記が正
 
 ## 何をするルーチンか
 
