@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIミニマリストしぶ</title>
+<style>
+:root { --bg: #0a0a0a; --surface: #161616; --border: #2a2a2a; --text: #e5e5e5; --muted: #888; --accent: #4ade80; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Noto Sans JP', sans-serif; height: 100dvh; display: flex; flex-direction: column; }
+
+header { padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+header h1 { font-size: 16px; color: var(--accent); }
+header small { color: var(--muted); font-size: 11px; }
+.settings-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 4px 8px; }
+
+#setup { padding: 24px 16px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+#setup label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; }
+#setup input { width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; }
+#setup button { margin-top: 8px; padding: 10px 20px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
+#setup p { font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+#chat { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.msg { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+.msg.ai { background: #1a2e1a; border: 1px solid #2d4a2d; align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.user { background: #2a2a2a; align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg .name { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 600; }
+.msg.user .name { color: var(--muted); }
+.typing { color: var(--muted); font-style: italic; font-size: 13px; align-self: flex-start; padding: 8px 14px; }
+
+#input-area { padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0; }
+#input-area textarea { flex: 1; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; height: 42px; max-height: 120px; }
+#input-area button { padding: 10px 16px; background: var(--accent); color: #000; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+#input-area button:disabled { opacity: 0.4; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+<div>
+<h1>AIミニマリストしぶ</h1>
+<small>少ないことは、豊かなこと。</small>
+</div>
+<button class="settings-btn" onclick="showSetup()" title="設定">⚙</button>
+</header>
+
+<div id="setup">
+<label>Anthropic API Key</label>
+<input type="password" id="apikey" placeholder="sk-ant-..." />
+<button onclick="saveKey()">はじめる</button>
+<p>APIキーはブラウザのlocalStorageにのみ保存され、外部には送信されません。</p>
+</div>
+
+<div id="chat"></div>
+
+<div id="input-area" style="display:none;">
+<textarea id="msg" placeholder="メッセージを入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="autoResize(this)"></textarea>
+<button id="send-btn" onclick="send()">送信</button>
+</div>
+
+<script src="knowledge-bundle.js"></script>
+<script>
+const SYSTEM_PROMPT = `あなたはミニマリストしぶ（澁谷直人、31歳）です。以下のナレッジに基づいて、しぶ本人として対話してください。
+
+## 口調のルール
+- タメ口で話す（敬語は使わない）
+- 簡潔に話す（ミニマリストらしく短く）
+- 断言する（「〜だと思う」ではなく「〜だよ」）
+- 決まり文句を自然に使う:「迷ったら手放す」「全出し」「部屋は心の映し鏡」「あったら便利=なくても困らない」「モノを減らすんじゃなくて、大切なモノを選ぶ」
+- 具体的なエピソードを交える（テスラ車上生活、月7万円生活、¥3,000ニトリマットレス11年、全財産20万円から起業等）
+- 質問には短く答えてから、相手の状況を聞く（コーチング的アプローチ）
+- 片付け・ミニマリズム以外の話題でも、ミニマリスト視点で回答する
+- 「お邪魔します」は片付け動画での挨拶、チャットでは使わない
+- 絵文字は最小限（ミニマリストらしく）
+
+## ナレッジ
+${SHIBU_KNOWLEDGE}`;
+
+let history = [];
+let apiKey = localStorage.getItem('shibu_apikey') || '';
+
+function init() {
+  if (apiKey) {
+    document.getElementById('setup').style.display = 'none';
+    document.getElementById('input-area').style.display = 'flex';
+    addMsg('ai', 'やあ。ミニマリストしぶだよ。\n\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。');
+  }
+}
+
+function saveKey() {
+  apiKey = document.getElementById('apikey').value.trim();
+  if (!apiKey) return;
+  localStorage.setItem('shibu_apikey', apiKey);
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('input-area').style.display = 'flex';
+  addMsg('ai', 'やあ。ミニマリストしぶだよ。\n\n何か気になることがあったら、何でも聞いてね。片付けのこと、ミニマリズムのこと、生き方のこと。');
+  document.getElementById('msg').focus();
+}
+
+function showSetup() {
+  const s = document.getElementById('setup');
+  s.style.display = s.style.display === 'none' ? 'block' : 'none';
+  document.getElementById('apikey').value = apiKey;
+}
+
+function addMsg(role, text) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const name = document.createElement('div');
+  name.className = 'name';
+  name.textContent = role === 'ai' ? 'しぶ' : 'あなた';
+  div.appendChild(name);
+  const body = document.createElement('div');
+  body.textContent = text;
+  div.appendChild(body);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return body;
+}
+
+async function send() {
+  const input = document.getElementById('msg');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = '42px';
+  document.getElementById('send-btn').disabled = true;
+
+  addMsg('user', text);
+  history.push({ role: 'user', content: text });
+
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.textContent = 'しぶが考え中...';
+  document.getElementById('chat').appendChild(typing);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: history.slice(-20)
+      })
+    });
+
+    typing.remove();
+
+    if (!res.ok) {
+      const err = await res.json();
+      addMsg('ai', '接続エラー: ' + (err.error?.message || res.statusText));
+      document.getElementById('send-btn').disabled = false;
+      return;
+    }
+
+    const data = await res.json();
+    const reply = data.content[0].text;
+    history.push({ role: 'assistant', content: reply });
+    addMsg('ai', reply);
+  } catch (e) {
+    typing.remove();
+    addMsg('ai', '通信エラーが発生したよ。ネットワークを確認してみて。');
+  }
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('msg').focus();
+}
+
+function autoResize(el) {
+  el.style.height = '42px';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+init();
+</script>
+</body>
+</html>

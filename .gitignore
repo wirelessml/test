@@ -1,8 +1,8 @@
 *.mp4
 *.webm
 *.mov
-ai-minimalist-shibu/logs/access_*.log
-ai-minimalist-shibu/photos/
+takeru-chatbot/logs/access_*.log
+takeru-chatbot/photos/
 google-photos-mcp/
 
 # ローカル専用・私的観察用（第三者動画字幕の整形テキスト）
@@ -17,3 +17,8 @@ docs/job-search/
 # 個人情報・アイデンティティマップ (絶対公開しない)
 docs/private/
 shibu-videos/
+sanseito-application/
+kadokawa-application/
+
+# IG等のスクショは今後ローカルのみ（既存コミット済分は履歴に残存）
+takeru-chatbot/knowledge/screenshots/

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone動画編集マニュアル — しぶチャンネル</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Sans+JP:wght@200;300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --card-border: #1e1e1e;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --text-dim: #555;
+      --accent: #4ade80;
+      --accent-dim: #166534;
+      --red: #ef4444;
+      --orange: #f97316;
+      --blue: #3b82f6;
+      --yellow: #eab308;
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 80px 0 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 200;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+    .hero .tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .hero .source {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* Sections */
+    section { padding: 40px 0; }
+    section + section { border-top: 1px solid var(--card-border); }
+    h2 {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      color: var(--accent);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 20px 0 10px;
+      color: var(--text);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    /* Profile */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+    .profile-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .profile-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .profile-item .label {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .profile-item .value {
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Workflow */
+    .workflow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .workflow-step {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+    }
+    .workflow-step .app-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .workflow-step .app-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .workflow-step .app-pct {
+      font-size: 24px;
+      font-weight: 200;
+      color: var(--accent);
+      margin-top: 8px;
+    }
+    .workflow-arrow {
+      font-size: 24px;
+      color: var(--text-dim);
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 200;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Pros/Cons */
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .pros-cons { grid-template-columns: 1fr; }
+    }
+    .pros-cons .card { margin-bottom: 0; }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+      border-bottom: 1px solid var(--card-border);
+    }
+    ul li:last-child { border-bottom: none; }
+    ul li::before {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 12px;
+    }
+    .list-check li::before { content: ''; color: var(--accent); }
+    .list-cross li::before { content: ''; color: var(--red); }
+    .list-dot li::before { content: ''; color: var(--text-dim); }
+
+    /* Quote */
+    .quote-block {
+      background: var(--card);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 20px 24px;
+      margin: 20px 0;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    /* Back link */
+    .back {
+      display: inline-block;
+      margin-top: 40px;
+      margin-bottom: 60px;
+      font-size: 13px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .back:hover { color: var(--accent); }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--card-border);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-label">editing manual</div>
+    <h1>iPhone動画編集</h1>
+    <p class="tagline">しぶチャンネルの編集手法を完全解説</p>
+    <p class="source">出典: きすけチャンネル「iPhone動画編集のプロに気になることを全部聞いてみた！」(2025/06/10)</p>
+  </div>
+
+  <!-- 編集者プロフィール -->
+  <section>
+    <h2>01 — 編集者プロフィール</h2>
+    <div class="card">
+      <div class="profile-grid">
+        <div class="profile-item">
+          <div class="profile-icon" style="background: var(--accent-dim);">R</div>
+          <div>
+            <div class="label">NAME</div>
+            <div class="value">りくと（竹本りくと）</div>
+          </div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-icon" style="background: #1e293b;">23</div>
+          <div>
+            <div class="label">AGE / JOB</div>
+            <div class="value">23歳 / 外資系企業勤務</div>
+          </div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-icon" style="background: #1e1e1e;">9</div>
+          <div>
+            <div class="label">ROLE</div>
+            <div class="value">メインチャンネルの9割を編集</div>
+          </div>
+        </div>
+        <div class="profile-item">
+          <div class="profile-icon" style="background: #1e1e1e;">0</div>
+          <div>
+            <div class="label">EDUCATION</div>
+            <div class="value">独学（しぶさん直伝）スクール等なし</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使用機材 -->
+  <section>
+    <h2>02 — 使用機材</h2>
+    <div class="card">
+      <div class="card-title">iPhone 15 Pro Max — 1TB</div>
+      <ul class="list-dot">
+        <li>企画 → 撮影 → 編集 → アップロードまで全てiPhone 1台で完結</li>
+        <li>Pro Maxを選ぶ理由: カメラ性能、バッテリー持ち、大画面（モザイク漏れチェック）</li>
+        <li>容量1TBでも常に800〜900GBでパンク状態</li>
+        <li>iPhone 16 Pro Max購入済みだが、素材移行に時間がかかり機種変更できず</li>
+      </ul>
+    </div>
+    <div class="quote-block">
+      PCは使わない。これ自体がミニマリズムの体現。
+    </div>
+  </section>
+
+  <!-- ワークフロー -->
+  <section>
+    <h2>03 — 編集ワークフロー</h2>
+    <div class="workflow">
+      <div class="workflow-step">
+        <div class="app-name">VLLO</div>
+        <div class="app-role">カット編集・モザイク処理</div>
+        <div class="app-pct">70-80%</div>
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">
+        <div class="app-name">CapCut</div>
+        <div class="app-role">テロップ・トランジション・仕上げ</div>
+        <div class="app-pct">20-30%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">VLLO（ブロ）の強み</div>
+      <ul class="list-check">
+        <li>音声波形が表示される → 直感的にカット位置を判断</li>
+        <li>UIがシンプルで操作しやすい</li>
+        <li>自動字幕機能あり（精度も割と高い）</li>
+        <li>BGM・効果音も豊富</li>
+        <li>モザイク機能</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- カット編集 -->
+  <section>
+    <h2>04 — カット編集（ジェットカット）</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">2-3秒</div>
+        <div class="stat-label">カット間隔</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3,000-4,000</div>
+        <div class="stat-label">1動画あたりのカット数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">700-800</div>
+        <div class="stat-label">VLLOの限界カット数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">×5回</div>
+        <div class="stat-label">分割して処理</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">手法</div>
+      <ul class="list-dot">
+        <li>噛んだところだけでなく、喋っている合間も全てカット</li>
+        <li>音声波形を見ながら無音部分をカット</li>
+        <li>自動カット機能は使わない（しぶさんの動画はピンマイクなしで音を拾いにくいため）</li>
+        <li>全て手動・耳で聞きながらカット</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 編集の哲学 -->
+  <section>
+    <h2>05 — 編集の哲学（ミニマリズム）</h2>
+    <div class="quote-block">
+      基本的にカットのみ。BGM・効果音は一切なし。<br>
+      6〜7年間ずっとこの編集スタイルで10万〜30万再生を維持。
+    </div>
+    <div class="card">
+      <ul class="list-dot">
+        <li>「何を残して、何を削ぎ落とすか」= 引き算の美学</li>
+        <li>テロップも最低限、画像挿入も必要最低限</li>
+        <li>片付け企画は一般家庭を訪問 → 個人情報のモザイク処理が重要</li>
+        <li>Pro Maxの大画面でモザイク漏れをチェック</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 制作規模 -->
+  <section>
+    <h2>06 — 制作の規模感</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">20-30h</div>
+        <div class="stat-label">素材量（2-3日〜1週間密着）</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">2-5h</div>
+        <div class="stat-label">完成動画の尺</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">60-120h</div>
+        <div class="stat-label">編集時間</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">約1ヶ月</div>
+        <div class="stat-label">1本の完成期間</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">目安</div>
+      <p style="font-size:14px; color:var(--text-muted);">素材時間の <strong style="color:var(--accent);">3〜6倍</strong> の編集時間が必要</p>
+    </div>
+  </section>
+
+  <!-- メリット・デメリット -->
+  <section>
+    <h2>07 — iPhone編集のメリット・デメリット</h2>
+    <div class="pros-cons">
+      <div class="card">
+        <div class="card-title" style="color: var(--accent);">MERIT</div>
+        <ul class="list-check">
+          <li>場所に縛られない（カフェ、電車、旅先）</li>
+          <li>思いついた瞬間にすぐ編集できる</li>
+          <li>指1本で編集（親指1本でOK）</li>
+          <li>全ワークフローが1台で完結</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color: var(--red);">DEMERIT</div>
+        <ul class="list-cross">
+          <li>書き出し時間が長い（3h素材→3-4h書き出し）</li>
+          <li>書き出し中はiPhoneが使えない</li>
+          <li>1TBでもストレージ不足（常に800-900GB）</li>
+          <li>700-800カットで動作が重くなる</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 初心者へのアドバイス -->
+  <section>
+    <h2>08 — 初心者へのアドバイス</h2>
+    <div class="card">
+      <ul class="list-check">
+        <li>ショート動画から始めるのがおすすめ → 1日で撮影〜編集〜アップまで完了</li>
+        <li>道具で言い訳はもうできない時代</li>
+        <li>ガチガチの機材で始めるとハードルが上がりすぎる</li>
+        <li>スマホは全員持っている → 有効活用しないのはもったいない</li>
+        <li>成功してる人は必ず継続している</li>
+      </ul>
+    </div>
+    <div class="quote-block">
+      しぶさん自身がりくとに直接教えた。サブチャンネルの手伝いから始まり、今はメインチャンネルの9割を担当。
+    </div>
+  </section>
+
+  <a href="index.html" class="back">← AIミニマリストしぶ トップへ戻る</a>
+
+  <footer>
+    <p>AIミニマリストしぶ — iPhone動画編集マニュアル</p>
+    <p style="margin-top:4px;">Generated by Claude Code from YouTube transcript analysis</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
