@@ -42,7 +42,7 @@
 - 新編集者 2 名をりくとが教育中（片付け動画 + トーク動画）
 - しぶは編集から完全撤退予定
 - 72 時間ジャーニー: 「何をして働けばいいんだ」→「AIマスター」→「ディレクター昇格 + AI RIKUTO 開発」
-- 更新: `ai-minimalist-shibu/knowledge/shibu-team.md`
+- 更新: `takeru-chatbot/knowledge/shibu-team.md`
 
 ### 5. Claude Code 運用
 - Mac / MASU-P55 両方 v2.1.118 に自動更新済み

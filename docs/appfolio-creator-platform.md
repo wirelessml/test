@@ -106,4 +106,4 @@ iPad / Mac のクリエイティブ系アプリ操作チュートリアル動画
 - @docs/transcripts/maestri-youtube-masao-transcript.md — 同テーマ系（クリエイター × AI / ツール）
 - @docs/transcripts/davinci-resolve-photo-editing-transcript.md — 動画編集ツール系
 - @docs/transcripts/ndl-precedent-newspaper-genealogy-transcript.md — 別ジャンル（先祖調査）但し動画ナレッジ化の同枠
-- @ai-minimalist-shibu/knowledge/shibu-ai-update.md — しぶ社内 Claude Code 研修文脈
+- @takeru-chatbot/knowledge/shibu-ai-update.md — しぶ社内 Claude Code 研修文脈

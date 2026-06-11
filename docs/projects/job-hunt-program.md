@@ -41,7 +41,7 @@
 ## ユーザー文脈（参考）
 - 仲啓輔、現在無職、ミニマリスト志向、AI エージェント多用
 - 機材役割分離: Mac=Claude Code 専用 / masup=Codex 専用 / しゅん先生 PC=据え置きメイン
-- GitHub: wirelessml（OSS 実績: shibu-video-editor 等）、Substack: 仲啓輔名義、X: @minimalistneko
+- GitHub: wirelessml（OSS 実績: takeru-video-editor 等）、Substack: 仲啓輔名義、X: @minimalistneko
 - 須磨区在住
 
 ## Codex への初手指示

@@ -213,7 +213,7 @@ DaVinci Resolve、CapCut、または使えるGUI NLEで編集する。
 
 ## 既存自動化との接続
 
-`shibu-video-editor` や既存の ffmpeg/文字起こし資産は、最初から全自動に寄せすぎない。
+`takeru-video-editor` や既存の ffmpeg/文字起こし資産は、最初から全自動に寄せすぎない。
 
 推奨ワークフロー:
 

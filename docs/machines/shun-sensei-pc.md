@@ -1,6 +1,6 @@
 # しゅん先生 PC
 
-> Last updated: 2026-04-22
+> Last updated: 2026-05-30
 >
 > 🎉 **4/29 16:30 完全復活**: Acer FA100 512GB NVMe Gen3 x4 へのクローン移行成功（実質 ¥10,267 はばタンPay+ 50% プレミアム適用）。CDM 3,374 MB/s で公称超え、Plextor 時代の速度に復帰。3 時間のクローン死闘の真犯人は `stornvme\StartOverride\0=0x3` だった。詳細 @docs/journal/2026-04-29.md
 >
@@ -187,6 +187,31 @@ XInput 互換のサードパーティ Switch Pro 風コントローラ (Model `2
 | YouTube DL | yt-dlp 2026.03.17 | 5/3 朝導入 |
 | 動画エンコード | ffmpeg 8.1 | 5/3 朝導入 |
 
+## AI エージェント / CLI（2026-05-30 時点）
+
+| ツール | バージョン | 経路 | 備考 |
+|---|---|---|---|
+| Claude Code | 2.1.157 | standalone binary `C:\Users\wirel\.local\bin\claude.exe` | `claude update`、毎日 0:00 タスクで最新化 |
+| Codex CLI | 0.135.0 | npm `@openai/codex`（`%APPDATA%\npm`） | 設定 `~/.codex/`、ログイン済み（auth.json）。`ssh shun-sensei "codex exec -s read-only '<指示>'"` で Mac から遠隔駆動可 |
+| Gemini CLI | 0.44.1 | npm `@google/gemini-cli` | - |
+| **Codex Desktop App** | **26.527.3686.0** | **Microsoft Store / MSIX (`OpenAI.Codex`)** | GUI。下記専用セクション参照 |
+
+- 既存の自作タスク（仲氏設定、SSH からは触らない）: `codex-remote-control` / `codex-watchdog` / `CodexLaunchLDPlayerTemp`。
+
+## Codex Desktop App (Microsoft Store / MSIX) — 2026-05-30
+
+- **`OpenAI.Codex` v26.527.3686.0**（Store/MSIX、PackageFamilyName `OpenAI.Codex_2p2nqsd0c76g0`、AUMID `OpenAI.Codex_2p2nqsd0c76g0!App`、InstallLocation `C:\Program Files\WindowsApps\OpenAI.Codex_26.527.3686.0_x64__2p2nqsd0c76g0`）。
+- ⚠️ **MSIX は `Get-AppxPackage` でしか検出できない**（アンインストールレジストリ / Program Files / `winget list | findstr` / winget id 指定 すべて不可）。更新は CIM `UpdateScanMethod`（全 Store アプリ対象・async）or Store GUI「更新プログラムを入手」。
+- 🚨 **Store/MSIX アプリは SSH から削除してはいけない**: 5/30 に「削除→再インストール」を SSH で試みたら、削除は成功したが**起動中プロセスがファイルを掴んだ壊れた半状態**（登録解除済だが `app\Codex.exe` 残・ゾンビ稼働）になり、**SSH からの再インストールは不可能**だった。理由: OpenAI は Windows 版を **Store 専売**（スタンドアロンインストーラ無し＝GitHub issue #13993）、winget msstore も **0x80073CF6**、`Add-AppxPackage -Register` も削除直後にペイロード GC で manifest 消失。**復旧は「再起動 → Microsoft Store GUI で『入手』」が必須**（コンソール/RDP）。製品 ID = `9PLM9XGG6VKS`。
+- 🎉 **Windows Computer Use 有効化（5/30 達成）**:
+  - 症状: アプリで「Computer Use をインストール」→「プラグインをインストールできませんでした」が毎回
+  - **真因**: `~/.codex/config.toml` が**読み取り専用 (ReadOnly)** で、プラグイン設定を書き込めず `failed to persist installed plugin config: アクセスが拒否されました (os error 5)`
+  - **修正**: `attrib -R "C:\Users\wirel\.codex\config.toml"`（読み取り専用解除）→ アプリで「Computer Use をインストール」再クリックで成功 → **アプリ再起動**で `[computer-use-native-pipe] ... native pipe startup ready`（旧 "helper paths are unavailable" 警告が解消）
+  - **副作用**: config が書き込み可になった瞬間、Desktop App が起動時処理で **`remote_control = true` を config.toml から削除**（バックアップ: `~/.codex/config.toml.bak-readonly-removed-20260530-121539`）。以降は Desktop App 純正の **Remote Connections** が稼働（ログ `reconcile_completed nextConnectionCount=3`）に移行。
+  - 有効化された plugins（config.toml）: `computer-use@openai-bundled` / `chrome@openai-bundled` / `browser@openai-bundled` / `github@openai-curated`（全 `enabled = true`）
+- 🔧 **対話セッションで GUI/MSIX を動かす技**（今回多用）: SSH (Session 0) からは GUI 表示・Store 配置ができないが、`New-ScheduledTaskPrincipal -UserId wirel -LogonType Interactive -RunLevel Highest` のタスクを `Register-ScheduledTask` + `Start-ScheduledTask` すれば、**ログオン中ユーザーのセッション内で実行**できる（Store ページを開く / アプリ再起動 / winget 等）。パスワード不要。
+- Desktop App ログ: `C:\Users\wirel\AppData\Local\Packages\OpenAI.Codex_2p2nqsd0c76g0\LocalCache\Local\Codex\Logs\YYYY\MM\DD\codex-desktop-*.log`（plugin/install の成否・os error 5・helper 状態が分かる）
+
 ## ネットワーク
 
 - **デュアル LAN 構成**（4/24 背面写真で確認、2x RJ45 ポート）
@@ -295,6 +320,7 @@ XInput 互換のサードパーティ Switch Pro 風コントローラ (Model `2
 
 ## 変更履歴
 
+- **2026-05-30**: AI CLI 3 種更新（claude 2.1.150→2.1.157 / codex 0.130.0→0.135.0 / gemini 0.43.0→0.44.1）。**Codex Desktop App = Microsoft Store/MSIX (`OpenAI.Codex` 26.527.3686.0) と判明**（`Get-AppxPackage` でのみ検出可）。🚨 SSH での削除→再インストールは不可と判明（Store 専売 + 0x80073CF6 + Session 0 隔離）→ 再起動 + Store GUI「入手」で復旧。🎉 **Windows Computer Use 有効化成功** — 真因は `~/.codex/config.toml` の読み取り専用属性でプラグイン設定を永続化できなかったこと（`os error 5`）、`attrib -R` 解除 + アプリ再起動で native pipe ready。副作用で `remote_control = true` が Desktop App により削除（バックアップ済、Remote Connections へ移行）。npm codex 更新の 224MB ステージング残骸は再起動時タスクで自動削除済。詳細: @docs/journal/2026-05-30.md
 - **2026-05-03 17:00**: VLC media player 3.0.23 を winget で導入（汎用動画再生用、PowerDVD と用途分離）。動画再生スタックの整理表を追加
 - **2026-05-03 16:30**: Gopher360 v0.989 を導入（XInput サードパーティコントローラ → マウス常駐ツール）。タスクスケジューラで管理者権限自動起動、`Gopher360 AutoStart` タスク登録。コントローラ Model `2322/3C2M638`、TELEC 219-239441、有線 USB-C、ゴールド色
 - **2026-05-03 朝**: yt-dlp / ffmpeg / deno を winget で導入（Mac と同等の動画 DL ワークフロー確立）

@@ -4,7 +4,7 @@ Starter プラン解約済み、2026/5/11まで有効、残クレジット32,472
 
 ### D. しぶYouTube動画20本のScribe一括書き起こし（先行）
 - ElevenLabs Scribe で word-level タイムスタンプ + 話者分離を一括生成
-- 保存先: `ai-minimalist-shibu/transcripts/`
+- 保存先: `takeru-chatbot/transcripts/`
 - 今後 video-use で再利用できる資産として残す
 
 ### A. video-use で過去素材を編集（Dのあと）

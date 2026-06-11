@@ -36,7 +36,7 @@
     - 🐬 CopilotKeyboard / イルカのカイル発見・masu-p55 Kyle.imeskin 切替済
     - 黒田蒲鉾: 店頭 ◯ / くろかま家 ✗ の構造判明
     - X 投稿 5/5 21:45 ID 2051578751096672581
-    - **✅ IG 投稿 DX9FnIfCRFi 9 枚目分析完了**（5/6 7:30〜、@nakasoniii_minimal = なかそにー、しぶエコ周辺、ミニマムライフコスト ¥74,370/月、`ai-minimalist-shibu/knowledge/minimalist-life-cost.md` に 3 者比較追加）
+    - **✅ IG 投稿 DX9FnIfCRFi 9 枚目分析完了**（5/6 7:30〜、@nakasoniii_minimal = なかそにー、しぶエコ周辺、ミニマムライフコスト ¥74,370/月、`takeru-chatbot/knowledge/minimalist-life-cost.md` に 3 者比較追加）
     - **✅ chrome-devtools-mcp user scope 永続インストール**（`claude mcp add --scope user`、 `/plugin` UI 不要の CLI ルート確立）
   - **詳細とフルログは @docs/journal/2026-05-06.md**
 - **今週の優先 TODO**:
@@ -87,6 +87,11 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
+- **2026-06-11** (水): **就活レポートMac移管初日が完全成功（04:30、83件、二重送信防止も動作）＋GVCキャリア カジュアル面談を一気通貫対応** — ①前夜応募の「AIエンジニア未経験6ヶ月研修」（実体=SES＋有料スクール「キャリフリ」＋風評対策事業の新興企業）を面談32分前に分析しチートシート化。②Zoomアプリ無し→**Chromeブラウザ参加**で実施（zoom caskはsudo必須でリモート不可）。③**録画システムv2**: ffmpeg画面キャプチャがmacOSでハング＋連係カメラでデバイス番号ズレ→**画面=screencapture -v／音声=ffmpeg(マイク+BlackHole)／Ctrl+C後に自動合成**方式へ改修、25分39秒・4K・3.3GBを取得。④whisper文字起こしは**繰り返し幻覚を`-mc 0`で解消**（v2）。⑤面談で核心質問（キャリフリ怪しい?等）をぶつけ、LINE誘導をメールへ切替。次の一手=書面質問3点（雇用契約/配属/研修費返還）。⑥録画のYouTube公開希望は肖像権・プライバシーで止めた。⑦iPhone Safari履歴の中抜け（4/17〜6/3等）発見→iCloud同期途中か削除か、SQL解析持ち越し（@docs/journal/2026-06-11.md）
+
+- **2026-06-10** (火): **就活ルーチンを5回改訂→masup Codexから Mac自作スクリプトへ完全移管** — ①朝: 事務職限定→誤記2件発見→**実在・勤務地検証必須化**＋メール再送。②午後: 全職種化→Codexクォータ切れ→**Claude実ブラウザ代行抽出**（求人ボックス325カード、geo水増し2件検出）→**買取マクサス（戎町徒歩3分）発見**→福祉/飲食/資格必須職を恒久除外＋**板宿駅1km拡大＋声を出さない在宅事務**→最終的に`job-search-daily.py`+LaunchAgent 04:30 に移管（Codex不使用＝クォータ・水増し根治、masupタスク無効化）。③ルール2本制定:**「時間かかりすぎ=中止シグナル」「枠の頭で計画」**（6/10朝にiMovieテスト75分停滞の反省）。④iMovie=ffmpeg実証で決着（合成可、編集はiMovie単独運用）、iPhone録画設定確定（4K30 HEVC/HDRオフ/ProRes不採用）。⑤Concentrix辞退の事後処理（正体=AppleCare AHA とぶっちゃけ分析）＋ココカラ面談カレンダー削除。⑥**LaunchAgent全アンロード事故を発見・7個復旧**（「全て終了」の巻き添え）。カレンダーのセッション1〜5廃止（@docs/journal/2026-06-10.md）
+
+- **2026-06-07** (日): **6/8 Bグループ面談の準備仕上げ（録音＋文字起こし）＋就活メール不達を恒久修理** — ①**録音**＝Audio MIDI「複数出力装置」(EarPods+BlackHole, primary EarPods)既設確認、`~/Desktop/Bグループ面談-録音.command`(ffmpegで本体マイク＋BlackHoleをmono WAV)。②**文字起こし**＝SuperWhisperは**Pro Monthlyが5/28失効**（CLAUDE.md等の「Lifetime」は誤記と訂正）→ **whisper.cpp**採用（無料/ローカル）。`ggml-large-v3-turbo`(1.5G)をDLし日本語精度実証（medium「タク」誤→turbo「宅」正）、`~/Desktop/面談-文字起こし.command`(最新録音→.txt+.srt, turbo優先)作成。③**就活メール不達**＝`com.yuika.job-report-email`が**launchdから`~/Desktop`をTCCで読めず`Operation not permitted`(exit126)で6/6以降失敗**と判明→ジョブ一式を**`~/Library/Application Support/job-report/`へ移設**しkickstartで**exit0復旧**(明日5:00自動)。教訓:launchd起動物は`~/Desktop`に置かない。⚠️masu-p-watch/kanno-watchも同罠の可能性（要点検）。6/6就活レポートはmasup未起動で欠番（@docs/journal/2026-06-07.md）
 - **2026-06-06** (土): **X返信ワークフロー＋全機アップデート＋就活案件解明** — ①**坂本龍佑・西宮市議(自民)の「結婚減税」ツイート**（返信144/引用59、引用最大@neotribella❤524=年少扶養控除復活論）を分析→「報酬を"婚姻という状態"でなく"子を育てる実態(子の数)=年少扶養控除の復活"に紐づけよ」で一貫させ、本スレ返信1＋サブ返信4を投稿。②**全機 claude 2.1.167 / codex 0.137.0 / gemini 0.45.2 に統一**。運用知見：twitter CLI 投稿は280加重(日本語≒140字)上限／`tweet <id>`が親を誤返却・`isQuote`が返信を拾わない／Chrome read tier はスクロール不可。③**夜**：就活案件 **Bグループ株式会社/Takeruチャンネル業務委託**（ミニマリスト訪問取材・1本15,000円）を動画5本＋masup Codex分担で解明（`biz-analysis.md`／`takeru-channel-transition-analysis.md`）し、**面談候補日時(6/8〜6/10の朝)をGmailで返信送信(SENT確認)**／しゅん先生PCヘルスチェック健全／Gmail MCP=下書き専用・gws CLI未設定（送信は保留、MCP下書き＋1クリック運用）（@docs/journal/2026-06-06.md）
 - **2026-06-05** (木): **プライバシー整理 + `/remote-control`(`/rc`)学習** — 公開リポジトリ wirelessml/test の**自宅番地**を2ファイル伏字化(push済、履歴には残存)／TCCで死んでいた cron 2件(report.sh:33・todo-check)撤去確認／`~/Desktop/screenshots/`全削除(公開90枚+ローカル227MB解放、しぶナレッジ2枚は無傷)。後半は本田圭佑(@kskgroup2017)「スマホでClaude codeリモート操作 面倒じゃない？」への返信を通じ **`/remote-control`(短縮`/rc`)=Claude Code v2.1.53+ の正式機能**と判明（私が当初「存在しない/typo」と誤判定→公式ソースで訂正）。仕組みは claude.ai 中継で**外からでもVPN/Tailscale不要**(Pro/Max・Research Preview)。⚠️自作`/rc`(状況報告)と名前衝突。Tailscaleは「不要だが保険=SSH復旧経路で入れておく派」で決着（@docs/journal/2026-06-05.md）
 - **2026-06-02** (火): **AIエージェント環境を役割分離で大整理** — **Mac=Claude Code専用 / masup=Codex専用** 確定。Mac の `codex remote-control` 停止＋自動起動無効化（plist→`.disabled`、SSH影響なし）。masup の **OpenClaw 完全削除**（systemd user service、復元用 backup `C:\Users\gci_admin\openclaw-backup.tar.gz`）／**Antigravity アンインストール**（~750MB）／Whisper残骸削除（~5.3G）。全機 claude 2.1.159・codex 0.136.0・gemini 0.44.1。Codex `remote-control` 検証（masup CLI で稼働確認＝ツイート概ね真）＋ Codex/Desktop の app-server 競合知見。処方箋2枚解析・トクリュウ特集動画分析・tokumei24.jp=匿名通報ダイヤル確認も（@docs/journal/2026-06-02.md）
@@ -123,12 +128,12 @@
 
 ## 個別プロジェクト
 
-- **AIミニマリストしぶ チャットサーバー**: Claude CLI 経由の Web チャットボット（@docs/projects/shibu-chatbot.md）
-- **shibu-video-editor**: しぶ受講生インタビュー動画 Claude API 半自動編集 OSS（4/26 公開、`/Users/yuika/Desktop/shibu-video-editor/`、https://github.com/wirelessml/shibu-video-editor、MIT、Python 1,451 行 + 12 unit tests）
+- **takeru-chatbot**（旧「AIミニマリストしぶ チャットサーバー」）: Claude CLI 経由の Web チャットボット（@docs/projects/takeru-chatbot.md）。ナレッジ `takeru-chatbot/knowledge/` はしぶ観察知識を保持
+- **takeru-video-editor**（旧 shibu-video-editor、**ローカル名のみ改名／GitHub公開リポは未改名**）: しぶ受講生インタビュー動画 Claude API 半自動編集 OSS（4/26 公開、`/Users/yuika/Desktop/takeru-video-editor/`、GitHub: https://github.com/wirelessml/shibu-video-editor、MIT、Python 1,451 行 + 12 unit tests）
 - **ミニマリスト宅訪問動画 制作 / 動画スキル向上**（2026-06-06 開始、Bグループ業務委託＝実制作＆練習の場、採算は度外視）: 脚本 @docs/projects/minimalist-visit-script.md（Mac/Claude 作）、制作メモ @docs/projects/minimalist-visit-production.md ＋ スキル向上プラン @docs/projects/video-skills.md（masup/Codex 作、撮影と GUI 手編集が主軸・2 週間で 1 本完走）
 - **整理収納アドバイザー 1 級 2 次審査** (2021/06/10 1 次合格、5/4 構成案策定 + Artifact 図表 10 個完成): @docs/projects/seiri-shu-nou-advisor-1.md
 - **しぶコーチング応募** (5/4 写真撮影完了、フォーム送信は 5/6 23:59 締切): @docs/journal/2026-05-04.md 参照
-- **しぶエコ観察**: @docs/journal/ に日次で記録、関連ナレッジは `ai-minimalist-shibu/knowledge/`
+- **しぶエコ観察**: @docs/journal/ に日次で記録、関連ナレッジは `takeru-chatbot/knowledge/`
 - **Substack 連載**: 仲啓輔名義、4/22 時点で「SSD 突然死」ネタ投稿済み
 - **動画スキル向上**: 採算度外視。撮影とGUI手編集を主軸に、2週間でルームツアー1本を完走する（@docs/projects/video-skills.md）
 - **ミニマリスト宅訪問動画制作**: 参考動画2本をもとに、ルームツアー＋持ち物/価値観インタビューの実制作手順を管理する（@docs/projects/minimalist-visit-production.md）
@@ -136,12 +141,12 @@
 ## 定期ルーチン（詳細は @docs/routines/）
 
 - **SSD 価格監視**（毎週月曜、しゅん先生 PC 用 NVMe 買い替え待ち）: @docs/routines/ssd-price-monitor.md
-- **Claude Code セッションスケジュール**（9/14/19/0/5 時 JST、毎日）: @docs/routines/session-schedule.md
+- ~~**Claude Code セッションスケジュール**（9/14/19/0/5 時 JST、毎日）~~ **廃止（6/11、カレンダー繰り返し予定5系列を削除。remote-control 常用＋LaunchAgent 化で形骸化のため）**: @docs/routines/session-schedule.md
 - ~~**X 情報収集ルーチン**（各セッション毎）: @docs/x-daily-briefing.md~~ **廃止（5/2 朝決定）**。各セッションで X 巡回するルーチンは終了、必要時に都度判断して `twitter -c feed` 実行
 - **しぶ Instagram 監視**（毎時 17 分）: @docs/routines/instagram-watch.md
 - **MASU-p 監視**（毎日 18:12 JST、LaunchAgent）: @docs/routines/masu-p-watch.md
 - **リモートコントロール状態報告**（毎時 33 分）: @docs/routines/remote-control-report.md
-- **就活 求人サーチ**（毎朝 04:00 JST、masup WSL2 Codex CLI。優先=京都・同志社関係／高槻・将棋関係、＋戎町500m全件＋本社=兵庫/大阪/京都リモートで計50件→GitHub `wirelessml/job-hunt-reports` に自動公開。「就活レポート」で最新報告）: @docs/routines/job-search-daily.md
+- **就活 求人サーチ**（毎朝 04:30 JST、**Mac の自作スクリプト＝Codex 不使用**。LaunchAgent `com.yuika.job-search-mac` → `~/Library/Application Support/job-report/job-search-daily.py` が求人ボックスを直接走査。**板宿駅1km・資格/免許必須職除外・福祉/飲食除外＋声を出さない在宅事務（神戸優先）**、/jb/詳細で実在検証→GitHub `wirelessml/job-hunt-reports` に push→メール送信。「就活レポート」で最新報告。※2026-06-10夜に masup Codex から完全移管（masup タスクは無効化・復元可）、経緯と旧仕様は @docs/routines/job-search-daily.md）
 - **運用ルーチン（CLAUDE.md とタスク管理の二層構造）**: @docs/routines/task-management.md
 
 ## TODO リスト
@@ -177,7 +182,7 @@ Claude 活用のナレッジベース。AI 関連の知見・ガイド・テン�
 │   └── <その他ガイド.md>           ← Claude Code Tips、Computer Use ガイド等
 ├── skills/
 │   └── claude-md-diet/            ← CLAUDE.md ダイエット用スキル
-├── ai-minimalist-shibu/           ← しぶチャットボット実装 + ナレッジ
+├── takeru-chatbot/           ← しぶチャットボット実装 + ナレッジ
 ├── templates/                     ← 学校プリント等のテンプレート
 └── screenshots/                   ← 定時報告スクリーンショット
 ```
@@ -187,7 +192,7 @@ Claude 活用のナレッジベース。AI 関連の知見・ガイド・テン�
 - モデル: セッション開始時に `/model opusplan`
 - ターミナル最前面設定: セッション開始時にユーザー案内（@docs/rules/session-setup.md）
 - 週次使用量: `/usage` または StatusLine で確認
-- セッションスケジュール: 1 日 5 回（9/14/19/0/5 時 JST）
+- ~~セッションスケジュール: 1 日 5 回（9/14/19/0/5 時 JST）~~ 廃止（6/11、必要時に随時接続へ）
 
 ## 今後の見直し
 

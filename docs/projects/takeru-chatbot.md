@@ -10,7 +10,7 @@
 
 ### サーバー起動
 ```bash
-python3 ~/Desktop/ai-minimalist-shibu/server.py
+python3 ~/Desktop/takeru-chatbot/server.py
 ```
 ポート 8787 で HTTP サーバー起動
 
@@ -22,15 +22,15 @@ cloudflared tunnel --url http://localhost:8787
 
 ### ナレッジ更新
 ```bash
-python3 ai-minimalist-shibu/src/build-knowledge.py
+python3 takeru-chatbot/src/build-knowledge.py
 # → サーバー再起動
 ```
 
 ## 構成
 
-- **メインスクリプト**: `~/Desktop/ai-minimalist-shibu/server.py`（668 行、v1.0 完成版）
-- **ナレッジベース**: `~/Desktop/ai-minimalist-shibu/knowledge/`（56 ファイル以上）
-- **会話ログ**: `~/Desktop/ai-minimalist-shibu/logs/chat_YYYY-MM-DD.jsonl`
+- **メインスクリプト**: `~/Desktop/takeru-chatbot/server.py`（668 行、v1.0 完成版）
+- **ナレッジベース**: `~/Desktop/takeru-chatbot/knowledge/`（56 ファイル以上）
+- **会話ログ**: `~/Desktop/takeru-chatbot/logs/chat_YYYY-MM-DD.jsonl`
 
 ## 機能
 
