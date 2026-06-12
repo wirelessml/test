@@ -35,6 +35,13 @@ def log(msg):
     print(line)
     with open(LOG, 'a') as f: f.write(line + '\n')
 
+
+# 2026-06-12 堅牢化: 取得異常を warning として蓄積し、全滅時は正常レポートを出さず fail させる
+WARNINGS = []
+def warn(msg):
+    WARNINGS.append(msg)
+    log('WARN ' + msg)
+
 def fetch(url, retries=2):
     for i in range(retries + 1):
         try:
@@ -103,7 +110,10 @@ def verify(card):
     mi = text.find('兵庫県')
     if mi < 0: mi = text.find('神戸市')
     addr = re.sub(r'\s+', '', text[mi:mi+100]) if mi >= 0 else ''
-    if addr and ('須磨区' not in addr and '板宿' not in addr and '西代' not in addr and '東須磨' not in addr):
+    if not addr:
+        log(f"ADDR_UNKNOWN: {card['title'][:40]}")
+        return ('△未確認', '勤務地の記載を確認できず')
+    if ('須磨区' not in addr and '板宿' not in addr and '西代' not in addr and '東須磨' not in addr):
         log(f"GEO_MISMATCH: {card['title'][:40]} addr={addr[:40]}")
         card['mismatch'] = addr[:50]
         return None
@@ -122,9 +132,13 @@ def main():
     onsite_raw = []
     for pg in range(1, 15):
         h = fetch(ONSITE_URL + (f'?pg={pg}' if pg > 1 else ''))
-        if not h: break
+        if not h:
+            warn(f'onsite fetch empty pg={pg}')
+            break
         cs = parse_cards(h)
-        if not cs: break
+        if not cs:
+            if pg == 1: warn(f'onsite parse zero pg=1 html_len={len(h)}')
+            break
         onsite_raw += cs
         time.sleep(1.2)
     onsite = dedupe([c for c in onsite_raw if onsite_keep(c)])
@@ -134,6 +148,8 @@ def main():
         extra = [c for c in parse_cards(h) if onsite_keep(c) or ('買取' in c['title'] and ('板宿' in c['area'] or any(x in c['area'] for x in TOWNS)))]
         onsite = dedupe(onsite + extra)
     log(f'onsite raw={len(onsite_raw)} kept={len(onsite)}')
+    if not onsite_raw:
+        raise RuntimeError(f'板宿側の取得が0件 — 求人ボックス構造変更/ブロックの疑い (warnings={WARNINGS})')
     # 検証（jbリンク持ちのみ、最大15件）
     excluded = []
     verified = []
@@ -157,8 +173,13 @@ def main():
     for label, url in REMOTE_URLS:
         for pg in (1, 2):
             h = fetch(url + (f'?pg={pg}' if pg > 1 else ''))
-            if not h: break
-            for c in parse_cards(h):
+            if not h:
+                warn(f'remote fetch empty {label} pg={pg}')
+                break
+            cs = parse_cards(h)
+            if not cs and pg == 1:
+                warn(f'remote parse zero {label} pg=1 html_len={len(h)}')
+            for c in cs:
                 if not remote_keep(c): continue
                 k = (c['title'][:32], c['company'])
                 if k in seen_keys: continue
@@ -176,6 +197,8 @@ def main():
     cats = {}
     for c in onsite: cats.setdefault(category(c), []).append(c)
     total = len(onsite) + len(remote)
+    if total == 0:
+        raise RuntimeError(f'抽出結果が0件 — 0件の正常レポートは出さない (warnings={WARNINGS})')
     n_ok = sum(1 for c in onsite if c['mark'].startswith('✔'))
     L = []
     L.append(f'# 求人サーチレポート（{DATE}）\n')
@@ -208,6 +231,10 @@ def main():
         L.append('## 検証で除外した求人（詳細ページとの矛盾・掲載終了）\n')
         for c in excluded:
             L.append(f"- {c['title'][:50]}（{c['company']}）: {c.get('mismatch','掲載終了')}")
+        L.append('')
+    if WARNINGS:
+        L.append('## ⚠️ 実行警告（取得が部分的だった可能性あり）\n')
+        for w in WARNINGS: L.append(f'- {w}')
         L.append('')
     L.append('## 注記\n')
     L.append('- 恒久除外: 介護・福祉/障がい福祉支援職/飲食/資格・免許必須職（看護・薬剤・保育士・美容師等）/50代不可明記/新卒限定。')

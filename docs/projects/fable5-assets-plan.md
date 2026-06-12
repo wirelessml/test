@@ -16,8 +16,9 @@
 - [x] Substack 政治家版ドラフト 2 案（docs/substack/2026-06-12-ai-rikai-seijika.md）
 
 ### 進行中（masup Codex 並走）
-- [ ] **Codex レビュー A**: takeru-video-editor（公開 OSS、Python ~1.5K 行）静的レビュー → 受領後 Fable 5 が検証し、修正 PR/パッチ判断
-- [ ] **Codex レビュー B**: job-search-daily-mac.py（毎朝 04:30 本番）堅牢性レビュー → 同上。**本番スクリプトの 6/23 後の自走品質に直結**
+- [x] **Codex レビュー A**: takeru-video-editor 静的レビュー **受領・検証済み**（抜き打ち照合 3/3 一致 → docs/projects/review-video-editor-2026-06-12.md。実バグ: typer.Context 誤用＝pipeline 即死 / カット境界フェード未実装 / AI 生成プラン無検証。パッチ適用はキュー 3）
+- [ ] **Codex レビュー B**: job-search-daily-mac.py（毎朝 04:30 本番）堅牢性レビュー → 受領待ち。**本番スクリプトの 6/23 後の自走品質に直結**
+- 運用知見: codex exec の `--sandbox workspace-write` は **cwd 外（/mnt/c）に書けない** → 成果物はワークスペース内に書かせて shell 側で回収する（A で踏んだ罠、ランナー設計に反映済み）
 
 ## キュー（優先順）
 
