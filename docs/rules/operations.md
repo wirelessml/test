@@ -9,6 +9,7 @@
   - メルマガ・通知の分類は Gmail の素のままで処理する
 - computer-use操作時、アクセス許可リクエストを事前説明せず直接実行する
 - Dispatchは使わない、CLIで完結させる
+- > ⚠️ **鮮度注記（2026-06-12 監査）**: 以下の Manus 段落は **4/18 時点の判断**で、現在は適用しない。5/4 に「**Codex Mac Desktop App ＝真の Computer Use**」と認識訂正済み（@docs/journal/2026-05-04.md）、さらに 6/2 の役割分離（Mac=Claude Code 専用 / masup=Codex 専用）以降、Manus は日常使いから外れている（5 月以降の利用記録なし）。Computer Use が要る場面は computer-use MCP（Mac）か Codex Desktop（masup/しゅん先生 PC、5/30 Windows 解禁済み）を使う。履歴として残置:
 - **Manus デスクトップアプリを Computer Use の最有力候補に採用**（4/18 朝決定）
   - `/Applications/Manus.app` v1.5.3（署名: Team 5V8XDGQQB6、arm64、Meta 傘下）
   - iPhone Manus (pirosi80@yahoo.co.jp) と Mac でアカウント自動連携、**7964 クレジット + 毎日更新 300**（00:00 リフレッシュ）
