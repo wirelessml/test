@@ -32,7 +32,7 @@ npm view @openai/codex version; npm view @google/gemini-cli version
 
 | ツール | Mac | Windows 機 |
 |---|---|---|
-| claude | `claude update` | `ssh <host> "claude update"`。配信が遅れていたら GitHub release zip で強制更新（`scripts/update-claude-win.ps1` の方式、`$ver` を書き換えて再利用） |
+| claude | `claude update` | `ssh <host> "claude update"`。配信が遅れていたら GitHub release zip で強制更新（`scripts/archive/update-claude-win.ps1` の方式、`$ver` を書き換えて再利用） |
 | codex | `npm install -g @openai/codex@latest` | **masup は WSL2 側**: `ssh masu-p55 'wsl -e bash -lc "npm install -g @openai/codex@latest"'` |
 | gemini | `npm install -g @google/gemini-cli@latest` | Windows 側 npm（WSL から見えるのは PATH interop） |
 

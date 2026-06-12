@@ -26,7 +26,7 @@
   - [ ] **Bグループ ミニマリスト宅訪問動画 1 本目**（2 週間完走目標、@docs/projects/minimalist-visit-production.md）
   - [ ] **GVC キャリアへ書面質問 3 点**送付（雇用契約/配属/研修費返還、6/11 持ち越し）
   - [ ] iPhone Safari 履歴中抜けの SQL 解析（6/11 持ち越し）
-  - [ ] scripts/ 棚卸しの削除実行（6/12 提案済み、**ユーザー承認待ち** → @docs/projects/scripts-audit-2026-06-12.md）
+  - [x] ~~scripts/ 棚卸しの削除実行~~ 完了（6/12 承認→削除 24・archive 16 実行、masup ゾンビ watchdog と shibu.stream も無効化、doctor 全緑。残=しゅん先生 PC 確認待ち 2 件 → @docs/projects/scripts-audit-2026-06-12.md）
   - [ ] BIOS 整理（CSM 無効化＋旧 HDD Boot Manager エントリ削除、しゅん先生 PC 着席時）
 - **⚠️ 状態不明・要本人確認**:
   - しぶコーチング応募: 締切 5/6 23:59 を超過と 5/7 ジャーナルに記録（失効扱い）
