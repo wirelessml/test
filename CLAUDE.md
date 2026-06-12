@@ -22,7 +22,7 @@
   - IG・X はログイン済 Chrome プロファイル経由で取得可（`open -a "Google Chrome" <url>` + osascript + screencapture、MCP 無しでも可）
 - **今週の優先 TODO**:
   - [ ] **Fable 5 期間の資産化**（〜6/22、上記⭐の方針で残り枠を配分）
-  - [ ] **整理収納 1 級 2 次試験申込**（協会 HP、CBT 受験/2021-06-10/受験地域）。本文ドラフトは 6/12 作成済 → @docs/projects/seiri-shu-nou-advisor-1-draft.md（申込→面談→30 日以内提出）
+  - [ ] **整理収納 1 級 2 次試験申込**（協会 HP、CBT 受験/2021-06-10/受験地域）。**本文は Word 内で完成済みと 6/12 判明**、残り＝要修正 2 点（10 分）＋事務手続き → @docs/projects/seiri-shu-nou-advisor-1-draft.md
   - [ ] **Bグループ ミニマリスト宅訪問動画 1 本目**（2 週間完走目標、@docs/projects/minimalist-visit-production.md）
   - [ ] **GVC キャリアへ書面質問 3 点**送付（雇用契約/配属/研修費返還、6/11 持ち越し）
   - [ ] iPhone Safari 履歴中抜けの SQL 解析（6/11 持ち越し）
@@ -65,6 +65,7 @@
 
 ## 最近 2 週間の作業記録（詳細は @docs/journal/YYYY-MM-DD.md）
 
+- **2026-06-12** (金): **Fable 5 資産化デー（無料期間〜6/22 の方針実行初日）** — ①CLAUDE.md 再ダイエット（212→168 行、4-5 月分を archive index 化、povo MNP 未確認を発掘）②スキル 4 本新設＋.claude/skills 配線（journal/録画文字起こし/全機更新/Xファクトチェック）③ハーネス: SessionStart フックで「枠の頭で計画」自動化＋**launchagent-doctor 新設→初走行で実害 3 件即検出**（kanno-watch/kioxia-monitor の TCC exit126、reco-mock の port 競合）→当日修理し 9/10 健全・TCC 警告 0 ④scripts 棚卸しを masup Codex 委譲→検証 3 点訂正→**削除 20 等の提案承認待ち**＋masup ゾンビ watchdog 発見 ⑤体験報告書は**本文完成済みと判明**→レビューで要修正 2 点特定。教訓: bash の `$var`+多バイト罠×2、tar の AppleDouble 混入、「動いている LaunchAgent も TCC 時限爆弾」（@docs/journal/2026-06-12.md）
 - **2026-06-11** (水): **就活レポートMac移管初日が完全成功（04:30、83件、二重送信防止も動作）＋GVCキャリア カジュアル面談を一気通貫対応** — ①前夜応募の「AIエンジニア未経験6ヶ月研修」（実体=SES＋有料スクール「キャリフリ」＋風評対策事業の新興企業）を面談32分前に分析しチートシート化。②Zoomアプリ無し→**Chromeブラウザ参加**で実施。③**録画システムv2**: 画面=screencapture -v／音声=ffmpeg(マイク+BlackHole)／Ctrl+C後に自動合成、25分39秒・4K・3.3GBを取得。④whisper文字起こしは**繰り返し幻覚を`-mc 0`で解消**。⑤面談で核心質問をぶつけ、LINE誘導をメールへ切替。次の一手=書面質問3点。⑥録画のYouTube公開希望は肖像権で止めた。⑦iPhone Safari履歴の中抜け発見→SQL解析持ち越し（@docs/journal/2026-06-11.md）
 - **2026-06-10** (火): **就活ルーチンを5回改訂→masup Codexから Mac自作スクリプトへ完全移管** — 実在・勤務地検証必須化／福祉・飲食・資格必須職を恒久除外／板宿駅1km＋声を出さない在宅事務／`job-search-daily.py`+LaunchAgent 04:30 に移管（Codexクォータ・geo水増し根治）。**ルール2本制定「時間かかりすぎ=中止シグナル」「枠の頭で計画」**。iMovie=ffmpeg実証で決着、iPhone録画設定確定（4K30 HEVC/HDRオフ）。**LaunchAgent全アンロード事故を発見・7個復旧**。カレンダーのセッション1〜5廃止（@docs/journal/2026-06-10.md）
 - **2026-06-07** (日): **6/8 Bグループ面談の準備仕上げ＋就活メール不達を恒久修理** — 録音=ffmpeg(本体マイク＋BlackHole)コマンド化／文字起こし=whisper.cpp `ggml-large-v3-turbo` 採用（SuperWhisper Pro は 5/28 失効、「Lifetime」は誤記と訂正）／**launchd TCC 罠**（`~/Desktop` 読めず exit126）→ `~/Library/Application Support/job-report/` へ移設で復旧（@docs/journal/2026-06-07.md）
@@ -87,7 +88,7 @@
 
 ## 個別プロジェクト
 
-- **整理収納アドバイザー 1 級 2 次審査**: 構成案＋図表 10 個完成（5/4）、**本文ドラフト 6/12 完成** → @docs/projects/seiri-shu-nou-advisor-1.md ＋ seiri-shu-nou-advisor-1-draft.md
+- **整理収納アドバイザー 1 級 2 次審査**: 図表 10 個（5/4）＋本文 9,186 字（5/5-6 Word 内で完成、6/12 レビューで要修正 2 点特定）→ @docs/projects/seiri-shu-nou-advisor-1.md ＋ seiri-shu-nou-advisor-1-draft.md
 - **ミニマリスト宅訪問動画 制作 / 動画スキル向上**（Bグループ業務委託、採算度外視・2 週間で 1 本完走）: 制作メモ @docs/projects/minimalist-visit-production.md、脚本 @docs/projects/minimalist-visit-script.md、スキル向上 @docs/projects/video-skills.md
 - **就活**: 毎朝 04:30 自動レポート（下記ルーチン）＋ GVC キャリア書面質問が次の一手
 - **takeru-chatbot**: Claude CLI 経由 Web チャットボット＋しぶ観察ナレッジ `takeru-chatbot/knowledge/`（@docs/projects/takeru-chatbot.md）
@@ -100,7 +101,8 @@
 - **就活 求人サーチ**（毎朝 04:30、LaunchAgent `com.yuika.job-search-mac` → `~/Library/Application Support/job-report/job-search-daily.py`。板宿駅 1km・資格/福祉/飲食除外・在宅事務（神戸優先）→ GitHub `wirelessml/job-hunt-reports` push → メール。「就活レポート」で最新報告。@docs/routines/job-search-daily.md）
 - **MASU-p 監視**（毎日 18:12、LaunchAgent）: @docs/routines/masu-p-watch.md
 - **Kioxia 整備品監視**（毎日 08:17、LaunchAgent）: @docs/routines/ssd-price-monitor.md（週次の手動 SSD 価格監視は 4/27 危機脱出により休眠）
-- **kanno-watch / masup-codex-attachment-sync**: LaunchAgent 稼働中（scripts/kanno-watch.sh ほか）
+- **kanno-watch / masup-codex-attachment-sync**: LaunchAgent 稼働中
+- **🩺 LaunchAgent 健全性チェック**: `bash scripts/launchagent-doctor.sh`（6/12 新設。未ロード/実行失敗/TCC罠/期待リスト突合）。**launchd 起動物の実体は `~/Library/Application Support/<name>/`、git 正本は `scripts/`**（kanno-watch / kioxia-monitor / masu-p-watch は 6/12 移設済み）
 - 廃止・休眠: セッションスケジュール（6/11 廃止）／ X 収集ルーチン（5/2 廃止）／ リモートコントロール状態報告（6/5 廃止）／ しぶ IG 毎時監視（セッション cron 前提が形骸化、必要時都度）
 - **運用ルーチン（CLAUDE.md とタスク管理の二層構造）**: @docs/routines/task-management.md
 
