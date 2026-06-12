@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ccpocket.bridge</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>-li</string>
+        <string>-c</string>
+        <string>exec npx --yes @ccpocket/bridge@latest</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>BRIDGE_PORT</key>
+        <string>8765</string>
+        <key>BRIDGE_HOST</key>
+        <string>0.0.0.0</string>
+        <key>npm_config_@anthropic-ai:registry</key>
+        <string>https://registry.npmjs.org/</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/ccpocket-bridge.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/ccpocket-bridge.err</string>
+</dict>
+</plist>

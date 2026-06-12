@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.yuika.reco-ollama-mock</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>/Users/yuika/Library/Application Support/reco-ollama-mock/reco-ollama-mock.py</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/reco-ollama-mock.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/reco-ollama-mock.err.log</string>
+    <key>WorkingDirectory</key>
+    <string>/tmp</string>
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>
