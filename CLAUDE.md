@@ -6,7 +6,7 @@
 
 ## 現在の状態（2026-06-12 時点）
 
-- **機材配置と役割ポリシー（6/2 確定）**: **Mac (M1) = Claude Code 専用**（持ち運び）/ **masup = Codex 専用**（CLI=WSL2 / Desktop=Windows で共存）/ **しゅん先生 PC = コワーキング据え置きメイン**。理由＝Codex サンドボックスは Linux 必須＋app-server 競合の OS 分離（@docs/journal/2026-06-02.md）
+- **機材配置と役割ポリシー（6/12 更新）**: **Mac (M1) = Claude Code 専用＝司令塔**（持ち運び）/ **masup = Claude の委譲先 Codex ワーカー**（独立自走せず、Mac の Claude が `codex exec` で重い作業＝レビュー・監査・文字起こし・大量調査を投げる subagent。手順: @skills/delegating-to-masup-codex/）/ **しゅん先生 PC = コワーキング据え置きメイン**。※6/2 は「masup = Codex 専用（独立）」だったが 6/12 に「Claude のサポート役」へ更新（@docs/journal/2026-06-12.md 追補 3）
 - **⭐ Fable 5 無料期間（〜2026-06-22）**: Claude Fable 5 が従量課金なしで利用可。**期間戦略＝「6/23 以降も残る資産」への変換に集中**（スキル・ハーネス・ドキュメント・重い執筆）。使い捨ての出力（デモ・遊び）に枠を使わない。**メニューと消化ログ: @docs/projects/fable5-assets-plan.md**（毎枠ここから取る。6/12 に 8 項目消化＋Codex レビュー 2 本並走開始）
 - **直近の重要イベント**:
   - **6/11**: 就活レポート Mac 移管初日成功（04:30、83 件）＋ GVC キャリア面談を録画 v2〜v3 体制で完遂（whisper `-mc 0` で幻覚解消）（@docs/journal/2026-06-11.md）

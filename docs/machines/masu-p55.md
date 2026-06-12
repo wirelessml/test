@@ -1,13 +1,15 @@
 # Windows PC (MASU-P55)
 
-> Last updated: 2026-06-02
+> Last updated: 2026-06-12
 
 ## 役割
 
-**コワーキングオフィス サブ作業機**
+**コワーキングオフィス サブ作業機 ＝ Claude（Mac）の委譲先 Codex ワーカー**
 - 配置: コワーキングスペース据え置き
-- 主用途: **Codex 専用機**（WSL2 の Codex CLI ＋ Windows の Codex Desktop App）。印刷・スキャン・ネット検索も。**OpenClaw は 2026-06-02 に削除**（旧: WSL Ubuntu 上で OpenClaw 実行）
+- 主用途: **Claude のサポートに徹する Codex 実行機**（2026-06-12 役割転換）。独立した自走エージェント（旧: job-search / remote-control / OpenClaw 等）としては運用しない。**WSL2 の Codex CLI を、Mac の Claude が `codex exec` で叩いて重い作業（コードレビュー・監査・文字起こし・大量調査）を委譲**する。印刷・スキャン・ネット検索の物理用途は継続
+- 委譲の標準手順とハマりどころ: **@skills/delegating-to-masup-codex/SKILL.md**
 - 所属: コワーキング設置（一部共用）
+- ⚠️ 旧「Codex 専用機（独立運用）」ポリシー（6/2）は **6/12 に「Claude のサポート役」へ更新**。masup 上で Codex が自分の判断で本番タスク（求人サーチ等）を回すことはしない（6/10 に job-search は Mac へ移管済み、6/12 にゾンビ watchdog 無効化済み）
 
 ## ハードウェア
 
@@ -80,6 +82,7 @@
 
 ## 変更履歴
 
+- 2026-06-12: **役割を「Claude の委譲先 Codex ワーカー」へ転換**（ユーザー指示「今後 masup Codex はあなたのサポートに徹してもらう」）。独立自走をやめ、Mac の Claude が `codex exec` で重い作業を投げる subagent 的位置づけに。同日この体制で実証＝コードレビュー 3 本（takeru-video-editor / job-search-daily / takeru-chatbot セキュリティ）を委譲→Claude 検証→反映。委譲パターンをスキル化（@skills/delegating-to-masup-codex/）。実証で判明したハマり: ①codex exec `--sandbox workspace-write` は cwd 外（/mnt/c）に書けない→ワークスペース or ホーム直下に書かせ shell で回収 ②macOS tar が `._*`（AppleDouble）を混入させる→`COPYFILE_DISABLE=1` ③stdout は実行ログ全部入りで巨大→末尾の成果物だけ回収
 - 2026-06-02: **Codex 専用機に整理**。AI CLI 確認（claude 2.1.159 / codex 0.136.0 / gemini 0.44.1、すべて最新。Windows claude.exe も 2.1.159）。**OpenClaw 完全削除**（systemd user service `openclaw-gateway.service` 停止+無効化、npm `openclaw` 削除、`~/.openclaw` 削除、.bashrc 行削除。復元 backup = `C:\Users\gci_admin\openclaw-backup.tar.gz`）。**Antigravity（Google Gemini系IDE）アンインストール**（Inno `unins000.exe /VERYSILENT` ＋ user データ `~/.antigravity` 336M・`AppData\Roaming\Antigravity` 110M 削除、計~750MB 解放）。Whisper 検証残骸（uv/HFモデルキャッシュ/音声、~5.3G）削除。CLI `codex remote-control` は WSL2(Linux) で稼働＝Windows Codex Desktop と OS 分離で app-server 競合せず
 - 2026-05-30: AI CLI 3 種を最新化（claude 2.1.156→2.1.157、codex 0.130.0→0.135.0、gemini 0.43.0→0.44.1）。**Codex Desktop App が Microsoft Store/MSIX 経由で導入済みと判明**（`OpenAI.Codex` v26.527.3378.0、`Get-AppxPackage` でのみ検出可）→ Store 更新スキャン発火（CIM `UpdateScanMethod` RV=0）。codex npm 更新で出た 224MB のステージング残骸（`.codex-0T2poKJG`、Defender がロック）を次回再起動で自動削除するワンショットタスク `CleanupCodexStaging`（SYSTEM/起動時、実行ログ `C:\Users\gci_admin\cleanup-codex-staging.log`）を登録。Windows Computer Use の有効化はコンソール操作が必要（SSH 不可）と確認
 - 2026-05-18: Mac 側の Codex 添付画像を MASU-P55 の `C:\tmp\codex-remote-attachments` へ自動同期する LaunchAgent を追加。Windows 側 Codex が Mac と同じ `/tmp/codex-remote-attachments/...` 形式の画像パスで読めることを確認
