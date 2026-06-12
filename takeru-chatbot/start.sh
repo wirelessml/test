@@ -1,5 +1,16 @@
 #!/bin/bash
 # AIミニマリストしぶ — ワンコマンド起動
+#
+# 🚨🚨 2026-06-12 セキュリティ警告: このスクリプトは server.py を 0.0.0.0 で公開し
+#   cloudflared トンネルで全世界に晒す。現状の server.py は【無認証】で、外部から:
+#     - /chat       → Claude API 課金を無制限に焼ける（レート制限は IP 単位・分散で回避可）
+#     - /api/voice  → ElevenLabs 課金エンドポイント（レート制限の前で return＝完全ノーガード）
+#     - /api/export, /api/history → 全会話ログ（個人の相談内容）を無認証で吸い出せる
+#     - /stats      → ユーザー質問を innerHTML 連結＝保存型 XSS
+#   公開実績あり（過去 Tailscale Funnel/trycloudflare）。【再公開する前に必ず】
+#   docs/projects/review-chatbot-security-2026-06-12.md の提案 1〜8 を実装すること
+#   （最低: 127.0.0.1 バインド＋全 API 認証＋/api/voice 課金ガード＋/stats を textContent 化）。
+#   それまでトンネル公開は禁止。ローカル検証は下記を 127.0.0.1 に変えてトンネル行を消して使う。
 DIR="$(cd "$(dirname "$0")" && pwd)"
 eval "$(/opt/homebrew/bin/brew shellenv zsh)" 2>/dev/null
 

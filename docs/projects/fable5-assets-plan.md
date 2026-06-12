@@ -18,7 +18,9 @@
 ### 進行中（masup Codex 並走）
 - [x] **Codex レビュー A**: takeru-video-editor 静的レビュー **受領・検証済み**（抜き打ち照合 3/3 一致 → docs/projects/review-video-editor-2026-06-12.md。実バグ: typer.Context 誤用＝pipeline 即死 / カット境界フェード未実装 / AI 生成プラン無検証。パッチ適用はキュー 3）
 - [ ] **Codex レビュー B**: job-search-daily-mac.py（毎朝 04:30 本番）堅牢性レビュー → 受領待ち。**本番スクリプトの 6/23 後の自走品質に直結**
-- 運用知見: codex exec の `--sandbox workspace-write` は **cwd 外（/mnt/c）に書けない** → 成果物はワークスペース内に書かせて shell 側で回収する（A で踏んだ罠、ランナー設計に反映済み）
+- [x] **Codex レビュー C**: takeru-chatbot セキュリティ監査 **受領・検証済み**（重大 5 点を実コード照合で全一致 → docs/projects/review-chatbot-security-2026-06-12.md）。`/api/voice` は 657 行 return が 658 行レート制限の前＝課金ノーガード、`/stats` は innerHTML 連結で保存型 XSS。**サーバは現在停止中＝露出なし**、再公開前必読警告を start.sh / chatbot CLAUDE.md に埋込済み
+- 運用知見: codex exec の `--sandbox workspace-write` は **cwd 外（/mnt/c）に書けない** → 成果物はワークスペース内（or ホーム直下）に書かせて shell 側で回収する（A〜C で確立、ランナーに salvage 段を内蔵）
+- **job-search 本番はレビュー B 反映の堅牢版を App Support に同期済み＝明日 04:30 から本番稼働**（silent failure 根治）
 
 ## キュー（優先順）
 
