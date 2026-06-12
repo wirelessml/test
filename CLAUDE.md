@@ -88,7 +88,7 @@
 
 - **整理収納アドバイザー 1 級 2 次審査**: 図表 10 個（5/4）＋本文 9,186 字（5/5-6 Word 内で完成、6/12 レビューで要修正 2 点特定）→ @docs/projects/seiri-shu-nou-advisor-1.md ＋ seiri-shu-nou-advisor-1-draft.md
 - **ミニマリスト宅訪問動画 制作 / 動画スキル向上**（Bグループ業務委託、採算度外視・2 週間で 1 本完走）: 制作メモ @docs/projects/minimalist-visit-production.md、脚本 @docs/projects/minimalist-visit-script.md、スキル向上 @docs/projects/video-skills.md
-- **就活**: 毎朝 04:30 自動レポート（下記ルーチン）＋ GVC キャリア書面質問が次の一手
+- **就活**: 毎朝 04:30 自動レポート（下記ルーチン）。直近はエボルカ WEB 面談 6/15(月) 11:00、角川は書類選考結果待ち
 - **takeru-chatbot**: Claude CLI 経由 Web チャットボット＋しぶ観察ナレッジ `takeru-chatbot/knowledge/`（@docs/projects/takeru-chatbot.md）
 - **takeru-video-editor**（GitHub 公開リポ名は shibu-video-editor のまま）: しぶ受講生インタビュー動画半自動編集 OSS
 - **しぶエコ観察**: @docs/journal/ に日次記録
