@@ -24,10 +24,9 @@
   - [ ] **Fable 5 期間の資産化**（〜6/22、上記⭐の方針で残り枠を配分）
   - [ ] **Bグループ ミニマリスト宅訪問動画 1 本目**（2 週間完走目標、@docs/projects/minimalist-visit-production.md）
   - [ ] エボルカ WEB 面談 6/15(月) 11:00（条件回答は済み。録画するなら 面談-録画.command）
-  - ※ GVC 送信・整理収納 2 次申込・DMM 退会の 3 件は **6/12 ユーザー指示でトラッキング外（本人管理）**
+  - ※ GVC 送信・整理収納 2 次申込・DMM 退会・BIOS 整理の 4 件は **6/12 ユーザー指示でトラッキング外**（BIOS 整理は不要と判断し廃止、4 月からの持ち越しを終了）
   - [ ] iPhone Safari 履歴 SQL 解析 — **Terminal に Full Disk Access 付与待ち**（システム設定→プライバシー→FDA。付与後は解析 5 分、@docs/journal/2026-06-12.md 追補 2）
   - [x] ~~scripts/ 棚卸しの削除実行~~ 完了（6/12 承認→削除 24・archive 16 実行、masup ゾンビ watchdog と shibu.stream も無効化、doctor 全緑。残=しゅん先生 PC 確認 2 件＋全機更新の残り 1 台、**6/13 起動予定** → @docs/projects/scripts-audit-2026-06-12.md）
-  - [ ] BIOS 整理（CSM 無効化＋旧 HDD Boot Manager エントリ削除、しゅん先生 PC 着席時）
 - **⚠️ 状態不明・要本人確認**:
   - しぶコーチング応募: 締切 5/6 23:59 を超過と 5/7 ジャーナルに記録（失効扱い）
   - ~~povo 2.0 MNP~~ → ✅ **実施済みと 6/12 本人確認**。eSIM は 2026 秋に長女・結花の新 iPhone へ移行予定（@docs/reminders.md）
