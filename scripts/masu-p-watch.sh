@@ -1,17 +1,22 @@
 #!/bin/bash
 # MASU-p (神戸市須磨区板宿コワーキング) サイト + Instagram 毎日監視
-# 実行: 毎日 08:23 JST (LaunchAgent)
-# ログ: docs/routines/masu-p-watch-log.md (append-only)
-# スナップショット: docs/routines/masu-p-snapshots/ (差分比較用)
+# 実行: 毎日 18:12 JST (LaunchAgent)
+# ログ: ~/Library/Application Support/masu-p-watch/masu-p-watch-log.md (append-only)
+# スナップショット: ~/Library/Application Support/masu-p-watch/snapshots/ (差分比較用)
 # 発動: ページ HTML / Instagram メタタグに変化があった場合
+#
+# ⚠️ 実行実体は ~/Library/Application Support/masu-p-watch/（2026-06-12 移設）。
+#    launchd は TCC で ~/Desktop を読み書きできない（kanno-watch/kioxia-monitor と同じ罠）。
+#    このファイルは git 管理用の正本。編集したら App Support 側へ cp で同期すること。
+#    過去ログ・スナップショットは docs/routines/ に残置（履歴参照用、追記は App Support 側へ）。
 
 set -uo pipefail
 
-ROOT="/Users/yuika/Desktop"
+APPDIR="$HOME/Library/Application Support/masu-p-watch"
 WEB_URL="https://masu-p.com/"
 IG_URL="https://www.instagram.com/masup_official/"
-LOG_FILE="${ROOT}/docs/routines/masu-p-watch-log.md"
-SNAP_DIR="${ROOT}/docs/routines/masu-p-snapshots"
+LOG_FILE="${APPDIR}/masu-p-watch-log.md"
+SNAP_DIR="${APPDIR}/snapshots"
 TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S JST')"
 DATE_TAG="$(date '+%Y%m%d-%H%M')"
 
@@ -122,7 +127,7 @@ fi
 
 # --- 変化検出時のメール送信 ---
 EMAIL_CONFIG="${HOME}/.config/masu-p-watch/email.json"
-SEND_EMAIL_PY="${ROOT}/scripts/lib/send-email.py"
+SEND_EMAIL_PY="${APPDIR}/lib/send-email.py"
 
 if [ "${ANY_CHANGE}" -eq 1 ] && [ "${PREV_WEB_HASH}" != "INITIAL" ]; then
   if [ -f "${EMAIL_CONFIG}" ] && [ -x "${SEND_EMAIL_PY}" ]; then

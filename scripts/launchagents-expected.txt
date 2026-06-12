@@ -1,0 +1,12 @@
+# launchagent-doctor 用の期待リスト（ここに書いた Label が未ロードなら 🚨）
+# 2026-06-12 の健全状態スナップショット。エージェントを増減したらこのファイルも更新すること。
+com.ccpocket.bridge
+com.codex-pet.limit-rings
+com.yuika.amazon-kioxia-monitor
+com.yuika.job-report-email
+com.yuika.job-search-mac
+com.yuika.kanno-watch
+com.yuika.masu-p-watch
+com.yuika.masup-codex-attachment-sync
+com.yuika.reco-ollama-mock
+# com.shibu.stream は exit 78 で形骸化中（配信は 4/30 停止）。無効化するか要ユーザー判断のため期待リストから除外

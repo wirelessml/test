@@ -2,14 +2,18 @@
 # Amazon Kioxia KBG40ZNS256G 整備品 定期監視スクリプト
 # ASIN: B0F3N6ND7K
 # 実行: 毎日 08:17 JST (LaunchAgent)
-# ログ: docs/routines/kioxia-monitor-log.md (append-only)
+# ログ: ~/Library/Application Support/kioxia-monitor/kioxia-monitor-log.md (append-only)
 # 発動: 価格 ¥5,000 以下 or 在庫切れ検出時
+#
+# ⚠️ 実行実体は ~/Library/Application Support/kioxia-monitor/（2026-06-12 移設）。
+#    launchd は TCC で ~/Desktop を読み書きできない（6/12 朝 08:17 の実行が exit126 で死亡し発覚、6/7 と同じ罠）。
+#    このファイルは git 管理用の正本。編集したら App Support 側へ cp で同期すること。
 
 set -uo pipefail  # -e 外す（パース失敗してもログ追記を優先）
 
 ASIN="B0F3N6ND7K"
 PRODUCT_URL="https://www.amazon.co.jp/dp/${ASIN}"
-LOG_FILE="/Users/yuika/Desktop/docs/routines/kioxia-monitor-log.md"
+LOG_FILE="$HOME/Library/Application Support/kioxia-monitor/kioxia-monitor-log.md"
 TMP_FILE="/tmp/amazon-kioxia-$(date +%Y%m%d-%H%M).html"
 TIMESTAMP="$(date '+%Y-%m-%d %H:%M:%S JST')"
 

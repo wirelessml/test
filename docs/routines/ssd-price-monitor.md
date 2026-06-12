@@ -1,5 +1,7 @@
 ## 定期タスク（毎週/毎月の継続監視）
 
+> ⚠️ **2026-06-12 移設（Kioxia 監視）**: launchd の TCC 罠で 6/12 朝 08:17 の実行が exit126 死亡 → 実行実体とログを `~/Library/Application Support/kioxia-monitor/` へ移設（amazon-kioxia-monitor.sh / kioxia-monitor-log.md）。git 正本は `scripts/amazon-kioxia-monitor.sh`。`docs/routines/kioxia-monitor-log.md` は履歴として残置（追記されない）。週次の手動 SSD 価格監視は 4/27 危機脱出により休眠中。
+
 ### SSD 価格監視（しゅん先生 PC 用 NVMe SSD 買い替え待ち）
 
 **状況**: 2026 年 NAND 高騰で 1TB NVMe が ¥20,980 から。4/22 Plextor 死亡後、Seagate SMR HDD で延命運用中。

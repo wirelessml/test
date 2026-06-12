@@ -1,5 +1,7 @@
 # MASU-p 毎日監視ルーチン
 
+> ⚠️ **2026-06-12 移設**: launchd の TCC 罠対策で実行実体・ログ・スナップショットを `~/Library/Application Support/masu-p-watch/` へ移設（スクリプト=masu-p-watch.sh / ログ=masu-p-watch-log.md / スナップショット=snapshots/ / 共通部品=lib/send-email.py）。git 正本は `scripts/masu-p-watch.sh`、編集後は App Support へ cp で同期。`docs/routines/` 内の旧ログ・旧スナップショットは履歴として残置（追記されない）。以下の本文中の旧パスは読み替えること。
+
 > 開始: 2026-04-29 18:12 JST
 > 動機: 普段使いのコワーキングスペース MASU-p (神戸市須磨区板宿) の公式情報を毎日チェック。新サービス、イベント、新規投稿を見逃さない。
 

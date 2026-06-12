@@ -1,6 +1,11 @@
 ## よく使うコマンド
 
 ```bash
+# LaunchAgent 健全性チェック（6/12 新設。未ロード/実行失敗/TCC罠/期待リスト突合を一括診断）
+bash scripts/launchagent-doctor.sh
+# 期待リスト: scripts/launchagents-expected.txt（エージェント増減時に更新）
+# ⚠️ launchd 起動物は ~/Desktop に置かない（TCC罠）。実体は ~/Library/Application Support/<name>/、git 正本は scripts/
+
 # HTMLをPNGに変換（Playwright）
 python docs/render_guide.py
 

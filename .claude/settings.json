@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(launchctl list)",
+      "Bash(launchctl list *)",
+      "Bash(vm_stat)",
+      "Bash(vm_stat *)",
+      "Bash(system_profiler *)",
+      "Bash(twitter tweet *)",
+      "mcp__claude_ai_Gmail__search_threads",
+      "mcp__claude_ai_Gmail__get_thread",
+      "mcp__claude_ai_Google_Calendar__list_events",
+      "mcp__computer-use__screenshot",
+      "mcp__computer-use__zoom",
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__take_screenshot"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/session-start-brief.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
