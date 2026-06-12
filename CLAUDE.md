@@ -24,8 +24,9 @@
   - [ ] **Fable 5 期間の資産化**（〜6/22、上記⭐の方針で残り枠を配分）
   - [ ] **整理収納 1 級 2 次試験申込**（協会 HP、CBT 受験/2021-06-10/受験地域）。**本文は Word 内で完成済みと 6/12 判明**、残り＝要修正 2 点（10 分）＋事務手続き → @docs/projects/seiri-shu-nou-advisor-1-draft.md
   - [ ] **Bグループ ミニマリスト宅訪問動画 1 本目**（2 週間完走目標、@docs/projects/minimalist-visit-production.md）
-  - [ ] **GVC キャリアへ書面質問 3 点**送付（雇用契約/配属/研修費返還、6/11 持ち越し）
-  - [ ] iPhone Safari 履歴中抜けの SQL 解析（6/11 持ち越し）
+  - [ ] **GVC 書面質問 3 点 → 下書き作成済み（6/12）、Gmail 下書きから送信ボタンのみ**。求人ボックスの未読メッセージ（6/11 14:50）も要確認
+  - [ ] **エボルカ「就業条件回答」Web フォーム回答**（6/15 月 11:00 面談の前まで）
+  - [ ] iPhone Safari 履歴 SQL 解析 — **Terminal に Full Disk Access 付与待ち**（システム設定→プライバシー→FDA。付与後は解析 5 分、@docs/journal/2026-06-12.md 追補 2）
   - [x] ~~scripts/ 棚卸しの削除実行~~ 完了（6/12 承認→削除 24・archive 16 実行、masup ゾンビ watchdog と shibu.stream も無効化、doctor 全緑。残=しゅん先生 PC 確認 2 件＋全機更新の残り 1 台、**6/13 起動予定** → @docs/projects/scripts-audit-2026-06-12.md）
   - [ ] BIOS 整理（CSM 無効化＋旧 HDD Boot Manager エントリ削除、しゅん先生 PC 着席時）
 - **⚠️ 状態不明・要本人確認**:
