@@ -42,4 +42,26 @@ await page.goto("URL");
 EOF
 ```
 
+## X / Twitter の読み取り（2026-06-13 確立）
+
+> WebFetch は X に弾かれる（402 / ログインwall）。**ブラウザ操作・スクショ不要**で、agent-reach 同梱の `twitter-cli`（ログイン済みセッション経由）で読む。`agent-reach doctor` で「Twitter/X 完整可用」を確認済み。
+
+```bash
+# 単一ツイート＋リプライ（YAML=詳細 / -c=LLM向けJSON）
+twitter tweet "https://x.com/<user>/status/<id>" --yaml
+twitter -c tweet "<URL_or_ID>"
+
+# ユーザーの投稿一覧 / プロフィール / ホームTL
+twitter user-posts @username -n 20
+twitter user @username
+twitter feed -n 20
+
+# 長文(Article) / 検索（searchはGraphQL変更で404のことあり→ pipx upgrade twitter-cli）
+twitter article "<URL_or_ID>"
+twitter search "query" -n 10
+```
+
+- 投稿（書き込み）は別。閲覧用 X PWA（@minimalistneko）は computer-use full tier、読み取りは上記 CLI が最速
+- 環境確認: `agent-reach doctor`（社交=推特/Reddit/V2EX、web=Jina Reader 等の在否を一括表示）
+
 
