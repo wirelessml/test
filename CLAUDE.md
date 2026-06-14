@@ -4,10 +4,10 @@
 >
 > ダイエット履歴: 2026-04-22（1984 行 → ~270 行）/ 2026-06-12（内容刷新、4-5 月分を docs/archive/ へ）
 
-## 現在の状態（2026-06-12 時点）
+## 現在の状態（2026-06-14 時点）
 
 - **機材配置と役割ポリシー（6/12 更新）**: **Mac (M1) = Claude Code 専用＝司令塔**（持ち運び）/ **masup = Claude の委譲先 Codex ワーカー**（独立自走せず、Mac の Claude が `codex exec` で重い作業＝レビュー・監査・文字起こし・大量調査を投げる subagent。手順: @skills/delegating-to-masup-codex/）/ **しゅん先生 PC = コワーキング据え置きメイン**。※6/2 は「masup = Codex 専用（独立）」だったが 6/12 に「Claude のサポート役」へ更新（@docs/journal/2026-06-12.md 追補 3）
-- **⭐ Fable 5 無料期間（〜2026-06-22）**: Claude Fable 5 が従量課金なしで利用可。**期間戦略＝「6/23 以降も残る資産」への変換に集中**（スキル・ハーネス・ドキュメント・重い執筆）。使い捨ての出力（デモ・遊び）に枠を使わない。**メニューと消化ログ: @docs/projects/fable5-assets-plan.md**（毎枠ここから取る。6/12 に 8 項目消化＋Codex レビュー 2 本並走開始）
+- **モデル（6/14 更新）**: **Fable 5 はもう使えない**（予定の 6/22 を待たず終了、6/14 ユーザー確認）。**標準モデル = Opus 4.8**（`~/.claude/settings.json` の `"model": "opus"`、max effort。必要時 `/model opusplan` へ切替可）。Fable 期間に始めた**資産化（「残る成果物」への変換）は通常作業として継続**＝メニューと消化ログ: @docs/projects/fable5-assets-plan.md（6/12 に 8 項目、6/13-14 に video-editor レビュー反映ほか）
 - **直近の重要イベント**:
   - **6/11**: 就活レポート Mac 移管初日成功（04:30、83 件）＋ GVC キャリア面談を録画 v2〜v3 体制で完遂（whisper `-mc 0` で幻覚解消）（@docs/journal/2026-06-11.md）
   - **6/10**: 就活ルーチンを masup Codex → Mac LaunchAgent に完全移管。**ルール 2 本制定「時間かかりすぎ＝中止シグナル」「枠の頭で計画」**。LaunchAgent 全アンロード事故→7 個復旧（@docs/journal/2026-06-10.md）
@@ -21,12 +21,12 @@
   - chrome-devtools-mcp（user scope）/ playwright / peekaboo / Gmail / Calendar / マネーフォワード MCP / codex MCP
   - IG・X はログイン済 Chrome プロファイル経由で取得可（`open -a "Google Chrome" <url>` + osascript + screencapture、MCP 無しでも可）
 - **今週の優先 TODO**:
-  - [ ] **Fable 5 期間の資産化**（〜6/22、上記⭐の方針で残り枠を配分）
+  - [ ] **資産化キューの継続**（@docs/projects/fable5-assets-plan.md。Fable 終了後は通常作業として。残る成果物＝スキル・ハーネス・ドキュメント・コードレビュー反映を優先）
   - [ ] **Bグループ ミニマリスト宅訪問動画 1 本目**（2 週間完走目標、@docs/projects/minimalist-visit-production.md）
-  - [ ] エボルカ WEB 面談 6/15(月) 11:00（条件回答は済み。録画するなら 面談-録画.command）
+  - [ ] エボルカ WEB 面談 6/15(月) 11:00（条件回答は済み。チートシート更新済み、録画するなら 面談-録画.command）
   - ※ GVC 送信・整理収納 2 次申込・DMM 退会・BIOS 整理の 4 件は **6/12 ユーザー指示でトラッキング外**（BIOS 整理は不要と判断し廃止、4 月からの持ち越しを終了）
   - [ ] iPhone Safari 履歴 SQL 解析 — **Terminal に Full Disk Access 付与待ち**（システム設定→プライバシー→FDA。付与後は解析 5 分、@docs/journal/2026-06-12.md 追補 2）
-  - [x] ~~scripts/ 棚卸しの削除実行~~ 完了（6/12 承認→削除 24・archive 16 実行、masup ゾンビ watchdog と shibu.stream も無効化、doctor 全緑。残=しゅん先生 PC 確認 2 件＋全機更新の残り 1 台、**6/13 起動予定** → @docs/projects/scripts-audit-2026-06-12.md）
+  - [x] ~~scripts/ 棚卸しの削除実行~~ 完了（6/12 承認→削除 24・archive 16 実行、masup ゾンビ watchdog と shibu.stream も無効化、doctor 全緑。6/13 にしゅん先生 PC も確認済み: AI CLI 更新残なし、`setup-shun-sensei-watchdog.ps1` は keep 寄り、`setup-tokenchecker-task.ps1` は delete/archive 候補 → @docs/projects/scripts-audit-2026-06-12.md）
 - **⚠️ 状態不明・要本人確認**:
   - しぶコーチング応募: 締切 5/6 23:59 を超過と 5/7 ジャーナルに記録（失効扱い）
   - ~~povo 2.0 MNP~~ → ✅ **実施済みと 6/12 本人確認**。eSIM は 2026 秋に長女・結花の新 iPhone へ移行予定（@docs/reminders.md）
@@ -79,7 +79,7 @@
 全期限リスト: @docs/reminders.md
 
 直近の重要期限:
-- **2026-06-22**: **Fable 5 無料期間終了**（以降は `/model opusplan` に戻す。資産化を完了させること）
+- ~~**2026-06-22**: Fable 5 無料期間終了~~ → **Fable 5 は 6/14 までに使用不可**（予定より前倒し）。標準モデルは Opus 4.8 に移行済み（settings.json `"model": "opus"`）
 - **2026-07-31**: はばタンPay+ 第 5 弾 利用期限（残高は @docs/finance/habatan-pay-strategy.md）
 - **2026-07〜08**: 国民年金免除申請の結果通知
 - **2026 秋**: povo eSIM を長女・結花の新 iPhone へ移行予定（@docs/reminders.md）
@@ -146,14 +146,14 @@ Claude 活用のナレッジベース。AI 関連の知見・ガイド・テン�
 
 ## Claude Code セッション運用
 
-- モデル: **〜6/22 は Fable 5**（無料期間）。**6/23 以降は `/model opusplan` に戻す**
+- モデル: **Opus 4.8**（`~/.claude/settings.json` の `"model": "opus"`、max effort）。Fable 5 は 6/14 までに使用不可となり移行。必要に応じ `/model opusplan`（思考=Opus・実行=Sonnet 自動切替）へ切替可
 - ターミナル最前面設定: セッション開始時にユーザー案内（@docs/rules/session-setup.md）
 - 週次使用量: `/usage` または StatusLine で確認
 - 「枠の頭で計画」ルール: @docs/rules/session-setup.md
 
 ## 今後の見直し
 
-- **2026-06-22**: Fable 5 期間終了。資産化の達成度を棚卸しし、モデル設定を opusplan に戻す
+- ~~2026-06-22: Fable 5 期間終了~~ **済（前倒し）**: Fable 5 は 6/14 までに使用不可となり、標準モデルを Opus 4.8 へ移行。資産化キューは @docs/projects/fable5-assets-plan.md で通常作業として継続
 
 ## 参照
 
