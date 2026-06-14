@@ -8,6 +8,7 @@
 
 - **機材配置と役割ポリシー（6/12 更新）**: **Mac (M1) = Claude Code 専用＝司令塔**（持ち運び）/ **masup = Claude の委譲先 Codex ワーカー**（独立自走せず、Mac の Claude が `codex exec` で重い作業＝レビュー・監査・文字起こし・大量調査を投げる subagent。手順: @skills/delegating-to-masup-codex/）/ **しゅん先生 PC = コワーキング据え置きメイン**。※6/2 は「masup = Codex 専用（独立）」だったが 6/12 に「Claude のサポート役」へ更新（@docs/journal/2026-06-12.md 追補 3）
 - **モデル（6/14 更新）**: **Fable 5 はもう使えない**（予定の 6/22 を待たず終了、6/14 ユーザー確認）。**標準モデル = Opus 4.8**（`~/.claude/settings.json` の `"model": "opus"`、max effort。必要時 `/model opusplan` へ切替可）。Fable 期間に始めた**資産化（「残る成果物」への変換）は通常作業として継続**＝メニューと消化ログ: @docs/projects/fable5-assets-plan.md（6/12 に 8 項目、6/13-14 に video-editor レビュー反映ほか）
+- **🧭 計画前提（Fable 不在を前提に組み立てる、6/14〜）**: 無料の重処理枠は無い。**重い/長い処理は Codex に委譲**（@skills/delegating-to-masup-codex/）して Opus 枠を温存し、Claude は指示と検証（ルール4）に徹する。Opus は有限として「枠の頭で計画」「時間かかりすぎ＝中止」を厳守、キューは『残る価値 × 緊急度』で優先（詳細: @docs/projects/fable5-assets-plan.md「運用前提」）
 - **直近の重要イベント**:
   - **6/11**: 就活レポート Mac 移管初日成功（04:30、83 件）＋ GVC キャリア面談を録画 v2〜v3 体制で完遂（whisper `-mc 0` で幻覚解消）（@docs/journal/2026-06-11.md）
   - **6/10**: 就活ルーチンを masup Codex → Mac LaunchAgent に完全移管。**ルール 2 本制定「時間かかりすぎ＝中止シグナル」「枠の頭で計画」**。LaunchAgent 全アンロード事故→7 個復旧（@docs/journal/2026-06-10.md）
