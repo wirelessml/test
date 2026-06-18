@@ -9,4 +9,5 @@ com.yuika.kanno-watch
 com.yuika.masu-p-watch
 com.yuika.masup-codex-attachment-sync
 com.yuika.reco-ollama-mock
+com.yuika.seimu-watch
 # com.shibu.stream は 6/12 に無効化済み（exit 78 で形骸化、配信は 4/30 停止 → bootout + plist を .disabled 化。復活時はリネームして bootstrap）
