@@ -54,6 +54,40 @@ def test_dedup_by_id_keeps_first():
     assert out[0]["n"] == 1
 
 
+def test_limit_per_source_caps_but_keeps_order():
+    items = (
+        [{"id": f"a{i}", "source": "イクハク"} for i in range(4)] +
+        [{"id": "b1", "source": "東洋経済オンライン"},
+         {"id": "b2", "source": "東洋経済オンライン"}]
+    )
+    out = sw.limit_per_source(items, 3)
+    assert [x["id"] for x in out] == ["a0", "a1", "a2", "b1", "b2"]
+
+
+def test_limit_per_source_uses_url_when_source_empty():
+    items = [{"id": "a", "source": "", "url": "https://n/a"},
+             {"id": "b", "source": "", "url": "https://n/b"}]
+    assert sw.limit_per_source(items, 1) == items
+
+
+def test_cap_speeches_and_articles_limits_total_and_speech_share():
+    speeches = [{"id": f"s{i}"} for i in range(25)]
+    articles = [{"id": f"n{i}"} for i in range(25)]
+    out_s, out_n = sw.cap_speeches_and_articles(speeches, articles, max_items=40, max_speeches=20)
+    assert len(out_s) == 20
+    assert len(out_n) == 20
+    assert out_s[-1]["id"] == "s19"
+    assert out_n[-1]["id"] == "n19"
+
+
+def test_cap_speeches_and_articles_uses_news_when_few_speeches():
+    speeches = [{"id": "s1"}]
+    articles = [{"id": f"n{i}"} for i in range(50)]
+    out_s, out_n = sw.cap_speeches_and_articles(speeches, articles, max_items=40, max_speeches=20)
+    assert len(out_s) == 1
+    assert len(out_n) == 39
+
+
 # --- Task 4: プロンプト生成 / claude JSON パース ---
 def test_build_summary_prompt_contains_keys_and_text():
     sp = [{"key": "S1", "date": "2026-03-15", "house": "衆議院",

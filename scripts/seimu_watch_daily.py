@@ -2,7 +2,7 @@
 """大学無償化ウォッチ 日次ダイジェスト。
 国会会議録API＋Google News RSS から新着を収集→claude(Haiku)要約→メール。
 job-search-daily の堅牢化教訓を反映（TCC回避・fail-loud・0件正常）。GitHub不使用。
-環境変数: SW_DRY_RUN=1（メール/状態更新せず標準出力）、SW_NO_EMAIL=1。
+環境変数: SW_DRY_RUN=1（メール/状態更新せず標準出力）、SW_NO_EMAIL=1、SW_SEED=1（既読ベースライン作成）。
 """
 import os
 import json
@@ -23,8 +23,10 @@ HAIKU_MODEL = 'claude-haiku-4-5-20251001'
 PY = '/usr/bin/python3'
 UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) seimu-watch/1.0'
 KEYWORDS = ['大学無償化', '高等教育無償化', '授業料無償化', '高等教育の修学支援新制度']
-WINDOW_DAYS = 45
+WINDOW_DAYS = 365          # 国会は該当発言が疎なため広め（dedupで重複報告は防ぐ）
 MAX_ITEMS = 40
+MAX_SPEECH_ITEMS = 20
+MAX_PER_SOURCE = 3         # 同一媒体の量産ページ（例: イクハクの地域別テンプレ）の氾濫を抑制
 
 
 # --- pure: parsing -------------------------------------------------------
@@ -74,6 +76,27 @@ def dedup_by_id(items):
             seen.add(k)
             out.append(it)
     return out
+
+
+def limit_per_source(items, max_per_source=MAX_PER_SOURCE):
+    counts, out = {}, []
+    for it in items:
+        source = (it.get('source') or it.get('url') or it.get('id') or '').strip()
+        if not source:
+            out.append(it)
+            continue
+        count = counts.get(source, 0)
+        if count >= max_per_source:
+            continue
+        counts[source] = count + 1
+        out.append(it)
+    return out
+
+
+def cap_speeches_and_articles(speeches, articles, max_items=MAX_ITEMS, max_speeches=MAX_SPEECH_ITEMS):
+    capped_speeches = speeches[:min(max_speeches, max_items)]
+    remaining = max(0, max_items - len(capped_speeches))
+    return capped_speeches, articles[:remaining]
 
 
 # --- pure: summary prompt / parse ---------------------------------------
@@ -224,8 +247,24 @@ def main():
 
     speeches, articles = dedup_by_id(speeches), dedup_by_id(articles)
     seen_s, seen_n = load_seen(SEEN_SPEECH), load_seen(SEEN_NEWS)
-    new_s = filter_new(speeches, seen_s)[:MAX_ITEMS]
-    new_n = filter_new(articles, seen_n)[:MAX_ITEMS]
+    new_s, new_n = cap_speeches_and_articles(
+        filter_new(speeches, seen_s),
+        limit_per_source(filter_new(articles, seen_n), MAX_PER_SOURCE),
+        MAX_ITEMS,
+        MAX_SPEECH_ITEMS,
+    )
+
+    if os.environ.get('SW_SEED'):
+        os.makedirs(REPORTS, exist_ok=True)
+        report_path = os.path.join(REPORTS, f'{until}.md')
+        with open(report_path, 'w') as f:
+            f.write(render_digest(until, [], [], None))
+        save_seen(SEEN_SPEECH, seen_s | {s['id'] for s in speeches if s.get('id')})
+        save_seen(SEEN_NEWS, seen_n | {a['id'] for a in articles if a.get('id')})
+        log(f'SEED speeches={len(speeches)} articles={len(articles)} -> {report_path}')
+        if os.environ.get('SW_DRY_RUN'):
+            print(f'# 【大学無償化ウォッチ】{until} seed\n\n既存取得分を既読化しました。メール送信なし。')
+        return
     for i, s in enumerate(new_s, 1):
         s['key'] = f'S{i}'
     for i, a in enumerate(new_n, 1):
