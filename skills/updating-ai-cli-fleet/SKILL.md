@@ -42,7 +42,7 @@ npm view @openai/codex version; npm view @google/gemini-cli version
 
 ## 絶対に守ること
 
-- **`@anthropic-ai:registry=http://localhost:1` は消すな**。npm 経由の claude インストールを物理的に塞ぐ意図的ガード（3 台統一済み）。`npm view @anthropic-ai/...` が ECONNREFUSED になるのは正常。claude の更新は `claude update` / GitHub release のみ
+- **claude は npm で入れない／更新しない**。導入・更新は **standalone のみ**（`claude update`、配信遅延時は GitHub release zip）。standalone 実体: Mac `~/.local/bin/claude`→`~/.local/share/claude/versions/<ver>` ／ Windows `…\.local\bin\claude.exe`→`…\.local\share\claude`（毎日 0:00 タスク `Claude Code Update` が更新）。⚠️ **旧記述「`@anthropic-ai:registry=http://localhost:1` ガードが3台統一済み・`npm view @anthropic-ai/...` が ECONNREFUSED になるのは正常」は実態と相違**（2026-06-19 確認: Mac・masup とも当該ガードは未設定で、`npm view @anthropic-ai/claude-code` は普通に版を返す。しゅん先生 PC はオフラインで未確認）。ガードは現状どこにも無く、規律は「**npm で claude を入れない**」で担保している。**npm-global に `@anthropic-ai/claude-code` を見つけたらドリフト**→ `npm uninstall -g @anthropic-ai/claude-code` で除去し standalone に一本化する（PATH が npm 版を先取りするので注意。6/19 masup で実施）。物理ガードで塞ぎたい場合のみ `npm config set @anthropic-ai:registry http://localhost:1` を **3台同時に**設定（片側だけは不統一を生む）
 - **更新前にピン留め記録を確認**: `grep -riE "ピン留め|pin" docs/journal/ | tail` 。意図的に止めてあるバージョンを上げない（上げる場合は理由をユーザーに確認）
 - バージョン以外の変更（設定・plist・サービス）はこのルーチンの範囲外。混ぜない
 
