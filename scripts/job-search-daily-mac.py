@@ -8,7 +8,7 @@
 - /jb/ 詳細ページで実在・勤務地を検証（矛盾は除外しログに記載）
 - レポートを GitHub (wirelessml/job-hunt-reports) に push し、メール送信をトリガー
 2026-06-10 作成（実行主体を masup Codex から移管。経緯: docs/routines/job-search-daily.md）
-環境変数: JS_DATE=YYYY-MM-DD（日付上書き） JS_NO_PUSH=1 JS_NO_EMAIL=1（テスト用）
+環境変数: JS_DATE=YYYY-MM-DD（日付上書き） JS_NO_PUSH=1 JS_NO_EMAIL=1 JS_FORCE_EMAIL=1（テスト用/再送用）
 """
 import re, os, sys, time, json, html, subprocess, datetime, urllib.request
 
@@ -41,6 +41,14 @@ WARNINGS = []
 def warn(msg):
     WARNINGS.append(msg)
     log('WARN ' + msg)
+
+def run_cmd(args, timeout):
+    cp = subprocess.run(args, timeout=timeout, text=True, capture_output=True)
+    if cp.returncode != 0:
+        stderr = (cp.stderr or '').strip()[-800:]
+        stdout = (cp.stdout or '').strip()[-400:]
+        raise RuntimeError(f"command failed rc={cp.returncode}: {' '.join(args)} stdout={stdout!r} stderr={stderr!r}")
+    return cp
 
 def fetch(url, retries=2):
     for i in range(retries + 1):
@@ -248,16 +256,22 @@ def main():
     if os.environ.get('JS_NO_PUSH'):
         log('NO_PUSH (test mode)'); return
     g = ['git', '-C', REPO, '-c', 'user.name=wirelessml', '-c', 'user.email=wirelessml@gmail.com']
-    subprocess.run(['git', '-C', REPO, 'pull', '-q', '--rebase'], timeout=60)
-    subprocess.run(['git', '-C', REPO, 'add', 'reports'], timeout=30)
-    rc = subprocess.run(g + ['commit', '-q', '-m', f'report: {DATE} (mac-claude)'], timeout=30).returncode
-    if rc == 0:
-        rc = subprocess.run(['git', '-C', REPO, 'push', '-q'], timeout=120).returncode
-        log('PUSHED' if rc == 0 else 'PUSH_FAILED')
+    # 当日レポートを先に commit してから rebase する。旧実装は pull --rebase を add より前に
+    # 実行しており、作業ツリーに未sta変更（テスト再生成の残骸など）が1つでもあると pull が
+    # rc=128 で恒久失敗 → run_cmd が FATAL 化して push/メールに到達しなかった（2026-06-14〜19
+    # のサイレント停止の原因、2026-06-19 修正）。--autostash は想定外の未sta変更への保険。
+    run_cmd(['git', '-C', REPO, 'add', 'reports'], timeout=30)
+    has_changes = subprocess.run(['git', '-C', REPO, 'diff', '--cached', '--quiet'], timeout=30).returncode != 0
+    if has_changes:
+        run_cmd(g + ['commit', '-q', '-m', f'report: {DATE} (mac-claude)'], timeout=30)
+    run_cmd(['git', '-C', REPO, 'pull', '-q', '--rebase', '--autostash'], timeout=60)
+    if has_changes:
+        run_cmd(['git', '-C', REPO, 'push', '-q'], timeout=120)
+        log('PUSHED')
     else:
         log('NO_CHANGE (nothing to commit)')
     if not os.environ.get('JS_NO_EMAIL'):
-        subprocess.run(['/bin/bash', os.path.join(SELF_DIR, 'email-job-report.sh')], timeout=120)
+        run_cmd(['/bin/bash', os.path.join(SELF_DIR, 'email-job-report.sh')], timeout=120)
         log('EMAIL_TRIGGERED')
 
 if __name__ == '__main__':
